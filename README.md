@@ -11,7 +11,9 @@ Légzőgyakorló web-app: doboz (4·4·4·4), elalvó (4·7·8) és nyugtató (4
 
 Telepítés után offline is elindul, és gyakorlás közben nem alszik el a képernyő. Ha új verzió jelenik meg, az app kiírja: „Új verzió érhető el” → *Frissítés*.
 
-A beállítások (ritmus, idő, hangerő) csak a telefonon tárolódnak, az app nem küld adatot sehova.
+A beállítások (ritmus, idő, hangok, színtéma, nyelv) csak a telefonon tárolódnak, az app nem küld adatot sehova.
+
+Nyelvek: magyar, English, Deutsch. Első indításkor a telefon nyelvét követi, a Beállításokban átállítható.
 
 ## Fejlesztés
 
