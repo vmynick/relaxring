@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Légző körök</title>
+<meta name="description" content="Légzőgyakorlat: doboz, 4-7-8 és nyugtató légzés.">
+<meta name="theme-color" content="#E7EEEA" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0E1A17" media="(prefers-color-scheme: dark)">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="RelaxRing">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="stylesheet" href="fonts.css">
+<style>
+/* Egyképernyős app: fent módválasztó, középen a lélegző körök, lent vezérlők a hüvelykujj alatt */
+:root{
+  --bg:#E7EEEA; --surface:#F4F8F5; --fg:#17302A; --muted:#55706A;
+  --c1:#2E7D6B; --c2:#8CC7B5; --c3:#4E9C88; --line:#C4D6CE; --on-c1:#F4F8F5;
+  --display:"Bricolage Grotesque",ui-rounded,system-ui,sans-serif;
+  --body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0E1A17; --surface:#16251F; --fg:#DCEBE4; --muted:#8FAAA1;
+  --c1:#3FA88E; --c2:#1F5547; --c3:#5FBFA5; --line:#2A3F38; --on-c1:#0E1A17; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0E1A17; --surface:#16251F; --fg:#DCEBE4; --muted:#8FAAA1;
+  --c1:#3FA88E; --c2:#1F5547; --c3:#5FBFA5; --line:#2A3F38; --on-c1:#0E1A17; color-scheme:dark}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;-webkit-tap-highlight-color:transparent;overflow:hidden;user-select:none}
+.app{height:100%;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;justify-content:space-between;gap:12px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  padding-top:max(16px,env(safe-area-inset-top,0px));padding-bottom:max(16px,env(safe-area-inset-bottom,0px));max-width:520px;margin:0 auto}
+.modes{display:flex;gap:6px;width:100%;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:5px;box-sizing:border-box}
+.modes button{flex:1;min-width:0;border:0;background:transparent;color:var(--muted);font:500 16px/1.2 var(--body);padding:14px 4px;border-radius:12px;cursor:pointer}
+.modes button small{display:block;font-weight:400;font-size:13px;font-variant-numeric:tabular-nums;margin-top:3px}
+.modes button[aria-pressed="true"]{background:var(--c1);color:var(--on-c1)}
+.stage{flex:1;width:100%;min-height:0;display:grid;place-items:center;position:relative;container-type:size}
+.ring{position:absolute;border-radius:50%;aspect-ratio:1;max-width:100%}
+/* A körök a színpad méretéhez igazodnak (cq), így belégzéskor (×1.04) sem lógnak ki; előtte a régi böngészőknek szóló tartalék */
+#r3{width:min(86vw,62vh,420px);width:min(86cqw,94cqh,420px);border:1.5px solid var(--c3);opacity:.6}
+#r2{width:min(62vw,44vh,300px);width:calc(min(86cqw,94cqh,420px)*.72);background:var(--c2);opacity:.55}
+#r1{width:min(38vw,27vh,180px);width:calc(min(86cqw,94cqh,420px)*.43);background:var(--c1)}
+.label{position:relative;text-align:center;color:var(--on-c1);pointer-events:none}
+#ph{font:500 22px/1.1 var(--display)}
+#ct{font:500 52px/1 var(--display);font-variant-numeric:tabular-nums;margin-top:4px}
+.idle .label{color:var(--fg)}
+.idle #r1{background:transparent;border:1.5px solid var(--c1)}
+.meta{font-size:14px;color:var(--muted);font-variant-numeric:tabular-nums;min-height:20px;text-align:center}
+.controls{width:100%;display:flex;flex-direction:column;gap:14px}
+.row{display:flex;align-items:center;gap:12px}
+.row label{font-size:14px;color:var(--muted);flex:none;min-width:58px}
+input[type=range]{flex:1;min-width:0;accent-color:var(--c1);height:28px}
+.chip{flex:none;border:1px solid var(--line);background:var(--surface);color:var(--fg);font:500 16px var(--body);padding:12px 18px;border-radius:999px;cursor:pointer}
+.chip[aria-pressed="false"]{color:var(--muted);text-decoration:line-through}
+.toggles{display:flex;gap:10px}
+.toggles .chip{flex:1}
+#go{width:100%;border:0;border-radius:18px;background:var(--fg);color:var(--bg);font:500 20px var(--display);padding:22px;cursor:pointer}
+button:focus-visible,input:focus-visible{outline:2px solid var(--c1);outline-offset:2px}
+/* Telepítési / beállítási sáv: csak nyugalmi állapotban látszik */
+.notice{display:none;width:100%;box-sizing:border-box;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:6px 6px 6px 14px;font-size:14px;line-height:1.3;color:var(--muted)}
+.notice.show{display:flex}
+.app:not(.idle) .notice{display:none}
+.notice span{flex:1;min-width:0}
+.notice .chip{font-size:14px;padding:8px 14px}
+#nx{flex:none;border:0;background:transparent;color:var(--muted);font:400 22px/1 var(--body);width:36px;height:36px;border-radius:999px;cursor:pointer}
+@media (max-height:600px){#ct{font-size:40px}.controls{gap:8px}.modes button{padding:10px 4px}.chip{padding:9px 16px}#go{padding:16px}}
+</style>
+</head>
+<body>
+<div class="app idle" id="app">
+  <div class="notice" id="notice" role="status"><span id="ntext"></span><button class="chip" id="nact"></button><button id="nx" aria-label="Bezárás">×</button></div>
+
+  <div class="modes" role="group" aria-label="Légzésritmus">
+    <button id="m-box" data-m="box">Doboz<small>4·4·4·4</small></button>
+    <button id="m-478" data-m="478">Elalvó<small>4·7·8</small></button>
+    <button id="m-calm" data-m="calm">Nyugtató<small>4·6</small></button>
+  </div>
+
+  <div class="stage" aria-live="polite">
+    <div class="ring" id="r3"></div>
+    <div class="ring" id="r2"></div>
+    <div class="ring" id="r1"></div>
+    <div class="label"><div id="ph">Kész?</div><div id="ct">·</div></div>
+  </div>
+
+  <div class="meta" id="meta">5 perc · hang bekapcsolva</div>
+
+  <div class="controls">
+    <div class="row">
+      <label for="dur">Idő</label>
+      <input type="range" id="dur" min="1" max="15" step="1" value="5">
+      <span id="durv" style="width:48px;text-align:right;font-variant-numeric:tabular-nums">5 perc</span>
+    </div>
+    <div class="row">
+      <label for="vol">Hangerő</label>
+      <input type="range" id="vol" min="0" max="100" step="1" value="35">
+    </div>
+    <div class="toggles">
+      <button class="chip" id="tone" aria-pressed="true">Hang</button>
+      <button class="chip" id="bell" aria-pressed="true">Csengő</button>
+    </div>
+    <button id="go">Indítás</button>
+  </div>
+</div>
+
+<script>
+const M={box:[["Belégzés",4,1],["Tartás",4,1],["Kilégzés",4,0],["Tartás",4,0]],"478":[["Belégzés",4,1],["Tartás",7,1],["Kilégzés",8,0]],calm:[["Belégzés",4,1],["Kilégzés",6,0]]};
+const $=id=>document.getElementById(id);
+const app=$('app'),r1=$('r1'),r2=$('r2'),r3=$('r3'),ph=$('ph'),ct=$('ct'),go=$('go'),meta=$('meta'),vol=$('vol'),tone=$('tone'),bell=$('bell'),dur=$('dur'),durv=$('durv');
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+let st={mode:'box',vol:35,tone:true,bell:true,dur:5};
+try{Object.assign(st,JSON.parse(localStorage.getItem('legzo')||'{}'))}catch(e){}
+function save(){try{localStorage.setItem('legzo',JSON.stringify(st))}catch(e){}}
+let run=false,i=0,left=0,cyc=0,elapsed=0,tm=null,ac=null,osc,osc2,g,tg,master,wake=null;
+const LO=196,HI=294;
+
+function audio(){
+  if(ac){ac.resume();return}
+  try{
+    ac=new (window.AudioContext||window.webkitAudioContext)();
+    master=ac.createGain();master.gain.value=st.vol/100*0.25;master.connect(ac.destination);
+    const lp=ac.createBiquadFilter();lp.type='lowpass';lp.frequency.value=700;lp.connect(master);
+    // tg: a légzőhang (zúgás) ki/be kapcsolója; a csengő a master-re megy, így attól független
+    tg=ac.createGain();tg.gain.value=st.tone?1:0;tg.connect(lp);
+    g=ac.createGain();g.gain.value=0;g.connect(tg);
+    osc=ac.createOscillator();osc.type='sine';osc.frequency.value=LO;
+    osc2=ac.createOscillator();osc2.type='triangle';osc2.frequency.value=LO*1.5;
+    const g2=ac.createGain();g2.gain.value=0.25;
+    osc.connect(g);osc2.connect(g2);g2.connect(g);osc.start();osc2.start();
+  }catch(e){ac=null}
+}
+function ramp(p,v,d){const t=ac.currentTime;p.cancelScheduledValues(t);p.setValueAtTime(p.value,t);p.linearRampToValueAtTime(v,t+d)}
+function ding(f){if(!ac||!st.bell)return;const o=ac.createOscillator(),e=ac.createGain(),t=ac.currentTime;o.type='sine';o.frequency.value=f;e.gain.setValueAtTime(0,t);e.gain.linearRampToValueAtTime(0.35,t+0.01);e.gain.exponentialRampToValueAtTime(0.0001,t+1.8);o.connect(e);e.connect(master);o.start(t);o.stop(t+1.9)}
+function sound(name,big,d){
+  if(!ac)return;
+  if(name==="Belégzés"){ramp(osc.frequency,HI,d);ramp(osc2.frequency,HI*1.5,d);ramp(g.gain,0.9,d);ding(784)}
+  else if(name==="Kilégzés"){ramp(osc.frequency,LO,d);ramp(osc2.frequency,LO*1.5,d);ramp(g.gain,0.15,d);ding(587)}
+  else{ramp(g.gain,big?0.45:0.08,1);ding(659)}
+}
+function buzz(){try{navigator.vibrate&&navigator.vibrate(30)}catch(e){}}
+
+function size(big,d){
+  const t=reduce?'none':`transform ${d}s ease-in-out`;
+  [r1,r2,r3].forEach(e=>e.style.transition=t);
+  r1.style.transform=big?'scale(1.75)':'scale(1)';
+  r2.style.transform=big?'scale(1.35)':'scale(1)';
+  r3.style.transform=big?'scale(1.04)':'scale(0.86)';
+}
+function phase(){const p=M[st.mode][i];ph.textContent=p[0];left=p[1];ct.textContent=left;if(p[0]!=="Tartás")size(p[2],p[1]);sound(p[0],p[2],p[1]);buzz()}
+function fmt(s){return Math.floor(s/60)+":"+String(s%60).padStart(2,'0')}
+function showMeta(){
+  if(run){meta.textContent=`${cyc}. kör · ${fmt(Math.max(0,st.dur*60-elapsed))} van hátra`}
+  else meta.textContent=`${st.dur} perc · ${st.tone?(st.bell?'hang és csengő':'csak hang'):(st.bell?'csak csengő':'néma')}`;
+}
+function tick(){
+  elapsed++;left--;
+  if(left<=0){
+    i++;
+    if(i>=M[st.mode].length){i=0;cyc++;if(elapsed>=st.dur*60){finish();return}}
+    phase();
+  }else ct.textContent=left;
+  showMeta();
+}
+async function lock(){try{wake=await navigator.wakeLock.request('screen')}catch(e){wake=null}}
+function unlock(){try{wake&&wake.release()}catch(e){}wake=null}
+function start(){
+  audio();run=true;i=0;cyc=1;elapsed=0;app.classList.remove('idle');
+  phase();tm=setInterval(tick,1000);go.textContent='Leállítás';lock();showMeta();
+}
+function stop(label){
+  run=false;clearInterval(tm);size(0,1.2);if(ac)ramp(g.gain,0,0.8);
+  app.classList.add('idle');ph.textContent=label||'Kész?';ct.textContent='·';go.textContent='Indítás';unlock();showMeta();
+}
+function finish(){ding(523);setTimeout(()=>ding(784),400);stop('Szép volt');}
+
+go.onclick=()=>run?stop():start();
+document.querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>{st.mode=b.dataset.m;save();mark();if(run)stop()});
+function mark(){document.querySelectorAll('[data-m]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.m===st.mode))}
+vol.oninput=()=>{st.vol=+vol.value;save();if(master)ramp(master.gain,st.vol/100*0.25,0.1)};
+tone.onclick=()=>{st.tone=!st.tone;tone.setAttribute('aria-pressed',st.tone);save();showMeta();if(tg)ramp(tg.gain,st.tone?1:0,0.3)};
+bell.onclick=()=>{st.bell=!st.bell;bell.setAttribute('aria-pressed',st.bell);save();showMeta()};
+dur.oninput=()=>{st.dur=+dur.value;durv.textContent=st.dur+' perc';save();showMeta()};
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&run){lock();if(ac)ac.resume()}});
+
+vol.value=st.vol;dur.value=st.dur;durv.textContent=st.dur+' perc';tone.setAttribute('aria-pressed',st.tone);bell.setAttribute('aria-pressed',st.bell);
+mark();size(0,0);showMeta();
+
+// Otthoni szerver: offline gyorsítótár, telepítés-ajánlat, HTTP-ről átváltás a biztonságos (https) címre
+const notice=$('notice'),ntext=$('ntext'),nact=$('nact'),nx=$('nx');
+function note(text,label,act,dismiss){
+  ntext.textContent=text;nact.textContent=label;nact.onclick=act;
+  nx.onclick=()=>{notice.classList.remove('show');dismiss&&dismiss()};notice.classList.add('show');
+}
+if(isSecureContext&&'serviceWorker' in navigator){
+  // Új verzió: az új service worker átveszi az irányítást (controllerchange) → sáv a Frissítés gombbal.
+  // Első telepítéskor nincs előző vezérlő, akkor nem jelzünk.
+  const hadCtl=!!navigator.serviceWorker.controller;
+  navigator.serviceWorker.addEventListener('controllerchange',()=>{
+    if(hadCtl)note('Új verzió érhető el.','Frissítés',()=>location.reload());
+  });
+  navigator.serviceWorker.register('sw.js').then(reg=>{
+    // A telepített app háttérből visszatérve nem tölt újra, ezért ilyenkor és félóránként mi kérdezünk rá
+    let last=Date.now();
+    const check=()=>{if(document.visibilityState!=='visible'||Date.now()-last<60e3)return;last=Date.now();reg.update().catch(()=>{})};
+    document.addEventListener('visibilitychange',check);
+    setInterval(check,30*60e3);
+  }).catch(()=>{});
+}
+if(!isSecureContext){
+  // Ha a telefon már megbízik a RelaxRing tanúsítványában, a https-kérés sikerül → átirányítás
+  const ctl=new AbortController();setTimeout(()=>ctl.abort(),3000);
+  fetch(`https://${location.hostname}/manifest.json`,{mode:'no-cors',cache:'no-store',signal:ctl.signal})
+    .then(()=>location.replace(`https://${location.hostname}${location.pathname}${location.search}`))
+    .catch(()=>note('A telepítéshez és az ébren maradó képernyőhöz egyszer be kell állítani a tanúsítványt.','Beállítás',()=>location.href='setup.html'));
+}
+let installEv=null;
+addEventListener('beforeinstallprompt',e=>{
+  e.preventDefault();installEv=e;if(st.noInstall)return;
+  note('Tedd ki a kezdőképernyőre, és appként indul.','Telepítés',async()=>{
+    notice.classList.remove('show');installEv.prompt();await installEv.userChoice;installEv=null;
+  },()=>{st.noInstall=true;save()});
+});
+addEventListener('appinstalled',()=>notice.classList.remove('show'));
+</script>
+</body>
+</html>

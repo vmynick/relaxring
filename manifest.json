@@ -1,0 +1,19 @@
+{
+  "id": "./",
+  "name": "RelaxRing – Légző körök",
+  "short_name": "RelaxRing",
+  "description": "Légzőgyakorlat: doboz, 4-7-8 és nyugtató légzés.",
+  "lang": "hu",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#E7EEEA",
+  "theme_color": "#E7EEEA",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
