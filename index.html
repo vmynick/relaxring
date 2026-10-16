@@ -311,7 +311,7 @@ async function lock(){try{wake=await navigator.wakeLock.request('screen')}catch(
 function unlock(){try{wake&&wake.release()}catch(e){}wake=null}
 function start(){
   closeSheet();ensureAudio();run=true;i=0;cyc=1;elapsed=0;app.classList.remove('idle');
-  phase();tm=setInterval(tick,1000);ringBtn.setAttribute('aria-label','Leállítás');lock();showMeta();focusLater(1200);
+  phase();tm=setInterval(tick,1000);ringBtn.setAttribute('aria-label','Leállítás');lock();showMeta();focusLater(1200);keepStorage();
   if((st.hint2||0)<3){st.hint2=(st.hint2||0)+1;save();hint.classList.add('show');setTimeout(()=>hint.classList.remove('show'),5000)}
 }
 function stop(label){
@@ -425,7 +425,20 @@ addEventListener('beforeinstallprompt',e=>{
     notice.classList.remove('show');installEv.prompt();await installEv.userChoice;installEv=null;
   },()=>{st.noInstall=true;save()});
 });
-addEventListener('appinstalled',()=>notice.classList.remove('show'));
+addEventListener('appinstalled',()=>{notice.classList.remove('show');keepStorage()});
+
+// Tartós tárolás: hogy a telefon helyhiánykor se törölje az app tárolt fájljait és beállításait.
+// Telepített appnál a Chrome kérdés nélkül dönt; ahol a böngésző rákérdez (pl. Firefox), csak egyszer kérjük.
+async function keepStorage(){
+  try{
+    if(!navigator.storage||!navigator.storage.persist||await navigator.storage.persisted())return;
+    const installed=matchMedia('(display-mode: standalone)').matches;
+    if(st.persistAsked&&!installed)return;
+    st.persistAsked=true;save();
+    await navigator.storage.persist();
+  }catch(e){}
+}
+if(matchMedia('(display-mode: standalone)').matches)keepStorage();
 </script>
 </body>
 </html>
