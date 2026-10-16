@@ -2,7 +2,7 @@
   "id": "/",
   "name": "RelaxRing – Légző körök",
   "short_name": "RelaxRing",
-  "description": "Légzőgyakorlat: doboz, 4-7-8 és nyugtató légzés.",
+  "description": "Légzőgyakorlat: doboz, 4-7-8, nyugtató, koherens és saját ritmus.",
   "lang": "hu",
   "start_url": "./",
   "scope": "./",
@@ -10,10 +10,19 @@
   "orientation": "portrait",
   "background_color": "#E7EEEA",
   "theme_color": "#E7EEEA",
+  "user_preferences": {
+    "color_scheme_dark": { "background_color": "#0E1A17", "theme_color": "#0E1A17" }
+  },
   "icons": [
     { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
     { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
     { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
     { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Elalvó légzés (4·7·8)", "short_name": "Elalvó", "url": "./?r=478", "icons": [{ "src": "icon-192.png", "sizes": "192x192", "type": "image/png" }] },
+    { "name": "Doboz légzés (4·4·4·4)", "short_name": "Doboz", "url": "./?r=box", "icons": [{ "src": "icon-192.png", "sizes": "192x192", "type": "image/png" }] },
+    { "name": "Nyugtató légzés (4·6)", "short_name": "Nyugtató", "url": "./?r=calm", "icons": [{ "src": "icon-192.png", "sizes": "192x192", "type": "image/png" }] },
+    { "name": "Koherens légzés (5·5)", "short_name": "Koherens", "url": "./?r=coh", "icons": [{ "src": "icon-192.png", "sizes": "192x192", "type": "image/png" }] }
   ]
 }

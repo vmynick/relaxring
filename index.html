@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Légző körök</title>
-<meta name="description" content="Légzőgyakorlat: doboz, 4-7-8 és nyugtató légzés.">
+<meta name="description" content="Légzőgyakorlat: doboz, 4-7-8, nyugtató, koherens és saját ritmus.">
 <meta name="theme-color" content="#E7EEEA" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0E1A17" media="(prefers-color-scheme: dark)">
 <meta name="mobile-web-app-capable" content="yes">
@@ -15,7 +15,7 @@
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="stylesheet" href="fonts.css">
 <style>
-/* Egyképernyős app: fent a ritmus, középen a lélegző körök (ezek az indító/leállító gomb), alul egy sor és a beállítások gomb.
+/* Egyképernyős app: fent legfeljebb 3 ritmus, középen a lélegző körök (ezek az indító/leállító gomb), alul egy sor és a beállítások gomb.
    Minden más a felcsúszó Beállítások lapon. Betű: Apple-eszközökön SF Pro (a számokhoz SF Pro Rounded), máshol Inter; kövér. */
 :root{
   --bg:#E7EEEA; --surface:#F4F8F5; --fg:#17302A; --muted:#55706A;
@@ -51,7 +51,7 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--c1);outline-off
   padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
   padding-top:max(16px,env(safe-area-inset-top,0px));padding-bottom:max(12px,env(safe-area-inset-bottom,0px));max-width:520px;margin:0 auto}
 
-/* ritmusválasztó: iOS-szerű szegmentált vezérlő */
+/* ritmusválasztó: iOS-szerű szegmentált vezérlő, legfeljebb 3 gombbal */
 .modes{display:flex;gap:2px;width:100%;background:color-mix(in srgb,var(--line) 60%,transparent);border-radius:16px;padding:3px;box-sizing:border-box}
 .modes button{flex:1;min-width:0;border:0;background:transparent;color:var(--muted);font-size:20px;font-weight:700;line-height:1.15;letter-spacing:-.01em;padding:11px 4px;border-radius:13px;cursor:pointer;transition:background .25s,color .25s,box-shadow .25s}
 .modes button small{display:block;font-weight:600;font-size:16px;font-variant-numeric:tabular-nums;margin-top:2px;opacity:.85}
@@ -88,6 +88,8 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--c1);outline-off
 .modes,.bottom{transition:filter .9s ease,opacity .9s ease}
 .app.focus .modes,.app.focus .bottom{filter:blur(8px);opacity:.08;pointer-events:none}
 @media (prefers-reduced-motion:reduce){.modes,.bottom{transition:opacity .3s}.app.focus .modes,.app.focus .bottom{filter:none;opacity:.05}}
+/* Alvás mód: a képernyő a gyakorlás alatt lassan elsötétül */
+#dim{position:fixed;inset:0;background:#000;opacity:0;pointer-events:none;z-index:5}
 
 /* Beállítások: felcsúszó lap, iOS-szerű csoportosított listával */
 .backdrop{position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:10}
@@ -101,15 +103,38 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--c1);outline-off
 .sheet-body{overflow-y:auto;padding:0 max(16px,env(safe-area-inset-right,0px)) max(24px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));-webkit-overflow-scrolling:touch}
 .sheet-body h3{margin:18px 14px 8px;font-size:16px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
 .group{background:var(--surface);border-radius:16px;padding:0 16px}
-.item{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:58px;border-top:1px solid var(--line)}
+.item{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:58px;padding:6px 0;box-sizing:border-box;border-top:1px solid var(--line)}
 .item:first-child{border-top:0}
 .item label,.item>span{font-size:20px;font-weight:700}
+.item .desc{display:block;font-size:15px;font-weight:600;color:var(--muted);margin-top:2px;line-height:1.3}
 .item output{font-size:20px;font-weight:700;color:var(--muted);font-variant-numeric:tabular-nums}
 .item.slider{padding:2px 0 14px;min-height:0;border-top:0}
+.note{font-size:15px;font-weight:600;color:var(--muted);padding:0 0 12px;line-height:1.35}
 .opts{display:flex;flex-wrap:wrap;gap:8px;padding:2px 0 14px;transition:opacity .2s}
 .opts.off{opacity:.45}
 .opts button{border:0;background:var(--bg);color:var(--fg);font-size:18px;font-weight:700;padding:10px 15px;border-radius:12px;cursor:pointer}
+.opts button small{display:block;font-size:14px;font-weight:600;opacity:.75;font-variant-numeric:tabular-nums;margin-top:1px}
 .opts button[aria-pressed="true"]{background:color-mix(in srgb,var(--c1) 18%,var(--surface));color:var(--c1);box-shadow:inset 0 0 0 1.5px var(--c1)}
+.opts.rh{padding-top:14px}
+.opts.rh button{text-align:left}
+/* saját ritmus: négy léptető */
+.steps{display:grid;gap:6px;padding:0 0 14px}
+.stepper{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--bg);border-radius:12px;padding:6px 6px 6px 14px}
+.stepper span{font-size:19px;font-weight:700;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.stepper div{display:flex;align-items:center;gap:4px;flex:none}
+.stepper button{width:36px;height:36px;border:0;border-radius:50%;background:var(--surface);color:var(--fg);font-size:22px;font-weight:700;line-height:1;cursor:pointer}
+.stepper output{min-width:26px;text-align:center;font-size:19px;font-weight:800;font-variant-numeric:tabular-nums}
+/* napló: három szám és a hét napjai */
+.kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;padding:16px 0 4px;text-align:center}
+.kpis b{display:block;font-size:32px;font-weight:800;line-height:1.1;font-variant-numeric:tabular-nums}
+.kpis span{display:block;font-size:15px;font-weight:600;color:var(--muted);margin-top:2px}
+.week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px;height:140px;box-sizing:border-box;padding:10px 0 14px}
+.week div{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:5px;min-width:0}
+.week i{display:block;width:100%;max-width:26px;min-height:4px;border-radius:5px 5px 2px 2px;background:color-mix(in srgb,var(--c1) 35%,transparent)}
+.week .today i{background:var(--c1)}
+.week small{font-size:13px;font-weight:700;font-variant-numeric:tabular-nums;min-height:16px}
+.week em{font-style:normal;font-size:14px;font-weight:700;color:var(--muted)}
+.week .today em{color:var(--fg)}
 /* iOS-kapcsoló */
 .switch{flex:none;position:relative;width:51px;height:31px;border:0;border-radius:16px;background:color-mix(in srgb,var(--fg) 20%,transparent);cursor:pointer;transition:background .2s}
 .switch::after{content:"";position:absolute;top:2px;left:2px;width:27px;height:27px;border-radius:50%;background:#fff;box-shadow:0 2px 4px rgba(0,0,0,.25);transition:transform .2s}
@@ -143,11 +168,7 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px;border:0;border-radiu
 <div class="app idle" id="app">
   <div class="notice" id="notice" role="status"><span id="ntext"></span><button class="act" id="nact"></button><button id="nx" data-ia="close">×</button></div>
 
-  <div class="modes" role="group" data-ia="modes">
-    <button data-m="box"><span data-i="box"></span><small>4·4·4·4</small></button>
-    <button data-m="478"><span data-i="sleep"></span><small>4·7·8</small></button>
-    <button data-m="calm"><span data-i="calm"></span><small>4·6</small></button>
-  </div>
+  <div class="modes" id="modes" role="group" data-ia="modes"></div>
 
   <div class="stage" aria-live="polite">
     <div class="ring" id="r3"></div>
@@ -168,15 +189,32 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px;border:0;border-radiu
     </button>
   </div>
 </div>
+<div id="dim"></div>
 
 <div class="backdrop" id="backdrop" hidden></div>
 <section class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle" hidden>
   <header class="sheet-head"><h2 id="sheetTitle" data-i="settings"></h2><button class="done" id="doneBtn" data-i="ok"></button></header>
   <div class="sheet-body">
+    <h3 data-i="journal"></h3>
+    <div class="group">
+      <div class="kpis"><div><b id="kStreak"></b><span data-i="streak"></span></div><div><b id="kToday"></b><span data-i="today"></span></div><div><b id="kTotal"></b><span data-i="sessions"></span></div></div>
+      <div class="week" id="week" role="img"></div>
+    </div>
+
+    <h3 data-i="rhythms"></h3>
+    <div class="group">
+      <div class="opts rh" id="rhOpts" role="group" data-ia="rhythms"></div>
+      <div class="note" data-i="pick3"></div>
+      <div class="item"><span data-i="ownTitle"></span></div>
+      <div class="steps" id="steps"></div>
+      <div class="note" data-i="slowInfo"></div>
+    </div>
+
     <h3 data-i="session"></h3>
     <div class="group">
       <div class="item"><label for="dur" data-i="duration"></label><output id="durv" for="dur"></output></div>
-      <div class="item slider"><input type="range" id="dur" min="1" max="15" step="1" value="5"></div>
+      <div class="item slider"><input type="range" id="dur" min="1" max="30" step="1" value="5"></div>
+      <div class="item"><span><span data-i="sleepMode"></span><small class="desc" data-i="sleepInfo"></small></span><button class="switch" id="sleepSw" role="switch" aria-checked="false" data-ia="sleepMode"></button></div>
       <div class="item"><span data-i="vibration"></span><button class="switch" id="vibSw" role="switch" aria-checked="true" data-ia="vibration"></button></div>
     </div>
 
@@ -186,6 +224,8 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px;border:0;border-radiu
       <div class="opts" id="voiceOpts" role="group" data-ia="breathKind"></div>
       <div class="item"><span data-i="chime"></span><button class="switch" id="bellSw" role="switch" aria-checked="true" data-ia="chime"></button></div>
       <div class="opts" id="chimeOpts" role="group" data-ia="chimeKind"></div>
+      <div class="item"><span data-i="speak"></span><button class="switch" id="speakSw" role="switch" aria-checked="false" data-ia="speak"></button></div>
+      <div class="note" id="voiceNote" hidden></div>
       <div class="item"><label for="vol" data-i="volume"></label></div>
       <div class="item slider"><input type="range" id="vol" min="0" max="100" step="1" value="35"></div>
     </div>
@@ -199,34 +239,49 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px;border:0;border-radiu
 </section>
 
 <script>
-// fázisok: [fajta, másodperc, nagy-e a kör]; a fajta: in = belégzés, hold = tartás, out = kilégzés
-const M={box:[['in',4,1],['hold',4,1],['out',4,0],['hold',4,0]],'478':[['in',4,1],['hold',7,1],['out',8,0]],calm:[['in',4,1],['out',6,0]]};
-
 // ---------------------------------------------------------------- nyelvek
 // A körben és a ritmusválasztóban kevés a hely: ott rövid szavak kellenek (pl. Inhale, Schlaf).
 const T={
-  hu:{name:'Magyar',title:'Légző körök',modes:'Légzésritmus',box:'Doboz',sleep:'Elalvó',calm:'Nyugtató',
-    in:'Belégzés',hold:'Tartás',out:'Kilégzés',start:'Indítás',stop:'Leállítás',tap:'koppints a körre',again:'koppints az újrakezdéshez',done:'Szép volt',
+  hu:{name:'Magyar',locale:'hu-HU',title:'Légző körök',modes:'Légzésritmus',
+    r_box:'Doboz',r_478:'Elalvó',r_calm:'Nyugtató',r_coh:'Koherens',r_relax:'Lazító',r_slow:'Lassuló',r_own:'Saját',
+    in:'Belégzés',hold:'Tartás',out:'Kilégzés',
+    start:'Indítás',stop:'Leállítás',tap:'koppints a körre',again:'koppints az újrakezdéshez',done:'Szép volt',
     hint:'A körre koppintva megáll, máshova koppintva előjön a menü',min:n=>`${n} perc`,round:(c,t)=>`${c}. kör · ${t}`,only:x=>`csak ${x}`,silent:'néma',
-    settings:'Beállítások',ok:'Kész',session:'Gyakorlás',duration:'Időtartam',vibration:'Rezgés',sound:'Hang',breath:'Légzőhang',chime:'Csengés',
+    settings:'Beállítások',ok:'Kész',journal:'Napló',streak:'napos sorozat',today:'perc ma',sessions:'alkalom',weekAria:m=>`Az elmúlt 7 nap percei: ${m}`,
+    rhythms:'Ritmusok',pick3:'A főképernyőn legfeljebb 3 látszik; koppintással választhatsz.',ownTitle:'Saját ritmus (másodperc)',
+    slowInfo:'Lassuló: 4 mp belégzés, a kilégzés a gyakorlás végére 4-ről 8 mp-re nyúlik.',
+    session:'Gyakorlás',duration:'Időtartam',sleepMode:'Alvás mód',sleepInfo:'A képernyő lassan elsötétül, a végén nincs csengés.',vibration:'Rezgés',
+    sound:'Hang',breath:'Légzőhang',chime:'Csengés',speak:'Hangos vezetés',noVoice:'Ezen a telefonon nincs magyar felolvasóhang.',
     volume:'Hangerő',theme:'Színtéma',language:'Nyelv',breathKind:'Légzőhang fajtája',chimeKind:'Csengés fajtája',close:'Bezárás',
     v_lagy:'Lágy',v_ocean:'Óceán',v_pad:'Pad',v_tal:'Tál',c_csengo:'Csengő',c_tal:'Tál',c_fa:'Fa',c_csepp:'Csepp',c_piezo:'Piezo',
     t_erdo:'Erdő',t_tenger:'Tenger',t_levendula:'Levendula',t_naplemente:'Naplemente',t_rozsa:'Rózsa',t_ko:'Kő',
     newVer:'Új verzió érhető el.',update:'Frissítés',installTxt:'Tedd ki a kezdőképernyőre, és appként indul.',install:'Telepítés',
     certTxt:'A telepítéshez és az ébren maradó képernyőhöz egyszer be kell állítani a tanúsítványt.',certBtn:'Beállítás'},
-  en:{name:'English',title:'Breathing Circles',modes:'Breathing rhythm',box:'Box',sleep:'Sleep',calm:'Calm',
-    in:'Inhale',hold:'Hold',out:'Exhale',start:'Start',stop:'Stop',tap:'tap the circle',again:'tap to start again',done:'Well done',
+  en:{name:'English',locale:'en-US',title:'Breathing Circles',modes:'Breathing rhythm',
+    r_box:'Box',r_478:'Sleep',r_calm:'Calm',r_coh:'Coherent',r_relax:'Relax',r_slow:'Unwind',r_own:'Custom',
+    in:'Inhale',hold:'Hold',out:'Exhale',
+    start:'Start',stop:'Stop',tap:'tap the circle',again:'tap to start again',done:'Well done',
     hint:'Tap the circle to stop, anywhere else for the menu',min:n=>`${n} min`,round:(c,t)=>`Round ${c} · ${t}`,only:x=>`only ${x}`,silent:'silent',
-    settings:'Settings',ok:'Done',session:'Session',duration:'Duration',vibration:'Vibration',sound:'Sound',breath:'Breathing sound',chime:'Chime',
+    settings:'Settings',ok:'Done',journal:'Journal',streak:'day streak',today:'min today',sessions:'sessions',weekAria:m=>`Minutes over the last 7 days: ${m}`,
+    rhythms:'Rhythms',pick3:'Up to 3 show on the main screen; tap to choose.',ownTitle:'Custom rhythm (seconds)',
+    slowInfo:'Unwind: 4 s inhale, the exhale grows from 4 to 8 s by the end of the session.',
+    session:'Session',duration:'Duration',sleepMode:'Sleep mode',sleepInfo:'The screen slowly goes dark; no chime at the end.',vibration:'Vibration',
+    sound:'Sound',breath:'Breathing sound',chime:'Chime',speak:'Voice guidance',noVoice:'This phone has no English text-to-speech voice.',
     volume:'Volume',theme:'Color theme',language:'Language',breathKind:'Breathing sound type',chimeKind:'Chime type',close:'Close',
     v_lagy:'Soft',v_ocean:'Ocean',v_pad:'Pad',v_tal:'Bowl',c_csengo:'Bell',c_tal:'Bowl',c_fa:'Wood',c_csepp:'Drop',c_piezo:'Piezo',
     t_erdo:'Forest',t_tenger:'Sea',t_levendula:'Lavender',t_naplemente:'Sunset',t_rozsa:'Rose',t_ko:'Stone',
     newVer:'A new version is available.',update:'Update',installTxt:'Add it to your home screen to use it as an app.',install:'Install',
     certTxt:'Set up the certificate once to install the app and keep the screen awake.',certBtn:'Set up'},
-  de:{name:'Deutsch',title:'Atemkreise',modes:'Atemrhythmus',box:'Box',sleep:'Schlaf',calm:'Ruhe',
-    in:'Einatmen',hold:'Halten',out:'Ausatmen',start:'Start',stop:'Stopp',tap:'Kreis antippen',again:'zum Neustart antippen',done:'Geschafft',
+  de:{name:'Deutsch',locale:'de-DE',title:'Atemkreise',modes:'Atemrhythmus',
+    r_box:'Box',r_478:'Schlaf',r_calm:'Ruhe',r_coh:'Kohärent',r_relax:'Relax',r_slow:'Langsam',r_own:'Eigen',
+    in:'Einatmen',hold:'Halten',out:'Ausatmen',
+    start:'Start',stop:'Stopp',tap:'Kreis antippen',again:'zum Neustart antippen',done:'Geschafft',
     hint:'Kreis antippen zum Stoppen, woanders für das Menü',min:n=>`${n} Min.`,round:(c,t)=>`Runde ${c} · ${t}`,only:x=>`nur ${x}`,silent:'stumm',
-    settings:'Einstellungen',ok:'Fertig',session:'Übung',duration:'Dauer',vibration:'Vibration',sound:'Klang',breath:'Atemklang',chime:'Glocke',
+    settings:'Einstellungen',ok:'Fertig',journal:'Tagebuch',streak:'Tage in Folge',today:'Min. heute',sessions:'Übungen',weekAria:m=>`Minuten der letzten 7 Tage: ${m}`,
+    rhythms:'Rhythmen',pick3:'Bis zu 3 erscheinen auf dem Startbildschirm; zum Wählen antippen.',ownTitle:'Eigener Rhythmus (Sekunden)',
+    slowInfo:'Langsam: 4 s einatmen, das Ausatmen wird bis zum Ende von 4 auf 8 s länger.',
+    session:'Übung',duration:'Dauer',sleepMode:'Schlafmodus',sleepInfo:'Der Bildschirm wird langsam dunkel; am Ende keine Glocke.',vibration:'Vibration',
+    sound:'Klang',breath:'Atemklang',chime:'Glocke',speak:'Sprachansage',noVoice:'Dieses Telefon hat keine deutsche Sprachausgabe.',
     volume:'Lautstärke',theme:'Farbthema',language:'Sprache',breathKind:'Art des Atemklangs',chimeKind:'Art der Glocke',close:'Schließen',
     v_lagy:'Sanft',v_ocean:'Ozean',v_pad:'Pad',v_tal:'Schale',c_csengo:'Glocke',c_tal:'Schale',c_fa:'Holz',c_csepp:'Tropfen',c_piezo:'Piezo',
     t_erdo:'Wald',t_tenger:'Meer',t_levendula:'Lavendel',t_naplemente:'Abendrot',t_rozsa:'Rose',t_ko:'Stein',
@@ -235,15 +290,38 @@ const T={
 };
 let L=T.hu,shownNote=null;
 const $=id=>document.getElementById(id);
-const app=$('app'),r1=$('r1'),r2=$('r2'),r3=$('r3'),ph=$('ph'),ct=$('ct'),sub=$('sub'),ringBtn=$('ringBtn'),meta=$('meta'),hint=$('hint');
-const vol=$('vol'),dur=$('dur'),durv=$('durv'),toneSw=$('toneSw'),bellSw=$('bellSw'),vibSw=$('vibSw');
+const app=$('app'),r1=$('r1'),r2=$('r2'),r3=$('r3'),ph=$('ph'),ct=$('ct'),sub=$('sub'),ringBtn=$('ringBtn'),meta=$('meta'),hint=$('hint'),dim=$('dim');
+const vol=$('vol'),dur=$('dur'),durv=$('durv'),toneSw=$('toneSw'),bellSw=$('bellSw'),vibSw=$('vibSw'),sleepSw=$('sleepSw'),speakSw=$('speakSw');
 const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
-let st={mode:'box',vol:35,tone:true,bell:true,vib:true,dur:5,color:'erdo',voice:'lagy',chime:'csengo'};
+
+// ---------------------------------------------------------------- ritmusok
+// Egy ritmus fázisai: [fajta, másodperc]; fajta: in = belégzés, hold = tartás, out = kilégzés
+const R={
+  box:[['in',4],['hold',4],['out',4],['hold',4]],
+  '478':[['in',4],['hold',7],['out',8]],
+  calm:[['in',4],['out',6]],
+  coh:[['in',5],['out',5]],          // koherens légzés: percenként 6
+  relax:[['in',4],['hold',2],['out',6]],
+  slow:null,                         // lassuló: a kilégzés 4-ről 8 mp-re nő a gyakorlás végéig
+  own:null                           // saját: st.own = [be, tartás, ki, tartás]
+};
+const RIDS=['box','478','calm','coh','relax','slow','own'];   // megjelenítési sorrend (az objektumban a '478' előre kerülne)
+function pattern(id){
+  if(id==='own'){const [a,b,c,d]=st.own;return [['in',a],['hold',b],['out',c],['hold',d]].filter(x=>x[1]>0)}
+  if(id==='slow'){const g=run?Math.min(1,elapsed/(st.dur*60)):0;return [['in',4],['out',Math.round(4+4*g)]]}
+  return R[id];
+}
+function patternLabel(id){return id==='slow'?'4·4→8':pattern(id).map(x=>x[1]).join('·')}
+
+let st={mode:'box',shown:['box','478','calm'],own:[4,4,6,0],vol:35,tone:true,bell:true,vib:true,sleep:false,speak:false,dur:5,
+  color:'erdo',voice:'lagy',chime:'csengo',log:{},sessions:0};
 try{Object.assign(st,JSON.parse(localStorage.getItem('legzo')||'{}'))}catch(e){}
 if(!T[st.lang]){const n=(navigator.language||'hu').slice(0,2).toLowerCase();st.lang=T[n]?n:'en'}   // első indításkor a telefon nyelve
+if(!R.hasOwnProperty(st.mode))st.mode='box';
+st.shown=(st.shown||[]).filter(id=>R.hasOwnProperty(id)).slice(0,3);if(!st.shown.length)st.shown=['box','478','calm'];
 L=T[st.lang];
 function save(){try{localStorage.setItem('legzo',JSON.stringify(st))}catch(e){}}
-let run=false,i=0,left=0,cyc=0,elapsed=0,tm=null,wake=null;
+let run=false,i=0,left=0,cyc=0,elapsed=0,tm=null,wake=null,cur=[],curBig=0;
 
 // ---------------------------------------------------------------- hang
 // Légzőhang: folyamatos, a légzéssel együtt erősödik/halkul. Csengés: rövid jel minden fázis elején.
@@ -272,19 +350,19 @@ const VOICES={
     return {inhale(d){ramp(o1.frequency,HI,d);ramp(o2.frequency,HI*1.5,d);ramp(g.gain,.9,d)},
       exhale(d){ramp(o1.frequency,LO,d);ramp(o2.frequency,LO*1.5,d);ramp(g.gain,.15,d)},
       hold(big){ramp(g.gain,big?.45:.08,1)},quiet(d){ramp(g.gain,0,d)},stop(){o1.stop();o2.stop();lp.disconnect()}}}},
-  ocean:{make(){     // barna zaj, a szűrő a belégzéssel kinyílik: hullámzás
+  ocean:{make(){      // barna zaj, a szűrő a belégzéssel kinyílik: hullámzás
     const src=ac.createBufferSource();src.buffer=brownNoise();src.loop=true;
     const lp=ac.createBiquadFilter();lp.type='lowpass';lp.frequency.value=280;
     const g=ac.createGain();g.gain.value=0;src.connect(lp);lp.connect(g);g.connect(tg);src.start();
     return {inhale(d){ramp(lp.frequency,1700,d);ramp(g.gain,.9,d)},exhale(d){ramp(lp.frequency,260,d);ramp(g.gain,.2,d)},
       hold(big){ramp(g.gain,big?.5:.12,1)},quiet(d){ramp(g.gain,0,d)},stop(){src.stop();g.disconnect()}}}},
-  pad:{make(){         // meleg D-akkord, a légzés a szűrőt nyitja-zárja
+  pad:{make(){        // meleg D-akkord, a légzés a szűrőt nyitja-zárja
     const lp=ac.createBiquadFilter();lp.type='lowpass';lp.frequency.value=380;
     const g=ac.createGain();g.gain.value=0;lp.connect(g);g.connect(tg);
     const os=oscs([['triangle',146.83,.5,-6],['triangle',220,.35,6],['triangle',293.66,.3,-5],['sine',440,.12,4]],lp);
     return {inhale(d){ramp(lp.frequency,1500,d);ramp(g.gain,.7,d)},exhale(d){ramp(lp.frequency,360,d);ramp(g.gain,.18,d)},
       hold(big){ramp(g.gain,big?.4:.1,1)},quiet(d){ramp(g.gain,0,d)},stop(){os.forEach(o=>o.stop());g.disconnect()}}}},
-  tal:{make(){         // hangtál-zümmögés lassú lebegéssel
+  tal:{make(){        // hangtál-zümmögés lassú lebegéssel
     const g=ac.createGain();g.gain.value=0;g.connect(tg);
     const trem=ac.createGain();trem.gain.value=1;trem.connect(g);
     const lfo=ac.createOscillator();lfo.frequency.value=.3;const lg=ac.createGain();lg.gain.value=.25;lfo.connect(lg);lg.connect(trem.gain);lfo.start();
@@ -322,6 +400,53 @@ function sound(kind,big,d){
 }
 function buzz(){if(st.vib)try{navigator.vibrate&&navigator.vibrate(30)}catch(e){}}
 
+// Hangos vezetés: a telefon felolvasóhangja mondja ki a fázist (ha van hang a választott nyelven)
+function ttsVoice(){
+  if(!('speechSynthesis' in window))return null;
+  const vs=speechSynthesis.getVoices();
+  return vs.find(v=>v.lang.toLowerCase().replace('_','-')===L.locale.toLowerCase())||vs.find(v=>v.lang.toLowerCase().startsWith(st.lang))||null;
+}
+function speak(kind){
+  if(!st.speak||!('speechSynthesis' in window))return;
+  const v=ttsVoice();if(!v)return;
+  const u=new SpeechSynthesisUtterance(L[kind]);u.voice=v;u.lang=v.lang;u.rate=.9;u.volume=Math.min(1,.25+st.vol/100);
+  speechSynthesis.cancel();setTimeout(()=>speechSynthesis.speak(u),st.bell?250:0);
+}
+function voiceNote(){
+  const n=$('voiceNote');
+  const known='speechSynthesis' in window&&speechSynthesis.getVoices().length>0;
+  n.textContent=L.noVoice;n.hidden=!(st.speak&&(!('speechSynthesis' in window)||(known&&!ttsVoice())));
+}
+if('speechSynthesis' in window)speechSynthesis.addEventListener('voiceschanged',voiceNote);
+
+// ---------------------------------------------------------------- napló
+// Naponta a gyakorolt másodpercek (60 napra visszamenőleg), és az alkalmak száma (legalább 1 perc)
+function dayKey(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
+function addDays(d,n){const x=new Date(d);x.setDate(x.getDate()+n);return x}
+function logSession(sec){
+  if(sec<5)return;
+  const k=dayKey(new Date());st.log[k]=(st.log[k]||0)+sec;if(sec>=60)st.sessions++;
+  const old=dayKey(addDays(new Date(),-60));for(const d in st.log)if(d<old)delete st.log[d];
+  save();
+}
+function streak(){
+  let d=new Date(),n=0;
+  if((st.log[dayKey(d)]||0)<60)d=addDays(d,-1);          // ha ma még nem volt, a tegnapig tartó sorozat számít
+  while((st.log[dayKey(d)]||0)>=60){n++;d=addDays(d,-1)}
+  return n;
+}
+function renderStats(){
+  const today=new Date();
+  $('kStreak').textContent=streak();
+  $('kToday').textContent=Math.round((st.log[dayKey(today)]||0)/60);
+  $('kTotal').textContent=st.sessions;
+  const days=[...Array(7)].map((_,k)=>addDays(today,k-6));
+  const mins=days.map(d=>Math.round((st.log[dayKey(d)]||0)/60));
+  const top=Math.max(10,...mins),fmtDay=new Intl.DateTimeFormat(L.locale,{weekday:'narrow'});
+  $('week').innerHTML=days.map((d,k)=>`<div class="${k===6?'today':''}"><small>${mins[k]||''}</small><i style="height:${Math.max(4,mins[k]/top*60)}px"></i><em>${fmtDay.format(d)}</em></div>`).join('');
+  $('week').setAttribute('aria-label',L.weekAria(mins.join(', ')));
+}
+
 // ---------------------------------------------------------------- légzés
 function size(big,d){
   const t=reduce?'none':`transform ${d}s ease-in-out`;
@@ -330,7 +455,14 @@ function size(big,d){
   r2.style.transform=big?'scale(1.3)':'scale(1)';
   r3.style.transform=big?'scale(1.04)':'scale(0.86)';
 }
-function phase(){const p=M[st.mode][i];ph.textContent=L[p[0]];left=p[1];ct.textContent=left;if(p[0]!=='hold')size(p[2],p[1]);sound(p[0],p[2],p[1]);buzz()}
+function phase(){
+  if(i===0)cur=pattern(st.mode);                    // minden kör elején (a Lassuló így nyúlik)
+  const [kind,secs]=cur[i];
+  ph.textContent=L[kind];left=secs;ct.textContent=left;
+  if(kind==='in')curBig=1;else if(kind==='out')curBig=0;
+  if(kind!=='hold')size(curBig,secs);
+  sound(kind,curBig,secs);speak(kind);buzz();
+}
 function fmt(s){return Math.floor(s/60)+":"+String(s%60).padStart(2,'0')}
 function showMeta(){
   if(run){meta.textContent=L.round(cyc,fmt(Math.max(0,st.dur*60-elapsed)));return}
@@ -341,28 +473,43 @@ function tick(){
   elapsed++;left--;
   if(left<=0){
     i++;
-    if(i>=M[st.mode].length){i=0;cyc++;if(elapsed>=st.dur*60){finish();return}}
+    if(i>=cur.length){i=0;cyc++;if(elapsed>=st.dur*60){finish();return}}
     phase();
   }else ct.textContent=left;
   showMeta();
 }
 async function lock(){try{wake=await navigator.wakeLock.request('screen')}catch(e){wake=null}}
 function unlock(){try{wake&&wake.release()}catch(e){}wake=null}
+function setDim(op,secs){dim.style.transition=`opacity ${secs}s linear`;dim.style.opacity=op}
 function start(){
-  closeSheet();ensureAudio();run=true;finished=false;i=0;cyc=1;elapsed=0;app.classList.remove('idle');
+  closeSheet();ensureAudio();run=true;finished=false;i=0;cyc=1;elapsed=0;curBig=0;app.classList.remove('idle');
   phase();tm=setInterval(tick,1000);ringBtn.setAttribute('aria-label',L.stop);lock();showMeta();focusLater(1200);keepStorage();
+  if(st.sleep){setDim(0,0);requestAnimationFrame(()=>requestAnimationFrame(()=>setDim(.9,st.dur*60)))}
   if((st.hint2||0)<3){st.hint2=(st.hint2||0)+1;save();hint.classList.add('show');setTimeout(()=>hint.classList.remove('show'),5000)}
 }
 let finished=false;
 function idleLabel(){ph.textContent=finished?L.done:L.start;sub.textContent=finished?L.again:L.tap;ringBtn.setAttribute('aria-label',L.start)}
 function stop(){
+  if(!run)return;
   run=false;clearInterval(tm);size(0,1.2);if(voice)voice.quiet(.8);
+  if('speechSynthesis' in window)speechSynthesis.cancel();
   clearTimeout(focusT);app.classList.remove('focus');hint.classList.remove('show');
-  app.classList.add('idle');idleLabel();unlock();showMeta();
+  app.classList.add('idle');idleLabel();unlock();showMeta();logSession(elapsed);
+  setDim(0,.6);
 }
-function finish(){ding(523);setTimeout(()=>ding(784),400);stop();finished=true;idleLabel()}
-ringBtn.onclick=()=>run?stop():start();
-document.querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>{st.mode=b.dataset.m;save();mark();if(run)stop()});
+function finish(){
+  const sleeping=st.sleep;
+  if(!sleeping){ding(523);setTimeout(()=>ding(784),400)}
+  stop();finished=true;idleLabel();
+  if(sleeping)setDim(.97,2);                         // alvás módban sötét marad, a képernyő magától kikapcsolhat
+}
+let undim=false;                                     // alvás mód után az első koppintás csak felébreszti a képernyőt
+ringBtn.onclick=()=>{if(undim){undim=false;return}run?stop():start()};
+function renderModes(){
+  const box=$('modes');
+  box.innerHTML=RIDS.filter(id=>st.shown.includes(id)).map(id=>`<button data-m="${id}" aria-pressed="${st.mode===id}"><span>${L['r_'+id]}</span><small>${patternLabel(id)}</small></button>`).join('');
+  box.querySelectorAll('button').forEach(b=>b.onclick=()=>{st.mode=b.dataset.m;save();mark();if(run)stop()});
+}
 function mark(){document.querySelectorAll('[data-m]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.m===st.mode))}
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&run){lock();if(ac)ac.resume()}});
 
@@ -372,15 +519,17 @@ let focusT=0;
 function focusLater(ms=4000){clearTimeout(focusT);focusT=setTimeout(()=>{if(run&&sheet.hidden)app.classList.add('focus')},ms)}
 function wakeUI(){if(!run)return;app.classList.remove('focus');focusLater()}
 app.addEventListener('pointerdown',e=>{
-  if(!run||e.target===ringBtn)return;               // a körre koppintás leállít, azt a gomb kezeli
+  if(ac&&ac.state!=='running')ac.resume();           // gyorsindításnál az első érintés engedi a hangot
+  if(!run){undim=+dim.style.opacity>.5&&e.target===ringBtn;if(+dim.style.opacity>0)setDim(0,.6);return}
+  if(e.target===ringBtn)return;                      // a körre koppintás leállít, azt a gomb kezeli
   app.classList.contains('focus')?wakeUI():focusLater();
 },true);
 document.addEventListener('keydown',()=>{if(run)wakeUI()});
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')wakeUI()});
 
 // ---------------------------------------------------------------- beállítások
-const sheet=$('sheet'),backdrop=$('backdrop'),setBtn=$('setBtn'),voiceOpts=$('voiceOpts'),chimeOpts=$('chimeOpts'),swatches=$('swatches');
-function openSheet(){sheet.hidden=backdrop.hidden=false;setBtn.setAttribute('aria-expanded','true');clearTimeout(focusT);app.classList.remove('focus');$('doneBtn').focus()}
+const sheet=$('sheet'),backdrop=$('backdrop'),setBtn=$('setBtn'),voiceOpts=$('voiceOpts'),chimeOpts=$('chimeOpts'),swatches=$('swatches'),rhOpts=$('rhOpts');
+function openSheet(){renderStats();voiceNote();sheet.hidden=backdrop.hidden=false;setBtn.setAttribute('aria-expanded','true');clearTimeout(focusT);app.classList.remove('focus');$('doneBtn').focus()}
 function closeSheet(){if(sheet.hidden)return;sheet.hidden=backdrop.hidden=true;setBtn.setAttribute('aria-expanded','false');setBtn.focus({preventScroll:true});if(run)focusLater()}
 setBtn.onclick=openSheet;$('doneBtn').onclick=closeSheet;backdrop.onclick=closeSheet;
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeSheet()});
@@ -391,6 +540,8 @@ dur.oninput=()=>{st.dur=+dur.value;durv.textContent=L.min(st.dur);fill(dur);save
 vol.oninput=()=>{st.vol=+vol.value;fill(vol);save();if(master)ramp(master.gain,st.vol/100*0.25,.1)};
 vol.onchange=()=>{if(st.bell&&ensureAudio())CHIMES[st.chime].play(784)};          // elengedéskor hallod, milyen hangos
 vibSw.onclick=()=>{st.vib=!st.vib;setSwitch(vibSw,st.vib);save();buzz()};
+sleepSw.onclick=()=>{st.sleep=!st.sleep;setSwitch(sleepSw,st.sleep);save()};
+speakSw.onclick=()=>{st.speak=!st.speak;setSwitch(speakSw,st.speak);save();voiceNote();if(st.speak&&!run)speak('in')};
 function setTone(on){st.tone=on;setSwitch(toneSw,on);voiceOpts.classList.toggle('off',!on);if(tg)ramp(tg.gain,on?1:0,.3);save();showMeta()}
 function setBell(on){st.bell=on;setSwitch(bellSw,on);chimeOpts.classList.toggle('off',!on);save();showMeta()}
 toneSw.onclick=()=>setTone(!st.tone);
@@ -403,11 +554,28 @@ function voicePick(id){                           // választáskor egy rövid b
   setTone(true);
   if(!ensureAudio())return;
   if(voice)voice.stop();voice=VOICES[id].make();
-  if(run){const p=M[st.mode][i];if(p[0]==='in')voice.inhale(left);else if(p[0]==='out')voice.exhale(left);else voice.hold(p[2]);return}
+  if(run){const p=cur[i];if(p[0]==='in')voice.inhale(left);else if(p[0]==='out')voice.exhale(left);else voice.hold(curBig);return}
   voice.inhale(1.2);const v=voice;
   setTimeout(()=>{if(!run&&voice===v)v.exhale(1.4)},1250);setTimeout(()=>{if(!run&&voice===v)v.quiet(.5)},2700);
 }
 function chimePick(id){setBell(true);if(ensureAudio())CHIMES[id].play(784)}
+
+// Ritmusok a főképernyőre: legfeljebb 3; egy negyedik választásakor a legrégebben választott lekerül
+function renderRhythms(){
+  rhOpts.innerHTML=RIDS.map(id=>`<button data-id="${id}" aria-pressed="${st.shown.includes(id)}">${L['r_'+id]}<small>${patternLabel(id)}</small></button>`).join('');
+  rhOpts.querySelectorAll('button').forEach(b=>b.onclick=()=>{
+    const id=b.dataset.id,k=st.shown.indexOf(id);
+    if(k>=0){if(st.shown.length>1)st.shown.splice(k,1)}else{st.shown.push(id);if(st.shown.length>3)st.shown.shift()}
+    if(!st.shown.includes(st.mode))st.mode=st.shown.includes(id)?id:st.shown[0];   // futó gyakorlásnál a következő körtől
+    save();renderRhythms();renderModes();
+  });
+  const names=[L.in,L.hold,L.out,L.hold],min=[2,0,2,0];
+  $('steps').innerHTML=st.own.map((v,k)=>`<div class="stepper"><span>${names[k]}</span><div><button data-k="${k}" data-d="-1" aria-label="${names[k]} −">−</button><output>${v}</output><button data-k="${k}" data-d="1" aria-label="${names[k]} +">+</button></div></div>`).join('');
+  $('steps').querySelectorAll('button').forEach(b=>b.onclick=()=>{
+    const k=+b.dataset.k;st.own[k]=Math.max(min[k],Math.min(12,st.own[k]+ +b.dataset.d));
+    save();renderRhythms();renderModes();
+  });
+}
 
 // Színtéma: [azonosító, fő szín, második szín, világos háttér, sötét háttér]; a nevét a nyelvi szótár adja
 const THEMES=[['erdo','#2E7D6B','#8CC7B5','#E7EEEA','#0E1A17'],['tenger','#2D6A9F','#8DB8DB','#E6ECF2','#0D1620'],
@@ -435,9 +603,9 @@ function applyLang(id){
   opts(voiceOpts,VOICES,'voice',voicePick,id=>L['v_'+id]);
   opts(chimeOpts,CHIMES,'chime',chimePick,id=>L['c_'+id]);
   opts(langOpts,T,'lang',applyLang,id=>T[id].name);
-  buildSwatches();
+  buildSwatches();renderRhythms();renderModes();renderStats();voiceNote();
   durv.textContent=L.min(st.dur);
-  if(run){ph.textContent=L[M[st.mode][i][0]];ringBtn.setAttribute('aria-label',L.stop)}else idleLabel();
+  if(run){ph.textContent=L[cur[i][0]];ringBtn.setAttribute('aria-label',L.stop)}else idleLabel();
   if(shownNote)note(...shownNote);
   showMeta();
 }
@@ -447,8 +615,12 @@ if(!VOICES[st.voice])st.voice='lagy';
 if(!CHIMES[st.chime])st.chime='csengo';
 dur.value=st.dur;vol.value=st.vol;fill(dur);fill(vol);
 applyLang(st.lang);
-setSwitch(vibSw,st.vib);setTone(st.tone);setBell(st.bell);
-applyTheme(st.color);mark();size(0,0);showMeta();
+setSwitch(vibSw,st.vib);setSwitch(sleepSw,st.sleep);setSwitch(speakSw,st.speak);setTone(st.tone);setBell(st.bell);
+applyTheme(st.color);size(0,0);showMeta();
+
+// Gyorsindítás az ikonról (manifest shortcuts): ?r=478 → az a ritmus azonnal indul
+{const q=new URLSearchParams(location.search).get('r');
+ if(q&&R.hasOwnProperty(q)){st.mode=q;save();mark();history.replaceState(null,'',location.pathname);setTimeout(start,400)}}
 
 // ---------------------------------------------------------------- telepítés, frissítés
 const notice=$('notice'),ntext=$('ntext'),nact=$('nact'),nx=$('nx');

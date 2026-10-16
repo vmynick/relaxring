@@ -12,13 +12,15 @@ self.addEventListener("activate", e => {
   e.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))).then(() => self.clients.claim()));
 });
 
-// Azonnal a gyorsítótárból indul, közben a háttérben frissít (ha elérhető az otthoni szerver)
+// Azonnal a gyorsítótárból indul, közben a háttérben frissít (ha elérhető a szerver).
+// Az oldalbetöltés kulcsa a cím ?… nélkül, így a gyorsindítás (?r=478) offline is ugyanazt az oldalt kapja.
 self.addEventListener("fetch", e => {
   if (e.request.method !== "GET" || new URL(e.request.url).origin !== location.origin) return;
+  const key = e.request.mode === "navigate" ? e.request.url.split("?")[0] : e.request;
   e.respondWith(
-    caches.match(e.request).then(cached => {
+    caches.match(key).then(cached => {
       const fresh = fetch(e.request).then(res => {
-        if (res.ok) { const copy = res.clone(); caches.open(CACHE).then(c => c.put(e.request, copy)); }
+        if (res.ok) { const copy = res.clone(); caches.open(CACHE).then(c => c.put(key, copy)); }
         return res;
       }).catch(() => cached);
       return cached || fresh;
