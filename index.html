@@ -15,12 +15,13 @@
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="stylesheet" href="fonts.css">
 <style>
-/* Egyképernyős app: fent módválasztó, középen a lélegző körök, lent vezérlők a hüvelykujj alatt */
+/* Egyképernyős app: fent a ritmus, középen a lélegző körök (ezek az indító/leállító gomb), lent a beállítások.
+   Betű: Apple-eszközökön a rendszer SF Pro (a számokhoz SF Pro Rounded), máshol a hozzá legközelebb álló Inter. */
 :root{
   --bg:#E7EEEA; --surface:#F4F8F5; --fg:#17302A; --muted:#55706A;
   --c1:#2E7D6B; --c2:#8CC7B5; --c3:#4E9C88; --line:#C4D6CE; --on-c1:#F4F8F5;
-  --display:"Bricolage Grotesque",ui-rounded,system-ui,sans-serif;
-  --body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --display:ui-rounded,"SF Pro Rounded",-apple-system,BlinkMacSystemFont,"Inter",system-ui,sans-serif;
+  --body:-apple-system,BlinkMacSystemFont,"Inter","Segoe UI",Roboto,system-ui,sans-serif;
 }
 @media (prefers-color-scheme:dark){:root{
   --bg:#0E1A17; --surface:#16251F; --fg:#DCEBE4; --muted:#8FAAA1;
@@ -40,35 +41,51 @@
 }
 [hidden]{display:none!important}
 html,body{height:100%}
-body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;-webkit-tap-highlight-color:transparent;overflow:hidden;user-select:none}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent;overflow:hidden;user-select:none}
 .app{height:100%;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;justify-content:space-between;gap:12px;
   padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
   padding-top:max(16px,env(safe-area-inset-top,0px));padding-bottom:max(16px,env(safe-area-inset-bottom,0px));max-width:520px;margin:0 auto}
-.modes{display:flex;gap:6px;width:100%;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:5px;box-sizing:border-box}
-.modes button{flex:1;min-width:0;border:0;background:transparent;color:var(--muted);font:500 16px/1.2 var(--body);padding:14px 4px;border-radius:12px;cursor:pointer}
-.modes button small{display:block;font-weight:400;font-size:13px;font-variant-numeric:tabular-nums;margin-top:3px}
-.modes button[aria-pressed="true"]{background:var(--c1);color:var(--on-c1)}
+/* ritmusválasztó: iOS-szerű szegmentált vezérlő */
+.modes{display:flex;gap:2px;width:100%;background:color-mix(in srgb,var(--line) 60%,transparent);border-radius:14px;padding:3px;box-sizing:border-box}
+.modes button{flex:1;min-width:0;border:0;background:transparent;color:var(--muted);font:500 15px/1.2 var(--body);letter-spacing:-.01em;padding:11px 4px;border-radius:11px;cursor:pointer;transition:background .25s,color .25s,box-shadow .25s}
+.modes button small{display:block;font-weight:400;font-size:12px;font-variant-numeric:tabular-nums;margin-top:2px;opacity:.8}
+.modes button[aria-pressed="true"]{background:var(--surface);color:var(--fg);box-shadow:0 1px 3px rgba(0,0,0,.12),0 0 0 .5px rgba(0,0,0,.05)}
+@media (prefers-color-scheme:dark){.modes button[aria-pressed="true"]{background:color-mix(in srgb,var(--fg) 16%,var(--surface))}}
 .stage{flex:1;width:100%;min-height:0;display:grid;place-items:center;position:relative;container-type:size}
 .ring{position:absolute;border-radius:50%;aspect-ratio:1;max-width:100%}
 /* A körök a színpad méretéhez igazodnak (cq), így belégzéskor (×1.04) sem lógnak ki; előtte a régi böngészőknek szóló tartalék */
 #r3{width:min(86vw,62vh,420px);width:min(86cqw,94cqh,420px);border:1.5px solid var(--c3);opacity:.6}
 #r2{width:min(62vw,44vh,300px);width:calc(min(86cqw,94cqh,420px)*.72);background:var(--c2);opacity:.55}
 #r1{width:min(38vw,27vh,180px);width:calc(min(86cqw,94cqh,420px)*.43);background:var(--c1)}
+/* a körök egyben a gomb: koppintásra indul, újabb koppintásra megáll */
+#ringBtn{position:absolute;width:min(74vw,53vh,361px);width:calc(min(86cqw,94cqh,420px)*.86);aspect-ratio:1;max-width:100%;padding:0;border:0;border-radius:50%;background:transparent;cursor:pointer}
+#ringBtn:focus-visible{outline:2px solid var(--c1);outline-offset:4px}
+.stage:has(#ringBtn:active) #r1{filter:brightness(.93)}
 .label{position:relative;text-align:center;color:var(--on-c1);pointer-events:none}
-#ph{font:500 22px/1.1 var(--display)}
-#ct{font:500 52px/1 var(--display);font-variant-numeric:tabular-nums;margin-top:4px}
+#ph{font:500 22px/1.15 var(--display);letter-spacing:-.01em}
+#ct{font:300 64px/1 var(--display);font-variant-numeric:tabular-nums;letter-spacing:-.02em;margin-top:2px}
+#sub{display:none;font:400 14px/1.3 var(--body);color:var(--muted);margin-top:6px}
 .idle .label{color:var(--fg)}
-.idle #r1{background:transparent;border:1.5px solid var(--c1)}
+.idle #ct{display:none}
+.idle #sub{display:block}
+.idle #r1{background:color-mix(in srgb,var(--c1) 12%,transparent);border:1.5px solid var(--c1)}
 .meta{font-size:14px;color:var(--muted);font-variant-numeric:tabular-nums;min-height:20px;text-align:center}
-.controls{width:100%;display:flex;flex-direction:column;gap:14px}
-.row{display:flex;align-items:center;gap:12px}
-.row label{font-size:14px;color:var(--muted);flex:none;min-width:58px}
-input[type=range]{flex:1;min-width:0;accent-color:var(--c1);height:28px}
-.chip{flex:none;border:1px solid var(--line);background:var(--surface);color:var(--fg);font:500 16px var(--body);padding:12px 18px;border-radius:999px;cursor:pointer}
-.chip[aria-pressed="false"]{color:var(--muted);text-decoration:line-through}
+.controls{width:100%;display:flex;flex-direction:column;gap:12px}
+.row{display:flex;align-items:center;gap:14px}
+.row label{font-size:15px;color:var(--muted);flex:none;min-width:64px}
+#durv{width:56px;text-align:right;font-size:15px;font-variant-numeric:tabular-nums}
+/* csúszka: vékony sáv, fehér gomb (iOS-szerű); a kitöltést a --p adja */
+input[type=range]{flex:1;min-width:0;-webkit-appearance:none;appearance:none;background:transparent;height:32px;margin:0;cursor:pointer;--p:50%}
+input[type=range]::-webkit-slider-runnable-track{height:4px;border-radius:2px;background:linear-gradient(to right,var(--c1) var(--p),var(--line) var(--p))}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:26px;height:26px;margin-top:-11px;border-radius:50%;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.22),0 0 0 .5px rgba(0,0,0,.06)}
+input[type=range]::-moz-range-track{height:4px;border-radius:2px;background:var(--line)}
+input[type=range]::-moz-range-progress{height:4px;border-radius:2px;background:var(--c1)}
+input[type=range]::-moz-range-thumb{width:26px;height:26px;border:0;border-radius:50%;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.22)}
+.chip{flex:none;border:0;background:var(--surface);color:var(--muted);font:500 15px var(--body);letter-spacing:-.01em;padding:13px 18px;border-radius:14px;cursor:pointer;transition:background .25s,color .25s}
+.chip[aria-pressed="true"]{background:color-mix(in srgb,var(--c1) 16%,var(--surface));color:var(--c1)}
 .toggles{display:flex;gap:10px}
 .toggles .chip{flex:1}
-.toggles .theme{flex:none;width:56px;padding:0;display:grid;place-items:center}
+.toggles .theme{flex:none;width:52px;padding:0;display:grid;place-items:center}
 .theme i{width:20px;height:20px;border-radius:50%;background:var(--c1);box-shadow:0 0 0 4px var(--c2)}
 /* Színtéma-választó */
 .backdrop{position:fixed;inset:0;background:rgba(0,0,0,.25);z-index:10}
@@ -85,7 +102,6 @@ input[type=range]{flex:1;min-width:0;accent-color:var(--c1);height:28px}
 .hint{position:absolute;left:0;right:0;bottom:0;text-align:center;font-size:13px;color:var(--muted);opacity:0;transition:opacity .6s;pointer-events:none}
 .hint.show{opacity:1}
 @media (prefers-reduced-motion:reduce){.modes,.meta,.controls{transition:opacity .3s}.app.focus .modes,.app.focus .meta,.app.focus .controls{filter:none;opacity:.05}}
-#go{width:100%;border:0;border-radius:18px;background:var(--fg);color:var(--bg);font:500 20px var(--display);padding:22px;cursor:pointer}
 button:focus-visible,input:focus-visible{outline:2px solid var(--c1);outline-offset:2px}
 /* Telepítési / beállítási sáv: csak nyugalmi állapotban látszik */
 .notice{display:none;width:100%;box-sizing:border-box;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:6px 6px 6px 14px;font-size:14px;line-height:1.3;color:var(--muted)}
@@ -94,7 +110,7 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--c1);outline-off
 .notice span{flex:1;min-width:0}
 .notice .chip{font-size:14px;padding:8px 14px}
 #nx{flex:none;border:0;background:transparent;color:var(--muted);font:400 22px/1 var(--body);width:36px;height:36px;border-radius:999px;cursor:pointer}
-@media (max-height:600px){#ct{font-size:40px}.controls{gap:8px}.modes button{padding:10px 4px}.chip{padding:9px 16px}#go{padding:16px}}
+@media (max-height:600px){#ct{font-size:48px}.controls{gap:8px}.modes button{padding:8px 4px}.chip{padding:10px 16px}}
 </style>
 <script>/* a választott színtéma már az első kirajzolás előtt */try{var c=JSON.parse(localStorage.getItem('legzo')||'{}').color;if(c&&c!=='erdo')document.documentElement.dataset.color=c}catch(e){}</script>
 </head>
@@ -112,8 +128,9 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--c1);outline-off
     <div class="ring" id="r3"></div>
     <div class="ring" id="r2"></div>
     <div class="ring" id="r1"></div>
-    <div class="label"><div id="ph">Kész?</div><div id="ct">·</div></div>
-    <div class="hint" id="hint">Koppints a képernyőre a vezérlőkhöz</div>
+    <button id="ringBtn" aria-label="Indítás"></button>
+    <div class="label"><div id="ph">Indítás</div><div id="ct"></div><div id="sub">koppints a körre</div></div>
+    <div class="hint" id="hint">A körre koppintva megáll, máshova koppintva előjönnek a beállítások</div>
   </div>
 
   <div class="meta" id="meta">5 perc · hang bekapcsolva</div>
@@ -122,7 +139,7 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--c1);outline-off
     <div class="row">
       <label for="dur">Idő</label>
       <input type="range" id="dur" min="1" max="15" step="1" value="5">
-      <span id="durv" style="width:48px;text-align:right;font-variant-numeric:tabular-nums">5 perc</span>
+      <span id="durv">5 perc</span>
     </div>
     <div class="row">
       <label for="vol">Hangerő</label>
@@ -133,7 +150,6 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--c1);outline-off
       <button class="chip" id="bell" aria-pressed="true">Csengő</button>
       <button class="chip theme" id="themeBtn" aria-label="Színtéma" aria-haspopup="dialog" aria-expanded="false"><i></i></button>
     </div>
-    <button id="go">Indítás</button>
   </div>
 </div>
 
@@ -146,7 +162,7 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--c1);outline-off
 <script>
 const M={box:[["Belégzés",4,1],["Tartás",4,1],["Kilégzés",4,0],["Tartás",4,0]],"478":[["Belégzés",4,1],["Tartás",7,1],["Kilégzés",8,0]],calm:[["Belégzés",4,1],["Kilégzés",6,0]]};
 const $=id=>document.getElementById(id);
-const app=$('app'),r1=$('r1'),r2=$('r2'),r3=$('r3'),ph=$('ph'),ct=$('ct'),go=$('go'),meta=$('meta'),vol=$('vol'),tone=$('tone'),bell=$('bell'),dur=$('dur'),durv=$('durv');
+const app=$('app'),r1=$('r1'),r2=$('r2'),r3=$('r3'),ph=$('ph'),ct=$('ct'),sub=$('sub'),ringBtn=$('ringBtn'),meta=$('meta'),vol=$('vol'),tone=$('tone'),bell=$('bell'),dur=$('dur'),durv=$('durv');
 const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
 let st={mode:'box',vol:35,tone:true,bell:true,dur:5,color:'erdo',hints:0};
 try{Object.assign(st,JSON.parse(localStorage.getItem('legzo')||'{}'))}catch(e){}
@@ -205,27 +221,30 @@ async function lock(){try{wake=await navigator.wakeLock.request('screen')}catch(
 function unlock(){try{wake&&wake.release()}catch(e){}wake=null}
 function start(){
   audio();run=true;i=0;cyc=1;elapsed=0;app.classList.remove('idle');
-  phase();tm=setInterval(tick,1000);go.textContent='Leállítás';lock();showMeta();
+  phase();tm=setInterval(tick,1000);ringBtn.setAttribute('aria-label','Leállítás');lock();showMeta();
   closeSheet();focusLater(1200);
-  if(st.hints<3){st.hints++;save();hint.classList.add('show');setTimeout(()=>hint.classList.remove('show'),4500)}
+  if((st.hint2||0)<3){st.hint2=(st.hint2||0)+1;save();hint.classList.add('show');setTimeout(()=>hint.classList.remove('show'),5000)}
 }
 function stop(label){
   run=false;clearInterval(tm);size(0,1.2);if(ac)ramp(g.gain,0,0.8);
   clearTimeout(focusT);app.classList.remove('focus');hint.classList.remove('show');
-  app.classList.add('idle');ph.textContent=label||'Kész?';ct.textContent='·';go.textContent='Indítás';unlock();showMeta();
+  app.classList.add('idle');ph.textContent=label||'Indítás';sub.textContent=label?'koppints az újrakezdéshez':'koppints a körre';
+  ringBtn.setAttribute('aria-label','Indítás');unlock();showMeta();
 }
 function finish(){ding(523);setTimeout(()=>ding(784),400);stop('Szép volt');}
 
-go.onclick=()=>run?stop():start();
+ringBtn.onclick=()=>run?stop():start();
 document.querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>{st.mode=b.dataset.m;save();mark();if(run)stop()});
 function mark(){document.querySelectorAll('[data-m]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.m===st.mode))}
+function fill(el){el.style.setProperty('--p',(el.value-el.min)/(el.max-el.min)*100+'%')}   // a csúszka kitöltése
+vol.addEventListener('input',()=>fill(vol));dur.addEventListener('input',()=>fill(dur));
 vol.oninput=()=>{st.vol=+vol.value;save();if(master)ramp(master.gain,st.vol/100*0.25,0.1)};
 tone.onclick=()=>{st.tone=!st.tone;tone.setAttribute('aria-pressed',st.tone);save();showMeta();if(tg)ramp(tg.gain,st.tone?1:0,0.3)};
 bell.onclick=()=>{st.bell=!st.bell;bell.setAttribute('aria-pressed',st.bell);save();showMeta()};
 dur.oninput=()=>{st.dur=+dur.value;durv.textContent=st.dur+' perc';save();showMeta()};
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&run){lock();if(ac)ac.resume()}});
 
-vol.value=st.vol;dur.value=st.dur;durv.textContent=st.dur+' perc';tone.setAttribute('aria-pressed',st.tone);bell.setAttribute('aria-pressed',st.bell);
+vol.value=st.vol;dur.value=st.dur;durv.textContent=st.dur+' perc';fill(vol);fill(dur);tone.setAttribute('aria-pressed',st.tone);bell.setAttribute('aria-pressed',st.bell);
 mark();size(0,0);showMeta();
 
 // Fókusz: gyakorlás közben a körökön kívül minden elhalványul; egy koppintás 4 mp-re visszahozza a vezérlőket
@@ -233,7 +252,10 @@ const hint=$('hint');
 let focusT=0;
 function focusLater(ms=4000){clearTimeout(focusT);focusT=setTimeout(()=>{if(run)app.classList.add('focus')},ms)}
 function wakeUI(){if(!run)return;app.classList.remove('focus');focusLater()}
-app.addEventListener('pointerdown',()=>{if(!run)return;app.classList.contains('focus')?wakeUI():focusLater()},true);
+app.addEventListener('pointerdown',e=>{
+  if(!run||e.target===ringBtn)return;               // a körre koppintás leállít, azt a gomb kezeli
+  app.classList.contains('focus')?wakeUI():focusLater();
+},true);
 app.addEventListener('input',()=>{if(run)focusLater()});
 document.addEventListener('keydown',()=>{if(run)wakeUI()});
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')wakeUI()});

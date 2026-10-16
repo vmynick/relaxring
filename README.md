@@ -17,4 +17,4 @@ A beállítások (ritmus, idő, hangerő) csak a telefonon tárolódnak, az app 
 
 Minden `main`-re küldött módosítás után a GitHub Actions közzéteszi az oldalt ([.github/workflows/pages.yml](.github/workflows/pages.yml)), és új verziószámot ír a `sw.js`-be.
 
-Betűtípusok: Bricolage Grotesque és Figtree, SIL Open Font License 1.1 ([fonts](fonts)).
+Betű: Apple-eszközökön a rendszer SF Pro betűje, máshol az Inter (SIL Open Font License 1.1, [fonts](fonts)).
