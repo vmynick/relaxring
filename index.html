@@ -22,12 +22,23 @@
   --display:"Bricolage Grotesque",ui-rounded,system-ui,sans-serif;
   --body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
 }
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+@media (prefers-color-scheme:dark){:root{
   --bg:#0E1A17; --surface:#16251F; --fg:#DCEBE4; --muted:#8FAAA1;
   --c1:#3FA88E; --c2:#1F5547; --c3:#5FBFA5; --line:#2A3F38; --on-c1:#0E1A17; color-scheme:dark}}
-:root[data-theme="dark"]{
-  --bg:#0E1A17; --surface:#16251F; --fg:#DCEBE4; --muted:#8FAAA1;
-  --c1:#3FA88E; --c2:#1F5547; --c3:#5FBFA5; --line:#2A3F38; --on-c1:#0E1A17; color-scheme:dark}
+/* Színtémák (data-color a <html>-en); az alap az Erdő (zöld) fent. A sötét változatok a világosak után jönnek, így felülírják őket. */
+:root[data-color="tenger"]{--bg:#E6ECF2;--surface:#F4F7FA;--fg:#15283A;--muted:#536B80;--c1:#2D6A9F;--c2:#8DB8DB;--c3:#4C88BC;--line:#C3D2E0;--on-c1:#F4F7FA}
+:root[data-color="levendula"]{--bg:#ECE9F3;--surface:#F7F5FB;--fg:#2A2340;--muted:#665E80;--c1:#6A55A8;--c2:#BBAEDF;--c3:#8774C4;--line:#D4CDE6;--on-c1:#F7F5FB}
+:root[data-color="naplemente"]{--bg:#F3ECE3;--surface:#FBF7F1;--fg:#3A2614;--muted:#7D654D;--c1:#A9581F;--c2:#EBC193;--c3:#D08A4F;--line:#E3D3BF;--on-c1:#FBF7F1}
+:root[data-color="rozsa"]{--bg:#F3E8EB;--surface:#FBF5F6;--fg:#3A1E26;--muted:#7E5A64;--c1:#B04A66;--c2:#E7AFBE;--c3:#C96E86;--line:#E4CCD3;--on-c1:#FBF5F6}
+:root[data-color="ko"]{--bg:#E9EAEA;--surface:#F6F6F6;--fg:#22262A;--muted:#62686E;--c1:#4B5560;--c2:#B6BDC4;--c3:#78828C;--line:#D0D4D8;--on-c1:#F6F6F6}
+@media (prefers-color-scheme:dark){
+  :root[data-color="tenger"]{--bg:#0D1620;--surface:#142231;--fg:#DAE6F1;--muted:#8BA2B8;--c1:#4A8CC7;--c2:#1C4466;--c3:#6AA6DA;--line:#26394D;--on-c1:#0D1620}
+  :root[data-color="levendula"]{--bg:#15121F;--surface:#1F1A2D;--fg:#E6E0F3;--muted:#A49BBD;--c1:#8D78CC;--c2:#3C3060;--c3:#A895E0;--line:#332B48;--on-c1:#15121F}
+  :root[data-color="naplemente"]{--bg:#1C140C;--surface:#271C12;--fg:#F2E5D6;--muted:#B9A086;--c1:#D9853F;--c2:#5A3A1C;--c3:#E6A066;--line:#3B2B1C;--on-c1:#1C140C}
+  :root[data-color="rozsa"]{--bg:#1D1014;--surface:#29171D;--fg:#F3E1E6;--muted:#BC98A2;--c1:#D06A86;--c2:#5B2635;--c3:#E08EA4;--line:#3D2329;--on-c1:#1D1014}
+  :root[data-color="ko"]{--bg:#121416;--surface:#1B1E21;--fg:#E2E5E8;--muted:#9AA1A8;--c1:#8C98A4;--c2:#3A4148;--c3:#A9B3BC;--line:#2D3237;--on-c1:#121416}
+}
+[hidden]{display:none!important}
 html,body{height:100%}
 body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;-webkit-tap-highlight-color:transparent;overflow:hidden;user-select:none}
 .app{height:100%;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;justify-content:space-between;gap:12px;
@@ -57,6 +68,23 @@ input[type=range]{flex:1;min-width:0;accent-color:var(--c1);height:28px}
 .chip[aria-pressed="false"]{color:var(--muted);text-decoration:line-through}
 .toggles{display:flex;gap:10px}
 .toggles .chip{flex:1}
+.toggles .theme{flex:none;width:56px;padding:0;display:grid;place-items:center}
+.theme i{width:20px;height:20px;border-radius:50%;background:var(--c1);box-shadow:0 0 0 4px var(--c2)}
+/* Színtéma-választó */
+.backdrop{position:fixed;inset:0;background:rgba(0,0,0,.25);z-index:10}
+.sheet{position:fixed;left:50%;transform:translateX(-50%);bottom:max(16px,env(safe-area-inset-bottom,0px));width:min(488px,calc(100% - 32px));box-sizing:border-box;
+  background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:16px;z-index:11;box-shadow:0 10px 40px rgba(0,0,0,.25)}
+.sheet h2{margin:0 0 12px;font:500 18px var(--display);color:var(--fg)}
+.swatches{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.swatches button{display:flex;flex-direction:column;align-items:center;gap:10px;padding:14px 4px 12px;border:1px solid var(--line);border-radius:14px;background:var(--bg);color:var(--fg);font:500 14px var(--body);cursor:pointer}
+.swatches button[aria-pressed="true"]{border-color:var(--fg);box-shadow:inset 0 0 0 1px var(--fg)}
+.swatches i{width:30px;height:30px;border-radius:50%;background:var(--s1);box-shadow:0 0 0 5px var(--s2)}
+/* Fókusz: gyakorlás közben a körökön kívül minden elhomályosul és elhalványul; koppintásra visszajön */
+.modes,.meta,.controls{transition:filter .9s ease,opacity .9s ease}
+.app.focus .modes,.app.focus .meta,.app.focus .controls{filter:blur(8px);opacity:.08;pointer-events:none}
+.hint{position:absolute;left:0;right:0;bottom:0;text-align:center;font-size:13px;color:var(--muted);opacity:0;transition:opacity .6s;pointer-events:none}
+.hint.show{opacity:1}
+@media (prefers-reduced-motion:reduce){.modes,.meta,.controls{transition:opacity .3s}.app.focus .modes,.app.focus .meta,.app.focus .controls{filter:none;opacity:.05}}
 #go{width:100%;border:0;border-radius:18px;background:var(--fg);color:var(--bg);font:500 20px var(--display);padding:22px;cursor:pointer}
 button:focus-visible,input:focus-visible{outline:2px solid var(--c1);outline-offset:2px}
 /* Telepítési / beállítási sáv: csak nyugalmi állapotban látszik */
@@ -68,6 +96,7 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--c1);outline-off
 #nx{flex:none;border:0;background:transparent;color:var(--muted);font:400 22px/1 var(--body);width:36px;height:36px;border-radius:999px;cursor:pointer}
 @media (max-height:600px){#ct{font-size:40px}.controls{gap:8px}.modes button{padding:10px 4px}.chip{padding:9px 16px}#go{padding:16px}}
 </style>
+<script>/* a választott színtéma már az első kirajzolás előtt */try{var c=JSON.parse(localStorage.getItem('legzo')||'{}').color;if(c&&c!=='erdo')document.documentElement.dataset.color=c}catch(e){}</script>
 </head>
 <body>
 <div class="app idle" id="app">
@@ -84,6 +113,7 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--c1);outline-off
     <div class="ring" id="r2"></div>
     <div class="ring" id="r1"></div>
     <div class="label"><div id="ph">Kész?</div><div id="ct">·</div></div>
+    <div class="hint" id="hint">Koppints a képernyőre a vezérlőkhöz</div>
   </div>
 
   <div class="meta" id="meta">5 perc · hang bekapcsolva</div>
@@ -101,9 +131,16 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--c1);outline-off
     <div class="toggles">
       <button class="chip" id="tone" aria-pressed="true">Hang</button>
       <button class="chip" id="bell" aria-pressed="true">Csengő</button>
+      <button class="chip theme" id="themeBtn" aria-label="Színtéma" aria-haspopup="dialog" aria-expanded="false"><i></i></button>
     </div>
     <button id="go">Indítás</button>
   </div>
+</div>
+
+<div class="backdrop" id="backdrop" hidden></div>
+<div class="sheet" id="sheet" role="dialog" aria-label="Színtéma" hidden>
+  <h2>Színtéma</h2>
+  <div class="swatches" id="swatches"></div>
 </div>
 
 <script>
@@ -111,7 +148,7 @@ const M={box:[["Belégzés",4,1],["Tartás",4,1],["Kilégzés",4,0],["Tartás",4
 const $=id=>document.getElementById(id);
 const app=$('app'),r1=$('r1'),r2=$('r2'),r3=$('r3'),ph=$('ph'),ct=$('ct'),go=$('go'),meta=$('meta'),vol=$('vol'),tone=$('tone'),bell=$('bell'),dur=$('dur'),durv=$('durv');
 const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
-let st={mode:'box',vol:35,tone:true,bell:true,dur:5};
+let st={mode:'box',vol:35,tone:true,bell:true,dur:5,color:'erdo',hints:0};
 try{Object.assign(st,JSON.parse(localStorage.getItem('legzo')||'{}'))}catch(e){}
 function save(){try{localStorage.setItem('legzo',JSON.stringify(st))}catch(e){}}
 let run=false,i=0,left=0,cyc=0,elapsed=0,tm=null,ac=null,osc,osc2,g,tg,master,wake=null;
@@ -169,9 +206,12 @@ function unlock(){try{wake&&wake.release()}catch(e){}wake=null}
 function start(){
   audio();run=true;i=0;cyc=1;elapsed=0;app.classList.remove('idle');
   phase();tm=setInterval(tick,1000);go.textContent='Leállítás';lock();showMeta();
+  closeSheet();focusLater(1200);
+  if(st.hints<3){st.hints++;save();hint.classList.add('show');setTimeout(()=>hint.classList.remove('show'),4500)}
 }
 function stop(label){
   run=false;clearInterval(tm);size(0,1.2);if(ac)ramp(g.gain,0,0.8);
+  clearTimeout(focusT);app.classList.remove('focus');hint.classList.remove('show');
   app.classList.add('idle');ph.textContent=label||'Kész?';ct.textContent='·';go.textContent='Indítás';unlock();showMeta();
 }
 function finish(){ding(523);setTimeout(()=>ding(784),400);stop('Szép volt');}
@@ -187,6 +227,36 @@ document.addEventListener('visibilitychange',()=>{if(document.visibilityState===
 
 vol.value=st.vol;dur.value=st.dur;durv.textContent=st.dur+' perc';tone.setAttribute('aria-pressed',st.tone);bell.setAttribute('aria-pressed',st.bell);
 mark();size(0,0);showMeta();
+
+// Fókusz: gyakorlás közben a körökön kívül minden elhalványul; egy koppintás 4 mp-re visszahozza a vezérlőket
+const hint=$('hint');
+let focusT=0;
+function focusLater(ms=4000){clearTimeout(focusT);focusT=setTimeout(()=>{if(run)app.classList.add('focus')},ms)}
+function wakeUI(){if(!run)return;app.classList.remove('focus');focusLater()}
+app.addEventListener('pointerdown',()=>{if(!run)return;app.classList.contains('focus')?wakeUI():focusLater()},true);
+app.addEventListener('input',()=>{if(run)focusLater()});
+document.addEventListener('keydown',()=>{if(run)wakeUI()});
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')wakeUI()});
+
+// Színtéma: [azonosító, név, fő szín, második szín, világos háttér, sötét háttér]
+const THEMES=[['erdo','Erdő','#2E7D6B','#8CC7B5','#E7EEEA','#0E1A17'],['tenger','Tenger','#2D6A9F','#8DB8DB','#E6ECF2','#0D1620'],
+  ['levendula','Levendula','#6A55A8','#BBAEDF','#ECE9F3','#15121F'],['naplemente','Naplemente','#A9581F','#EBC193','#F3ECE3','#1C140C'],
+  ['rozsa','Rózsa','#B04A66','#E7AFBE','#F3E8EB','#1D1014'],['ko','Kő','#4B5560','#B6BDC4','#E9EAEA','#121416']];
+const themeBtn=$('themeBtn'),sheet=$('sheet'),backdrop=$('backdrop'),swatches=$('swatches');
+function applyTheme(id){
+  const t=THEMES.find(x=>x[0]===id)||THEMES[0];
+  if(t[0]==='erdo')delete document.documentElement.dataset.color;else document.documentElement.dataset.color=t[0];
+  const metas=document.querySelectorAll('meta[name="theme-color"]');metas[0].content=t[4];metas[1].content=t[5];
+  swatches.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.t===t[0]));
+  st.color=t[0];save();
+}
+swatches.innerHTML=THEMES.map(t=>`<button data-t="${t[0]}" aria-pressed="false"><i style="--s1:${t[2]};--s2:${t[3]}"></i>${t[1]}</button>`).join('');
+swatches.querySelectorAll('button').forEach(b=>b.onclick=()=>{applyTheme(b.dataset.t);closeSheet()});
+function openSheet(){sheet.hidden=backdrop.hidden=false;themeBtn.setAttribute('aria-expanded','true');swatches.querySelector('[aria-pressed="true"]').focus()}
+function closeSheet(){if(sheet.hidden)return;sheet.hidden=backdrop.hidden=true;themeBtn.setAttribute('aria-expanded','false')}
+themeBtn.onclick=openSheet;backdrop.onclick=closeSheet;
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeSheet()});
+applyTheme(st.color);
 
 // Otthoni szerver: offline gyorsítótár, telepítés-ajánlat, HTTP-ről átváltás a biztonságos (https) címre
 const notice=$('notice'),ntext=$('ntext'),nact=$('nact'),nx=$('nx');
