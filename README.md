@@ -2,7 +2,7 @@
 
 Légzőgyakorló web-app lélegző körökkel, halk hanggal és rezgéssel. Ritmusok: doboz (4·4·4·4), elalvó (4·7·8), nyugtató (4·6), koherens (5·5), lazító (4·2·6), lassuló (a kilégzés 4-ről 8 mp-re nyúlik) és saját. A főképernyőn a Beállításokban kiválasztott 3 látszik.
 
-További funkciók: napló (napos sorozat, heti percek), alvás mód (a képernyő lassan elsötétül, a végén nincs csengés), a telepített app teljes képernyős (nincs állapotsor és alsó gombsor; böngészőben gyakorlás közben vált teljes képernyőre), hangos vezetés (a telefon felolvasóhangjával), gyorsindítás az app ikonjáról (hosszan nyomva).
+További funkciók: napló (napos sorozat, heti percek), alvás mód (a képernyő lassan elsötétül, a végén nincs csengés), a telepített app teljes képernyős (nincs állapotsor és alsó gombsor; böngészőben gyakorlás közben vált teljes képernyőre), hangos vezetés (a telefon felolvasóhangjával), témánként háttérkép (a téma színeiből rajzolt táj, kikapcsolható), gyorsindítás az app ikonjáról (hosszan nyomva).
 
 **Megnyitás:** https://vmynick.github.io/relaxring/
 

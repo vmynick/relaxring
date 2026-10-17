@@ -160,11 +160,26 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px;border:0;border-radiu
 .notice .act{flex:none;border:0;background:color-mix(in srgb,var(--c1) 16%,var(--bg));color:var(--c1);font-size:18px;font-weight:700;padding:10px 14px;border-radius:12px;cursor:pointer}
 #nx{flex:none;border:0;background:transparent;color:var(--muted);font-size:26px;font-weight:400;line-height:1;width:40px;height:40px;border-radius:50%;cursor:pointer}
 
+/* Háttérkép: témánként egy táj a téma színeiből. Világosban a közeli rétegek sötétebbek, sötétben (éjszaka) a távoliak világosabbak. */
+.app{position:relative;z-index:1}
+#scene{position:fixed;inset:0;z-index:0;pointer-events:none;
+  --glow:color-mix(in srgb,var(--c2) 38%,var(--bg));--sun:color-mix(in srgb,var(--c2) 70%,var(--surface));
+  --l1:color-mix(in srgb,var(--c3) 26%,var(--bg));--l2:color-mix(in srgb,var(--c3) 50%,var(--bg));
+  --l3:color-mix(in srgb,var(--c1) 76%,var(--bg));--acc:color-mix(in srgb,var(--c1) 50%,var(--bg))}
+@media (prefers-color-scheme:dark){#scene{
+  --glow:color-mix(in srgb,var(--c2) 75%,var(--bg));--sun:color-mix(in srgb,var(--fg) 55%,var(--bg));
+  --l1:color-mix(in srgb,var(--c2) 60%,var(--bg));--l2:color-mix(in srgb,var(--c2) 32%,var(--bg));
+  --l3:color-mix(in srgb,#000 38%,var(--bg));--acc:color-mix(in srgb,var(--c3) 26%,var(--bg))}}
+#scene svg{display:block;width:100%;height:100%}
+.app.scenic .hint{text-shadow:0 0 10px var(--bg),0 0 3px var(--bg)}
+.app.scenic .meta{justify-self:center;background:color-mix(in srgb,var(--surface) 80%,transparent);border-radius:14px;padding:6px 14px;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+
 @media (max-height:640px){#ph{font-size:24px}#ct{font-size:64px}.modes button{padding:8px 4px;font-size:18px}.modes button small{font-size:14px}}
 </style>
 <script>/* a választott színtéma már az első kirajzolás előtt */try{var c=JSON.parse(localStorage.getItem('legzo')||'{}').color;if(c&&c!=='erdo')document.documentElement.dataset.color=c}catch(e){}</script>
 </head>
 <body>
+<div id="scene" hidden></div>
 <div class="app idle" id="app">
   <div class="notice" id="notice" role="status"><span id="ntext"></span><button class="act" id="nact"></button><button id="nx" data-ia="close">×</button></div>
 
@@ -232,7 +247,10 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px;border:0;border-radiu
     </div>
 
     <h3 data-i="theme"></h3>
-    <div class="group"><div class="swatches" id="swatches"></div></div>
+    <div class="group">
+      <div class="item"><span><span data-i="scene"></span><small class="desc" data-i="sceneInfo"></small></span><button class="switch" id="sceneSw" role="switch" aria-checked="false" data-ia="scene"></button></div>
+      <div class="swatches" id="swatches"></div>
+    </div>
 
     <h3 data-i="language"></h3>
     <div class="group"><div class="opts" id="langOpts" role="group" data-ia="language" style="padding-top:14px"></div></div>
@@ -257,6 +275,7 @@ const T={
     volume:'Hangerő',theme:'Színtéma',language:'Nyelv',breathKind:'Légzőhang fajtája',chimeKind:'Csengés fajtája',close:'Bezárás',
     v_lagy:'Lágy',v_ocean:'Óceán',v_pad:'Pad',v_tal:'Tál',c_csengo:'Csengő',c_tal:'Tál',c_fa:'Fa',c_csepp:'Csepp',c_piezo:'Piezo',
     t_erdo:'Erdő',t_tenger:'Tenger',t_levendula:'Levendula',t_naplemente:'Naplemente',t_rozsa:'Rózsa',t_ko:'Kő',
+    scene:'Háttérkép',sceneInfo:'A témához illő nyugodt táj a körök mögött.',
     newVer:'Új verzió érhető el.',update:'Frissítés',installTxt:'Tedd ki a kezdőképernyőre, és appként indul.',install:'Telepítés',
     certTxt:'A telepítéshez és az ébren maradó képernyőhöz egyszer be kell állítani a tanúsítványt.',certBtn:'Beállítás'},
   en:{name:'English',locale:'en-US',title:'Breathing Circles',modes:'Breathing rhythm',
@@ -273,6 +292,7 @@ const T={
     volume:'Volume',theme:'Color theme',language:'Language',breathKind:'Breathing sound type',chimeKind:'Chime type',close:'Close',
     v_lagy:'Soft',v_ocean:'Ocean',v_pad:'Pad',v_tal:'Bowl',c_csengo:'Bell',c_tal:'Bowl',c_fa:'Wood',c_csepp:'Drop',c_piezo:'Piezo',
     t_erdo:'Forest',t_tenger:'Sea',t_levendula:'Lavender',t_naplemente:'Sunset',t_rozsa:'Rose',t_ko:'Stone',
+    scene:'Background scene',sceneInfo:'A calm landscape matching the theme, behind the circles.',
     newVer:'A new version is available.',update:'Update',installTxt:'Add it to your home screen to use it as an app.',install:'Install',
     certTxt:'Set up the certificate once to install the app and keep the screen awake.',certBtn:'Set up'},
   de:{name:'Deutsch',locale:'de-DE',title:'Atemkreise',modes:'Atemrhythmus',
@@ -289,6 +309,7 @@ const T={
     volume:'Lautstärke',theme:'Farbthema',language:'Sprache',breathKind:'Art des Atemklangs',chimeKind:'Art der Glocke',close:'Schließen',
     v_lagy:'Sanft',v_ocean:'Ozean',v_pad:'Pad',v_tal:'Schale',c_csengo:'Glocke',c_tal:'Schale',c_fa:'Holz',c_csepp:'Tropfen',c_piezo:'Piezo',
     t_erdo:'Wald',t_tenger:'Meer',t_levendula:'Lavendel',t_naplemente:'Abendrot',t_rozsa:'Rose',t_ko:'Stein',
+    scene:'Hintergrundbild',sceneInfo:'Eine ruhige Landschaft passend zum Farbthema hinter den Kreisen.',
     newVer:'Neue Version verfügbar.',update:'Aktualisieren',installTxt:'Zum Startbildschirm hinzufügen und als App nutzen.',install:'Installieren',
     certTxt:'Richte einmal das Zertifikat ein, um die App zu installieren und den Bildschirm wach zu halten.',certBtn:'Einrichten'}
 };
@@ -317,7 +338,7 @@ function pattern(id){
 }
 function patternLabel(id){return id==='slow'?'4·4→8':pattern(id).map(x=>x[1]).join('·')}
 
-let st={mode:'box',shown:['box','478','calm'],own:[4,4,6,0],vol:35,tone:true,bell:true,vib:true,sleep:false,speak:false,full:true,dur:5,
+let st={mode:'box',shown:['box','478','calm'],own:[4,4,6,0],vol:35,tone:true,bell:true,vib:true,sleep:false,speak:false,full:true,scene:false,dur:5,
   color:'erdo',voice:'lagy',chime:'csengo',log:{},sessions:0};
 try{Object.assign(st,JSON.parse(localStorage.getItem('legzo')||'{}'))}catch(e){}
 if(!T[st.lang]){const n=(navigator.language||'hu').slice(0,2).toLowerCase();st.lang=T[n]?n:'en'}   // első indításkor a telefon nyelve
@@ -606,8 +627,53 @@ function applyTheme(id){
   if(t[0]==='erdo')delete document.documentElement.dataset.color;else document.documentElement.dataset.color=t[0];
   const metas=document.querySelectorAll('meta[name="theme-color"]');metas[0].content=t[3];metas[1].content=t[4];
   swatches.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.t===t[0]));
-  st.color=t[0];save();
+  st.color=t[0];save();renderScene();
 }
+
+// Háttérkép: 1200×800-as rajz alulra igazítva; a telefon a középső ~370 egységet látja, a horizont a körök alá esik.
+// A színek a #scene CSS-változóiból jönnek (--l1 távoli … --l3 közeli réteg), így téma- és világos/sötét váltáskor is illenek.
+const sceneEl=$('scene'),sceneSw=$('sceneSw');
+function rng(seed){let s=seed;return ()=>(s=s*16807%2147483647)/2147483647}
+function wave(y,a,f,ph){const p=[];for(let x=-100;x<=1300;x+=20)p.push([x,y+a*Math.sin(x/f+ph)+a*.45*Math.sin(x/(f*.41)+ph*1.7)]);return p}
+function ridge(y,a,step,r){const p=[];for(let x=-100;x<=1300;x+=step)p.push([x,y-r()*a]);return p}
+function area(p,fill,extra=''){return `<path d="M${p[0][0]} 800${p.map(q=>`L${q[0]} ${q[1].toFixed(1)}`).join('')}L${p[p.length-1][0]} 800Z" style="fill:var(${fill})" ${extra}/>`}
+function trees(p,r,hmin,hmax,fill){   // fenyősor a domb vonalán
+  let d='';
+  for(const [x,y] of p){if(r()<.2)continue;const h=hmin+r()*(hmax-hmin),w=h*.4,c=x+r()*12-6;
+    d+=`M${(c-w/2).toFixed(1)} ${(y+6).toFixed(1)}L${c.toFixed(1)} ${(y-h).toFixed(1)}L${(c+w/2).toFixed(1)} ${(y+6).toFixed(1)}Z`}
+  return `<path d="${d}" style="fill:var(${fill})"/>`;
+}
+const SCENES={
+  erdo(){const r=rng(11),a=wave(606,10,150,1),b=wave(652,9,120,2.4),c=wave(708,8,95,4.1);
+    return `<circle cx="715" cy="205" r="34" style="fill:var(--sun)"/>`+trees(a,r,30,62,'--l1')+area(a,'--l1')+trees(b,r,40,80,'--l2')+area(b,'--l2')+trees(c,r,50,100,'--l3')+area(c,'--l3')},
+  tenger(){let g='';[[92,652],[70,664],[50,677],[32,691]].forEach(([w,y])=>g+=`<rect x="${700-w/2}" y="${y}" width="${w}" height="4" rx="2" style="fill:var(--sun)" opacity=".75"/>`);
+    return `<circle cx="700" cy="640" r="58" style="fill:var(--sun)"/><rect x="-100" y="640" width="1400" height="160" style="fill:var(--l1)"/>`+g+area(wave(712,5,55,1),'--l2')+area(wave(756,6,46,2.5),'--l3')},
+  levendula(){const field=wave(652,5,220,2);let rows='';
+    for(let k=-16;k<=16;k++){const x=600+k*96;rows+=`M600 610L${x-26} 820L${x+26} 820Z`}
+    return `<circle cx="500" cy="190" r="32" style="fill:var(--sun)"/>`+area(wave(614,12,170,.5),'--l1')+
+      `<clipPath id="fld">${area(field,'--l2')}</clipPath>`+area(field,'--l2')+`<path d="${rows}" style="fill:var(--acc)" clip-path="url(#fld)"/>`},
+  naplemente(){const r=rng(5);
+    return `<circle cx="680" cy="604" r="80" style="fill:var(--sun)"/>`+area(ridge(616,52,60,r),'--l1')+area(ridge(664,36,46,r),'--l2')+area(wave(718,10,110,3),'--l3')},
+  rozsa(){const r=rng(3);let b='';
+    for(let k=0;k<16;k++){const x=300+r()*600,y=90+r()*470,s=16+r()*46;b+=`<circle cx="${x.toFixed(0)}" cy="${y.toFixed(0)}" r="${s.toFixed(0)}" fill="url(#bk)" opacity="${(.35+r()*.4).toFixed(2)}"/>`}
+    return `<radialGradient id="bk"><stop offset="0" style="stop-color:var(--sun);stop-opacity:.9"/><stop offset="1" style="stop-color:var(--sun);stop-opacity:0"/></radialGradient>`+b+
+      area(wave(640,14,210,1),'--l1')+area(wave(690,12,160,2.8),'--l2')+area(wave(746,10,130,4.4),'--l3')},
+  ko(){let lines='',rings='';
+    for(let y=650;y<800;y+=13)lines+=`M-100 ${y}Q300 ${y-4} 600 ${y}T1300 ${y}`;
+    for(let rx=92;rx<=184;rx+=23)rings+=`<ellipse cx="640" cy="728" rx="${rx}" ry="${(rx*.3).toFixed(1)}"/>`;
+    return area(wave(604,8,200,1),'--l2')+`<rect x="-100" y="628" width="1400" height="172" style="fill:var(--l1)"/>`+
+      `<mask id="mk"><rect x="-100" y="0" width="1400" height="800" fill="#fff"/><ellipse cx="640" cy="728" rx="200" ry="62" fill="#000"/></mask>`+
+      `<g style="fill:none;stroke:var(--acc)" stroke-width="1.6" opacity=".55"><path d="${lines}" mask="url(#mk)"/>${rings}</g>`+
+      `<g style="fill:var(--l3)"><ellipse cx="640" cy="724" rx="62" ry="19"/><ellipse cx="636" cy="697" rx="46" ry="15"/><ellipse cx="642" cy="675" rx="33" ry="12"/><ellipse cx="639" cy="657" rx="21" ry="9"/>`+
+      `<ellipse cx="470" cy="702" rx="34" ry="11"/><ellipse cx="474" cy="687" rx="20" ry="8"/></g>`}
+};
+function renderScene(){
+  sceneEl.hidden=!st.scene;app.classList.toggle('scenic',st.scene);setSwitch(sceneSw,st.scene);
+  sceneEl.innerHTML=st.scene?`<svg viewBox="0 0 1200 800" preserveAspectRatio="xMidYMax slice" aria-hidden="true">`+
+    `<linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--bg)"/><stop offset="1" style="stop-color:var(--glow)"/></linearGradient>`+
+    `<rect x="-100" y="250" width="1400" height="550" fill="url(#sky)"/>${(SCENES[st.color]||SCENES.erdo)()}</svg>`:'';
+}
+sceneSw.onclick=()=>{st.scene=!st.scene;save();renderScene()};
 function buildSwatches(){
   swatches.innerHTML=THEMES.map(t=>`<button data-t="${t[0]}" aria-pressed="${st.color===t[0]}"><i style="--s1:${t[1]};--s2:${t[2]}"></i>${L['t_'+t[0]]}</button>`).join('');
   swatches.querySelectorAll('button').forEach(b=>b.onclick=()=>applyTheme(b.dataset.t));
