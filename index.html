@@ -484,10 +484,12 @@ function tick(){
 }
 async function lock(){try{wake=await navigator.wakeLock.request('screen')}catch(e){wake=null}}
 function unlock(){try{wake&&wake.release()}catch(e){}wake=null}
-// Teljes képernyő gyakorlás közben: a Chrome elrejti az állapotsort és az alsó gombsort, így nem marad világos sáv.
+// A telepített app eleve teljes képernyős (manifest display: fullscreen), így nincs rendszersáv és Chrome-felirat sem.
+// Böngészőben megnyitva gyakorlás közben kérünk teljes képernyőt: ilyenkor a Chrome kiírja a webhely címét.
 // Csak érintőképernyőn; koppintás kell hozzá, ezért gyorsindításnál az első érintéskor kapcsol be.
 // Ha sikerült, és a felhasználó maga lép ki belőle, abban a körben már nem kérjük újra.
-const canFull=!!document.fullscreenEnabled&&matchMedia('(pointer: coarse)').matches;
+const installed=matchMedia('(display-mode: standalone), (display-mode: fullscreen)').matches;
+const canFull=!matchMedia('(display-mode: fullscreen)').matches&&!!document.fullscreenEnabled&&matchMedia('(pointer: coarse)').matches;
 let fsTried=false;
 function goFull(){
   if(!st.full||!canFull||fsTried||document.fullscreenElement)return;
@@ -683,13 +685,12 @@ addEventListener('appinstalled',()=>{shownNote=null;notice.classList.remove('sho
 async function keepStorage(){
   try{
     if(!navigator.storage||!navigator.storage.persist||await navigator.storage.persisted())return;
-    const installed=matchMedia('(display-mode: standalone)').matches;
     if(st.persistAsked&&!installed)return;
     st.persistAsked=true;save();
     await navigator.storage.persist();
   }catch(e){}
 }
-if(matchMedia('(display-mode: standalone)').matches)keepStorage();
+if(installed)keepStorage();
 </script>
 </body>
 </html>

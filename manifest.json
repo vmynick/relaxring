@@ -6,7 +6,7 @@
   "lang": "hu",
   "start_url": "./",
   "scope": "./",
-  "display": "standalone",
+  "display": "fullscreen",
   "orientation": "portrait",
   "background_color": "#121416",
   "icons": [
