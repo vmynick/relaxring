@@ -1,134 +1,135 @@
-# RelaxRing – Légző körök
+# RelaxRing – Breathing Circles
 
-[![Közzététel](https://github.com/vmynick/relaxring/actions/workflows/pages.yml/badge.svg)](https://github.com/vmynick/relaxring/actions/workflows/pages.yml)
+[![Publish](https://github.com/vmynick/relaxring/actions/workflows/pages.yml/badge.svg)](https://github.com/vmynick/relaxring/actions/workflows/pages.yml)
 
-Légzőgyakorló és edzés-időzítő telefonra. A lélegző körök mutatják, mikor szívd be, tartsd bent és fújd ki a levegőt. Halk hang, rezgés és kérésre hangos vezetés segít, így csukott szemmel is követhető. Appként telepíthető, internet nélkül is működik, és nem küld adatot sehova.
+A breathing-exercise app and interval timer for your phone. Breathing circles show when to inhale, hold and exhale. Soft sound, vibration and optional voice guidance let you follow along with your eyes closed. It installs as an app, works offline and does not send any data anywhere.
 
-**▶ Megnyitás: https://vmynick.github.io/relaxring/**
+**▶ Open the app: https://vmynick.github.io/relaxring/**
 
-![Főképernyő háttérképpel, légzés közben sötét módban, Tabata edzés és a Beállítások](docs/kepernyok.png)
+![Main screen with a background scene, a breathing session in dark mode, a Tabata workout and the Settings screen](docs/screenshots.png)
 
-*Főképernyő háttérképpel · légzés közben (sötét mód) · Tabata edzés · Beállítások*
+*Main screen with a background scene · breathing session (dark mode) · Tabata workout · Settings*
 
-## Funkciók
+## Features
 
-### Légzés
+### Breathing
 
-| Ritmus | Ütem (mp) | Jellemző |
+| Rhythm | Pattern (seconds) | What it is |
 |---|---|---|
-| Doboz | 4 be · 4 tart · 4 ki · 4 tart | négy egyforma szakasz |
-| Elalvó | 4 be · 7 tart · 8 ki | hosszú tartás és kilégzés, lefekvés előtt |
-| Nyugtató | 4 be · 6 ki | a kilégzés hosszabb a belégzésnél |
-| Sóhajtás | 2 be + 1 rászívás · 6 ki | rövid, 1–3 perces stresszoldáshoz |
-| Koherens | 5 be · 5 ki | percenként 6 légzés |
-| Lazító | 4 be · 2 tart · 6 ki | rövid tartás, hosszú kilégzés |
-| Lassuló | 4 be · 4→8 ki | a kilégzés a gyakorlás végére 8 mp-re nyúlik |
-| Saját | állítható | be és ki 2–12 mp, tartások 0–12 mp |
+| Box | 4 in · 4 hold · 4 out · 4 hold | four equal parts |
+| Sleep | 4 in · 7 hold · 8 out | the 4-7-8 pattern, long hold and exhale, for bedtime |
+| Calm | 4 in · 6 out | exhale longer than inhale |
+| Sigh | 2 in + 1 top-up · 6 out | the physiological sigh, a quick 1–3 minute reset |
+| Coherent | 5 in · 5 out | six breaths a minute |
+| Relax | 4 in · 2 hold · 6 out | short hold, long exhale |
+| Unwind | 4 in · 4→8 out | the exhale lengthens to 8 s by the end of the session |
+| Custom | your choice | inhale and exhale 2–12 s, holds 0–12 s |
 
-- A főképernyőn a Beállításokban kiválasztott 3 ritmus látszik. A körre koppintva indul és áll meg a gyakorlás.
-- Időtartam 1–30 perc. A gyakorlás a ritmus egy teljes körének végén áll meg.
-- **Fókusz mód:** gyakorlás közben a körökön kívül minden elhalványul, egy koppintás visszahozza.
-- **Alvás mód:** a képernyő lassan elsötétül, a végén nincs csengés, és a természethang lassan elhalkul.
-- **Hangok:** 4 légzőhang (Lágy, Óceán, Pad, Tál) és 5 csengés (Csengő, Tál, Fa, Csepp, Piezo). A légzés alá természethang is szólhat (eső, patak, tűz, szél). Mindet a telefon állítja elő, nincs letöltendő hangfájl.
-- **Hangos vezetés:** a telefon felolvasóhangja mondja be a szakaszokat. Ha nincs hang a választott nyelven, az app jelzi.
+- The main screen shows the 3 rhythms you pick in Settings. Tap the circle to start or stop.
+- Sessions last 1–30 minutes and end after the current breath cycle.
+- **Focus mode:** while you breathe, everything except the circles fades. Tap once to bring the controls back.
+- **Sleep mode:** the screen slowly goes dark, there is no chime at the end and the nature sound fades out slowly.
+- **Sounds:**
+  - 4 breathing sounds: Soft, Ocean, Pad, Bowl.
+  - 5 chimes: Bell, Bowl, Wood, Drop, Piezo.
+  - Optional nature sound under the session: rain, stream, fire or wind.
+  
+  The phone synthesizes all of them, so there are no audio files to download.
+- **Voice guidance:** the phone's text-to-speech voice reads out each phase. If no voice is installed for the selected language, the app tells you.
 
-### Edzés (Tabata)
+### Workouts (Tabata)
 
-- **Előbeállítások:** Tabata 20/10 mp × 8, HIIT 40/20 mp × 8, EMOM 1 perc × 10.
-- **Beállítások:**
-  - A főképernyőn: munka (5–90 mp), pihenő (0–90 mp), körök (1–30), blokkok (1–5).
-  - A Beállításokban: felkészülés (0–30 mp) és a blokkok közti pihenő (10–180 mp).
-- **Messziről is látható kijelzés:** edzés közben az egész képernyő a szakasz színére vált. Munkánál piros, pihenőnél zöld, felkészüléskor sárga, óriási számokkal.
-- **Hangos, külön állítható jelzés:** 3-2-1 csipogás minden váltás előtt, más hang a munka és a pihenő elején, és erősebb rezgés.
-- **Gyakorlatlista:** munka közben a gyakorlat neve látszik, pihenőnél a következő. A hangos vezetés be is mondja.
+- **Presets:** Tabata 20/10 s × 8, HIIT 40/20 s × 8, EMOM 1 min × 10.
+- **Adjustable:**
+  - On the main screen: work (5–90 s), rest (0–90 s), rounds (1–30) and sets (1–5).
+  - In Settings: get-ready time (0–30 s) and rest between sets (10–180 s).
+- **Readable from across the room:** during a workout the whole screen takes the phase color, with a huge countdown:
+  - red for work,
+  - green for rest,
+  - yellow while getting ready.
+- **Loud signal with its own volume:**
+  - 3-2-1 beeps before every change,
+  - a different tone at the start of work and of rest,
+  - stronger vibration.
+- **Exercise list:** the current exercise shows during work and the next one during rest. Voice guidance reads them out.
 
-### Napló és mentés
+### Journal and backup
 
-- A napló mutatja a napos sorozatot, a mai perceket, az alkalmak számát és az elmúlt 7 nap oszlopdiagramját. A Tabata-edzések külön számítanak.
-- A napló és a beállítások JSON-fájlba menthetők, és visszatölthetők, például új telefonon vagy újratelepítés után. Visszatöltéskor a napló napokra bontva összefésülődik.
+- The journal shows your day streak, today's minutes, the number of sessions and a 7-day bar chart. Tabata workouts are counted separately.
+- You can save the journal and all settings to a JSON file and restore them, for example on a new phone or after a reinstall. When you restore, the app merges the journal day by day.
 
-### Megjelenés
+### Appearance
 
-- 6 színtéma: Erdő, Tenger, Levendula, Naplemente, Rózsa, Kő. A világos vagy sötét mód a telefon beállítását követi.
-- Témánként háttérkép: a téma színeiből rajzolt nyugodt táj, kikapcsolható.
-- Nyelvek: magyar, English, Deutsch. Első indításkor a telefon nyelvét követi.
+- 6 color themes: Forest, Sea, Lavender, Sunset, Rose, Stone. Light or dark mode follows the phone setting.
+- An optional background scene for each theme: a calm landscape drawn in the theme's colors.
+- Languages: English, Hungarian, German. On first launch the app uses the phone's language.
 
-## Telepítés
+## Install
 
-- **Android, Chrome:** nyisd meg a címet, majd ⋮ menü → *Alkalmazás telepítése*, vagy koppints az appban felugró „Telepítés” gombra.
-- **iPhone, iPad, Safari:** Megosztás → *Főképernyőhöz adás*.
-- **Számítógépen, Chrome vagy Edge:** a címsor végén lévő telepítés ikonnal.
+- **Android, Chrome:** open the link, then ⋮ menu → *Install app*, or tap the "Install" button the app shows.
+- **iPhone, iPad, Safari:** Share → *Add to Home Screen*.
+- **Desktop, Chrome or Edge:** use the install icon at the end of the address bar.
 
-A telepített app:
-- internet nélkül is elindul;
-- Androidon teljes képernyős, az állapotsor és a gombsor a képernyő széléről húzva jön elő;
-- gyakorlás közben ébren tartja a képernyőt;
-- ikonja hosszan nyomva gyorsindítót kínál: Elalvó, Doboz, Nyugtató, Koherens.
+The installed app:
+- starts without an internet connection;
+- runs full screen on Android, where you swipe from the edge to show the status and navigation bars;
+- keeps the screen awake during a session;
+- offers quick starts when you long-press its icon: 4-7-8, Box, Calm, Coherent. These labels are in Hungarian.
 
-Ha új verzió jelenik meg, az app kiírja: „Új verzió érhető el” → *Frissítés*.
+When a new version is published, the app shows "A new version is available" → *Update*.
 
-## Kezelés
+## Controls
 
-| Mit | Hogyan |
+| Action | How |
 |---|---|
-| Indítás, leállítás | koppints a körre |
-| Ritmus váltása | felső gombsor |
-| Beállítások | bal alsó gomb |
-| Kilépés (telepített app) | jobb alsó **X**, kétszer koppintva |
-| Gombok gyakorlás közben | koppints bárhova a körön kívül |
-| Vissza a Beállításokban | **‹** gomb vagy a telefon vissza mozdulata |
+| Start or stop | tap the circle |
+| Switch rhythm | buttons at the top |
+| Settings | bottom-left button |
+| Exit (installed app) | bottom-right **X**, tap twice |
+| Controls during a session | tap anywhere outside the circle |
+| Back in Settings | **‹** button or the phone's back gesture |
 
-## Adatvédelem
+## Privacy
 
-- Nincs fiók, nincs regisztráció, nincs analitika és nincs süti.
-- A beállítások és a napló a telefon böngészőjének helyi tárolójában maradnak.
-- Az app fájljait a GitHub Pages szolgálja ki. Ezen kívül az app nem küld kérést sehova, a betűtípus is helyben van.
-- A telefon törölheti a helyi tárolót, például ha törlöd a böngészőadatokat. Ezért érdemes időnként fájlba menteni (Beállítások → Mentés).
+- There is no account, no sign-up, no analytics and no cookies.
+- Settings and the journal stay in the browser's local storage on your phone.
+- GitHub Pages serves the app files. Beyond that the app makes no requests, and the font is bundled.
+- Clearing the browser data deletes the local storage, so save a backup from time to time (Settings → Backup).
 
-## Ismert korlátok
+## Known limitations
 
 - **iPhone:**
-  - A Safari nem támogatja a rezgést.
-  - A teljes képernyőre váltás és a vissza mozdulat kezelése csak Androidon működik.
-- **Hangos vezetés:** a telefonra telepített felolvasóhangtól függ.
-- **Hangerő:** a hangok és a jelzések hangereje a telefon médiahangerejétől is függ.
-- **Képernyő:** gyakorlás közben ne kapcsold ki. Az app ébren tartja, de kikapcsolt képernyőnél a böngésző szüneteltetheti az időzítést.
+  - Safari does not support vibration.
+  - Full screen and the back-gesture handling only work on Android.
+- **Voice guidance** depends on the text-to-speech voices installed on the phone.
+- **Volume:** the phone's media volume also limits the sounds and signals.
+- **Screen:** do not turn it off during a session. The app keeps it awake, but with the screen off the browser may pause the timer.
 
-## Fejlesztés
+## Development
 
-Az app egyetlen HTML-fájl (HTML, CSS és JavaScript), nincs keretrendszer, és nem kell lefordítani. A hangokat a Web Audio API állítja elő, a háttérképeket SVG-ként rajzolja.
+The app is a single HTML file with HTML, CSS and JavaScript. It uses no framework and has no build step. Sounds are synthesized with the Web Audio API, and the background scenes are drawn as SVG.
 
-| Fájl | Szerepe |
+| File | Purpose |
 |---|---|
-| [index.html](index.html) | az egész app: felület, időzítés, hangok, nyelvi szótár |
-| [sw.js](sw.js) | service worker: offline gyorsítótár és frissítés |
-| [manifest.json](manifest.json) | telepítési adatok, ikonok, gyorsindítók |
-| [fonts.css](fonts.css), [fonts/](fonts) | Inter betűtípus |
-| `*.png` | ikonok |
-| [setup.html](setup.html) | csak a korábbi otthoni szerveres változathoz |
-| [docs/](docs) | a README képei, nem kerülnek ki az oldalra |
-| [.github/workflows/pages.yml](.github/workflows/pages.yml) | közzététel |
+| [index.html](index.html) | the whole app: UI, timing, sounds, translations |
+| [sw.js](sw.js) | service worker: offline cache and update notice |
+| [manifest.json](manifest.json) | install data, icons, shortcuts |
+| [fonts.css](fonts.css), [fonts/](fonts) | the Inter font |
+| `*.png` | icons |
+| [setup.html](setup.html) | only for the earlier self-hosted home-server version |
+| [docs/](docs) | README images, not published to the site |
+| [.github/workflows/pages.yml](.github/workflows/pages.yml) | publishing |
 
-**Helyi futtatás:** az `app` mappában indíts egy egyszerű webszervert, például `python -m http.server 8000`, majd nyisd meg a http://localhost:8000 címet. A service worker localhoston is működik.
+**Run locally:** start any static web server in this folder, for example `python -m http.server 8000`, and open http://localhost:8000. The service worker also works on localhost.
 
-**Közzététel:** minden `main`-re küldött módosítás után a GitHub Actions kb. 1 perc alatt közzéteszi az oldalt. Közben két dolgot csinál:
-- új verziószámot ír a `sw.js`-be, ezért jelzi a telepített app a frissítést;
-- a manifestben az app azonosítóját a `/relaxring/` útvonalra állítja.
+**Publishing:** every push to `main` publishes the site with GitHub Actions in about a minute. The workflow:
+- writes a new version into `sw.js`, which is how installed apps notice an update;
+- sets the app id in the manifest to the `/relaxring/` path.
 
-**Bővítés:**
-- **Új nyelv:** a `T` szótárba kell egy új blokk, ugyanazokkal a kulcsokkal, mint a meglévők.
-- **Új ritmus:** az `R` táblába és az `RIDS` listába kell felvenni, és minden nyelvhez kell egy `r_<azonosító>` felirat.
+**Extending:**
+- **New language:** add a block to the `T` dictionary in `index.html` with the same keys as the existing ones.
+- **New rhythm:** add it to the `R` table and the `RIDS` list, and add an `r_<id>` label in every language.
 
-## Licenc
+## License
 
-A betűtípus az [Inter](https://rsms.me/inter/) a SIL Open Font License 1.1 alatt ([fonts/OFL-Inter.txt](fonts/OFL-Inter.txt)). Apple-eszközökön a rendszer saját betűje (SF Pro) látszik.
-
----
-
-### English
-
-RelaxRing is a breathing-exercise and interval-timer web app for phones, at **https://vmynick.github.io/relaxring/**. Breathing circles show when to inhale, hold and exhale, with soft sound, vibration and optional voice guidance. It comes with eight rhythms, including box, 4-7-8, physiological sigh, coherent and custom.
-
-The Tabata/HIIT/EMOM timer uses a full-screen color display that is readable from a distance, loud adjustable beeps and an exercise list. The app also has a journal with streaks, nature sounds, sleep mode, color themes with background scenes, and file backup.
-
-It installs as an app, works offline and keeps all data on the device. It is available in Hungarian, English and German.
+The font is [Inter](https://rsms.me/inter/), under the SIL Open Font License 1.1 ([fonts/OFL-Inter.txt](fonts/OFL-Inter.txt)). On Apple devices the system font (SF Pro) is used instead.
