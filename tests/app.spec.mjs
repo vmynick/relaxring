@@ -54,6 +54,13 @@ test('szünet és folytatás, a lezárási vezérlő adatai', async ({ page }) =
   await page.clock.runFor(1_100);
   expect(await page.evaluate(() => navigator.mediaSession.metadata.title)).toBe('RelaxRing – Belégzés');
   expect(await page.evaluate(() => navigator.mediaSession.playbackState)).toBe('playing');
+  // a háttérben futáshoz kell egy önállóan szóló, 5 mp-nél hosszabb, mérhető szintű <audio> (nem a Web Audióba kötve)
+  const keepAlive = await page.evaluate(async () => {
+    const buf = await (await fetch(media.src)).arrayBuffer(), v = new DataView(buf);
+    let peak = 0; for (let k = 44; k < buf.byteLength; k += 2) peak = Math.max(peak, Math.abs(v.getInt16(k, true)));
+    return { playing: !media.paused, loop: media.loop, secs: (buf.byteLength - 44) / 2 / v.getUint32(24, true), peak };
+  });
+  expect(keepAlive).toEqual({ playing: true, loop: true, secs: 10, peak: 66 });
   await page.evaluate(() => pause());                // mint a lezárási képernyő Szünet gombja
   await expect(page.locator('#ph')).toHaveText('Szünet');
   const before = await page.evaluate(() => elapsed);
