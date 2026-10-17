@@ -8,11 +8,8 @@
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#E7EEEA",
-  "theme_color": "#E7EEEA",
-  "user_preferences": {
-    "color_scheme_dark": { "background_color": "#0E1A17", "theme_color": "#0E1A17" }
-  },
+  "background_color": "#121416",
+  "theme_color": "#121416",
   "icons": [
     { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
     { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
