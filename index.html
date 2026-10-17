@@ -192,6 +192,14 @@ html.tb-run #sub{display:block;color:var(--tbt);font-size:clamp(24px,4.2vh,38px)
 .tbsteps .stepper button{width:34px;height:34px;font-size:20px;background:var(--bg)}
 .tbsteps .stepper output{font-size:22px}
 html.tb-run #ringBtn:focus-visible{outline-color:color-mix(in srgb,var(--tbt) 45%,transparent)}
+.tbpre{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;padding:0}
+.tbpre button{background:var(--surface);text-align:center;padding:7px 4px}
+.group textarea{display:block;width:100%;box-sizing:border-box;min-height:120px;margin:0 0 10px;border:0;border-radius:12px;background:var(--bg);color:var(--fg);
+  font:600 18px/1.4 var(--body);padding:10px 12px;resize:vertical;user-select:text;-webkit-user-select:text}
+.group textarea::placeholder{color:var(--muted);opacity:.7}
+.item.dim{opacity:.45}
+html.tb-run #sub{max-width:92vw;margin-left:auto;margin-right:auto}
+html.tb-run #ph{max-width:94vw;margin:0 auto;white-space:nowrap}
 .tbvol{display:flex;align-items:center;gap:10px;background:var(--surface);border-radius:14px;padding:4px 14px}
 .tbvol svg{flex:none;width:24px;height:24px;color:var(--muted)}
 .app.scenic .hint{text-shadow:0 0 10px var(--bg),0 0 3px var(--bg)}
@@ -218,6 +226,7 @@ html.tb-run #ringBtn:focus-visible{outline-color:color-mix(in srgb,var(--tbt) 45
   </div>
 
   <div class="tbpanel" id="tbPanel" hidden>
+    <div class="opts tbpre" id="tbPre" role="group"></div>
     <div class="tbsteps" id="tsteps2"></div>
     <div class="tbvol"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9z" fill="currentColor"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg>
       <input type="range" id="tvol2" min="0" max="100" step="1" value="80" data-ia="tVol"></div>
@@ -253,11 +262,15 @@ html.tb-run #ringBtn:focus-visible{outline-color:color-mix(in srgb,var(--tbt) 45
       <div class="item"><span data-i="ownTitle"></span></div>
       <div class="steps" id="steps"></div>
       <div class="note" data-i="slowInfo"></div>
+      <div class="note" data-i="sighInfo"></div>
       <div class="item"><span data-i="tabTitle"></span></div>
       <div class="steps" id="tsteps"></div>
       <div class="item"><label for="tvol" data-i="tVol"></label></div>
       <div class="item slider"><input type="range" id="tvol" min="0" max="100" step="1" value="80"></div>
       <div class="note" data-i="tabInfo"></div>
+      <div class="item"><label for="tex" data-i="exTitle"></label></div>
+      <textarea id="tex" rows="4" data-ph="exPh"></textarea>
+      <div class="note" data-i="exInfo"></div>
     </div>
 
     <h3 data-i="session"></h3>
@@ -273,6 +286,9 @@ html.tb-run #ringBtn:focus-visible{outline-color:color-mix(in srgb,var(--tbt) 45
     <div class="group">
       <div class="item"><span data-i="breath"></span><button class="switch" id="toneSw" role="switch" aria-checked="true" data-ia="breath"></button></div>
       <div class="opts" id="voiceOpts" role="group" data-ia="breathKind"></div>
+      <div class="item"><span data-i="amb"></span></div>
+      <div class="opts" id="ambOpts" role="group" data-ia="amb"></div>
+      <div class="item slider" id="ambVolRow"><input type="range" id="ambVol" min="0" max="100" step="1" value="50" data-ia="ambVol"></div>
       <div class="item"><span data-i="chime"></span><button class="switch" id="bellSw" role="switch" aria-checked="true" data-ia="chime"></button></div>
       <div class="opts" id="chimeOpts" role="group" data-ia="chimeKind"></div>
       <div class="item"><span data-i="speak"></span><button class="switch" id="speakSw" role="switch" aria-checked="false" data-ia="speak"></button></div>
@@ -289,6 +305,13 @@ html.tb-run #ringBtn:focus-visible{outline-color:color-mix(in srgb,var(--tbt) 45
 
     <h3 data-i="language"></h3>
     <div class="group"><div class="opts" id="langOpts" role="group" data-ia="language" style="padding-top:14px"></div></div>
+
+    <h3 data-i="backup"></h3>
+    <div class="group">
+      <div class="note" data-i="backupInfo" style="padding-top:14px"></div>
+      <div class="opts"><button id="expBtn" data-i="exportBtn"></button><button id="impBtn" data-i="importBtn"></button></div>
+      <input type="file" id="impFile" accept=".json,application/json" hidden>
+    </div>
   </div>
 </section>
 
@@ -297,8 +320,15 @@ html.tb-run #ringBtn:focus-visible{outline-color:color-mix(in srgb,var(--tbt) 45
 // A körben és a ritmusválasztóban kevés a hely: ott rövid szavak kellenek (pl. Inhale, Schlaf).
 const T={
   hu:{name:'Magyar',locale:'hu-HU',title:'Légző körök',modes:'Légzésritmus',
-    r_box:'Doboz',r_478:'Elalvó',r_calm:'Nyugtató',r_coh:'Koherens',r_relax:'Lazító',r_slow:'Lassuló',r_own:'Saját',r_tabata:'Tabata',
-    in:'Belégzés',hold:'Tartás',out:'Kilégzés',work:'Munka',rest:'Pihenő',prep:'Készülj',
+    r_box:'Doboz',r_478:'Elalvó',r_calm:'Nyugtató',r_sigh:'Sóhajtás',r_coh:'Koherens',r_relax:'Lazító',r_slow:'Lassuló',r_own:'Saját',r_tabata:'Tabata',
+    in:'Belégzés',in2:'Még egyet',hold:'Tartás',out:'Kilégzés',work:'Munka',rest:'Pihenő',prep:'Készülj',next:'Következik',
+    sighInfo:'Sóhajtás: két belégzés egymás után (a másodikkal még egy kis levegőt veszel), majd hosszú kilégzés. Gyors stresszoldó, 1–3 perc elég.',
+    amb:'Természethang',ambVol:'Természethang hangereje',a_off:'Nincs',a_eso:'Eső',a_patak:'Patak',a_tuz:'Tűz',a_szel:'Szél',
+    exTitle:'Gyakorlatok (soronként egy)',exPh:'Guggolás\nFekvőtámasz\nHasprés\nKitörés',
+    exInfo:'Ha kitöltöd, munka közben a gyakorlat neve látszik, pihenőnél a következő; a hangos vezetés be is mondja. Ha kevesebb gyakorlat van, mint kör, a lista elölről kezdődik.',
+    backup:'Mentés',backupInfo:'A napló és a beállítások csak ezen a telefonon vannak. Mentsd fájlba, és telefoncsere vagy újratelepítés után töltsd vissza.',
+    exportBtn:'Mentés fájlba',importBtn:'Visszatöltés',importAsk:'Visszatöltöd a mentést? A beállítások felülíródnak, a napló összefésülődik.',
+    importBad:'Ez a fájl nem RelaxRing-mentés.',importOk:'Mentés visszatöltve.',
     start:'Indítás',stop:'Leállítás',tap:'koppints a körre',again:'koppints az újrakezdéshez',done:'Szép volt',
     hint:'A körre koppintva megáll, máshova koppintva előjön a menü',min:n=>`${n} perc`,round:(c,t)=>`${c}. kör · ${t}`,only:x=>`csak ${x}`,silent:'néma',
     settings:'Beállítások',ok:'Kész',journal:'Napló',streak:'napos sorozat',today:'perc ma',sessions:'alkalom',weekAria:m=>`Az elmúlt 7 nap percei: ${m}`,
@@ -318,8 +348,15 @@ const T={
     newVer:'Új verzió érhető el.',update:'Frissítés',installTxt:'Tedd ki a kezdőképernyőre, és appként indul.',install:'Telepítés',
     certTxt:'A telepítéshez és az ébren maradó képernyőhöz egyszer be kell állítani a tanúsítványt.',certBtn:'Beállítás'},
   en:{name:'English',locale:'en-US',title:'Breathing Circles',modes:'Breathing rhythm',
-    r_box:'Box',r_478:'Sleep',r_calm:'Calm',r_coh:'Coherent',r_relax:'Relax',r_slow:'Unwind',r_own:'Custom',r_tabata:'Tabata',
-    in:'Inhale',hold:'Hold',out:'Exhale',work:'Work',rest:'Rest',prep:'Get ready',
+    r_box:'Box',r_478:'Sleep',r_calm:'Calm',r_sigh:'Sigh',r_coh:'Coherent',r_relax:'Relax',r_slow:'Unwind',r_own:'Custom',r_tabata:'Tabata',
+    in:'Inhale',in2:'Top up',hold:'Hold',out:'Exhale',work:'Work',rest:'Rest',prep:'Get ready',next:'Next',
+    sighInfo:'Sigh: two inhales in a row (the second tops up the lungs), then a long exhale. A quick stress reliever; 1–3 minutes is enough.',
+    amb:'Nature sound',ambVol:'Nature sound volume',a_off:'Off',a_eso:'Rain',a_patak:'Stream',a_tuz:'Fire',a_szel:'Wind',
+    exTitle:'Exercises (one per line)',exPh:'Squats\nPush-ups\nCrunches\nLunges',
+    exInfo:'If filled in, the exercise shows during work and the next one during rest; voice guidance reads them out. With fewer exercises than rounds, the list starts over.',
+    backup:'Backup',backupInfo:'Your journal and settings live only on this phone. Save them to a file and load it back after a reinstall or on a new phone.',
+    exportBtn:'Save to file',importBtn:'Restore',importAsk:'Restore this backup? Settings are replaced, the journal is merged.',
+    importBad:'This file is not a RelaxRing backup.',importOk:'Backup restored.',
     start:'Start',stop:'Stop',tap:'tap the circle',again:'tap to start again',done:'Well done',
     hint:'Tap the circle to stop, anywhere else for the menu',min:n=>`${n} min`,round:(c,t)=>`Round ${c} · ${t}`,only:x=>`only ${x}`,silent:'silent',
     settings:'Settings',ok:'Done',journal:'Journal',streak:'day streak',today:'min today',sessions:'sessions',weekAria:m=>`Minutes over the last 7 days: ${m}`,
@@ -339,8 +376,15 @@ const T={
     newVer:'A new version is available.',update:'Update',installTxt:'Add it to your home screen to use it as an app.',install:'Install',
     certTxt:'Set up the certificate once to install the app and keep the screen awake.',certBtn:'Set up'},
   de:{name:'Deutsch',locale:'de-DE',title:'Atemkreise',modes:'Atemrhythmus',
-    r_box:'Box',r_478:'Schlaf',r_calm:'Ruhe',r_coh:'Kohärent',r_relax:'Relax',r_slow:'Langsam',r_own:'Eigen',r_tabata:'Tabata',
-    in:'Einatmen',hold:'Halten',out:'Ausatmen',work:'Arbeit',rest:'Pause',prep:'Bereit',
+    r_box:'Box',r_478:'Schlaf',r_calm:'Ruhe',r_sigh:'Seufzer',r_coh:'Kohärent',r_relax:'Relax',r_slow:'Langsam',r_own:'Eigen',r_tabata:'Tabata',
+    in:'Einatmen',in2:'Nachatmen',hold:'Halten',out:'Ausatmen',work:'Arbeit',rest:'Pause',prep:'Bereit',next:'Als Nächstes',
+    sighInfo:'Seufzer: zweimal hintereinander einatmen (beim zweiten Mal etwas nachatmen), dann lange ausatmen. Schnell gegen Stress; 1–3 Minuten genügen.',
+    amb:'Naturklang',ambVol:'Lautstärke Naturklang',a_off:'Aus',a_eso:'Regen',a_patak:'Bach',a_tuz:'Feuer',a_szel:'Wind',
+    exTitle:'Übungen (eine pro Zeile)',exPh:'Kniebeugen\nLiegestütze\nSit-ups\nAusfallschritte',
+    exInfo:'Wenn ausgefüllt, erscheint bei Arbeit der Übungsname und in der Pause die nächste Übung; die Sprachansage liest sie vor. Bei weniger Übungen als Runden beginnt die Liste von vorn.',
+    backup:'Sicherung',backupInfo:'Tagebuch und Einstellungen sind nur auf diesem Telefon gespeichert. Sichere sie in eine Datei und lade sie nach einer Neuinstallation oder auf einem neuen Telefon zurück.',
+    exportBtn:'In Datei sichern',importBtn:'Wiederherstellen',importAsk:'Diese Sicherung wiederherstellen? Einstellungen werden ersetzt, das Tagebuch wird zusammengeführt.',
+    importBad:'Diese Datei ist keine RelaxRing-Sicherung.',importOk:'Sicherung wiederhergestellt.',
     start:'Start',stop:'Stopp',tap:'Kreis antippen',again:'zum Neustart antippen',done:'Geschafft',
     hint:'Kreis antippen zum Stoppen, woanders für das Menü',min:n=>`${n} Min.`,round:(c,t)=>`Runde ${c} · ${t}`,only:x=>`nur ${x}`,silent:'stumm',
     settings:'Einstellungen',ok:'Fertig',journal:'Tagebuch',streak:'Tage in Folge',today:'Min. heute',sessions:'Übungen',weekAria:m=>`Minuten der letzten 7 Tage: ${m}`,
@@ -372,13 +416,14 @@ const R={
   box:[['in',4],['hold',4],['out',4],['hold',4]],
   '478':[['in',4],['hold',7],['out',8]],
   calm:[['in',4],['out',6]],
+  sigh:[['in',2],['in2',1],['out',6]],   // sóhajtás: két belégzés egymás után, hosszú kilégzés
   coh:[['in',5],['out',5]],          // koherens légzés: percenként 6
   relax:[['in',4],['hold',2],['out',6]],
   slow:null,                         // lassuló: a kilégzés 4-ről 8 mp-re nő a gyakorlás végéig
   own:null,                          // saját: st.own = [be, tartás, ki, tartás]
   tabata:null                        // edzés-időzítő: st.tab = {work, rest, rounds, sets}
 };
-const RIDS=['box','478','calm','coh','relax','slow','own','tabata'];   // megjelenítési sorrend (az objektumban a '478' előre kerülne)
+const RIDS=['box','478','calm','sigh','coh','relax','slow','own','tabata'];   // megjelenítési sorrend (az objektumban a '478' előre kerülne)
 function pattern(id){
   if(id==='own'){const [a,b,c,d]=st.own;return [['in',a],['hold',b],['out',c],['hold',d]].filter(x=>x[1]>0)}
   if(id==='slow'){const g=run?Math.min(1,elapsed/(st.dur*60)):0;return [['in',4],['out',Math.round(4+4*g)]]}
@@ -387,25 +432,28 @@ function pattern(id){
 }
 // Tabata: nem ismétlődő kör, hanem a teljes edzés egyben: [fajta, mp, kör, blokk]
 function tabataPlan(){
-  const t=st.tab,p=t.prep?[['prep',t.prep,0,1]]:[];
+  // 5. elem: a gyakorlat neve (munkánál az aktuális, pihenőnél a következő); pihenő 0 mp-cel = EMOM
+  const t=st.tab,ex=exList(),en=k=>ex.length?ex[(k-1)%ex.length]:'',p=t.prep?[['prep',t.prep,0,1,en(1)]]:[];
   for(let s=1;s<=t.sets;s++){
-    if(s>1)p.push(['rest',t.brk,0,s]);               // blokkok közti pihenő
-    for(let k=1;k<=t.rounds;k++){p.push(['work',t.work,k,s]);if(k<t.rounds)p.push(['rest',t.rest,k,s])}
+    if(s>1)p.push(['rest',t.brk,0,s,en(1)]);         // blokkok közti pihenő
+    for(let k=1;k<=t.rounds;k++){p.push(['work',t.work,k,s,en(k)]);if(k<t.rounds&&t.rest)p.push(['rest',t.rest,k,s,en(k+1)])}
   }
   return p;
 }
+function exList(){return (st.tab.ex||'').split('\n').map(x=>x.trim()).filter(Boolean).slice(0,40)}
 function patternLabel(id){
   if(id==='slow')return '4·4→8';
+  if(id==='sigh')return '2+1·6';
   if(id==='tabata'){const t=st.tab;return `${t.work}/${t.rest} ×${t.rounds}`+(t.sets>1?` ×${t.sets}`:'')}
   return pattern(id).map(x=>x[1]).join('·');
 }
 
 let st={mode:'box',shown:['box','478','calm'],own:[4,4,6,0],vol:35,tone:true,bell:true,vib:true,sleep:false,speak:false,full:true,scene:false,dur:5,
-  color:'erdo',voice:'lagy',chime:'csengo',log:{},sessions:0,tab:{},tabN:0,tvol:80};
+  color:'erdo',voice:'lagy',chime:'csengo',log:{},sessions:0,tab:{},tabN:0,tvol:80,amb:'off',ambVol:50};
 try{Object.assign(st,JSON.parse(localStorage.getItem('legzo')||'{}'))}catch(e){}
 if(!T[st.lang]){const n=(navigator.language||'hu').slice(0,2).toLowerCase();st.lang=T[n]?n:'en'}   // első indításkor a telefon nyelve
 if(!R.hasOwnProperty(st.mode))st.mode='box';
-st.tab=Object.assign({work:20,rest:10,rounds:8,sets:1,prep:10,brk:60},st.tab);
+st.tab=Object.assign({work:20,rest:10,rounds:8,sets:1,prep:10,brk:60,ex:''},st.tab);
 st.shown=(st.shown||[]).filter(id=>R.hasOwnProperty(id)).slice(0,3);if(!st.shown.length)st.shown=['box','478','calm'];
 L=T[st.lang];
 function save(){try{localStorage.setItem('legzo',JSON.stringify(st))}catch(e){}}
@@ -483,7 +531,7 @@ const CHIMES={
 function ding(f){if(ac&&st.bell)CHIMES[st.chime].play(f)}
 function sound(kind,big,d){
   if(!ac||!voice)return;
-  if(kind==='in'){voice.inhale(d);ding(784)}
+  if(kind==='in'||kind==='in2'){voice.inhale(d);ding(kind==='in2'?880:784)}
   else if(kind==='out'){voice.exhale(d);ding(587)}
   else{voice.hold(big);ding(659)}
 }
@@ -502,16 +550,54 @@ function beep(f,len,n=1){
 }
 function tbBuzz(p){if(st.vib)try{navigator.vibrate&&navigator.vibrate(p)}catch(e){}}
 
+// Természethang a légzés alá: a telefon generálja (nincs hangfájl). 8 mp-es hurok, a vége az elejébe úsztatva, így nincs kattanás.
+// gen(sr) mintánként ad egy értéket; chain: élő szűrők [fajta, Hz, Q]; lvl: szint a többihez képest.
+function loopBuf(secs,next){
+  const sr=ac.sampleRate,n=sr*secs,f=Math.floor(sr*.5),b=ac.createBuffer(1,n,sr),d=b.getChannelData(0);
+  for(let k=0;k<n+f;k++){const x=next();if(k<n)d[k]=x;else{const a=(k-n)/f;d[k-n]=d[k-n]*a+x*(1-a)}}
+  return b;
+}
+const AMB={
+  off:null,
+  eso:{lvl:.9,chain:[['highpass',500],['lowpass',7000]],gen:sr=>{let a=0,dec=0;   // sűrű zaj + koppanó cseppek
+    return ()=>{const w=Math.random()*2-1;if(Math.random()<45/sr){a=(.25+Math.random()*.75)*(Math.random()<.5?-1:1);dec=Math.exp(-1/(sr*(.002+Math.random()*.004)))}a*=dec;return w*.18+a*w*1.2}}},
+  patak:{lvl:1,chain:[['highpass',150],['lowpass',2600]],gen:sr=>{let y=0,ph=0,f=0,env=0,dec=0;   // csobogás + felfelé csúszó buborékok
+    return ()=>{const w=Math.random()*2-1;y+=.12*(w-y);
+      if(env<.01&&Math.random()<35/sr){f=300+Math.random()*900;env=.25+Math.random()*.35;dec=Math.exp(-1/(sr*(.015+Math.random()*.025)))}
+      f*=1+25/sr;ph+=2*Math.PI*f/sr;env*=dec;return y*.9+Math.sin(ph)*env}}},
+  tuz:{lvl:.8,chain:[['lowpass',5000]],gen:sr=>{let b=0,a=0,dec=0,burst=0;   // mély zúgás + csoportos pattogás
+    return ()=>{const w=Math.random()*2-1;b=(b+.02*w)/1.02;
+      if(burst>0)burst--;else if(Math.random()<1.5/sr)burst=sr*(.05+Math.random()*.15);
+      if(Math.random()<(burst>0?220:6)/sr){a=(.2+Math.random()*.8)*(Math.random()<.5?-1:1);dec=Math.exp(-1/(sr*(.0004+Math.random()*.0012)))}
+      a*=dec;return b*2.2+a*w}}},
+  szel:{lvl:1.3,chain:[['bandpass',450,.9]],sweep:true,gen:()=>()=>Math.random()*2-1}   // zaj, lassan vándorló sávszűrővel
+};
+let amb=null,ambGain=null;
+function ambOut(){if(!ambGain){ambGain=ac.createGain();ambGain.connect(master)}ambGain.gain.value=(st.ambVol/100)**1.5*1.2;return ambGain}
+function ambStart(fade){
+  ambStop(.3);
+  const def=AMB[st.amb];if(!def||!ensureAudio())return;
+  if(!def.buf)def.buf=loopBuf(8,def.gen(ac.sampleRate));
+  const src=ac.createBufferSource(),g=ac.createGain(),osc=[];src.buffer=def.buf;src.loop=true;
+  let node=src;
+  def.chain.forEach(([type,f,q])=>{const b=ac.createBiquadFilter();b.type=type;b.frequency.value=f;if(q)b.Q.value=q;node.connect(b);node=b;
+    if(def.sweep){const l=ac.createOscillator(),lg=ac.createGain();l.frequency.value=.07;lg.gain.value=300;l.connect(lg);lg.connect(b.frequency);l.start();osc.push(l)}});
+  g.gain.value=0;node.connect(g);g.connect(ambOut());src.start();osc.push(src);ramp(g.gain,def.lvl,fade);
+  amb={stop(d){ramp(g.gain,0,d);setTimeout(()=>{osc.forEach(o=>{try{o.stop()}catch(e){}});g.disconnect()},d*1000+150)}};
+}
+function ambStop(d=2){if(amb){amb.stop(d);amb=null}}
+
 // Hangos vezetés: a telefon felolvasóhangja mondja ki a fázist (ha van hang a választott nyelven)
 function ttsVoice(){
   if(!('speechSynthesis' in window))return null;
   const vs=speechSynthesis.getVoices();
   return vs.find(v=>v.lang.toLowerCase().replace('_','-')===L.locale.toLowerCase())||vs.find(v=>v.lang.toLowerCase().startsWith(st.lang))||null;
 }
-function speak(kind){
+function speak(kind){speakText(L[kind])}
+function speakText(text){
   if(!st.speak||!('speechSynthesis' in window))return;
   const v=ttsVoice();if(!v)return;
-  const u=new SpeechSynthesisUtterance(L[kind]);u.voice=v;u.lang=v.lang;u.rate=.9;u.volume=Math.min(1,.25+st.vol/100);
+  const u=new SpeechSynthesisUtterance(text);u.voice=v;u.lang=v.lang;u.rate=.9;u.volume=Math.min(1,.25+st.vol/100);
   speechSynthesis.cancel();setTimeout(()=>speechSynthesis.speak(u),st.bell?250:0);
 }
 function voiceNote(){
@@ -554,9 +640,10 @@ function renderStats(){
 function size(big,d){
   const t=reduce?'none':`transform ${d}s ease-in-out`;
   [r1,r2,r3].forEach(e=>e.style.transition=t);
-  r1.style.transform=big?'scale(1.6)':'scale(1)';
-  r2.style.transform=big?'scale(1.3)':'scale(1)';
-  r3.style.transform=big?'scale(1.04)':'scale(0.86)';
+  // big: 0 = kilégzett, 1 = belégzett, 1.2 = a Sóhajtás második, ráadás belégzése
+  r1.style.transform=`scale(${1+.6*big})`;
+  r2.style.transform=`scale(${1+.3*big})`;
+  r3.style.transform=`scale(${.86+.18*big})`;
 }
 function phase(){
   if(i===0){                                         // minden kör elején (a Lassuló így nyúlik)
@@ -566,19 +653,25 @@ function phase(){
   const [kind,secs]=cur[i];
   ph.textContent=L[kind];left=secs;ct.textContent=left;
   if(tb){                                            // a képernyő színe jelzi a szakaszt (CSS: html[data-tb])
-    document.documentElement.dataset.tb=kind;
+    const exn=cur[i][4];document.documentElement.dataset.tb=kind;ph.style.fontSize=ph.style.whiteSpace='';
+    if(kind==='work'&&exn){ph.textContent=exn;fitPh()} // munka közben a gyakorlat neve, pihenőnél alul a következő
     if(kind==='work'){beep(1500,.6);tbBuzz(400)}else if(kind==='rest'){beep(750,.3,2);tbBuzz([150,100,150])}
-    speak(kind);return;
+    speakText(kind==='work'&&exn?exn:exn?`${L[kind]}. ${L.next}: ${exn}`:L[kind]);return;
   }
-  if(kind==='in')curBig=1;else if(kind==='out')curBig=0;
+  if(kind==='in')curBig=1;else if(kind==='in2')curBig=1.2;else if(kind==='out')curBig=0;
   if(kind!=='hold')size(curBig,secs);
   sound(kind,curBig,secs);speak(kind);buzz();
+}
+function fitPh(){   // hosszú gyakorlatnév: kisebb betű, hogy egy sorba férjen; nagyon hosszúnál inkább tördel
+  const w=ph.scrollWidth,max=ph.clientWidth;if(w<=max)return;
+  const fs=parseFloat(getComputedStyle(ph).fontSize)*max/w;
+  if(fs>=22)ph.style.fontSize=fs+'px';else{ph.style.fontSize='22px';ph.style.whiteSpace='normal'}
 }
 function fmt(s){return Math.floor(s/60)+":"+String(s%60).padStart(2,'0')}
 function planSecs(p){return p.reduce((a,x)=>a+x[1],0)}
 function showMeta(){
-  if(run&&tb){const [,,r,s]=cur[i],t=st.tab,x=`${Math.max(1,r)}/${t.rounds}`;   // a kör nagyban a szám alatt, lent a hátralévő idő
-    sub.textContent=(t.sets>1?L.tset(s)+' · ':'')+x;
+  if(run&&tb){const [kind,,r,s,exn]=cur[i],t=st.tab,x=`${Math.max(1,r)}/${t.rounds}`;   // a kör nagyban a szám alatt, lent a hátralévő idő
+    sub.textContent=(t.sets>1?L.tset(s)+' · ':'')+x+(kind!=='work'&&exn?` → ${exn}`:'');
     meta.textContent=(t.sets>1?L.tset(s)+' · '+x:L.tround(x))+' · '+fmt(Math.max(0,planSecs(cur)-elapsed));return}
   if(run){meta.textContent=L.round(cyc,fmt(Math.max(0,st.dur*60-elapsed)));return}
   if(st.mode==='tabata'){meta.textContent=fmt(planSecs(tabataPlan()))+' · '+L.rounds(st.tab.rounds*st.tab.sets);return}
@@ -615,15 +708,16 @@ function start(){
   document.documentElement.classList.toggle('tb-run',tb);
   run=true;finished=false;i=0;cyc=1;elapsed=0;curBig=0;app.classList.remove('idle');
   phase();tm=setInterval(tick,1000);ringBtn.setAttribute('aria-label',L.stop);lock();showMeta();focusLater(1200);keepStorage();
+  if(!tb&&st.amb!=='off')ambStart(4);
   if(st.sleep&&!tb){setDim(0,0);requestAnimationFrame(()=>requestAnimationFrame(()=>setDim(.9,st.dur*60)))}
   if((st.hint2||0)<3){st.hint2=(st.hint2||0)+1;save();hint.classList.add('show');setTimeout(()=>hint.classList.remove('show'),5000)}
 }
 let finished=false;
-function idleLabel(){ph.textContent=finished?L.done:L.start;sub.textContent=finished?L.again:L.tap;ringBtn.setAttribute('aria-label',L.start)}
+function idleLabel(){ph.style.fontSize=ph.style.whiteSpace='';ph.textContent=finished?L.done:L.start;sub.textContent=finished?L.again:L.tap;ringBtn.setAttribute('aria-label',L.start)}
 function stop(keepFull){
   if(!run)return;
   if(!keepFull)leaveFull();
-  run=false;clearInterval(tm);size(0,1.2);if(voice)voice.quiet(.8);
+  run=false;clearInterval(tm);size(0,1.2);if(voice)voice.quiet(.8);ambStop(keepFull?10:2);   // alvás mód végén lassan halkul
   if('speechSynthesis' in window)speechSynthesis.cancel();
   clearTimeout(focusT);app.classList.remove('focus');hint.classList.remove('show');
   document.documentElement.classList.remove('tb-run');delete document.documentElement.dataset.tb;
@@ -691,11 +785,20 @@ function voicePick(id){                           // választáskor egy rövid b
   setTone(true);
   if(!ensureAudio())return;
   if(voice)voice.stop();voice=VOICES[id].make();
-  if(run){if(tb)return;const p=cur[i];if(p[0]==='in')voice.inhale(left);else if(p[0]==='out')voice.exhale(left);else voice.hold(curBig);return}
+  if(run){if(tb)return;const p=cur[i];if(p[0]==='in'||p[0]==='in2')voice.inhale(left);else if(p[0]==='out')voice.exhale(left);else voice.hold(curBig);return}
   voice.inhale(1.2);const v=voice;
   setTimeout(()=>{if(!run&&voice===v)v.exhale(1.4)},1250);setTimeout(()=>{if(!run&&voice===v)v.quiet(.5)},2700);
 }
 function chimePick(id){setBell(true);if(ensureAudio())CHIMES[id].play(784)}
+function ambPick(id){                             // választáskor 4 mp-ig hallod; futó légzésnél azonnal átvált
+  $('ambVolRow').classList.toggle('dim',id==='off');
+  if(id==='off'){ambStop(.6);return}
+  if(run){if(!tb)ambStart(1.5);return}
+  ambStart(1);const a=amb;setTimeout(()=>{if(!run&&amb===a)ambStop(1.5)},4000);
+}
+const ambVol=$('ambVol');
+ambVol.oninput=()=>{st.ambVol=+ambVol.value;fill(ambVol);save();if(ambGain)ramp(ambGain.gain,(st.ambVol/100)**1.5*1.2,.1)};
+ambVol.onchange=()=>{if(!run&&st.amb!=='off')ambPick(st.amb)};
 
 // Ritmusok a főképernyőre: legfeljebb 3; egy negyedik választásakor a legrégebben választott lekerül
 function renderRhythms(){
@@ -712,13 +815,20 @@ function renderRhythms(){
 }
 // Tabata-értékek: [név, érték, min, max, lépés]; a főképernyőn az első 4, a Beállításokban mind a 6
 const TKEYS=['work','rest','rounds','sets','prep','brk'];
-function tabItems(n){const t=st.tab;return [[L.work,t.work,5,90,5],[L.rest,t.rest,5,90,5],[L.tRounds,t.rounds,1,30,1],[L.tSets,t.sets,1,5,1],
+function tabItems(n){const t=st.tab;return [[L.work,t.work,5,90,5],[L.rest,t.rest,0,90,5],[L.tRounds,t.rounds,1,30,1],[L.tSets,t.sets,1,5,1],
   [L.tPrep,t.prep,0,30,5],[L.tBreak,t.brk,10,180,10]].slice(0,n)}
 function tabSet(k,v){st.tab[TKEYS[k]]=v}
+// Előbeállítások a főképernyőn; pihenő 0 = EMOM (minden perc elején indul egy kör)
+const TPRE={Tabata:[20,10,8,'20/10 ×8'],HIIT:[40,20,8,'40/20 ×8'],EMOM:[60,0,10,'1′ ×10']};
 function renderTabPanel(){
-  const p=$('tbPanel');p.hidden=st.mode!=='tabata';
-  if(!p.hidden)steppers($('tsteps2'),tabItems(4),tabSet);
+  const p=$('tbPanel');p.hidden=st.mode!=='tabata';if(p.hidden)return;
+  const t=st.tab,pre=$('tbPre');
+  pre.innerHTML=Object.entries(TPRE).map(([n,[w,r,k,lab]])=>`<button data-p="${n}" aria-pressed="${t.work===w&&t.rest===r&&t.rounds===k&&t.sets===1}">${n}<small>${lab}</small></button>`).join('');
+  pre.querySelectorAll('button').forEach(b=>b.onclick=()=>{const [w,r,k]=TPRE[b.dataset.p];Object.assign(st.tab,{work:w,rest:r,rounds:k,sets:1});
+    save();renderRhythms();renderModes();showMeta()});
+  steppers($('tsteps2'),tabItems(4),tabSet);
 }
+const tex=$('tex');tex.oninput=()=>{st.tab.ex=tex.value;save()};
 // léptetők: [név, érték, min, max, lépés]
 function steppers(box,items,set){
   box.innerHTML=items.map(([n,v],k)=>`<div class="stepper"><span>${n}</span><div><button data-k="${k}" data-d="-1" aria-label="${n} −">−</button><output>${v}</output><button data-k="${k}" data-d="1" aria-label="${n} +">+</button></div></div>`).join('');
@@ -804,6 +914,8 @@ function applyLang(id){
   document.querySelectorAll('[data-ia]').forEach(e=>e.setAttribute('aria-label',L[e.dataset.ia]));
   opts(voiceOpts,VOICES,'voice',voicePick,id=>L['v_'+id]);
   opts(chimeOpts,CHIMES,'chime',chimePick,id=>L['c_'+id]);
+  opts($('ambOpts'),AMB,'amb',ambPick,id=>L['a_'+id]);
+  document.querySelectorAll('[data-ph]').forEach(e=>e.placeholder=L[e.dataset.ph]);
   opts(langOpts,T,'lang',applyLang,id=>T[id].name);
   buildSwatches();renderRhythms();renderModes();renderStats();voiceNote();
   durv.textContent=L.min(st.dur);
@@ -814,6 +926,8 @@ function applyLang(id){
 
 // kezdőállapot
 if(!VOICES[st.voice])st.voice='lagy';
+if(!AMB.hasOwnProperty(st.amb))st.amb='off';
+ambVol.value=st.ambVol;fill(ambVol);$('ambVolRow').classList.toggle('dim',st.amb==='off');tex.value=st.tab.ex;
 if(!CHIMES[st.chime])st.chime='csengo';
 dur.value=st.dur;vol.value=st.vol;fill(dur);fill(vol);tvols.forEach(x=>{x.value=st.tvol;fill(x)});
 applyLang(st.lang);
@@ -831,6 +945,28 @@ function note(textKey,labelKey,act,dismiss){
   ntext.textContent=L[textKey];nact.textContent=L[labelKey];nact.onclick=()=>{shownNote=null;act()};
   nx.onclick=()=>{shownNote=null;notice.classList.remove('show');dismiss&&dismiss()};notice.classList.add('show');
 }
+
+// ---------------------------------------------------------------- mentés
+// Minden adat (napló, beállítások) csak ezen a telefonon van: fájlba menthető, és máshol vagy újratelepítés után visszatölthető.
+// Visszatöltéskor a beállítások felülíródnak, a napló napokra bontva összefésülődik (naponta a nagyobb érték marad).
+$('expBtn').onclick=()=>{
+  const blob=new Blob([JSON.stringify({app:'relaxring',v:1,date:new Date().toISOString(),st})],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`relaxring-${dayKey(new Date())}.json`;
+  document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),10000);
+};
+$('impBtn').onclick=()=>$('impFile').click();
+$('impFile').onchange=async e=>{
+  const f=e.target.files[0];e.target.value='';if(!f)return;
+  let d=null;try{d=JSON.parse(await f.text())}catch(x){}
+  if(!d||d.app!=='relaxring'||!d.st||typeof d.st!=='object'){alert(L.importBad);return}
+  if(!confirm(L.importAsk))return;
+  const log=Object.assign({},d.st.log);for(const k in st.log)log[k]=Math.max(log[k]||0,st.log[k]);
+  st=Object.assign({},d.st,{log,sessions:Math.max(st.sessions||0,d.st.sessions||0),tabN:Math.max(st.tabN||0,d.st.tabN||0),
+    persistAsked:st.persistAsked,noInstall:st.noInstall});
+  save();try{sessionStorage.setItem('imported','1')}catch(x){}
+  location.reload();
+};
+try{if(sessionStorage.getItem('imported')){sessionStorage.removeItem('imported');note('importOk','ok',()=>notice.classList.remove('show'))}}catch(e){}
 if(isSecureContext&&'serviceWorker' in navigator){
   // Új verzió: az új service worker átveszi az irányítást (controllerchange) → sáv a Frissítés gombbal.
   // Első telepítéskor nincs előző vezérlő, akkor nem jelzünk.

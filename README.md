@@ -1,8 +1,8 @@
 # RelaxRing – Légző körök
 
-Légzőgyakorló web-app lélegző körökkel, halk hanggal és rezgéssel. Ritmusok: doboz (4·4·4·4), elalvó (4·7·8), nyugtató (4·6), koherens (5·5), lazító (4·2·6), lassuló (a kilégzés 4-ről 8 mp-re nyúlik) és saját, valamint Tabata edzés-időzítő (20/10 mp × 8 kör, a főképernyőn állítható; edzés közben messziről is látható színes teljes képernyő óriási számokkal, hangos, külön állítható 3-2-1 jelzés). A főképernyőn a Beállításokban kiválasztott 3 látszik.
+Légzőgyakorló web-app lélegző körökkel, halk hanggal és rezgéssel. Ritmusok: doboz (4·4·4·4), elalvó (4·7·8), nyugtató (4·6), sóhajtás (2+1·6, gyors stresszoldó), koherens (5·5), lazító (4·2·6), lassuló (a kilégzés 4-ről 8 mp-re nyúlik) és saját, valamint Tabata edzés-időzítő (Tabata 20/10, HIIT 40/20 és EMOM előbeállítás, a főképernyőn állítható, saját gyakorlatlistával; edzés közben messziről is látható színes teljes képernyő óriási számokkal, hangos, külön állítható 3-2-1 jelzés). A főképernyőn a Beállításokban kiválasztott 3 látszik.
 
-További funkciók: napló (napos sorozat, heti percek), alvás mód (a képernyő lassan elsötétül, a végén nincs csengés), a telepített app teljes képernyős (nincs állapotsor és alsó gombsor; böngészőben gyakorlás közben vált teljes képernyőre), hangos vezetés (a telefon felolvasóhangjával), témánként háttérkép (a téma színeiből rajzolt táj, kikapcsolható), gyorsindítás az app ikonjáról (hosszan nyomva).
+További funkciók: napló (napos sorozat, heti percek), alvás mód (a képernyő lassan elsötétül, a végén nincs csengés), a telepített app teljes képernyős (nincs állapotsor és alsó gombsor; böngészőben gyakorlás közben vált teljes képernyőre), hangos vezetés (a telefon felolvasóhangjával), természethang a légzés alá (eső, patak, tűz, szél), mentés fájlba és visszatöltés, témánként háttérkép (a téma színeiből rajzolt táj, kikapcsolható), gyorsindítás az app ikonjáról (hosszan nyomva).
 
 **Megnyitás:** https://vmynick.github.io/relaxring/
 
