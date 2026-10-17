@@ -120,6 +120,40 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--c1);outline-off
 .navi span{flex:none}
 .navi em{flex:1;min-width:0;font-style:normal;font-size:17px;font-weight:600;color:var(--muted);text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .navi b{flex:none;font-size:26px;font-weight:600;line-height:1;color:var(--muted);opacity:.7}
+a.navi{text-decoration:none;box-sizing:border-box}
+/* napló: napi cél, havi naptár */
+.gbar{padding:12px 0}
+.gbar:empty{display:none}
+.gtxt{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:17px;font-weight:700;margin-bottom:8px}
+.gtxt b{font-variant-numeric:tabular-nums;white-space:nowrap}
+.gtxt b.ok{color:var(--c1)}
+.gbar i{display:block;height:10px;border-radius:5px;background:color-mix(in srgb,var(--c1) 18%,transparent);overflow:hidden}
+.gbar s{display:block;height:100%;border-radius:5px;background:var(--c1);text-decoration:none;transition:width .4s}
+.week{position:relative}
+.week .gline{position:absolute;left:0;right:0;height:0;border-top:2px dashed color-mix(in srgb,var(--c1) 55%,transparent);pointer-events:none}
+.calhead{display:flex;align-items:center;justify-content:space-between;padding:12px 0 6px}
+.calhead span{font-size:19px;font-weight:800}
+.calhead button{width:38px;height:38px;border:0;border-radius:50%;background:var(--bg);color:var(--fg);font-size:22px;font-weight:700;cursor:pointer}
+.calhead button:disabled{opacity:.3;cursor:default}
+.cal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px;padding:4px 0 10px;text-align:center}
+.cal b{font-size:13px;font-weight:700;color:var(--muted);padding-bottom:2px}
+.cal div{aspect-ratio:1;display:grid;place-items:center;border-radius:10px;font-size:15px;font-weight:700;font-variant-numeric:tabular-nums;color:var(--muted)}
+.cal .part{background:color-mix(in srgb,var(--c1) 28%,transparent);color:var(--fg)}
+.cal .full{background:var(--c1);color:var(--on-c1)}
+.cal .today{box-shadow:inset 0 0 0 2px var(--fg)}
+.cal .future{opacity:.35}
+/* súgó és névjegy */
+.aboutHead{display:flex;align-items:center;gap:14px;padding:14px 0}
+.aboutHead img{border-radius:14px}
+.aboutHead b{display:block;font-size:22px;font-weight:800}
+.aboutHead span{display:block;font-size:15px;font-weight:600;color:var(--muted);margin-top:2px}
+.help{margin:0;padding:12px 0 12px 20px;font-size:17px;font-weight:600;line-height:1.4}
+.help li+li{margin-top:8px}
+.news{padding:12px 0;border-top:1px solid var(--line)}
+.news:first-child{border-top:0}
+.news b{display:block;font-size:17px;font-weight:800;margin-bottom:4px}
+.news ul{margin:0;padding-left:20px;font-size:16px;font-weight:600;line-height:1.4;color:var(--muted)}
+.app.paused #sub{display:block;color:inherit;opacity:.85}
 .done{border:0;background:transparent;color:var(--c1);font-size:21px;font-weight:700;padding:8px 4px;cursor:pointer}
 .sheet-body{overflow-y:auto;padding:0 max(16px,env(safe-area-inset-right,0px)) max(24px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));-webkit-overflow-scrolling:touch}
 .sheet-body h3{margin:18px 14px 8px;font-size:16px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
@@ -279,9 +313,9 @@ html.tb-run #ph{max-width:94vw;margin:0 auto;white-space:nowrap}
     <div class="page" data-page="main">
       <h3 data-i="journal"></h3>
       <div class="group">
-        <div class="kpis"><div><b id="kStreak"></b><span data-i="streak"></span></div><div><b id="kToday"></b><span data-i="today"></span></div><div><b id="kTotal"></b><span data-i="sessions"></span></div></div>
-        <div class="week" id="week" role="img"></div>
-        <div class="note" id="tabNote" hidden></div>
+        <div class="kpis" id="kpis"></div>
+        <div class="gbar" id="goalMain"></div>
+        <button class="navi" data-go="journal"><span data-i="details"></span><em></em><b aria-hidden="true">›</b></button>
       </div>
       <div class="group nav">
         <button class="navi" data-go="rhythms"><i style="--ic:#30A46C"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.5"/></svg></i><span data-i="rhythms"></span><em id="sv_rhythms"></em><b aria-hidden="true">›</b></button>
@@ -295,6 +329,38 @@ html.tb-run #ph{max-width:94vw;margin:0 auto;white-space:nowrap}
       </div>
       <div class="group nav">
         <button class="navi" data-go="backup"><i style="--ic:#8E8E93"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v10M8 10l4 4 4-4M5 16v3h14v-3"/></svg></i><span data-i="backup"></span><em id="sv_backup"></em><b aria-hidden="true">›</b></button>
+        <button class="navi" data-go="about"><i style="--ic:#636366"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 11v5M12 8h.01"/></svg></i><span data-i="about"></span><em id="sv_about"></em><b aria-hidden="true">›</b></button>
+      </div>
+    </div>
+
+    <div class="page" data-page="journal" hidden>
+      <div class="group">
+        <div class="gbar" id="goalBar"></div>
+        <div class="opts" id="goalOpts" role="group" data-ia="goal"></div>
+        <div class="note" id="goalWeek"></div>
+      </div>
+      <h3 data-i="last7"></h3>
+      <div class="group"><div class="week" id="week" role="img"></div></div>
+      <h3 data-i="month"></h3>
+      <div class="group">
+        <div class="calhead"><button id="calPrev" data-ia="prevMonth">‹</button><span id="calTitle"></span><button id="calNext" data-ia="nextMonth">›</button></div>
+        <div class="cal" id="cal"></div>
+        <div class="note" id="calSum"></div>
+      </div>
+      <div class="group"><div class="note" id="tabNote"></div></div>
+    </div>
+
+    <div class="page" data-page="about" hidden>
+      <div class="group"><div class="aboutHead"><img src="icon-192.png" alt="" width="56" height="56"><div><b>RelaxRing</b><span id="verTxt"></span></div></div></div>
+      <h3 data-i="howTo"></h3>
+      <div class="group"><ul class="help" id="helpList"></ul></div>
+      <h3 data-i="whatsNew"></h3>
+      <div class="group" id="newsList"></div>
+      <h3 data-i="privacy"></h3>
+      <div class="group"><div class="note" data-i="privacyTxt"></div></div>
+      <div class="group nav">
+        <a class="navi" href="https://github.com/vmynick/relaxring" target="_blank" rel="noopener"><span data-i="source"></span><em>GitHub</em><b aria-hidden="true">›</b></a>
+        <a class="navi" href="https://github.com/vmynick/relaxring/blob/main/LICENSE" target="_blank" rel="noopener"><span data-i="license"></span><em>MIT</em><b aria-hidden="true">›</b></a>
       </div>
     </div>
 
@@ -402,6 +468,19 @@ const T={
     tabTitle:'Tabata (másodperc, darab)',tRounds:'Körök',tSets:'Blokkok',
     tPrep:'Felkészülés',tBreak:'Blokk-pihenő',tVol:'Jelzés hangereje',tSignal:'Jelzés',look:'Megjelenés',back:'Vissza',
     exit:'Kilépés',exitAgain:'Koppints újra a kilépéshez',exitFail:'A telefon nem engedte bezárni; használd a vissza vagy a kezdőlap gombot.',
+    paused:'Szünet',tapResume:'koppints a folytatáshoz',resume:'Folytatás',
+    details:'Részletek',goal:'Napi cél',goalToday:(m,g)=>`Ma ${m} / ${g} perc`,goalWeek:n=>`Ezen a héten ${n} napon teljesült a cél.`,
+    last7:'Az elmúlt 7 nap',month:'Havi naptár',monthSum:(d,m)=>`${d} aktív nap · ${m} perc`,prevMonth:'Előző hónap',nextMonth:'Következő hónap',
+    about:'Súgó és névjegy',howTo:'Használat',whatsNew:'Újdonságok',privacy:'Adatvédelem',source:'Forráskód',license:'Licenc',version:'Verzió',
+    privacyTxt:'Az app nem gyűjt és nem küld adatot: nincs fiók, analitika vagy süti. A beállítások és a napló csak ezen a készüléken, a böngésző tárolójában vannak.',
+    help:['Koppints a körre: indul a gyakorlás, újabb koppintásra leáll.',
+      'Fent választhatsz ritmust; hogy melyik 3 látsszon, a Beállítások → Ritmusok részben állíthatod.',
+      'Gyakorlás közben a körökön kívül minden elhalványul. Koppints a körön kívül, és visszajönnek a gombok.',
+      'Lezárt képernyővel is megy: a lezárási képernyőn vagy a fülhallgató gombjával szüneteltetheted és leállíthatod.',
+      'Tabata: a főképernyőn állíthatod a munkát, a pihenőt és a köröket; edzés közben a képernyő színe jelzi a szakaszt.',
+      'Bal alsó gomb: Beállítások. Jobb alsó X: kilépés, kétszer koppintva.',
+      'A napló és a beállítások csak ezen a telefonon vannak: időnként mentsd fájlba (Beállítások → Mentés).'],
+    welcome:'Üdv! Nézd meg röviden, hogyan működik.',helpBtn:'Súgó',newsTxt:'Frissült az app. Nézd meg, mi újság!',newsBtn:'Újdonságok',
     tabInfo:'Edzés közben munkánál piros, pihenőnél zöld, felkészüléskor sárga a képernyő. Minden szakasz utolsó 3 másodpercében csipog; a hangerő a telefon médiahangerejétől is függ.',
     tround:x=>`${x} kör`,tset:s=>`${s}. blokk`,rounds:n=>`${n} kör`,tabN:n=>`Tabata-edzés eddig: ${n}`,
     session:'Gyakorlás',duration:'Időtartam',sleepMode:'Alvás mód',sleepInfo:'A képernyő lassan elsötétül, a végén nincs csengés.',
@@ -431,6 +510,19 @@ const T={
     tabTitle:'Tabata (seconds, count)',tRounds:'Rounds',tSets:'Sets',
     tPrep:'Get ready',tBreak:'Set rest',tVol:'Signal volume',tSignal:'Signal',look:'Appearance',back:'Back',
     exit:'Exit',exitAgain:'Tap again to exit',exitFail:'The phone did not allow closing; use the back or home button.',
+    paused:'Paused',tapResume:'tap to continue',resume:'Continue',
+    details:'Details',goal:'Daily goal',goalToday:(m,g)=>`Today ${m} / ${g} min`,goalWeek:n=>`Goal reached on ${n} ${n===1?'day':'days'} this week.`,
+    last7:'Last 7 days',month:'Monthly calendar',monthSum:(d,m)=>`${d} active ${d===1?'day':'days'} · ${m} min`,prevMonth:'Previous month',nextMonth:'Next month',
+    about:'Help & about',howTo:'How to use',whatsNew:'What\'s new',privacy:'Privacy',source:'Source code',license:'License',version:'Version',
+    privacyTxt:'The app collects and sends no data: no account, analytics or cookies. Settings and the journal stay on this device, in the browser\'s storage.',
+    help:['Tap the circle to start a session; tap again to stop.',
+      'Pick a rhythm at the top; choose which 3 appear in Settings → Rhythms.',
+      'During a session everything except the circles fades. Tap outside the circle to bring the buttons back.',
+      'It keeps running with the screen locked: pause or stop it from the lock screen or with your headset button.',
+      'Tabata: set work, rest and rounds on the main screen; during a workout the screen color shows the phase.',
+      'Bottom-left button: Settings. Bottom-right X: exit, tap twice.',
+      'Your journal and settings live only on this phone: save them to a file now and then (Settings → Backup).'],
+    welcome:'Welcome! Take a quick look at how it works.',helpBtn:'Help',newsTxt:'The app was updated. See what\'s new!',newsBtn:'What\'s new',
     tabInfo:'During a workout the screen is red for work, green for rest and yellow while getting ready. Beeps in the last 3 seconds of each part; loudness also depends on the phone\'s media volume.',
     tround:x=>`Round ${x}`,tset:s=>`Set ${s}`,rounds:n=>`${n} rounds`,tabN:n=>`Tabata workouts so far: ${n}`,
     session:'Session',duration:'Duration',sleepMode:'Sleep mode',sleepInfo:'The screen slowly goes dark; no chime at the end.',
@@ -460,6 +552,19 @@ const T={
     tabTitle:'Tabata (Sekunden, Anzahl)',tRounds:'Runden',tSets:'Sätze',
     tPrep:'Vorbereitung',tBreak:'Satzpause',tVol:'Signallautstärke',tSignal:'Signal',look:'Darstellung',back:'Zurück',
     exit:'Beenden',exitAgain:'Zum Beenden erneut tippen',exitFail:'Das Telefon erlaubt das Schließen nicht; nutze die Zurück- oder Home-Taste.',
+    paused:'Pause',tapResume:'zum Fortsetzen antippen',resume:'Fortsetzen',
+    details:'Details',goal:'Tagesziel',goalToday:(m,g)=>`Heute ${m} / ${g} Min.`,goalWeek:n=>`Ziel diese Woche an ${n} ${n===1?'Tag':'Tagen'} erreicht.`,
+    last7:'Letzte 7 Tage',month:'Monatskalender',monthSum:(d,m)=>`${d} aktive ${d===1?'Tag':'Tage'} · ${m} Min.`,prevMonth:'Vorheriger Monat',nextMonth:'Nächster Monat',
+    about:'Hilfe & Info',howTo:'Bedienung',whatsNew:'Neuigkeiten',privacy:'Datenschutz',source:'Quellcode',license:'Lizenz',version:'Version',
+    privacyTxt:'Die App sammelt und sendet keine Daten: kein Konto, keine Analyse, keine Cookies. Einstellungen und Tagebuch bleiben auf diesem Gerät im Browserspeicher.',
+    help:['Kreis antippen: die Übung startet, erneut antippen stoppt sie.',
+      'Oben wählst du den Rhythmus; welche 3 erscheinen, legst du unter Einstellungen → Rhythmen fest.',
+      'Während der Übung verblasst alles außer den Kreisen. Tippe neben den Kreis, dann kommen die Tasten zurück.',
+      'Läuft auch bei gesperrtem Bildschirm: Pause und Stopp über den Sperrbildschirm oder die Kopfhörertaste.',
+      'Tabata: Arbeit, Pause und Runden stellst du auf dem Startbildschirm ein; die Bildschirmfarbe zeigt den Abschnitt.',
+      'Taste unten links: Einstellungen. X unten rechts: Beenden, zweimal tippen.',
+      'Tagebuch und Einstellungen sind nur auf diesem Telefon: sichere sie ab und zu in eine Datei (Einstellungen → Sicherung).'],
+    welcome:'Willkommen! Schau kurz, wie es funktioniert.',helpBtn:'Hilfe',newsTxt:'Die App wurde aktualisiert. Sieh dir die Neuigkeiten an!',newsBtn:'Neuigkeiten',
     tabInfo:'Während des Trainings ist der Bildschirm bei Arbeit rot, in der Pause grün und bei der Vorbereitung gelb. Piept in den letzten 3 Sekunden jedes Abschnitts; die Lautstärke hängt auch von der Medienlautstärke des Telefons ab.',
     tround:x=>`Runde ${x}`,tset:s=>`Satz ${s}`,rounds:n=>`${n} Runden`,tabN:n=>`Tabata-Workouts bisher: ${n}`,
     session:'Übung',duration:'Dauer',sleepMode:'Schlafmodus',sleepInfo:'Der Bildschirm wird langsam dunkel; am Ende keine Glocke.',
@@ -473,6 +578,20 @@ const T={
     certTxt:'Richte einmal das Zertifikat ein, um die App zu installieren und den Bildschirm wach zu halten.',certBtn:'Einrichten'}
 };
 let L=T.hu,shownNote=null;
+
+// Újdonságok, a legfrissebb elöl. Az első elem verziója az app verziója; ha nagyobb, mint amit a felhasználó
+// utoljára látott, indításkor egyszer szólunk („Mi újság”). Új kiadásnál ide kerül egy új elem.
+const NEWS=[
+  {v:'1.1',d:'2026-10-17',
+    hu:['Lezárt képernyővel is fut, a lezárási képernyőn szüneteltethető és leállítható','Napló: napi cél, havi naptár, heti célnapok','Súgó és névjegy, újdonságok frissítés után','Angol nevű gyorsindítók az app ikonján'],
+    en:['Keeps running with the screen locked; pause or stop it from the lock screen','Journal: daily goal, monthly calendar, goal days this week','Help & about page, what\'s new after an update','Icon shortcuts now have English names'],
+    de:['Läuft auch bei gesperrtem Bildschirm; Pause und Stopp über den Sperrbildschirm','Tagebuch: Tagesziel, Monatskalender, Zieltage dieser Woche','Hilfe & Info, Neuigkeiten nach einem Update','Englische Namen für die Schnellstarts am App-Symbol']},
+  {v:'1.0',d:'2026-10-17',
+    hu:['Tabata, HIIT és EMOM időzítő színes, messziről is látható kijelzéssel és gyakorlatlistával','Sóhajtás ritmus, természethangok, háttérképek','Mentés fájlba és visszatöltés','Beállítások almenükkel, kilépés gomb'],
+    en:['Tabata, HIIT and EMOM timer with a colored display readable from afar and an exercise list','Sigh rhythm, nature sounds, background scenes','Backup to a file and restore','Settings with sub-pages, exit button'],
+    de:['Tabata-, HIIT- und EMOM-Timer mit farbiger, weithin lesbarer Anzeige und Übungsliste','Seufzer-Rhythmus, Naturklänge, Hintergrundbilder','Sicherung in eine Datei und Wiederherstellung','Einstellungen mit Unterseiten, Beenden-Taste']}
+];
+const APP_VER=NEWS[0].v;
 const $=id=>document.getElementById(id);
 const app=$('app'),r1=$('r1'),r2=$('r2'),r3=$('r3'),ph=$('ph'),ct=$('ct'),sub=$('sub'),ringBtn=$('ringBtn'),meta=$('meta'),hint=$('hint'),dim=$('dim');
 const vol=$('vol'),dur=$('dur'),durv=$('durv'),toneSw=$('toneSw'),bellSw=$('bellSw'),vibSw=$('vibSw'),sleepSw=$('sleepSw'),speakSw=$('speakSw'),fullSw=$('fullSw');
@@ -517,7 +636,8 @@ function patternLabel(id){
 }
 
 let st={mode:'box',shown:['box','478','calm'],own:[4,4,6,0],vol:35,tone:true,bell:true,vib:true,sleep:false,speak:false,full:true,scene:false,dur:5,
-  color:'erdo',voice:'lagy',chime:'csengo',log:{},sessions:0,tab:{},tabN:0,tvol:80,amb:'off',ambVol:50};
+  color:'erdo',voice:'lagy',chime:'csengo',log:{},sessions:0,tab:{},tabN:0,tvol:80,amb:'off',ambVol:50,goal:5};
+const firstRun=(()=>{try{return !localStorage.getItem('legzo')}catch(e){return false}})();
 try{Object.assign(st,JSON.parse(localStorage.getItem('legzo')||'{}'))}catch(e){}
 if(!T[st.lang]){const n=(navigator.language||'hu').slice(0,2).toLowerCase();st.lang=T[n]?n:'en'}   // első indításkor a telefon nyelve
 if(!R.hasOwnProperty(st.mode))st.mode='box';
@@ -676,13 +796,13 @@ function voiceNote(){
 if('speechSynthesis' in window)speechSynthesis.addEventListener('voiceschanged',voiceNote);
 
 // ---------------------------------------------------------------- napló
-// Naponta a gyakorolt másodpercek (60 napra visszamenőleg), és az alkalmak száma (legalább 1 perc)
+// Naponta a gyakorolt másodpercek (kb. 13 hónapra visszamenőleg, a havi naptárhoz), és az alkalmak száma (legalább 1 perc)
 function dayKey(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
 function addDays(d,n){const x=new Date(d);x.setDate(x.getDate()+n);return x}
 function logSession(sec){
   if(sec<5)return;
   const k=dayKey(new Date());st.log[k]=(st.log[k]||0)+sec;if(sec>=60)st.sessions++;
-  const old=dayKey(addDays(new Date(),-60));for(const d in st.log)if(d<old)delete st.log[d];
+  const old=dayKey(addDays(new Date(),-400));for(const d in st.log)if(d<old)delete st.log[d];
   save();
 }
 function streak(){
@@ -691,17 +811,53 @@ function streak(){
   while((st.log[dayKey(d)]||0)>=60){n++;d=addDays(d,-1)}
   return n;
 }
-function renderStats(){
-  const today=new Date();
-  $('kStreak').textContent=streak();
-  $('kToday').textContent=Math.round((st.log[dayKey(today)]||0)/60);
-  $('kTotal').textContent=st.sessions;
-  const days=[...Array(7)].map((_,k)=>addDays(today,k-6));
-  const mins=days.map(d=>Math.round((st.log[dayKey(d)]||0)/60));
-  const top=Math.max(10,...mins),fmtDay=new Intl.DateTimeFormat(L.locale,{weekday:'narrow'});
-  $('week').innerHTML=days.map((d,k)=>`<div class="${k===6?'today':''}"><small>${mins[k]||''}</small><i style="height:${Math.max(4,mins[k]/top*60)}px"></i><em>${fmtDay.format(d)}</em></div>`).join('');
-  $('week').setAttribute('aria-label',L.weekAria(mins.join(', ')));
-  $('tabNote').hidden=!st.tabN;$('tabNote').textContent=L.tabN(st.tabN);   // a Tabata külön számít, nem légzésperc
+const GOALS=[2,5,10,15,20,30];                       // napi cél választható értékei (perc)
+const todayMin=()=>Math.round((st.log[dayKey(new Date())]||0)/60);
+function goalHTML(){const m=todayMin(),g=st.goal,ok=m>=g;
+  return `<div class="gtxt"><span>${L.goal}</span><b class="${ok?'ok':''}">${ok?'✓ ':''}${L.goalToday(m,g)}</b></div><i><s style="width:${Math.min(100,m/g*100)}%"></s></i>`}
+function renderStats(){                              // a Beállítások főoldala: három szám és a mai cél
+  $('kpis').innerHTML=[[streak(),L.streak],[todayMin(),L.today],[st.sessions,L.sessions]].map(([n,t])=>`<div><b>${n}</b><span>${t}</span></div>`).join('');
+  $('goalMain').innerHTML=goalHTML();
+}
+let calOff=0;                                        // a naptárban mutatott hónap: 0 = ez, -1 = előző…
+function renderJournal(){
+  const today=new Date(),g=st.goal*60,tk=dayKey(today);
+  $('goalBar').innerHTML=goalHTML();
+  const go=$('goalOpts');go.innerHTML=GOALS.map(n=>`<button data-g="${n}" aria-pressed="${st.goal===n}">${L.min(n)}</button>`).join('');
+  go.querySelectorAll('button').forEach(b=>b.onclick=()=>{st.goal=+b.dataset.g;save();renderJournal();renderStats()});
+  let n=0;for(let d=addDays(today,-((today.getDay()+6)%7));dayKey(d)<=tk;d=addDays(d,1))if((st.log[dayKey(d)]||0)>=g)n++;
+  $('goalWeek').textContent=L.goalWeek(n);
+  // az elmúlt 7 nap, a cél szaggatott vonalával
+  const days=[...Array(7)].map((_,k)=>addDays(today,k-6)),mins=days.map(d=>Math.round((st.log[dayKey(d)]||0)/60));
+  const top=Math.max(10,st.goal,...mins),fmtDay=new Intl.DateTimeFormat(L.locale,{weekday:'narrow'}),wk=$('week');
+  wk.innerHTML=days.map((d,k)=>`<div class="${k===6?'today':''}"><small>${mins[k]||''}</small><i style="height:${Math.max(4,mins[k]/top*60)}px"></i><em>${fmtDay.format(d)}</em></div>`).join('')+'<div class="gline"></div>';
+  wk.setAttribute('aria-label',L.weekAria(mins.join(', ')));
+  const bar=wk.querySelector('i'),line=wk.querySelector('.gline');
+  if(wk.offsetHeight)line.style.bottom=wk.getBoundingClientRect().bottom-bar.getBoundingClientRect().bottom+st.goal/top*60+'px';else line.hidden=true;
+  // havi naptár: telt = cél teljesült, halvány = legalább 1 perc
+  const m0=new Date(today.getFullYear(),today.getMonth()+calOff,1),y=m0.getFullYear(),mo=m0.getMonth(),nd=new Date(y,mo+1,0).getDate();
+  $('calTitle').textContent=new Intl.DateTimeFormat(L.locale,{year:'numeric',month:'long'}).format(m0);
+  const wd=new Intl.DateTimeFormat(L.locale,{weekday:'narrow'});
+  let h=[...Array(7)].map((_,k)=>`<b>${wd.format(new Date(2024,0,1+k))}</b>`).join('')+'<span></span>'.repeat((m0.getDay()+6)%7),act=0,tot=0;
+  for(let d=1;d<=nd;d++){const k=dayKey(new Date(y,mo,d)),s=st.log[k]||0;if(s>=60)act++;tot+=s;
+    h+=`<div class="${s>=g?'full':s>=60?'part':''}${k===tk?' today':''}${k>tk?' future':''}" aria-label="${d}: ${L.min(Math.round(s/60))}">${d}</div>`}
+  $('cal').innerHTML=h;
+  $('calSum').textContent=L.monthSum(act,Math.round(tot/60));
+  $('calNext').disabled=calOff>=0;$('calPrev').disabled=calOff<=-12;
+  $('tabNote').textContent=L.tabN(st.tabN||0);       // a Tabata külön számít, nem légzésperc
+}
+$('calPrev').onclick=()=>{calOff--;renderJournal()};$('calNext').onclick=()=>{calOff++;renderJournal()};
+
+// Súgó és névjegy: használat, újdonságok, adatvédelem; a verzió mellett a közzététel ideje (a gyorsítótár nevéből)
+function renderAbout(){
+  $('helpList').innerHTML=L.help.map(x=>`<li>${x}</li>`).join('');
+  const df=new Intl.DateTimeFormat(L.locale,{year:'numeric',month:'long',day:'numeric'});
+  $('newsList').innerHTML=NEWS.map(n=>`<div class="news"><b>${n.v} · ${df.format(new Date(n.d+'T12:00'))}</b><ul>${(n[st.lang]||n.en).map(x=>`<li>${x}</li>`).join('')}</ul></div>`).join('');
+  $('verTxt').textContent=`${L.version} ${APP_VER}`;
+  if('caches' in window)caches.keys().then(ks=>{
+    const m=ks.map(k=>/^relaxring-(\d{4})(\d\d)(\d\d)(\d\d)(\d\d)/.exec(k)).find(Boolean);
+    if(m)$('verTxt').textContent=`${L.version} ${APP_VER} · ${new Intl.DateTimeFormat(L.locale,{dateStyle:'medium',timeStyle:'short'}).format(new Date(Date.UTC(m[1],m[2]-1,m[3],m[4],m[5])))}`;
+  }).catch(()=>{});
 }
 
 // ---------------------------------------------------------------- légzés
@@ -723,12 +879,16 @@ function phase(){
   if(tb){                                            // a képernyő színe jelzi a szakaszt (CSS: html[data-tb])
     const exn=cur[i][4];document.documentElement.dataset.tb=kind;ph.style.fontSize=ph.style.whiteSpace='';
     if(kind==='work'&&exn){ph.textContent=exn;fitPh()} // munka közben a gyakorlat neve, pihenőnél alul a következő
-    if(kind==='work'){beep(1500,.6);tbBuzz(400)}else if(kind==='rest'){beep(750,.3,2);tbBuzz([150,100,150])}
-    speakText(kind==='work'&&exn?exn:exn?`${L[kind]}. ${L.next}: ${exn}`:L[kind]);return;
+    if(!mute){
+      if(kind==='work'){beep(1500,.6);tbBuzz(400)}else if(kind==='rest'){beep(750,.3,2);tbBuzz([150,100,150])}
+      speakText(kind==='work'&&exn?exn:exn?`${L[kind]}. ${L.next}: ${exn}`:L[kind]);
+    }
+    mediaMeta();return;
   }
   if(kind==='in')curBig=1;else if(kind==='in2')curBig=1.2;else if(kind==='out')curBig=0;
   if(kind!=='hold')size(curBig,secs);
-  sound(kind,curBig,secs);speak(kind);buzz();
+  if(!mute){sound(kind,curBig,secs);speak(kind);buzz()}
+  mediaMeta();
 }
 function fitPh(){   // hosszú gyakorlatnév: kisebb betű, hogy egy sorba férjen; nagyon hosszúnál inkább tördel
   const w=ph.scrollWidth,max=ph.clientWidth;if(w<=max)return;
@@ -747,14 +907,87 @@ function showMeta(){
   const v=L['v_'+st.voice],c=L['c_'+st.chime];
   meta.textContent=L.min(st.dur)+' · '+(st.tone&&st.bell?`${v} + ${c}`:st.tone?L.only(v):st.bell?L.only(c):L.silent);
 }
+// Időzítés a valós órához igazítva: ha a böngésző a háttérben (lezárt képernyőnél) ritkábban hív, a lemaradt
+// másodperceket bepótoljuk; nagy lemaradásnál hangok nélkül, hogy ne szóljon egyszerre sok jelzés.
+let t0=0,paused=false,pauseAt=0,mute=false;
 function tick(){
+  if(!run||paused)return;
+  const due=Math.floor((performance.now()-t0)/1000);
+  mute=due-elapsed>3;
+  while(run&&!paused&&elapsed<due){if(due-elapsed===1)mute=false;step()}
+  mute=false;
+}
+function step(){
   elapsed++;left--;
   if(left<=0){
     i++;
     if(i>=cur.length){if(tb){finish();return}i=0;cyc++;if(elapsed>=st.dur*60){finish();return}}
     phase();
-  }else{ct.textContent=left;if(tb&&left<=3){beep(1000,.15);tbBuzz(60)}}   // Tabata: 3-2-1 csipogás a váltás előtt
+  }else{ct.textContent=left;if(tb&&left<=3&&!mute){beep(1000,.15);tbBuzz(60)}}   // Tabata: 3-2-1 csipogás a váltás előtt
   showMeta();
+}
+// Szünet és folytatás: a lezárási képernyő, a fülhallgató gombja, vagy ha a telefon elveszi a hangot (pl. hívás)
+function pause(){
+  if(!run||paused)return;
+  paused=true;pauseAt=performance.now();
+  if(voice)voice.quiet(.5);ambStop(1);if('speechSynthesis' in window)speechSynthesis.cancel();
+  if(st.sleep&&!tb)setDim(getComputedStyle(dim).opacity,0);     // az elsötétülés is megáll
+  clearTimeout(focusT);app.classList.remove('focus');app.classList.add('paused');
+  ph.style.fontSize=ph.style.whiteSpace='';ph.textContent=L.paused;sub.textContent=L.tapResume;ringBtn.setAttribute('aria-label',L.resume);
+  if(media&&!media.paused)media.pause();
+  mediaMeta();
+}
+function resume(){
+  if(!run||!paused)return;
+  paused=false;t0+=performance.now()-pauseAt;ensureAudio();
+  app.classList.remove('paused');ringBtn.setAttribute('aria-label',L.stop);
+  const [kind,,,,exn]=cur[i];ph.textContent=tb&&kind==='work'&&exn?exn:L[kind];ct.textContent=left;
+  if(!tb){                                           // a félbemaradt szakasz a hátralévő időre folytatódik
+    if(kind!=='hold')size(curBig,left);
+    if(voice){if(kind==='in'||kind==='in2')voice.inhale(left);else if(kind==='out')voice.exhale(left);else voice.hold(curBig)}
+    if(st.amb!=='off')ambStart(2);
+    if(st.sleep)setDim(.9,Math.max(1,st.dur*60-elapsed));
+  }
+  if(media&&media.paused)media.play().catch(()=>{});
+  showMeta();mediaMeta();focusLater();
+}
+
+// Lezárt képernyő: a Web Audio hangja Androidon nem kér „audiofókuszt”, ezért egy valódi <audio> elemet is bekötünk
+// a hangláncba (10 mp-es, gyakorlatilag néma hurok). Így a Chrome médialejátszásnak tekinti: kikapcsolt képernyőnél
+// is futni hagyja, és a lezárási képernyőn vezérlőt mutat („RelaxRing – Belégzés”, szünet/folytatás, leállítás).
+let media=null,mediaUrl='';
+function quietWav(secs){
+  const sr=8000,n=sr*secs,b=new ArrayBuffer(44+n*2),v=new DataView(b),w=(o,s)=>[...s].forEach((c,k)=>v.setUint8(o+k,c.charCodeAt(0)));
+  w(0,'RIFF');v.setUint32(4,36+n*2,true);w(8,'WAVE');w(12,'fmt ');v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,1,true);
+  v.setUint32(24,sr,true);v.setUint32(28,sr*2,true);v.setUint16(32,2,true);v.setUint16(34,16,true);w(36,'data');v.setUint32(40,n*2,true);
+  for(let k=0;k<n;k++)v.setInt16(44+k*2,Math.round(Math.random()*2-1),true);   // ±1 a 32767-ből: nem hallható
+  return URL.createObjectURL(new Blob([b],{type:'audio/wav'}));
+}
+function mediaStart(){
+  if(!ac)return;
+  if(!media){
+    media=new Audio();media.loop=true;mediaUrl=quietWav(10);
+    try{ac.createMediaElementSource(media).connect(ac.destination)}catch(e){}
+    media.addEventListener('pause',()=>{if(run&&!paused)pause()});   // a rendszer állította meg (hívás, másik app)
+  }
+  media.src=mediaUrl;media.play().catch(()=>{});
+  mediaMeta();
+}
+function mediaStop(){
+  if(media){media.pause();media.removeAttribute('src');media.load()}   // a lezárási vezérlő eltűnik
+  if('mediaSession' in navigator){navigator.mediaSession.metadata=null;navigator.mediaSession.playbackState='none'}
+}
+function mediaMeta(){
+  if(!run||!('mediaSession' in navigator)||!window.MediaMetadata)return;
+  const [kind,,,,exn]=cur[i]||[],ms=navigator.mediaSession,dur=tb?planSecs(cur):Math.max(st.dur*60,elapsed);
+  ms.metadata=new MediaMetadata({title:'RelaxRing – '+(paused?L.paused:tb&&kind==='work'&&exn?exn:L[kind]||''),artist:L['r_'+runMode],
+    artwork:[{src:'icon-192.png',sizes:'192x192',type:'image/png'},{src:'icon-512.png',sizes:'512x512',type:'image/png'}]});
+  ms.playbackState=paused?'paused':'playing';
+  try{ms.setPositionState({duration:dur,position:Math.min(elapsed,dur),playbackRate:1})}catch(e){}
+}
+if('mediaSession' in navigator){
+  const acts={play:()=>resume(),pause:()=>pause(),stop:()=>stop()};
+  for(const a in acts)try{navigator.mediaSession.setActionHandler(a,acts[a])}catch(e){}
 }
 async function lock(){try{wake=await navigator.wakeLock.request('screen')}catch(e){wake=null}}
 function unlock(){try{wake&&wake.release()}catch(e){}wake=null}
@@ -775,8 +1008,8 @@ function start(){
   fsTried=false;goFull();
   closeSheet();ensureAudio();tb=st.mode==='tabata';runMode=st.mode;
   document.documentElement.classList.toggle('tb-run',tb);
-  run=true;finished=false;i=0;cyc=1;elapsed=0;curBig=0;app.classList.remove('idle');
-  phase();tm=setInterval(tick,1000);ringBtn.setAttribute('aria-label',L.stop);lock();showMeta();focusLater(1200);keepStorage();
+  run=true;paused=false;finished=false;i=0;cyc=1;elapsed=0;curBig=0;t0=performance.now();app.classList.remove('idle','paused');
+  phase();mediaStart();tm=setInterval(tick,250);ringBtn.setAttribute('aria-label',L.stop);lock();showMeta();focusLater(1200);keepStorage();
   if(!tb&&st.amb!=='off')ambStart(4);
   if(st.sleep&&!tb){setDim(0,0);requestAnimationFrame(()=>requestAnimationFrame(()=>setDim(.9,st.dur*60)))}
   if((st.hint2||0)<3){st.hint2=(st.hint2||0)+1;save();hint.classList.add('show');setTimeout(()=>hint.classList.remove('show'),5000)}
@@ -786,7 +1019,8 @@ function idleLabel(){ph.style.fontSize=ph.style.whiteSpace='';ph.textContent=fin
 function stop(keepFull){
   if(!run)return;
   if(!keepFull)leaveFull();
-  run=false;clearInterval(tm);size(0,1.2);if(voice)voice.quiet(.8);ambStop(keepFull?10:2);   // alvás mód végén lassan halkul
+  run=false;paused=false;app.classList.remove('paused');clearInterval(tm);mediaStop();
+  size(0,1.2);if(voice)voice.quiet(.8);ambStop(keepFull?10:2);   // alvás mód végén lassan halkul
   if('speechSynthesis' in window)speechSynthesis.cancel();
   clearTimeout(focusT);app.classList.remove('focus');hint.classList.remove('show');
   document.documentElement.classList.remove('tb-run');delete document.documentElement.dataset.tb;
@@ -801,7 +1035,7 @@ function finish(){
   if(sleeping)setDim(.97,2);                         // alvás módban sötét (és teljes képernyős) marad, a képernyő magától kikapcsolhat
 }
 let undim=false;                                     // alvás mód után az első koppintás csak felébreszti a képernyőt
-ringBtn.onclick=()=>{if(undim){undim=false;return}run?stop():start()};
+ringBtn.onclick=()=>{if(undim){undim=false;return}if(run&&paused){resume();return}run?stop():start()};
 function renderModes(){
   const box=$('modes');
   box.innerHTML=RIDS.filter(id=>st.shown.includes(id)).map(id=>`<button data-m="${id}" aria-pressed="${st.mode===id}"><span>${L['r_'+id]}</span><small>${patternLabel(id)}</small></button>`).join('');
@@ -809,7 +1043,7 @@ function renderModes(){
   renderTabPanel();
 }
 function mark(){document.querySelectorAll('[data-m]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.m===st.mode))}
-document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&run){lock();if(ac)ac.resume()}});
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&run){lock();if(ac)ac.resume();tick()}});
 
 // ---------------------------------------------------------------- fókusz
 // Gyakorlás közben a körökön kívül minden elhalványul; a körön kívüli koppintás 4 mp-re visszahozza
@@ -818,6 +1052,7 @@ function focusLater(ms=4000){clearTimeout(focusT);focusT=setTimeout(()=>{if(run&
 function wakeUI(){if(!run)return;app.classList.remove('focus');focusLater()}
 app.addEventListener('pointerdown',e=>{
   if(ac&&ac.state!=='running')ac.resume();           // gyorsindításnál az első érintés engedi a hangot
+  if(run&&!paused&&media&&media.paused)media.play().catch(()=>{});   // és a lezárási vezérlőt
   if(!run){undim=+dim.style.opacity>.5&&e.target===ringBtn;if(+dim.style.opacity>0)setDim(0,.6);leaveFull();return}
   if(e.target===ringBtn)return;                      // a körre koppintás leállít, azt a gomb kezeli
   app.classList.contains('focus')?wakeUI():focusLater();
@@ -831,7 +1066,7 @@ const sheet=$('sheet'),backdrop=$('backdrop'),setBtn=$('setBtn'),voiceOpts=$('vo
 // Főoldal (napló + kategóriák) és almenük. A telefon vissza gombja/mozdulata (CloseWatcher) az almenüből a főoldalra,
 // onnan a főképernyőre lép, és nem zárja be az appot. Böngészőelőzményt szándékosan nem írunk: azzal a Kilépés gomb
 // (window.close) nem működne. CloseWatcher nélkül (Firefox, Safari) az Esc billentyű lép vissza.
-const PAGES={rhythms:'rhythms',tabata:'r_tabata',session:'session',sound:'sound',look:'look',lang:'language',backup:'backup'};
+const PAGES={journal:'journal',rhythms:'rhythms',tabata:'r_tabata',session:'session',sound:'sound',look:'look',lang:'language',backup:'backup',about:'about'};
 let page='main',cwMain=null,cwPage=null;
 function watch(fn){if(!('CloseWatcher' in window))return null;try{const w=new CloseWatcher();w.onclose=fn;return w}catch(e){return null}}
 function setTitle(){$('sheetTitle').textContent=L[PAGES[page]||'settings']}
@@ -839,6 +1074,8 @@ function showPage(p){
   page=p;sheet.querySelectorAll('.page').forEach(x=>x.hidden=x.dataset.page!==p);
   $('backBtn').hidden=p==='main';setTitle();$('sheetBody').scrollTop=0;
   if(p==='main'){renderStats();navSummary()}
+  if(p==='journal'){calOff=0;renderJournal()}
+  if(p==='about')renderAbout();
 }
 function navSummary(){   // a kategóriák mellett a mostani érték
   const sv=(k,v)=>$('sv_'+k).textContent=v,v=L['v_'+st.voice],c=L['c_'+st.chime];
@@ -848,6 +1085,7 @@ function navSummary(){   // a kategóriák mellett a mostani érték
   sv('sound',st.tone&&st.bell?`${v} + ${c}`:st.tone?v:st.bell?c:L.silent);
   sv('look',L['t_'+st.color]);
   sv('lang',T[st.lang].name);
+  sv('about',APP_VER);
 }
 function openSheet(){
   voiceNote();showPage('main');sheet.hidden=backdrop.hidden=false;setBtn.setAttribute('aria-expanded','true');clearTimeout(focusT);app.classList.remove('focus');
@@ -1080,6 +1318,11 @@ $('impFile').onchange=async e=>{
   closeSheet();location.reload();
 };
 try{if(sessionStorage.getItem('imported')){sessionStorage.removeItem('imported');note('importOk','ok',()=>notice.classList.remove('show'))}}catch(e){}
+
+// Első indításkor a rövid súgót ajánljuk, frissítés után (egyszer) az újdonságokat
+function openAbout(news){notice.classList.remove('show');openSheet();openPage('about');if(news)$('newsList').scrollIntoView({block:'start'})}
+if(firstRun){st.newsSeen=APP_VER;save();note('welcome','helpBtn',()=>openAbout())}
+else if(st.newsSeen!==APP_VER){st.newsSeen=APP_VER;save();note('newsTxt','newsBtn',()=>openAbout(true))}
 if(isSecureContext&&'serviceWorker' in navigator){
   // Új verzió: az új service worker átveszi az irányítást (controllerchange) → sáv a Frissítés gombbal.
   // Első telepítéskor nincs előző vezérlő, akkor nem jelzünk.

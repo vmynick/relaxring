@@ -1,0 +1,13 @@
+{
+  "name": "relaxring",
+  "private": true,
+  "description": "Breathing exercises and interval timer (PWA). The app itself needs no build; this file is only for the browser tests.",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "test": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.64.0"
+  }
+}

@@ -36,6 +36,7 @@ A breathing-exercise app and interval timer for your phone. Breathing circles sh
   
   The phone synthesizes all of them, so there are no audio files to download.
 - **Voice guidance:** the phone's text-to-speech voice reads out each phase. If no voice is installed for the selected language, the app tells you.
+- **Screen off:** sessions keep running with the screen locked. The lock screen shows "RelaxRing – Inhale" with pause, resume and stop, and a headset button pauses too. An incoming call pauses the session. Some sound must be on for this to work.
 
 ### Workouts (Tabata)
 
@@ -55,7 +56,10 @@ A breathing-exercise app and interval timer for your phone. Breathing circles sh
 
 ### Journal and backup
 
-- The journal shows your day streak, today's minutes, the number of sessions and a 7-day bar chart. Tabata workouts are counted separately.
+- The journal shows your day streak, today's minutes and the number of sessions.
+- **Daily goal:** 2–30 minutes, with a progress bar and the number of days this week you reached it.
+- **Charts:** a 7-day bar chart with a line for the goal, and a monthly calendar for the past year. Days that met the goal are filled, days with practice below the goal are shaded.
+- Tabata workouts are counted separately.
 - You can save the journal and all settings to a JSON file and restore them, for example on a new phone or after a reinstall. When you restore, the app merges the journal day by day.
 
 ### Appearance
@@ -63,6 +67,12 @@ A breathing-exercise app and interval timer for your phone. Breathing circles sh
 - 6 color themes: Forest, Sea, Lavender, Sunset, Rose, Stone. Light or dark mode follows the phone setting.
 - An optional background scene for each theme: a calm landscape drawn in the theme's colors.
 - Languages: English, Hungarian, German. On first launch the app uses the phone's language.
+
+### Help
+
+- **Help & about** in Settings has short instructions, the list of changes, the privacy note and the version.
+- On first launch the app offers the help page.
+- After an update it shows once what is new.
 
 ## Install
 
@@ -74,7 +84,7 @@ The installed app:
 - starts without an internet connection;
 - runs full screen on Android, where you swipe from the edge to show the status and navigation bars;
 - keeps the screen awake during a session;
-- offers quick starts when you long-press its icon: 4-7-8, Box, Calm, Coherent. These labels are in Hungarian.
+- offers quick starts when you long-press its icon: Sleep 4-7-8, Box, Calm, Coherent.
 
 When a new version is published, the app shows "A new version is available" → *Update*.
 
@@ -83,6 +93,7 @@ When a new version is published, the app shows "A new version is available" → 
 | Action | How |
 |---|---|
 | Start or stop | tap the circle |
+| Pause or resume | lock screen controls or headset button; while paused, tap the circle to continue |
 | Switch rhythm | buttons at the top |
 | Settings | bottom-left button |
 | Exit (installed app) | bottom-right **X**, tap twice |
@@ -103,7 +114,7 @@ When a new version is published, the app shows "A new version is available" → 
   - Full screen and the back-gesture handling only work on Android.
 - **Voice guidance** depends on the text-to-speech voices installed on the phone.
 - **Volume:** the phone's media volume also limits the sounds and signals.
-- **Screen:** do not turn it off during a session. The app keeps it awake, but with the screen off the browser may pause the timer.
+- **Screen off:** this needs some sound on (breathing sound, chime or nature sound). If every sound is off, the browser may slow down or pause the timer while the screen is locked. Some phones' battery savers can also stop the app in the background.
 
 ## Development
 
@@ -118,18 +129,37 @@ The app is a single HTML file with HTML, CSS and JavaScript. It uses no framewor
 | `*.png` | icons |
 | [setup.html](setup.html) | only for the earlier self-hosted home-server version |
 | [docs/](docs) | README images, not published to the site |
-| [.github/workflows/pages.yml](.github/workflows/pages.yml) | publishing |
+| [tests/](tests), [playwright.config.mjs](playwright.config.mjs), [package.json](package.json) | browser tests; only needed for development |
+| [.github/workflows/pages.yml](.github/workflows/pages.yml) | tests and publishing |
 
 **Run locally:** start any static web server in this folder, for example `python -m http.server 8000`, and open http://localhost:8000. The service worker also works on localhost.
 
-**Publishing:** every push to `main` publishes the site with GitHub Actions in about a minute. The workflow:
+**Tests:** run `npm install` once, then `npm test`. Playwright runs the tests in headless Chromium against a small built-in web server. They cover:
+- loading in all three languages;
+- a full breathing session and the journal;
+- pause and resume with the lock-screen data;
+- catching up after the browser was throttled;
+- the rhythm picker;
+- Tabata and EMOM;
+- settings navigation;
+- backup and restore;
+- shortcuts;
+- offline start;
+- the daily goal and calendar;
+- the "what's new" notice.
+
+**Publishing:** every push to `main` runs the tests first. The site is published only if they all pass, about 2–3 minutes in total. The workflow also:
 - writes a new version into `sw.js`, which is how installed apps notice an update;
 - sets the app id in the manifest to the `/relaxring/` path.
+
+**Releasing:** add an entry at the top of the `NEWS` list in `index.html`. Its version becomes the app version, and installed apps show the "what's new" notice once.
 
 **Extending:**
 - **New language:** add a block to the `T` dictionary in `index.html` with the same keys as the existing ones.
 - **New rhythm:** add it to the `R` table and the `RIDS` list, and add an `r_<id>` label in every language.
 
 ## License
+
+The code is under the [MIT License](LICENSE).
 
 The font is [Inter](https://rsms.me/inter/), under the SIL Open Font License 1.1 ([fonts/OFL-Inter.txt](fonts/OFL-Inter.txt)). On Apple devices the system font (SF Pro) is used instead.

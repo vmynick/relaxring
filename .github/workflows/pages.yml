@@ -17,7 +17,22 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  # Böngészős tesztek (tests/, Playwright): ha bármelyik elbukik, nem kerül ki az új verzió
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Install
+        run: |
+          npm ci --no-audit --no-fund
+          npx playwright install --with-deps chromium
+
+      - name: Test
+        run: npx playwright test
+
   deploy:
+    needs: test
     runs-on: ubuntu-latest
     environment:
       name: github-pages

@@ -1,9 +1,9 @@
 {
   "id": "/",
-  "name": "RelaxRing – Légző körök",
+  "name": "RelaxRing – Breathing Circles",
   "short_name": "RelaxRing",
-  "description": "Légzőgyakorlat: doboz, 4-7-8, nyugtató, koherens és saját ritmus.",
-  "lang": "hu",
+  "description": "Breathing exercises (box, 4-7-8, sigh, coherent, custom) and a Tabata/HIIT interval timer.",
+  "lang": "en",
   "start_url": "./",
   "scope": "./",
   "display": "fullscreen",
@@ -16,9 +16,9 @@
     { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
   ],
   "shortcuts": [
-    { "name": "Elalvó légzés (4·7·8)", "short_name": "Elalvó", "url": "./?r=478", "icons": [{ "src": "icon-192.png", "sizes": "192x192", "type": "image/png" }] },
-    { "name": "Doboz légzés (4·4·4·4)", "short_name": "Doboz", "url": "./?r=box", "icons": [{ "src": "icon-192.png", "sizes": "192x192", "type": "image/png" }] },
-    { "name": "Nyugtató légzés (4·6)", "short_name": "Nyugtató", "url": "./?r=calm", "icons": [{ "src": "icon-192.png", "sizes": "192x192", "type": "image/png" }] },
-    { "name": "Koherens légzés (5·5)", "short_name": "Koherens", "url": "./?r=coh", "icons": [{ "src": "icon-192.png", "sizes": "192x192", "type": "image/png" }] }
+    { "name": "Sleep breathing (4-7-8)", "short_name": "Sleep 4-7-8", "url": "./?r=478", "icons": [{ "src": "icon-192.png", "sizes": "192x192", "type": "image/png" }] },
+    { "name": "Box breathing (4-4-4-4)", "short_name": "Box", "url": "./?r=box", "icons": [{ "src": "icon-192.png", "sizes": "192x192", "type": "image/png" }] },
+    { "name": "Calm breathing (4-6)", "short_name": "Calm", "url": "./?r=calm", "icons": [{ "src": "icon-192.png", "sizes": "192x192", "type": "image/png" }] },
+    { "name": "Coherent breathing (5-5)", "short_name": "Coherent", "url": "./?r=coh", "icons": [{ "src": "icon-192.png", "sizes": "192x192", "type": "image/png" }] }
   ]
 }
