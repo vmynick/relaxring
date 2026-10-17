@@ -171,6 +171,7 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px;border:0;border-radiu
   --l1:color-mix(in srgb,var(--c2) 60%,var(--bg));--l2:color-mix(in srgb,var(--c2) 32%,var(--bg));
   --l3:color-mix(in srgb,#000 38%,var(--bg));--acc:color-mix(in srgb,var(--c3) 26%,var(--bg))}}
 #scene svg{display:block;width:100%;height:100%}
+.app.tb-rest #r1{filter:saturate(.3)}               /* Tabata: pihenőnél fakóbb a belső kör (a felirat olvasható marad) */
 .app.scenic .hint{text-shadow:0 0 10px var(--bg),0 0 3px var(--bg)}
 .app.scenic .meta{justify-self:center;background:color-mix(in srgb,var(--surface) 80%,transparent);border-radius:14px;padding:6px 14px;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
 
@@ -214,6 +215,7 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px;border:0;border-radiu
     <div class="group">
       <div class="kpis"><div><b id="kStreak"></b><span data-i="streak"></span></div><div><b id="kToday"></b><span data-i="today"></span></div><div><b id="kTotal"></b><span data-i="sessions"></span></div></div>
       <div class="week" id="week" role="img"></div>
+      <div class="note" id="tabNote" hidden></div>
     </div>
 
     <h3 data-i="rhythms"></h3>
@@ -223,6 +225,9 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px;border:0;border-radiu
       <div class="item"><span data-i="ownTitle"></span></div>
       <div class="steps" id="steps"></div>
       <div class="note" data-i="slowInfo"></div>
+      <div class="item"><span data-i="tabTitle"></span></div>
+      <div class="steps" id="tsteps"></div>
+      <div class="note" data-i="tabInfo"></div>
     </div>
 
     <h3 data-i="session"></h3>
@@ -262,13 +267,16 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px;border:0;border-radiu
 // A körben és a ritmusválasztóban kevés a hely: ott rövid szavak kellenek (pl. Inhale, Schlaf).
 const T={
   hu:{name:'Magyar',locale:'hu-HU',title:'Légző körök',modes:'Légzésritmus',
-    r_box:'Doboz',r_478:'Elalvó',r_calm:'Nyugtató',r_coh:'Koherens',r_relax:'Lazító',r_slow:'Lassuló',r_own:'Saját',
-    in:'Belégzés',hold:'Tartás',out:'Kilégzés',
+    r_box:'Doboz',r_478:'Elalvó',r_calm:'Nyugtató',r_coh:'Koherens',r_relax:'Lazító',r_slow:'Lassuló',r_own:'Saját',r_tabata:'Tabata',
+    in:'Belégzés',hold:'Tartás',out:'Kilégzés',work:'Munka',rest:'Pihenő',prep:'Készülj',
     start:'Indítás',stop:'Leállítás',tap:'koppints a körre',again:'koppints az újrakezdéshez',done:'Szép volt',
     hint:'A körre koppintva megáll, máshova koppintva előjön a menü',min:n=>`${n} perc`,round:(c,t)=>`${c}. kör · ${t}`,only:x=>`csak ${x}`,silent:'néma',
     settings:'Beállítások',ok:'Kész',journal:'Napló',streak:'napos sorozat',today:'perc ma',sessions:'alkalom',weekAria:m=>`Az elmúlt 7 nap percei: ${m}`,
     rhythms:'Ritmusok',pick3:'A főképernyőn legfeljebb 3 látszik; koppintással választhatsz.',ownTitle:'Saját ritmus (másodperc)',
     slowInfo:'Lassuló: 4 mp belégzés, a kilégzés a gyakorlás végére 4-ről 8 mp-re nyúlik.',
+    tabTitle:'Tabata (másodperc, darab)',tRounds:'Körök',tSets:'Blokkok',
+    tabInfo:'10 mp felkészülés után munka és pihenő váltakozik, a blokkok között 1 perc pihenő. Minden szakasz utolsó 3 másodpercében csipog.',
+    tround:x=>`${x} kör`,tset:s=>`${s}. blokk`,rounds:n=>`${n} kör`,tabN:n=>`Tabata-edzés eddig: ${n}`,
     session:'Gyakorlás',duration:'Időtartam',sleepMode:'Alvás mód',sleepInfo:'A képernyő lassan elsötétül, a végén nincs csengés.',
     full:'Teljes képernyő',fullInfo:'Gyakorlás közben eltűnik az állapotsor és az alsó gombsor.',vibration:'Rezgés',
     sound:'Hang',breath:'Légzőhang',chime:'Csengés',speak:'Hangos vezetés',noVoice:'Ezen a telefonon nincs magyar felolvasóhang.',
@@ -279,13 +287,16 @@ const T={
     newVer:'Új verzió érhető el.',update:'Frissítés',installTxt:'Tedd ki a kezdőképernyőre, és appként indul.',install:'Telepítés',
     certTxt:'A telepítéshez és az ébren maradó képernyőhöz egyszer be kell állítani a tanúsítványt.',certBtn:'Beállítás'},
   en:{name:'English',locale:'en-US',title:'Breathing Circles',modes:'Breathing rhythm',
-    r_box:'Box',r_478:'Sleep',r_calm:'Calm',r_coh:'Coherent',r_relax:'Relax',r_slow:'Unwind',r_own:'Custom',
-    in:'Inhale',hold:'Hold',out:'Exhale',
+    r_box:'Box',r_478:'Sleep',r_calm:'Calm',r_coh:'Coherent',r_relax:'Relax',r_slow:'Unwind',r_own:'Custom',r_tabata:'Tabata',
+    in:'Inhale',hold:'Hold',out:'Exhale',work:'Work',rest:'Rest',prep:'Get ready',
     start:'Start',stop:'Stop',tap:'tap the circle',again:'tap to start again',done:'Well done',
     hint:'Tap the circle to stop, anywhere else for the menu',min:n=>`${n} min`,round:(c,t)=>`Round ${c} · ${t}`,only:x=>`only ${x}`,silent:'silent',
     settings:'Settings',ok:'Done',journal:'Journal',streak:'day streak',today:'min today',sessions:'sessions',weekAria:m=>`Minutes over the last 7 days: ${m}`,
     rhythms:'Rhythms',pick3:'Up to 3 show on the main screen; tap to choose.',ownTitle:'Custom rhythm (seconds)',
     slowInfo:'Unwind: 4 s inhale, the exhale grows from 4 to 8 s by the end of the session.',
+    tabTitle:'Tabata (seconds, count)',tRounds:'Rounds',tSets:'Sets',
+    tabInfo:'After 10 s to get ready, work and rest alternate, with 1 min rest between sets. Beeps in the last 3 seconds of each part.',
+    tround:x=>`Round ${x}`,tset:s=>`Set ${s}`,rounds:n=>`${n} rounds`,tabN:n=>`Tabata workouts so far: ${n}`,
     session:'Session',duration:'Duration',sleepMode:'Sleep mode',sleepInfo:'The screen slowly goes dark; no chime at the end.',
     full:'Full screen',fullInfo:'The status and navigation bars hide during a session.',vibration:'Vibration',
     sound:'Sound',breath:'Breathing sound',chime:'Chime',speak:'Voice guidance',noVoice:'This phone has no English text-to-speech voice.',
@@ -296,13 +307,16 @@ const T={
     newVer:'A new version is available.',update:'Update',installTxt:'Add it to your home screen to use it as an app.',install:'Install',
     certTxt:'Set up the certificate once to install the app and keep the screen awake.',certBtn:'Set up'},
   de:{name:'Deutsch',locale:'de-DE',title:'Atemkreise',modes:'Atemrhythmus',
-    r_box:'Box',r_478:'Schlaf',r_calm:'Ruhe',r_coh:'Kohärent',r_relax:'Relax',r_slow:'Langsam',r_own:'Eigen',
-    in:'Einatmen',hold:'Halten',out:'Ausatmen',
+    r_box:'Box',r_478:'Schlaf',r_calm:'Ruhe',r_coh:'Kohärent',r_relax:'Relax',r_slow:'Langsam',r_own:'Eigen',r_tabata:'Tabata',
+    in:'Einatmen',hold:'Halten',out:'Ausatmen',work:'Arbeit',rest:'Pause',prep:'Bereit',
     start:'Start',stop:'Stopp',tap:'Kreis antippen',again:'zum Neustart antippen',done:'Geschafft',
     hint:'Kreis antippen zum Stoppen, woanders für das Menü',min:n=>`${n} Min.`,round:(c,t)=>`Runde ${c} · ${t}`,only:x=>`nur ${x}`,silent:'stumm',
     settings:'Einstellungen',ok:'Fertig',journal:'Tagebuch',streak:'Tage in Folge',today:'Min. heute',sessions:'Übungen',weekAria:m=>`Minuten der letzten 7 Tage: ${m}`,
     rhythms:'Rhythmen',pick3:'Bis zu 3 erscheinen auf dem Startbildschirm; zum Wählen antippen.',ownTitle:'Eigener Rhythmus (Sekunden)',
     slowInfo:'Langsam: 4 s einatmen, das Ausatmen wird bis zum Ende von 4 auf 8 s länger.',
+    tabTitle:'Tabata (Sekunden, Anzahl)',tRounds:'Runden',tSets:'Sätze',
+    tabInfo:'Nach 10 s Vorbereitung wechseln Arbeit und Pause, zwischen den Sätzen 1 Min. Pause. Piept in den letzten 3 Sekunden jedes Abschnitts.',
+    tround:x=>`Runde ${x}`,tset:s=>`Satz ${s}`,rounds:n=>`${n} Runden`,tabN:n=>`Tabata-Workouts bisher: ${n}`,
     session:'Übung',duration:'Dauer',sleepMode:'Schlafmodus',sleepInfo:'Der Bildschirm wird langsam dunkel; am Ende keine Glocke.',
     full:'Vollbild',fullInfo:'Status- und Navigationsleiste verschwinden während der Übung.',vibration:'Vibration',
     sound:'Klang',breath:'Atemklang',chime:'Glocke',speak:'Sprachansage',noVoice:'Dieses Telefon hat keine deutsche Sprachausgabe.',
@@ -328,25 +342,42 @@ const R={
   coh:[['in',5],['out',5]],          // koherens légzés: percenként 6
   relax:[['in',4],['hold',2],['out',6]],
   slow:null,                         // lassuló: a kilégzés 4-ről 8 mp-re nő a gyakorlás végéig
-  own:null                           // saját: st.own = [be, tartás, ki, tartás]
+  own:null,                          // saját: st.own = [be, tartás, ki, tartás]
+  tabata:null                        // edzés-időzítő: st.tab = {work, rest, rounds, sets}
 };
-const RIDS=['box','478','calm','coh','relax','slow','own'];   // megjelenítési sorrend (az objektumban a '478' előre kerülne)
+const RIDS=['box','478','calm','coh','relax','slow','own','tabata'];   // megjelenítési sorrend (az objektumban a '478' előre kerülne)
 function pattern(id){
   if(id==='own'){const [a,b,c,d]=st.own;return [['in',a],['hold',b],['out',c],['hold',d]].filter(x=>x[1]>0)}
   if(id==='slow'){const g=run?Math.min(1,elapsed/(st.dur*60)):0;return [['in',4],['out',Math.round(4+4*g)]]}
+  if(id==='tabata')return tabataPlan();
   return R[id];
 }
-function patternLabel(id){return id==='slow'?'4·4→8':pattern(id).map(x=>x[1]).join('·')}
+// Tabata: nem ismétlődő kör, hanem a teljes edzés egyben: [fajta, mp, kör, blokk]
+function tabataPlan(){
+  const t=st.tab,p=[['prep',10,0,1]];
+  for(let s=1;s<=t.sets;s++){
+    if(s>1)p.push(['rest',60,0,s]);                  // blokkok közti pihenő
+    for(let k=1;k<=t.rounds;k++){p.push(['work',t.work,k,s]);if(k<t.rounds)p.push(['rest',t.rest,k,s])}
+  }
+  return p;
+}
+function patternLabel(id){
+  if(id==='slow')return '4·4→8';
+  if(id==='tabata'){const t=st.tab;return `${t.work}/${t.rest} ×${t.rounds}`+(t.sets>1?` ×${t.sets}`:'')}
+  return pattern(id).map(x=>x[1]).join('·');
+}
 
 let st={mode:'box',shown:['box','478','calm'],own:[4,4,6,0],vol:35,tone:true,bell:true,vib:true,sleep:false,speak:false,full:true,scene:false,dur:5,
-  color:'erdo',voice:'lagy',chime:'csengo',log:{},sessions:0};
+  color:'erdo',voice:'lagy',chime:'csengo',log:{},sessions:0,tab:{work:20,rest:10,rounds:8,sets:1},tabN:0};
 try{Object.assign(st,JSON.parse(localStorage.getItem('legzo')||'{}'))}catch(e){}
 if(!T[st.lang]){const n=(navigator.language||'hu').slice(0,2).toLowerCase();st.lang=T[n]?n:'en'}   // első indításkor a telefon nyelve
 if(!R.hasOwnProperty(st.mode))st.mode='box';
+st.tab=Object.assign({work:20,rest:10,rounds:8,sets:1},st.tab);
 st.shown=(st.shown||[]).filter(id=>R.hasOwnProperty(id)).slice(0,3);if(!st.shown.length)st.shown=['box','478','calm'];
 L=T[st.lang];
 function save(){try{localStorage.setItem('legzo',JSON.stringify(st))}catch(e){}}
 let run=false,i=0,left=0,cyc=0,elapsed=0,tm=null,wake=null,cur=[],curBig=0;
+let tb=false,runMode='box';                          // tb: a futó gyakorlás Tabata-edzés
 
 // ---------------------------------------------------------------- hang
 // Légzőhang: folyamatos, a légzéssel együtt erősödik/halkul. Csengés: rövid jel minden fázis elején.
@@ -424,6 +455,7 @@ function sound(kind,big,d){
   else{voice.hold(big);ding(659)}
 }
 function buzz(){if(st.vib)try{navigator.vibrate&&navigator.vibrate(30)}catch(e){}}
+function beep(f,len){if(ac&&st.bell)blip('sine',f,.32,.005,len)}   // Tabata: rövid csipogás a csengés-profiltól függetlenül
 
 // Hangos vezetés: a telefon felolvasóhangja mondja ki a fázist (ha van hang a választott nyelven)
 function ttsVoice(){
@@ -470,27 +502,40 @@ function renderStats(){
   const top=Math.max(10,...mins),fmtDay=new Intl.DateTimeFormat(L.locale,{weekday:'narrow'});
   $('week').innerHTML=days.map((d,k)=>`<div class="${k===6?'today':''}"><small>${mins[k]||''}</small><i style="height:${Math.max(4,mins[k]/top*60)}px"></i><em>${fmtDay.format(d)}</em></div>`).join('');
   $('week').setAttribute('aria-label',L.weekAria(mins.join(', ')));
+  $('tabNote').hidden=!st.tabN;$('tabNote').textContent=L.tabN(st.tabN);   // a Tabata külön számít, nem légzésperc
 }
 
 // ---------------------------------------------------------------- légzés
 function size(big,d){
-  const t=reduce?'none':`transform ${d}s ease-in-out`;
+  const t=reduce?'none':`transform ${d}s ease-in-out,filter .6s`;
   [r1,r2,r3].forEach(e=>e.style.transition=t);
   r1.style.transform=big?'scale(1.6)':'scale(1)';
   r2.style.transform=big?'scale(1.3)':'scale(1)';
   r3.style.transform=big?'scale(1.04)':'scale(0.86)';
 }
 function phase(){
-  if(i===0)cur=pattern(st.mode);                    // minden kör elején (a Lassuló így nyúlik)
+  if(i===0){                                         // minden kör elején (a Lassuló így nyúlik)
+    if(!tb&&st.mode!=='tabata')runMode=st.mode;      // légzés közben a Beállításokban váltott ritmus a következő körtől él
+    cur=pattern(runMode);
+  }
   const [kind,secs]=cur[i];
   ph.textContent=L[kind];left=secs;ct.textContent=left;
+  if(tb){                                            // munka: nagy kör, pihenő/felkészülés: kicsi és halvány
+    app.classList.toggle('tb-rest',kind!=='work');size(kind==='work'?1:0,.6);
+    if(kind==='work')beep(1320,.45);else if(kind==='rest')beep(660,.45);
+    speak(kind);buzz();return;
+  }
   if(kind==='in')curBig=1;else if(kind==='out')curBig=0;
   if(kind!=='hold')size(curBig,secs);
   sound(kind,curBig,secs);speak(kind);buzz();
 }
 function fmt(s){return Math.floor(s/60)+":"+String(s%60).padStart(2,'0')}
+function planSecs(p){return p.reduce((a,x)=>a+x[1],0)}
 function showMeta(){
+  if(run&&tb){const [,,r,s]=cur[i],t=st.tab,x=`${Math.max(1,r)}/${t.rounds}`;   // pl. „2. blokk · 3/8 · 1:30” – egy sorba férjen
+    meta.textContent=(t.sets>1?L.tset(s)+' · '+x:L.tround(x))+' · '+fmt(Math.max(0,planSecs(cur)-elapsed));return}
   if(run){meta.textContent=L.round(cyc,fmt(Math.max(0,st.dur*60-elapsed)));return}
+  if(st.mode==='tabata'){meta.textContent=fmt(planSecs(tabataPlan()))+' · '+L.rounds(st.tab.rounds*st.tab.sets);return}
   const v=L['v_'+st.voice],c=L['c_'+st.chime];
   meta.textContent=L.min(st.dur)+' · '+(st.tone&&st.bell?`${v} + ${c}`:st.tone?L.only(v):st.bell?L.only(c):L.silent);
 }
@@ -498,9 +543,9 @@ function tick(){
   elapsed++;left--;
   if(left<=0){
     i++;
-    if(i>=cur.length){i=0;cyc++;if(elapsed>=st.dur*60){finish();return}}
+    if(i>=cur.length){if(tb){finish();return}i=0;cyc++;if(elapsed>=st.dur*60){finish();return}}
     phase();
-  }else ct.textContent=left;
+  }else{ct.textContent=left;if(tb&&left<=3)beep(880,.12)}   // Tabata: 3-2-1 csipogás a váltás előtt
   showMeta();
 }
 async function lock(){try{wake=await navigator.wakeLock.request('screen')}catch(e){wake=null}}
@@ -520,9 +565,10 @@ function leaveFull(){if(document.fullscreenElement)document.exitFullscreen().cat
 function setDim(op,secs){dim.style.transition=`opacity ${secs}s linear`;dim.style.opacity=op}
 function start(){
   fsTried=false;goFull();
-  closeSheet();ensureAudio();run=true;finished=false;i=0;cyc=1;elapsed=0;curBig=0;app.classList.remove('idle');
+  closeSheet();ensureAudio();tb=st.mode==='tabata';runMode=st.mode;
+  run=true;finished=false;i=0;cyc=1;elapsed=0;curBig=0;app.classList.remove('idle');
   phase();tm=setInterval(tick,1000);ringBtn.setAttribute('aria-label',L.stop);lock();showMeta();focusLater(1200);keepStorage();
-  if(st.sleep){setDim(0,0);requestAnimationFrame(()=>requestAnimationFrame(()=>setDim(.9,st.dur*60)))}
+  if(st.sleep&&!tb){setDim(0,0);requestAnimationFrame(()=>requestAnimationFrame(()=>setDim(.9,st.dur*60)))}
   if((st.hint2||0)<3){st.hint2=(st.hint2||0)+1;save();hint.classList.add('show');setTimeout(()=>hint.classList.remove('show'),5000)}
 }
 let finished=false;
@@ -532,12 +578,13 @@ function stop(keepFull){
   if(!keepFull)leaveFull();
   run=false;clearInterval(tm);size(0,1.2);if(voice)voice.quiet(.8);
   if('speechSynthesis' in window)speechSynthesis.cancel();
-  clearTimeout(focusT);app.classList.remove('focus');hint.classList.remove('show');
-  app.classList.add('idle');idleLabel();unlock();showMeta();logSession(elapsed);
+  clearTimeout(focusT);app.classList.remove('focus','tb-rest');hint.classList.remove('show');
+  app.classList.add('idle');idleLabel();unlock();showMeta();if(!tb)logSession(elapsed);
   setDim(0,.6);
 }
 function finish(){
-  const sleeping=st.sleep;
+  const sleeping=st.sleep&&!tb;
+  if(tb){st.tabN=(st.tabN||0)+1;save()}
   if(!sleeping){ding(523);setTimeout(()=>ding(784),400)}
   stop(sleeping);finished=true;idleLabel();
   if(sleeping)setDim(.97,2);                         // alvás módban sötét (és teljes képernyős) marad, a képernyő magától kikapcsolhat
@@ -595,7 +642,7 @@ function voicePick(id){                           // választáskor egy rövid b
   setTone(true);
   if(!ensureAudio())return;
   if(voice)voice.stop();voice=VOICES[id].make();
-  if(run){const p=cur[i];if(p[0]==='in')voice.inhale(left);else if(p[0]==='out')voice.exhale(left);else voice.hold(curBig);return}
+  if(run){if(tb)return;const p=cur[i];if(p[0]==='in')voice.inhale(left);else if(p[0]==='out')voice.exhale(left);else voice.hold(curBig);return}
   voice.inhale(1.2);const v=voice;
   setTimeout(()=>{if(!run&&voice===v)v.exhale(1.4)},1250);setTimeout(()=>{if(!run&&voice===v)v.quiet(.5)},2700);
 }
@@ -611,10 +658,16 @@ function renderRhythms(){
     save();renderRhythms();renderModes();
   });
   const names=[L.in,L.hold,L.out,L.hold],min=[2,0,2,0];
-  $('steps').innerHTML=st.own.map((v,k)=>`<div class="stepper"><span>${names[k]}</span><div><button data-k="${k}" data-d="-1" aria-label="${names[k]} −">−</button><output>${v}</output><button data-k="${k}" data-d="1" aria-label="${names[k]} +">+</button></div></div>`).join('');
-  $('steps').querySelectorAll('button').forEach(b=>b.onclick=()=>{
-    const k=+b.dataset.k;st.own[k]=Math.max(min[k],Math.min(12,st.own[k]+ +b.dataset.d));
-    save();renderRhythms();renderModes();
+  steppers($('steps'),st.own.map((v,k)=>[names[k],v,min[k],12,1]),(k,v)=>st.own[k]=v);
+  const t=st.tab,keys=['work','rest','rounds','sets'];
+  steppers($('tsteps'),[[L.work,t.work,5,90,5],[L.rest,t.rest,5,60,5],[L.tRounds,t.rounds,1,20,1],[L.tSets,t.sets,1,5,1]],(k,v)=>t[keys[k]]=v);
+}
+// léptetők: [név, érték, min, max, lépés]
+function steppers(box,items,set){
+  box.innerHTML=items.map(([n,v],k)=>`<div class="stepper"><span>${n}</span><div><button data-k="${k}" data-d="-1" aria-label="${n} −">−</button><output>${v}</output><button data-k="${k}" data-d="1" aria-label="${n} +">+</button></div></div>`).join('');
+  box.querySelectorAll('button').forEach(b=>b.onclick=()=>{
+    const k=+b.dataset.k,[,v,min,max,step]=items[k];set(k,Math.max(min,Math.min(max,v+ +b.dataset.d*step)));
+    save();renderRhythms();renderModes();showMeta();
   });
 }
 
