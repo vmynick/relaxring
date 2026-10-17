@@ -954,37 +954,41 @@ function resume(){
 
 // Lezárt képernyő: a Web Audio nem vesz részt az Android médiamenetében, ezért mellette egy önálló <audio> elem is szól.
 // Így a Chrome médialejátszásnak tekinti: audiofókuszt kér, kikapcsolt képernyőnél is futni hagyja az appot (a Web Audio
-// hangjait is), és a lezárási képernyőn vezérlőt mutat („RelaxRing – Belégzés”, szünet/folytatás, leállítás).
-// A Chrome feltételei: a klip 5 mp-nél hosszabb, és a jele a némasági küszöb (−72 dBFS) fölött van. Ezért 10 mp-es,
-// 20 Hz-es, kb. −57 dBFS-es hang: mérhető, de a telefon hangszórója ilyen mély hangot nem szólaltat meg.
+// hangjait is), és a lezárási képernyőn vezérlőt mutat (szünet/folytatás, leállítás).
+// A Chrome feltételei: a klip 5 mp-nél hosszabb, és a jele a némasági küszöb (−72 dBFS) fölött van. Ezért 20 Hz-es,
+// kb. −57 dBFS-es hang: mérhető, de a telefon hangszórója ilyen mély hangot nem szólaltat meg. 60 mp-es hurok, a végein
+// negyed másodperces be- és kiúsztatással, hogy az újrakezdésnél se kattanjon.
 // Az elemet nem szabad a Web Audióba kötni, és a szintet a mintákban kell megadni (a volume-ot a Chrome is beszámítja).
-let media=null,mediaUrl='';
+let media=null,mediaUrl='',metaKey='';
 function keepAliveWav(secs){
-  const sr=8000,n=sr*secs,b=new ArrayBuffer(44+n*2),v=new DataView(b),w=(o,s)=>[...s].forEach((c,k)=>v.setUint8(o+k,c.charCodeAt(0)));
+  const sr=4000,n=sr*secs,f=sr/4,b=new ArrayBuffer(44+n*2),v=new DataView(b),w=(o,s)=>[...s].forEach((c,k)=>v.setUint8(o+k,c.charCodeAt(0)));
   w(0,'RIFF');v.setUint32(4,36+n*2,true);w(8,'WAVE');w(12,'fmt ');v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,1,true);
   v.setUint32(24,sr,true);v.setUint32(28,sr*2,true);v.setUint16(32,2,true);v.setUint16(34,16,true);w(36,'data');v.setUint32(40,n*2,true);
-  for(let k=0;k<n;k++)v.setInt16(44+k*2,Math.round(66*Math.sin(2*Math.PI*20*k/sr)),true);   // 66/32767 ≈ 0,002 amplitúdó; 200 teljes periódus, hézagmentes hurok
+  for(let k=0;k<n;k++)v.setInt16(44+k*2,Math.round(66*Math.min(1,k/f,(n-k)/f)*Math.sin(2*Math.PI*20*k/sr)),true);   // 66/32767 ≈ 0,002 amplitúdó
   return URL.createObjectURL(new Blob([b],{type:'audio/wav'}));
 }
 function mediaStart(){
   if(!media){
-    media=new Audio();media.loop=true;mediaUrl=keepAliveWav(10);
+    media=new Audio();media.loop=true;mediaUrl=keepAliveWav(60);
     media.addEventListener('pause',()=>{if(run&&!paused)pause()});   // a rendszer állította meg (hívás, másik app)
   }
-  mediaMeta();                                       // a felirat a lejátszás indulása előtt legyen meg
+  metaKey='';mediaMeta();                            // a felirat a lejátszás indulása előtt legyen meg
   media.src=mediaUrl;media.play().catch(()=>{});
 }
 function mediaStop(){
   if(media){media.pause();media.removeAttribute('src');media.load()}   // a lezárási vezérlő eltűnik
   if('mediaSession' in navigator){navigator.mediaSession.metadata=null;navigator.mediaSession.playbackState='none'}
 }
+// A felirat csak indításkor, szünetnél és folytatáskor változik: minden módosításnál a Chrome újraküldi a média-értesítést,
+// és egyes telefonokon ez minden alkalommal megszólal (szakaszonkénti frissítésnél pár másodpercenként csippant).
 function mediaMeta(){
   if(!run||!('mediaSession' in navigator)||!window.MediaMetadata)return;
-  const [kind,,,,exn]=cur[i]||[],ms=navigator.mediaSession,dur=tb?planSecs(cur):Math.max(st.dur*60,elapsed);
-  ms.metadata=new MediaMetadata({title:'RelaxRing – '+(paused?L.paused:tb&&kind==='work'&&exn?exn:L[kind]||''),artist:L['r_'+runMode],
+  const key=runMode+'|'+paused;if(key===metaKey)return;metaKey=key;
+  const ms=navigator.mediaSession,dur=tb?planSecs(cur):st.dur*60;
+  ms.metadata=new MediaMetadata({title:'RelaxRing – '+L['r_'+runMode],artist:paused?L.paused:tb?fmt(dur):L.min(st.dur),
     artwork:[{src:'icon-192.png',sizes:'192x192',type:'image/png'},{src:'icon-512.png',sizes:'512x512',type:'image/png'}]});
   ms.playbackState=paused?'paused':'playing';
-  try{ms.setPositionState({duration:dur,position:Math.min(elapsed,dur),playbackRate:1})}catch(e){}
+  try{ms.setPositionState({duration:Math.max(dur,elapsed),position:elapsed,playbackRate:1})}catch(e){}
 }
 if('mediaSession' in navigator){
   const acts={play:()=>resume(),pause:()=>pause(),stop:()=>stop()};
