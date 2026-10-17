@@ -98,7 +98,25 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--c1);outline-off
 @keyframes up{from{transform:translate(-50%,40px);opacity:0}}
 @media (prefers-reduced-motion:reduce){.sheet{animation:none}}
 .sheet-head{display:flex;align-items:center;justify-content:space-between;padding:18px max(18px,env(safe-area-inset-right,0px)) 10px max(18px,env(safe-area-inset-left,0px))}
-.sheet-head h2{margin:0;font-size:26px;font-weight:800;letter-spacing:-.01em}
+.sheet-head h2{flex:1;min-width:0;margin:0;font-size:26px;font-weight:800;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;outline:none}
+/* almenük: egyszerre egy oldal látszik; a lap mindig teljes magas, így lapozáskor nem ugrál */
+.sheet{height:calc(100% - max(24px,env(safe-area-inset-top,0px)))}
+.back{flex:none;width:40px;height:40px;margin:0 4px 0 -8px;border:0;border-radius:50%;background:transparent;color:var(--c1);display:grid;place-items:center;cursor:pointer}
+.back svg{width:26px;height:26px}
+.page{animation:pg .22s ease-out}
+@keyframes pg{from{opacity:0;transform:translateX(14px)}}
+@media (prefers-reduced-motion:reduce){.page{animation:none}}
+.page>.group+.group{margin-top:14px}
+.page>.group:first-child{margin-top:8px}
+.group>:is(.steps,.note):first-child{padding-top:14px}
+.group>textarea:first-child{margin-top:14px}
+.navi{display:flex;align-items:center;gap:12px;width:100%;min-height:56px;padding:6px 0;border:0;border-top:1px solid var(--line);background:none;color:var(--fg);font:inherit;font-size:20px;font-weight:700;text-align:left;cursor:pointer}
+.navi:first-child{border-top:0}
+.navi i{flex:none;width:32px;height:32px;border-radius:9px;background:var(--ic);color:#fff;display:grid;place-items:center}
+.navi i svg{width:20px;height:20px}
+.navi span{flex:none}
+.navi em{flex:1;min-width:0;font-style:normal;font-size:17px;font-weight:600;color:var(--muted);text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.navi b{flex:none;font-size:26px;font-weight:600;line-height:1;color:var(--muted);opacity:.7}
 .done{border:0;background:transparent;color:var(--c1);font-size:21px;font-weight:700;padding:8px 4px;cursor:pointer}
 .sheet-body{overflow-y:auto;padding:0 max(16px,env(safe-area-inset-right,0px)) max(24px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));-webkit-overflow-scrolling:touch}
 .sheet-body h3{margin:18px 14px 8px;font-size:16px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
@@ -246,71 +264,112 @@ html.tb-run #ph{max-width:94vw;margin:0 auto;white-space:nowrap}
 
 <div class="backdrop" id="backdrop" hidden></div>
 <section class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle" hidden>
-  <header class="sheet-head"><h2 id="sheetTitle" data-i="settings"></h2><button class="done" id="doneBtn" data-i="ok"></button></header>
-  <div class="sheet-body">
-    <h3 data-i="journal"></h3>
-    <div class="group">
-      <div class="kpis"><div><b id="kStreak"></b><span data-i="streak"></span></div><div><b id="kToday"></b><span data-i="today"></span></div><div><b id="kTotal"></b><span data-i="sessions"></span></div></div>
-      <div class="week" id="week" role="img"></div>
-      <div class="note" id="tabNote" hidden></div>
+  <header class="sheet-head">
+    <button class="back" id="backBtn" data-ia="back" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+    <h2 id="sheetTitle" tabindex="-1"></h2><button class="done" id="doneBtn" data-i="ok"></button>
+  </header>
+  <div class="sheet-body" id="sheetBody">
+    <!-- Főoldal: napló és a kategóriák; az almenük alább, egyszerre egy látszik -->
+    <div class="page" data-page="main">
+      <h3 data-i="journal"></h3>
+      <div class="group">
+        <div class="kpis"><div><b id="kStreak"></b><span data-i="streak"></span></div><div><b id="kToday"></b><span data-i="today"></span></div><div><b id="kTotal"></b><span data-i="sessions"></span></div></div>
+        <div class="week" id="week" role="img"></div>
+        <div class="note" id="tabNote" hidden></div>
+      </div>
+      <div class="group nav">
+        <button class="navi" data-go="rhythms"><i style="--ic:#30A46C"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.5"/></svg></i><span data-i="rhythms"></span><em id="sv_rhythms"></em><b aria-hidden="true">›</b></button>
+        <button class="navi" data-go="tabata"><i style="--ic:#E5352B"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="13.5" r="7"/><path d="M12 13.5V10M10 3h4M18.5 6.5L17 8"/></svg></i><span data-i="r_tabata"></span><em id="sv_tabata"></em><b aria-hidden="true">›</b></button>
+        <button class="navi" data-go="session"><i style="--ic:#5E5CE6"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3h10M7 21h10M8 3c0 5 8 5 8 9s-8 4-8 9M16 3c0 5-8 5-8 9s8 4 8 9"/></svg></i><span data-i="session"></span><em id="sv_session"></em><b aria-hidden="true">›</b></button>
+      </div>
+      <div class="group nav">
+        <button class="navi" data-go="sound"><i style="--ic:#FF375F"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9z" fill="currentColor"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg></i><span data-i="sound"></span><em id="sv_sound"></em><b aria-hidden="true">›</b></button>
+        <button class="navi" data-go="look"><i style="--ic:#FF9F0A"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 1 0 16z" fill="currentColor"/></svg></i><span data-i="look"></span><em id="sv_look"></em><b aria-hidden="true">›</b></button>
+        <button class="navi" data-go="lang"><i style="--ic:#0A84FF"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M4 12h16M12 4c2.7 2.6 2.7 13.4 0 16M12 4c-2.7 2.6-2.7 13.4 0 16"/></svg></i><span data-i="language"></span><em id="sv_lang"></em><b aria-hidden="true">›</b></button>
+      </div>
+      <div class="group nav">
+        <button class="navi" data-go="backup"><i style="--ic:#8E8E93"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v10M8 10l4 4 4-4M5 16v3h14v-3"/></svg></i><span data-i="backup"></span><em id="sv_backup"></em><b aria-hidden="true">›</b></button>
+      </div>
     </div>
 
-    <h3 data-i="rhythms"></h3>
-    <div class="group">
-      <div class="opts rh" id="rhOpts" role="group" data-ia="rhythms"></div>
-      <div class="note" data-i="pick3"></div>
-      <div class="item"><span data-i="ownTitle"></span></div>
-      <div class="steps" id="steps"></div>
-      <div class="note" data-i="slowInfo"></div>
-      <div class="note" data-i="sighInfo"></div>
-      <div class="item"><span data-i="tabTitle"></span></div>
-      <div class="steps" id="tsteps"></div>
-      <div class="item"><label for="tvol" data-i="tVol"></label></div>
-      <div class="item slider"><input type="range" id="tvol" min="0" max="100" step="1" value="80"></div>
-      <div class="note" data-i="tabInfo"></div>
-      <div class="item"><label for="tex" data-i="exTitle"></label></div>
-      <textarea id="tex" rows="4" data-ph="exPh"></textarea>
-      <div class="note" data-i="exInfo"></div>
+    <div class="page" data-page="rhythms" hidden>
+      <div class="group">
+        <div class="opts rh" id="rhOpts" role="group" data-ia="rhythms"></div>
+        <div class="note" data-i="pick3"></div>
+        <div class="note" data-i="slowInfo"></div>
+        <div class="note" data-i="sighInfo"></div>
+      </div>
+      <h3 data-i="ownTitle"></h3>
+      <div class="group"><div class="steps" id="steps"></div></div>
     </div>
 
-    <h3 data-i="session"></h3>
-    <div class="group">
-      <div class="item"><label for="dur" data-i="duration"></label><output id="durv" for="dur"></output></div>
-      <div class="item slider"><input type="range" id="dur" min="1" max="30" step="1" value="5"></div>
-      <div class="item"><span><span data-i="sleepMode"></span><small class="desc" data-i="sleepInfo"></small></span><button class="switch" id="sleepSw" role="switch" aria-checked="false" data-ia="sleepMode"></button></div>
-      <div class="item" id="fullItem"><span><span data-i="full"></span><small class="desc" data-i="fullInfo"></small></span><button class="switch" id="fullSw" role="switch" aria-checked="true" data-ia="full"></button></div>
-      <div class="item"><span data-i="vibration"></span><button class="switch" id="vibSw" role="switch" aria-checked="true" data-ia="vibration"></button></div>
+    <div class="page" data-page="tabata" hidden>
+      <div class="group"><div class="steps" id="tsteps"></div></div>
+      <h3 data-i="tSignal"></h3>
+      <div class="group">
+        <div class="item"><label for="tvol" data-i="tVol"></label></div>
+        <div class="item slider"><input type="range" id="tvol" min="0" max="100" step="1" value="80"></div>
+        <div class="note" data-i="tabInfo"></div>
+      </div>
+      <h3 data-i="exTitle"></h3>
+      <div class="group">
+        <textarea id="tex" rows="4" data-ph="exPh" data-ia="exTitle"></textarea>
+        <div class="note" data-i="exInfo"></div>
+      </div>
     </div>
 
-    <h3 data-i="sound"></h3>
-    <div class="group">
-      <div class="item"><span data-i="breath"></span><button class="switch" id="toneSw" role="switch" aria-checked="true" data-ia="breath"></button></div>
-      <div class="opts" id="voiceOpts" role="group" data-ia="breathKind"></div>
-      <div class="item"><span data-i="amb"></span></div>
-      <div class="opts" id="ambOpts" role="group" data-ia="amb"></div>
-      <div class="item slider" id="ambVolRow"><input type="range" id="ambVol" min="0" max="100" step="1" value="50" data-ia="ambVol"></div>
-      <div class="item"><span data-i="chime"></span><button class="switch" id="bellSw" role="switch" aria-checked="true" data-ia="chime"></button></div>
-      <div class="opts" id="chimeOpts" role="group" data-ia="chimeKind"></div>
-      <div class="item"><span data-i="speak"></span><button class="switch" id="speakSw" role="switch" aria-checked="false" data-ia="speak"></button></div>
-      <div class="note" id="voiceNote" hidden></div>
-      <div class="item"><label for="vol" data-i="volume"></label></div>
-      <div class="item slider"><input type="range" id="vol" min="0" max="100" step="1" value="35"></div>
+    <div class="page" data-page="session" hidden>
+      <div class="group">
+        <div class="item"><label for="dur" data-i="duration"></label><output id="durv" for="dur"></output></div>
+        <div class="item slider"><input type="range" id="dur" min="1" max="30" step="1" value="5"></div>
+        <div class="item"><span><span data-i="sleepMode"></span><small class="desc" data-i="sleepInfo"></small></span><button class="switch" id="sleepSw" role="switch" aria-checked="false" data-ia="sleepMode"></button></div>
+        <div class="item" id="fullItem"><span><span data-i="full"></span><small class="desc" data-i="fullInfo"></small></span><button class="switch" id="fullSw" role="switch" aria-checked="true" data-ia="full"></button></div>
+        <div class="item"><span data-i="vibration"></span><button class="switch" id="vibSw" role="switch" aria-checked="true" data-ia="vibration"></button></div>
+      </div>
     </div>
 
-    <h3 data-i="theme"></h3>
-    <div class="group">
-      <div class="item"><span><span data-i="scene"></span><small class="desc" data-i="sceneInfo"></small></span><button class="switch" id="sceneSw" role="switch" aria-checked="false" data-ia="scene"></button></div>
-      <div class="swatches" id="swatches"></div>
+    <div class="page" data-page="sound" hidden>
+      <div class="group">
+        <div class="item"><label for="vol" data-i="volume"></label></div>
+        <div class="item slider"><input type="range" id="vol" min="0" max="100" step="1" value="35"></div>
+      </div>
+      <div class="group">
+        <div class="item"><span data-i="breath"></span><button class="switch" id="toneSw" role="switch" aria-checked="true" data-ia="breath"></button></div>
+        <div class="opts" id="voiceOpts" role="group" data-ia="breathKind"></div>
+      </div>
+      <div class="group">
+        <div class="item"><span data-i="chime"></span><button class="switch" id="bellSw" role="switch" aria-checked="true" data-ia="chime"></button></div>
+        <div class="opts" id="chimeOpts" role="group" data-ia="chimeKind"></div>
+      </div>
+      <div class="group">
+        <div class="item"><span data-i="amb"></span></div>
+        <div class="opts" id="ambOpts" role="group" data-ia="amb"></div>
+        <div class="item slider" id="ambVolRow"><input type="range" id="ambVol" min="0" max="100" step="1" value="50" data-ia="ambVol"></div>
+      </div>
+      <div class="group">
+        <div class="item"><span data-i="speak"></span><button class="switch" id="speakSw" role="switch" aria-checked="false" data-ia="speak"></button></div>
+        <div class="note" id="voiceNote" hidden></div>
+      </div>
     </div>
 
-    <h3 data-i="language"></h3>
-    <div class="group"><div class="opts" id="langOpts" role="group" data-ia="language" style="padding-top:14px"></div></div>
+    <div class="page" data-page="look" hidden>
+      <h3 data-i="theme"></h3>
+      <div class="group"><div class="swatches" id="swatches"></div></div>
+      <div class="group">
+        <div class="item"><span><span data-i="scene"></span><small class="desc" data-i="sceneInfo"></small></span><button class="switch" id="sceneSw" role="switch" aria-checked="false" data-ia="scene"></button></div>
+      </div>
+    </div>
 
-    <h3 data-i="backup"></h3>
-    <div class="group">
-      <div class="note" data-i="backupInfo" style="padding-top:14px"></div>
-      <div class="opts"><button id="expBtn" data-i="exportBtn"></button><button id="impBtn" data-i="importBtn"></button></div>
-      <input type="file" id="impFile" accept=".json,application/json" hidden>
+    <div class="page" data-page="lang" hidden>
+      <div class="group"><div class="opts" id="langOpts" role="group" data-ia="language" style="padding-top:14px"></div></div>
+    </div>
+
+    <div class="page" data-page="backup" hidden>
+      <div class="group">
+        <div class="note" data-i="backupInfo"></div>
+        <div class="opts"><button id="expBtn" data-i="exportBtn"></button><button id="impBtn" data-i="importBtn"></button></div>
+        <input type="file" id="impFile" accept=".json,application/json" hidden>
+      </div>
     </div>
   </div>
 </section>
@@ -335,7 +394,7 @@ const T={
     rhythms:'Ritmusok',pick3:'A főképernyőn legfeljebb 3 látszik; koppintással választhatsz.',ownTitle:'Saját ritmus (másodperc)',
     slowInfo:'Lassuló: 4 mp belégzés, a kilégzés a gyakorlás végére 4-ről 8 mp-re nyúlik.',
     tabTitle:'Tabata (másodperc, darab)',tRounds:'Körök',tSets:'Blokkok',
-    tPrep:'Felkészülés',tBreak:'Blokk-pihenő',tVol:'Jelzés hangereje',
+    tPrep:'Felkészülés',tBreak:'Blokk-pihenő',tVol:'Jelzés hangereje',tSignal:'Jelzés',look:'Megjelenés',back:'Vissza',
     tabInfo:'Edzés közben munkánál piros, pihenőnél zöld, felkészüléskor sárga a képernyő. Minden szakasz utolsó 3 másodpercében csipog; a hangerő a telefon médiahangerejétől is függ.',
     tround:x=>`${x} kör`,tset:s=>`${s}. blokk`,rounds:n=>`${n} kör`,tabN:n=>`Tabata-edzés eddig: ${n}`,
     session:'Gyakorlás',duration:'Időtartam',sleepMode:'Alvás mód',sleepInfo:'A képernyő lassan elsötétül, a végén nincs csengés.',
@@ -363,7 +422,7 @@ const T={
     rhythms:'Rhythms',pick3:'Up to 3 show on the main screen; tap to choose.',ownTitle:'Custom rhythm (seconds)',
     slowInfo:'Unwind: 4 s inhale, the exhale grows from 4 to 8 s by the end of the session.',
     tabTitle:'Tabata (seconds, count)',tRounds:'Rounds',tSets:'Sets',
-    tPrep:'Get ready',tBreak:'Set rest',tVol:'Signal volume',
+    tPrep:'Get ready',tBreak:'Set rest',tVol:'Signal volume',tSignal:'Signal',look:'Appearance',back:'Back',
     tabInfo:'During a workout the screen is red for work, green for rest and yellow while getting ready. Beeps in the last 3 seconds of each part; loudness also depends on the phone\'s media volume.',
     tround:x=>`Round ${x}`,tset:s=>`Set ${s}`,rounds:n=>`${n} rounds`,tabN:n=>`Tabata workouts so far: ${n}`,
     session:'Session',duration:'Duration',sleepMode:'Sleep mode',sleepInfo:'The screen slowly goes dark; no chime at the end.',
@@ -391,7 +450,7 @@ const T={
     rhythms:'Rhythmen',pick3:'Bis zu 3 erscheinen auf dem Startbildschirm; zum Wählen antippen.',ownTitle:'Eigener Rhythmus (Sekunden)',
     slowInfo:'Langsam: 4 s einatmen, das Ausatmen wird bis zum Ende von 4 auf 8 s länger.',
     tabTitle:'Tabata (Sekunden, Anzahl)',tRounds:'Runden',tSets:'Sätze',
-    tPrep:'Vorbereitung',tBreak:'Satzpause',tVol:'Signallautstärke',
+    tPrep:'Vorbereitung',tBreak:'Satzpause',tVol:'Signallautstärke',tSignal:'Signal',look:'Darstellung',back:'Zurück',
     tabInfo:'Während des Trainings ist der Bildschirm bei Arbeit rot, in der Pause grün und bei der Vorbereitung gelb. Piept in den letzten 3 Sekunden jedes Abschnitts; die Lautstärke hängt auch von der Medienlautstärke des Telefons ab.',
     tround:x=>`Runde ${x}`,tset:s=>`Satz ${s}`,rounds:n=>`${n} Runden`,tabN:n=>`Tabata-Workouts bisher: ${n}`,
     session:'Übung',duration:'Dauer',sleepMode:'Schlafmodus',sleepInfo:'Der Bildschirm wird langsam dunkel; am Ende keine Glocke.',
@@ -759,10 +818,45 @@ document.addEventListener('visibilitychange',()=>{if(document.visibilityState===
 
 // ---------------------------------------------------------------- beállítások
 const sheet=$('sheet'),backdrop=$('backdrop'),setBtn=$('setBtn'),voiceOpts=$('voiceOpts'),chimeOpts=$('chimeOpts'),swatches=$('swatches'),rhOpts=$('rhOpts');
-function openSheet(){renderStats();voiceNote();sheet.hidden=backdrop.hidden=false;setBtn.setAttribute('aria-expanded','true');clearTimeout(focusT);app.classList.remove('focus');$('doneBtn').focus()}
-function closeSheet(){if(sheet.hidden)return;sheet.hidden=backdrop.hidden=true;setBtn.setAttribute('aria-expanded','false');setBtn.focus({preventScroll:true});if(run)focusLater()}
-setBtn.onclick=openSheet;$('doneBtn').onclick=closeSheet;backdrop.onclick=closeSheet;
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeSheet()});
+// Főoldal (napló + kategóriák) és almenük. Minden lépés bekerül a böngészőelőzménybe,
+// így a telefon vissza gombja/mozdulata az almenüből a főoldalra, onnan a főképernyőre lép (és nem zárja be az appot).
+const PAGES={rhythms:'rhythms',tabata:'r_tabata',session:'session',sound:'sound',look:'look',lang:'language',backup:'backup'};
+let page='main',navDepth=0;
+function setTitle(){$('sheetTitle').textContent=L[PAGES[page]||'settings']}
+function showPage(p){
+  page=p;sheet.querySelectorAll('.page').forEach(x=>x.hidden=x.dataset.page!==p);
+  $('backBtn').hidden=p==='main';setTitle();$('sheetBody').scrollTop=0;
+  if(p==='main'){renderStats();navSummary()}
+}
+function navSummary(){   // a kategóriák mellett a mostani érték
+  const sv=(k,v)=>$('sv_'+k).textContent=v,v=L['v_'+st.voice],c=L['c_'+st.chime];
+  sv('rhythms',RIDS.filter(id=>st.shown.includes(id)).map(id=>L['r_'+id]).join(', '));
+  sv('tabata',patternLabel('tabata'));
+  sv('session',L.min(st.dur)+(st.sleep?' · '+L.sleepMode:''));
+  sv('sound',st.tone&&st.bell?`${v} + ${c}`:st.tone?v:st.bell?c:L.silent);
+  sv('look',L['t_'+st.color]);
+  sv('lang',T[st.lang].name);
+}
+function openSheet(){
+  voiceNote();showPage('main');sheet.hidden=backdrop.hidden=false;setBtn.setAttribute('aria-expanded','true');clearTimeout(focusT);app.classList.remove('focus');
+  history.pushState({rr:1},'');navDepth=1;$('doneBtn').focus();
+}
+function openPage(p){showPage(p);history.pushState({rr:2,p},'');navDepth=2;$('sheetTitle').focus({preventScroll:true})}
+function closeSheet(){
+  if(sheet.hidden)return;const n=navDepth;navDepth=0;
+  sheet.hidden=backdrop.hidden=true;setBtn.setAttribute('aria-expanded','false');setBtn.focus({preventScroll:true});if(run)focusLater();
+  if(n)history.go(-n);                               // az előzményből is kivesszük a lap lépéseit
+}
+addEventListener('popstate',e=>{
+  if(sheet.hidden)return;
+  const s=e.state;
+  if(s&&s.rr===2){showPage(s.p);navDepth=2}
+  else if(s&&s.rr===1){showPage('main');navDepth=1}
+  else{navDepth=0;closeSheet()}
+});
+setBtn.onclick=openSheet;$('doneBtn').onclick=closeSheet;backdrop.onclick=closeSheet;$('backBtn').onclick=()=>history.back();
+sheet.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>openPage(b.dataset.go));
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(navDepth===2)history.back();else closeSheet()}});
 
 function fill(el){el.style.setProperty('--p',(el.value-el.min)/(el.max-el.min)*100+'%')}
 function setSwitch(el,on){el.setAttribute('aria-checked',on)}
@@ -917,7 +1011,7 @@ function applyLang(id){
   opts($('ambOpts'),AMB,'amb',ambPick,id=>L['a_'+id]);
   document.querySelectorAll('[data-ph]').forEach(e=>e.placeholder=L[e.dataset.ph]);
   opts(langOpts,T,'lang',applyLang,id=>T[id].name);
-  buildSwatches();renderRhythms();renderModes();renderStats();voiceNote();
+  buildSwatches();renderRhythms();renderModes();renderStats();voiceNote();setTitle();navSummary();
   durv.textContent=L.min(st.dur);
   if(run){ph.textContent=L[cur[i][0]];ringBtn.setAttribute('aria-label',L.stop)}else idleLabel();
   if(shownNote)note(...shownNote);
@@ -964,7 +1058,7 @@ $('impFile').onchange=async e=>{
   st=Object.assign({},d.st,{log,sessions:Math.max(st.sessions||0,d.st.sessions||0),tabN:Math.max(st.tabN||0,d.st.tabN||0),
     persistAsked:st.persistAsked,noInstall:st.noInstall});
   save();try{sessionStorage.setItem('imported','1')}catch(x){}
-  location.reload();
+  closeSheet();setTimeout(()=>location.reload(),300);   // előbb a lap lépései kikerülnek az előzményből
 };
 try{if(sessionStorage.getItem('imported')){sessionStorage.removeItem('imported');note('importOk','ok',()=>notice.classList.remove('show'))}}catch(e){}
 if(isSecureContext&&'serviceWorker' in navigator){
