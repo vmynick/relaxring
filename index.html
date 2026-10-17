@@ -81,7 +81,10 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--c1);outline-off
 /* alsó sor: állapot és a beállítások gomb */
 .bottom{width:100%;display:grid;grid-template-columns:52px 1fr 52px;align-items:center;gap:8px}
 .meta{grid-column:2;font-size:18px;font-weight:700;color:var(--muted);font-variant-numeric:tabular-nums;text-align:center;line-height:1.3}
-.gear{grid-column:3;width:52px;height:52px;border:0;border-radius:50%;background:var(--surface);color:var(--fg);display:grid;place-items:center;cursor:pointer}
+#setBtn{grid-column:1;grid-row:1}
+#exitBtn{grid-column:3;grid-row:1;transition:background .2s,color .2s}
+#exitBtn.armed{background:#E5352B;color:#fff}       /* első koppintás után: még egy koppintás kilép */
+.gear{width:52px;height:52px;border:0;border-radius:50%;background:var(--surface);color:var(--fg);display:grid;place-items:center;cursor:pointer}
 .gear svg{width:26px;height:26px}
 
 /* Fókusz: gyakorlás közben a körökön kívül minden elhomályosul és elhalványul; koppintásra visszajön */
@@ -251,12 +254,15 @@ html.tb-run #ph{max-width:94vw;margin:0 auto;white-space:nowrap}
   </div>
 
   <div class="bottom">
-    <div class="meta" id="meta"></div>
     <button class="gear" id="setBtn" data-ia="settings" aria-haspopup="dialog" aria-expanded="false">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">
         <line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="17" x2="20" y2="17"/>
         <circle cx="9" cy="7" r="2.6" fill="var(--surface)"/><circle cx="15" cy="17" r="2.6" fill="var(--surface)"/>
       </svg>
+    </button>
+    <div class="meta" id="meta"></div>
+    <button class="gear exit" id="exitBtn" data-ia="exit" hidden>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 3.5v8"/><path d="M6.4 7.3a7.5 7.5 0 1 0 11.2 0"/></svg>
     </button>
   </div>
 </div>
@@ -395,6 +401,7 @@ const T={
     slowInfo:'Lassuló: 4 mp belégzés, a kilégzés a gyakorlás végére 4-ről 8 mp-re nyúlik.',
     tabTitle:'Tabata (másodperc, darab)',tRounds:'Körök',tSets:'Blokkok',
     tPrep:'Felkészülés',tBreak:'Blokk-pihenő',tVol:'Jelzés hangereje',tSignal:'Jelzés',look:'Megjelenés',back:'Vissza',
+    exit:'Kilépés',exitAgain:'Koppints újra a kilépéshez',exitFail:'A telefon nem engedte bezárni; használd a vissza vagy a kezdőlap gombot.',
     tabInfo:'Edzés közben munkánál piros, pihenőnél zöld, felkészüléskor sárga a képernyő. Minden szakasz utolsó 3 másodpercében csipog; a hangerő a telefon médiahangerejétől is függ.',
     tround:x=>`${x} kör`,tset:s=>`${s}. blokk`,rounds:n=>`${n} kör`,tabN:n=>`Tabata-edzés eddig: ${n}`,
     session:'Gyakorlás',duration:'Időtartam',sleepMode:'Alvás mód',sleepInfo:'A képernyő lassan elsötétül, a végén nincs csengés.',
@@ -423,6 +430,7 @@ const T={
     slowInfo:'Unwind: 4 s inhale, the exhale grows from 4 to 8 s by the end of the session.',
     tabTitle:'Tabata (seconds, count)',tRounds:'Rounds',tSets:'Sets',
     tPrep:'Get ready',tBreak:'Set rest',tVol:'Signal volume',tSignal:'Signal',look:'Appearance',back:'Back',
+    exit:'Exit',exitAgain:'Tap again to exit',exitFail:'The phone did not allow closing; use the back or home button.',
     tabInfo:'During a workout the screen is red for work, green for rest and yellow while getting ready. Beeps in the last 3 seconds of each part; loudness also depends on the phone\'s media volume.',
     tround:x=>`Round ${x}`,tset:s=>`Set ${s}`,rounds:n=>`${n} rounds`,tabN:n=>`Tabata workouts so far: ${n}`,
     session:'Session',duration:'Duration',sleepMode:'Sleep mode',sleepInfo:'The screen slowly goes dark; no chime at the end.',
@@ -451,6 +459,7 @@ const T={
     slowInfo:'Langsam: 4 s einatmen, das Ausatmen wird bis zum Ende von 4 auf 8 s länger.',
     tabTitle:'Tabata (Sekunden, Anzahl)',tRounds:'Runden',tSets:'Sätze',
     tPrep:'Vorbereitung',tBreak:'Satzpause',tVol:'Signallautstärke',tSignal:'Signal',look:'Darstellung',back:'Zurück',
+    exit:'Beenden',exitAgain:'Zum Beenden erneut tippen',exitFail:'Das Telefon erlaubt das Schließen nicht; nutze die Zurück- oder Home-Taste.',
     tabInfo:'Während des Trainings ist der Bildschirm bei Arbeit rot, in der Pause grün und bei der Vorbereitung gelb. Piept in den letzten 3 Sekunden jedes Abschnitts; die Lautstärke hängt auch von der Medienlautstärke des Telefons ab.',
     tround:x=>`Runde ${x}`,tset:s=>`Satz ${s}`,rounds:n=>`${n} Runden`,tabN:n=>`Tabata-Workouts bisher: ${n}`,
     session:'Übung',duration:'Dauer',sleepMode:'Schlafmodus',sleepInfo:'Der Bildschirm wird langsam dunkel; am Ende keine Glocke.',
@@ -516,7 +525,7 @@ st.tab=Object.assign({work:20,rest:10,rounds:8,sets:1,prep:10,brk:60,ex:''},st.t
 st.shown=(st.shown||[]).filter(id=>R.hasOwnProperty(id)).slice(0,3);if(!st.shown.length)st.shown=['box','478','calm'];
 L=T[st.lang];
 function save(){try{localStorage.setItem('legzo',JSON.stringify(st))}catch(e){}}
-let run=false,i=0,left=0,cyc=0,elapsed=0,tm=null,wake=null,cur=[],curBig=0;
+let run=false,i=0,left=0,cyc=0,elapsed=0,tm=null,wake=null,cur=[],curBig=0,exitArmed=false;
 let tb=false,runMode='box';                          // tb: a futó gyakorlás Tabata-edzés
 
 // ---------------------------------------------------------------- hang
@@ -729,6 +738,7 @@ function fitPh(){   // hosszú gyakorlatnév: kisebb betű, hogy egy sorba férj
 function fmt(s){return Math.floor(s/60)+":"+String(s%60).padStart(2,'0')}
 function planSecs(p){return p.reduce((a,x)=>a+x[1],0)}
 function showMeta(){
+  if(exitArmed){meta.textContent=L.exitAgain;return}   // amíg a Kilépés élesítve van, ez a felirat marad
   if(run&&tb){const [kind,,r,s,exn]=cur[i],t=st.tab,x=`${Math.max(1,r)}/${t.rounds}`;   // a kör nagyban a szám alatt, lent a hátralévő idő
     sub.textContent=(t.sets>1?L.tset(s)+' · ':'')+x+(kind!=='work'&&exn?` → ${exn}`:'');
     meta.textContent=(t.sets>1?L.tset(s)+' · '+x:L.tround(x))+' · '+fmt(Math.max(0,planSecs(cur)-elapsed));return}
@@ -818,10 +828,12 @@ document.addEventListener('visibilitychange',()=>{if(document.visibilityState===
 
 // ---------------------------------------------------------------- beállítások
 const sheet=$('sheet'),backdrop=$('backdrop'),setBtn=$('setBtn'),voiceOpts=$('voiceOpts'),chimeOpts=$('chimeOpts'),swatches=$('swatches'),rhOpts=$('rhOpts');
-// Főoldal (napló + kategóriák) és almenük. Minden lépés bekerül a böngészőelőzménybe,
-// így a telefon vissza gombja/mozdulata az almenüből a főoldalra, onnan a főképernyőre lép (és nem zárja be az appot).
+// Főoldal (napló + kategóriák) és almenük. A telefon vissza gombja/mozdulata (CloseWatcher) az almenüből a főoldalra,
+// onnan a főképernyőre lép, és nem zárja be az appot. Böngészőelőzményt szándékosan nem írunk: azzal a Kilépés gomb
+// (window.close) nem működne. CloseWatcher nélkül (Firefox, Safari) az Esc billentyű lép vissza.
 const PAGES={rhythms:'rhythms',tabata:'r_tabata',session:'session',sound:'sound',look:'look',lang:'language',backup:'backup'};
-let page='main',navDepth=0;
+let page='main',cwMain=null,cwPage=null;
+function watch(fn){if(!('CloseWatcher' in window))return null;try{const w=new CloseWatcher();w.onclose=fn;return w}catch(e){return null}}
 function setTitle(){$('sheetTitle').textContent=L[PAGES[page]||'settings']}
 function showPage(p){
   page=p;sheet.querySelectorAll('.page').forEach(x=>x.hidden=x.dataset.page!==p);
@@ -839,24 +851,18 @@ function navSummary(){   // a kategóriák mellett a mostani érték
 }
 function openSheet(){
   voiceNote();showPage('main');sheet.hidden=backdrop.hidden=false;setBtn.setAttribute('aria-expanded','true');clearTimeout(focusT);app.classList.remove('focus');
-  history.pushState({rr:1},'');navDepth=1;$('doneBtn').focus();
+  cwMain=watch(()=>{cwMain=null;closeSheet()});$('doneBtn').focus();
 }
-function openPage(p){showPage(p);history.pushState({rr:2,p},'');navDepth=2;$('sheetTitle').focus({preventScroll:true})}
+function openPage(p){showPage(p);cwPage=watch(()=>{cwPage=null;showPage('main')});$('sheetTitle').focus({preventScroll:true})}
+function backToMain(){if(cwPage){cwPage.destroy();cwPage=null}showPage('main')}
 function closeSheet(){
-  if(sheet.hidden)return;const n=navDepth;navDepth=0;
-  sheet.hidden=backdrop.hidden=true;setBtn.setAttribute('aria-expanded','false');setBtn.focus({preventScroll:true});if(run)focusLater();
-  if(n)history.go(-n);                               // az előzményből is kivesszük a lap lépéseit
-}
-addEventListener('popstate',e=>{
   if(sheet.hidden)return;
-  const s=e.state;
-  if(s&&s.rr===2){showPage(s.p);navDepth=2}
-  else if(s&&s.rr===1){showPage('main');navDepth=1}
-  else{navDepth=0;closeSheet()}
-});
-setBtn.onclick=openSheet;$('doneBtn').onclick=closeSheet;backdrop.onclick=closeSheet;$('backBtn').onclick=()=>history.back();
+  [cwPage,cwMain].forEach(w=>w&&w.destroy());cwPage=cwMain=null;
+  sheet.hidden=backdrop.hidden=true;setBtn.setAttribute('aria-expanded','false');setBtn.focus({preventScroll:true});if(run)focusLater();
+}
+setBtn.onclick=openSheet;$('doneBtn').onclick=closeSheet;backdrop.onclick=closeSheet;$('backBtn').onclick=backToMain;
 sheet.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>openPage(b.dataset.go));
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(navDepth===2)history.back();else closeSheet()}});
+if(!('CloseWatcher' in window))document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!sheet.hidden){page==='main'?closeSheet():backToMain()}});
 
 function fill(el){el.style.setProperty('--p',(el.value-el.min)/(el.max-el.min)*100+'%')}
 function setSwitch(el,on){el.setAttribute('aria-checked',on)}
@@ -1040,6 +1046,19 @@ function note(textKey,labelKey,act,dismiss){
   nx.onclick=()=>{shownNote=null;notice.classList.remove('show');dismiss&&dismiss()};notice.classList.add('show');
 }
 
+// ---------------------------------------------------------------- kilépés
+// Csak a telepített appban látszik. Első koppintás élesít (piros gomb, felirat), 3 mp-en belül a második bezárja az appot.
+// window.close() akkor engedett, ha az app ablakának nincs előzménye; ha a telefon mégsem engedi, szólunk.
+const exitBtn=$('exitBtn');let exitT=0;
+exitBtn.hidden=!installed;
+function disarm(){exitArmed=false;clearTimeout(exitT);exitBtn.classList.remove('armed');exitBtn.setAttribute('aria-label',L.exit);showMeta()}
+exitBtn.onclick=()=>{
+  if(!exitArmed){exitArmed=true;exitBtn.classList.add('armed');exitBtn.setAttribute('aria-label',L.exitAgain);showMeta();exitT=setTimeout(disarm,3000);return}
+  disarm();if(run)stop();
+  window.close();
+  setTimeout(()=>note('exitFail','ok',()=>notice.classList.remove('show')),600);
+};
+
 // ---------------------------------------------------------------- mentés
 // Minden adat (napló, beállítások) csak ezen a telefonon van: fájlba menthető, és máshol vagy újratelepítés után visszatölthető.
 // Visszatöltéskor a beállítások felülíródnak, a napló napokra bontva összefésülődik (naponta a nagyobb érték marad).
@@ -1058,7 +1077,7 @@ $('impFile').onchange=async e=>{
   st=Object.assign({},d.st,{log,sessions:Math.max(st.sessions||0,d.st.sessions||0),tabN:Math.max(st.tabN||0,d.st.tabN||0),
     persistAsked:st.persistAsked,noInstall:st.noInstall});
   save();try{sessionStorage.setItem('imported','1')}catch(x){}
-  closeSheet();setTimeout(()=>location.reload(),300);   // előbb a lap lépései kikerülnek az előzményből
+  closeSheet();location.reload();
 };
 try{if(sessionStorage.getItem('imported')){sessionStorage.removeItem('imported');note('importOk','ok',()=>notice.classList.remove('show'))}}catch(e){}
 if(isSecureContext&&'serviceWorker' in navigator){
