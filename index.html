@@ -215,6 +215,7 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px;border:0;border-radiu
       <div class="item"><label for="dur" data-i="duration"></label><output id="durv" for="dur"></output></div>
       <div class="item slider"><input type="range" id="dur" min="1" max="30" step="1" value="5"></div>
       <div class="item"><span><span data-i="sleepMode"></span><small class="desc" data-i="sleepInfo"></small></span><button class="switch" id="sleepSw" role="switch" aria-checked="false" data-ia="sleepMode"></button></div>
+      <div class="item" id="fullItem"><span><span data-i="full"></span><small class="desc" data-i="fullInfo"></small></span><button class="switch" id="fullSw" role="switch" aria-checked="true" data-ia="full"></button></div>
       <div class="item"><span data-i="vibration"></span><button class="switch" id="vibSw" role="switch" aria-checked="true" data-ia="vibration"></button></div>
     </div>
 
@@ -250,7 +251,8 @@ const T={
     settings:'Beállítások',ok:'Kész',journal:'Napló',streak:'napos sorozat',today:'perc ma',sessions:'alkalom',weekAria:m=>`Az elmúlt 7 nap percei: ${m}`,
     rhythms:'Ritmusok',pick3:'A főképernyőn legfeljebb 3 látszik; koppintással választhatsz.',ownTitle:'Saját ritmus (másodperc)',
     slowInfo:'Lassuló: 4 mp belégzés, a kilégzés a gyakorlás végére 4-ről 8 mp-re nyúlik.',
-    session:'Gyakorlás',duration:'Időtartam',sleepMode:'Alvás mód',sleepInfo:'A képernyő lassan elsötétül, a végén nincs csengés.',vibration:'Rezgés',
+    session:'Gyakorlás',duration:'Időtartam',sleepMode:'Alvás mód',sleepInfo:'A képernyő lassan elsötétül, a végén nincs csengés.',
+    full:'Teljes képernyő',fullInfo:'Gyakorlás közben eltűnik az állapotsor és az alsó gombsor.',vibration:'Rezgés',
     sound:'Hang',breath:'Légzőhang',chime:'Csengés',speak:'Hangos vezetés',noVoice:'Ezen a telefonon nincs magyar felolvasóhang.',
     volume:'Hangerő',theme:'Színtéma',language:'Nyelv',breathKind:'Légzőhang fajtája',chimeKind:'Csengés fajtája',close:'Bezárás',
     v_lagy:'Lágy',v_ocean:'Óceán',v_pad:'Pad',v_tal:'Tál',c_csengo:'Csengő',c_tal:'Tál',c_fa:'Fa',c_csepp:'Csepp',c_piezo:'Piezo',
@@ -265,7 +267,8 @@ const T={
     settings:'Settings',ok:'Done',journal:'Journal',streak:'day streak',today:'min today',sessions:'sessions',weekAria:m=>`Minutes over the last 7 days: ${m}`,
     rhythms:'Rhythms',pick3:'Up to 3 show on the main screen; tap to choose.',ownTitle:'Custom rhythm (seconds)',
     slowInfo:'Unwind: 4 s inhale, the exhale grows from 4 to 8 s by the end of the session.',
-    session:'Session',duration:'Duration',sleepMode:'Sleep mode',sleepInfo:'The screen slowly goes dark; no chime at the end.',vibration:'Vibration',
+    session:'Session',duration:'Duration',sleepMode:'Sleep mode',sleepInfo:'The screen slowly goes dark; no chime at the end.',
+    full:'Full screen',fullInfo:'The status and navigation bars hide during a session.',vibration:'Vibration',
     sound:'Sound',breath:'Breathing sound',chime:'Chime',speak:'Voice guidance',noVoice:'This phone has no English text-to-speech voice.',
     volume:'Volume',theme:'Color theme',language:'Language',breathKind:'Breathing sound type',chimeKind:'Chime type',close:'Close',
     v_lagy:'Soft',v_ocean:'Ocean',v_pad:'Pad',v_tal:'Bowl',c_csengo:'Bell',c_tal:'Bowl',c_fa:'Wood',c_csepp:'Drop',c_piezo:'Piezo',
@@ -280,7 +283,8 @@ const T={
     settings:'Einstellungen',ok:'Fertig',journal:'Tagebuch',streak:'Tage in Folge',today:'Min. heute',sessions:'Übungen',weekAria:m=>`Minuten der letzten 7 Tage: ${m}`,
     rhythms:'Rhythmen',pick3:'Bis zu 3 erscheinen auf dem Startbildschirm; zum Wählen antippen.',ownTitle:'Eigener Rhythmus (Sekunden)',
     slowInfo:'Langsam: 4 s einatmen, das Ausatmen wird bis zum Ende von 4 auf 8 s länger.',
-    session:'Übung',duration:'Dauer',sleepMode:'Schlafmodus',sleepInfo:'Der Bildschirm wird langsam dunkel; am Ende keine Glocke.',vibration:'Vibration',
+    session:'Übung',duration:'Dauer',sleepMode:'Schlafmodus',sleepInfo:'Der Bildschirm wird langsam dunkel; am Ende keine Glocke.',
+    full:'Vollbild',fullInfo:'Status- und Navigationsleiste verschwinden während der Übung.',vibration:'Vibration',
     sound:'Klang',breath:'Atemklang',chime:'Glocke',speak:'Sprachansage',noVoice:'Dieses Telefon hat keine deutsche Sprachausgabe.',
     volume:'Lautstärke',theme:'Farbthema',language:'Sprache',breathKind:'Art des Atemklangs',chimeKind:'Art der Glocke',close:'Schließen',
     v_lagy:'Sanft',v_ocean:'Ozean',v_pad:'Pad',v_tal:'Schale',c_csengo:'Glocke',c_tal:'Schale',c_fa:'Holz',c_csepp:'Tropfen',c_piezo:'Piezo',
@@ -291,7 +295,7 @@ const T={
 let L=T.hu,shownNote=null;
 const $=id=>document.getElementById(id);
 const app=$('app'),r1=$('r1'),r2=$('r2'),r3=$('r3'),ph=$('ph'),ct=$('ct'),sub=$('sub'),ringBtn=$('ringBtn'),meta=$('meta'),hint=$('hint'),dim=$('dim');
-const vol=$('vol'),dur=$('dur'),durv=$('durv'),toneSw=$('toneSw'),bellSw=$('bellSw'),vibSw=$('vibSw'),sleepSw=$('sleepSw'),speakSw=$('speakSw');
+const vol=$('vol'),dur=$('dur'),durv=$('durv'),toneSw=$('toneSw'),bellSw=$('bellSw'),vibSw=$('vibSw'),sleepSw=$('sleepSw'),speakSw=$('speakSw'),fullSw=$('fullSw');
 const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 // ---------------------------------------------------------------- ritmusok
@@ -313,7 +317,7 @@ function pattern(id){
 }
 function patternLabel(id){return id==='slow'?'4·4→8':pattern(id).map(x=>x[1]).join('·')}
 
-let st={mode:'box',shown:['box','478','calm'],own:[4,4,6,0],vol:35,tone:true,bell:true,vib:true,sleep:false,speak:false,dur:5,
+let st={mode:'box',shown:['box','478','calm'],own:[4,4,6,0],vol:35,tone:true,bell:true,vib:true,sleep:false,speak:false,full:true,dur:5,
   color:'erdo',voice:'lagy',chime:'csengo',log:{},sessions:0};
 try{Object.assign(st,JSON.parse(localStorage.getItem('legzo')||'{}'))}catch(e){}
 if(!T[st.lang]){const n=(navigator.language||'hu').slice(0,2).toLowerCase();st.lang=T[n]?n:'en'}   // első indításkor a telefon nyelve
@@ -480,8 +484,19 @@ function tick(){
 }
 async function lock(){try{wake=await navigator.wakeLock.request('screen')}catch(e){wake=null}}
 function unlock(){try{wake&&wake.release()}catch(e){}wake=null}
+// Teljes képernyő gyakorlás közben: a Chrome elrejti az állapotsort és az alsó gombsort, így nem marad világos sáv.
+// Csak érintőképernyőn; koppintás kell hozzá, ezért gyorsindításnál az első érintéskor kapcsol be.
+// Ha sikerült, és a felhasználó maga lép ki belőle, abban a körben már nem kérjük újra.
+const canFull=!!document.fullscreenEnabled&&matchMedia('(pointer: coarse)').matches;
+let fsTried=false;
+function goFull(){
+  if(!st.full||!canFull||fsTried||document.fullscreenElement)return;
+  document.documentElement.requestFullscreen({navigationUI:'hide'}).then(()=>fsTried=true,()=>{});
+}
+function leaveFull(){if(document.fullscreenElement)document.exitFullscreen().catch(()=>{})}
 function setDim(op,secs){dim.style.transition=`opacity ${secs}s linear`;dim.style.opacity=op}
 function start(){
+  fsTried=false;goFull();
   closeSheet();ensureAudio();run=true;finished=false;i=0;cyc=1;elapsed=0;curBig=0;app.classList.remove('idle');
   phase();tm=setInterval(tick,1000);ringBtn.setAttribute('aria-label',L.stop);lock();showMeta();focusLater(1200);keepStorage();
   if(st.sleep){setDim(0,0);requestAnimationFrame(()=>requestAnimationFrame(()=>setDim(.9,st.dur*60)))}
@@ -489,8 +504,9 @@ function start(){
 }
 let finished=false;
 function idleLabel(){ph.textContent=finished?L.done:L.start;sub.textContent=finished?L.again:L.tap;ringBtn.setAttribute('aria-label',L.start)}
-function stop(){
+function stop(keepFull){
   if(!run)return;
+  if(!keepFull)leaveFull();
   run=false;clearInterval(tm);size(0,1.2);if(voice)voice.quiet(.8);
   if('speechSynthesis' in window)speechSynthesis.cancel();
   clearTimeout(focusT);app.classList.remove('focus');hint.classList.remove('show');
@@ -500,8 +516,8 @@ function stop(){
 function finish(){
   const sleeping=st.sleep;
   if(!sleeping){ding(523);setTimeout(()=>ding(784),400)}
-  stop();finished=true;idleLabel();
-  if(sleeping)setDim(.97,2);                         // alvás módban sötét marad, a képernyő magától kikapcsolhat
+  stop(sleeping);finished=true;idleLabel();
+  if(sleeping)setDim(.97,2);                         // alvás módban sötét (és teljes képernyős) marad, a képernyő magától kikapcsolhat
 }
 let undim=false;                                     // alvás mód után az első koppintás csak felébreszti a képernyőt
 ringBtn.onclick=()=>{if(undim){undim=false;return}run?stop():start()};
@@ -520,10 +536,11 @@ function focusLater(ms=4000){clearTimeout(focusT);focusT=setTimeout(()=>{if(run&
 function wakeUI(){if(!run)return;app.classList.remove('focus');focusLater()}
 app.addEventListener('pointerdown',e=>{
   if(ac&&ac.state!=='running')ac.resume();           // gyorsindításnál az első érintés engedi a hangot
-  if(!run){undim=+dim.style.opacity>.5&&e.target===ringBtn;if(+dim.style.opacity>0)setDim(0,.6);return}
+  if(!run){undim=+dim.style.opacity>.5&&e.target===ringBtn;if(+dim.style.opacity>0)setDim(0,.6);leaveFull();return}
   if(e.target===ringBtn)return;                      // a körre koppintás leállít, azt a gomb kezeli
   app.classList.contains('focus')?wakeUI():focusLater();
 },true);
+app.addEventListener('pointerup',e=>{if(run&&e.target!==ringBtn)goFull()});   // érintésnél a felengedés számít koppintásnak
 document.addEventListener('keydown',()=>{if(run)wakeUI()});
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')wakeUI()});
 
@@ -541,6 +558,7 @@ vol.oninput=()=>{st.vol=+vol.value;fill(vol);save();if(master)ramp(master.gain,s
 vol.onchange=()=>{if(st.bell&&ensureAudio())CHIMES[st.chime].play(784)};          // elengedéskor hallod, milyen hangos
 vibSw.onclick=()=>{st.vib=!st.vib;setSwitch(vibSw,st.vib);save();buzz()};
 sleepSw.onclick=()=>{st.sleep=!st.sleep;setSwitch(sleepSw,st.sleep);save()};
+fullSw.onclick=()=>{st.full=!st.full;setSwitch(fullSw,st.full);save();if(run){if(st.full){fsTried=false;goFull()}else leaveFull()}};
 speakSw.onclick=()=>{st.speak=!st.speak;setSwitch(speakSw,st.speak);save();voiceNote();if(st.speak&&!run)speak('in')};
 function setTone(on){st.tone=on;setSwitch(toneSw,on);voiceOpts.classList.toggle('off',!on);if(tg)ramp(tg.gain,on?1:0,.3);save();showMeta()}
 function setBell(on){st.bell=on;setSwitch(bellSw,on);chimeOpts.classList.toggle('off',!on);save();showMeta()}
@@ -615,7 +633,7 @@ if(!VOICES[st.voice])st.voice='lagy';
 if(!CHIMES[st.chime])st.chime='csengo';
 dur.value=st.dur;vol.value=st.vol;fill(dur);fill(vol);
 applyLang(st.lang);
-setSwitch(vibSw,st.vib);setSwitch(sleepSw,st.sleep);setSwitch(speakSw,st.speak);setTone(st.tone);setBell(st.bell);
+setSwitch(vibSw,st.vib);setSwitch(sleepSw,st.sleep);setSwitch(speakSw,st.speak);setSwitch(fullSw,st.full);$('fullItem').hidden=!canFull;setTone(st.tone);setBell(st.bell);
 applyTheme(st.color);size(0,0);showMeta();
 
 // Gyorsindítás az ikonról (manifest shortcuts): ?r=478 → az a ritmus azonnal indul
