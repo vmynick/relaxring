@@ -1,81 +1,90 @@
-# RelaxRing – Breathing Circles
+# RelaxRing+ – Breathing Circles
 
 [![Publish](https://github.com/vmynick/relaxring/actions/workflows/pages.yml/badge.svg)](https://github.com/vmynick/relaxring/actions/workflows/pages.yml)
 
-A breathing-exercise app and interval timer for your phone. Breathing circles show when to inhale, hold and exhale. Soft sound, vibration and optional voice guidance let you follow along with your eyes closed. It installs as an app, works offline and does not send any data anywhere.
+A breathing-exercise app and interval timer for your phone. Breathing circles show when to inhale, hold and exhale. Soft sound, vibration and optional voice guidance let you follow along with your eyes closed. It installs as an app, works offline, is free, and does not send any data anywhere.
 
 **▶ Open the app: https://vmynick.github.io/relaxring/**
 
-![Main screen with a background scene, a breathing session in dark mode, a Tabata workout and the Settings screen](docs/screenshots.png)
+![Main screen with a background scene, alternate nostril breathing in dark mode, a Tabata workout, the rhythm library and the journal with badges](docs/screenshots.png)
 
-*Main screen with a background scene · breathing session (dark mode) · Tabata workout · Settings*
+*Main screen · alternate nostril breathing (dark mode) · Tabata workout · rhythm library · journal with badges*
 
 ## Features
 
-### Breathing
+### Breathing techniques
 
-| Rhythm | Pattern (seconds) | What it is |
+15 built-in techniques in four groups. Each one has a short description in Settings → Rhythms.
+
+| Group | Rhythm | Pattern (seconds) |
 |---|---|---|
-| Box | 4 in · 4 hold · 4 out · 4 hold | four equal parts |
-| Sleep | 4 in · 7 hold · 8 out | the 4-7-8 pattern, long hold and exhale, for bedtime |
-| Calm | 4 in · 6 out | exhale longer than inhale |
-| Sigh | 2 in + 1 top-up · 6 out | the physiological sigh, a quick 1–3 minute reset |
-| Coherent | 5 in · 5 out | six breaths a minute |
-| Relax | 4 in · 2 hold · 6 out | short hold, long exhale |
-| Unwind | 4 in · 4→8 out | the exhale lengthens to 8 s by the end of the session |
-| Custom | your choice | inhale and exhale 2–12 s, holds 0–12 s |
+| Calm | Calm | 4 in · 6 out |
+| | Sigh | 2 in + 1 top-up · 6 out (the physiological sigh) |
+| | Coherent | 5 in · 5 out by default; pace adjustable from 10 to 4.3 breaths a minute |
+| | Relax | 4 in · 2 hold · 6 out |
+| | Equal | 4 in · 4 out |
+| Sleep | Sleep | 4 in · 7 hold · 8 out (4-7-8) |
+| | Unwind | 4 in · the exhale grows from 4 to 8 s over the session |
+| | Lullaby | 4 in · 8 out |
+| | Bee | 4 in · 8 humming exhale (bhramari) |
+| Focus | Box | 4 in · 4 hold · 4 out · 4 hold |
+| | Triangle | 4 in · 4 hold · 4 out |
+| | Alternate | alternate nostril breathing; the line under the circle and the voice say which nostril |
+| Energy | Wake up | 4 in · 2 out |
+| | Kapalbhati | 30 quick exhales (the circle twitches with each), 15 s hold, rest |
+| | Power | Wim Hof-style: 30 deep breaths, hold out as long as you can (tap when you need air), 15 s hold in; 1–6 rounds |
 
-- The main screen shows the 3 rhythms you pick in Settings. Tap the circle to start or stop.
-- Sessions last 1–30 minutes and end after the current breath cycle.
-- **Focus mode:** while you breathe, everything except the circles fades. Tap once to bring the controls back.
-- **Sleep mode:** the screen slowly goes dark, there is no chime at the end and the nature sound fades out slowly.
-- **Sounds:**
-  - 4 breathing sounds: Soft, Ocean, Pad, Bowl.
-  - 5 chimes: Bell, Bowl, Wood, Drop, Piezo.
-  - Optional nature sound under the session: rain, stream, fire or wind.
-  
-  The phone synthesizes all of them, so there are no audio files to download.
-- **Voice guidance:** the phone's text-to-speech voice reads out each phase. The app measures how long the voice takes to start and starts it that much early, so you hear it as the counter changes. If no voice is installed for the selected language, the app tells you.
-- **Screen off:** sessions keep running with the screen locked. The lock screen shows "RelaxRing – Inhale" with pause, resume and stop, and a headset button pauses too. An incoming call pauses the session. Some sound must be on for this to work.
+The app warns once before Kapalbhati and Power breathing: they are hyperventilation exercises, to be done only sitting or lying down.
+
+- **Custom rhythms:** as many as you like, each with a name and its own inhale, holds and exhale.
+- **Sequences:** chain rhythms into one session, for example 3 minutes Sigh → 5 minutes Coherent → 5 minutes Sleep.
+- The main screen shows the 3 rhythms you pick. Tap the circle to start or stop.
+- **Session length:** 1–30 minutes, a number of breaths (5–100) or endless. An optional countdown (3, 5 or 10 s) comes before the start.
+- **Focus mode:** while you breathe, everything except the circles fades. Tap outside the circle to bring the controls back.
+- **Sleep mode:** the screen slowly goes dark, there is no chime at the end and the nature sound fades out.
+- **Screen off:** sessions keep running with the screen locked. The lock screen shows pause, resume and stop, and a headset button pauses too. An incoming call pauses the session. Some sound must be on for this to work.
+
+### Sound and voice
+
+- 4 breathing sounds (Soft, Ocean, Pad, Bowl), 5 chimes (Bell, Bowl, Wood, Drop, Piezo) and 8 background sounds (rain, stream, fire, wind, waves, birds, white and brown noise). The phone synthesizes all of these, so nothing has to be downloaded.
+- **Voice guidance** in three kinds:
+  - the phone's own text-to-speech voice. The app measures how late it starts and starts it that much early, so you hear it as the counter changes;
+  - a recorded female or male voice for 18 languages. It sounds the same on every phone and plays exactly at the change. It downloads on first use and then works offline. Exercise names are still read by the phone voice.
+- Separate volume for the voice guidance and for the background sound.
+- Vibration on every phase change.
 
 ### Workouts (Tabata)
 
+- **Saved workouts:** as many as you like, each with a name. Duplicate, rename or delete them; pick one on the main screen.
 - **Presets:** Tabata 20/10 s × 8, HIIT 40/20 s × 8, EMOM 1 min × 10.
-- **Adjustable:**
-  - On the main screen: work (5–90 s), rest (0–90 s), rounds (1–30) and sets (1–5).
-  - In Settings: get-ready time (0–30 s) and rest between sets (10–180 s).
-- **Readable from across the room:** during a workout the whole screen takes the phase color, with a huge countdown:
-  - red for work,
-  - green for rest,
-  - yellow while getting ready.
-- **Loud signal with its own volume:**
-  - 3-2-1 beeps before every change,
-  - a different tone at the start of work and of rest,
-  - stronger vibration.
+- **Adjustable:** work (5–90 s), rest (0–90 s), rounds (1–30), sets (1–5), get-ready time (0–30 s), rest between sets (10–180 s), warm-up and cool-down (0–15 min).
+- **Readable from across the room:** the whole screen takes the phase color, with a huge countdown. Each phase (warm-up, get ready, work, rest, cool-down) has its own color, 9 to choose from, and its own signal: high beep, double low beep, bell, gong, whistle, buzzer or none.
+- **Loud signal with its own volume:** 3-2-1 beeps before every change, and stronger vibration.
 - **Exercise list:** the current exercise shows during work and the next one during rest. Voice guidance reads them out.
 - **Safe controls:** tapping the number pauses the workout and holding it stops, so a sweaty touch cannot end it by mistake. ⏭ jumps to the next part, also from the lock screen.
 - **Landscape:** turn the phone sideways and the countdown fills the screen next to the exercise name.
+- **With your own music:** on Android the signals only lower the music playing on the phone instead of stopping it. In this mode the lock screen has no controls and the screen stays on.
+- **Share a workout:** a link carries the whole workout. Whoever opens it can save it with one tap.
 
 ### Journal and backup
 
-- The journal shows your day streak, today's minutes and the number of sessions.
+- Day streak, today's minutes and the number of sessions.
 - **Daily goal:** 2–30 minutes, with a progress bar and the number of days this week you reached it.
-- **Charts:** a 7-day bar chart with a line for the goal, and a monthly calendar for the past year. Days that met the goal are filled, days with practice below the goal are shaded.
-- Tabata workouts are counted separately.
-- You can save the journal and all settings to a JSON file and restore them, for example on a new phone or after a reinstall. When you restore, the app merges the journal day by day.
+- **Charts:** a 7-day bar chart with a line for the goal, and a monthly calendar for the past year.
+- **Badges and statistics** (optional, off by default): levels by total minutes, 16 badges, the last 20 sessions with breath-hold times, and minutes by rhythm and by time of day for the last 30 days. Badges also count your earlier sessions.
+- Save the journal, your rhythms, workouts and settings to a JSON file and restore them, for example on a new phone. Restoring merges the journal.
 
-### Appearance
+### Appearance and languages
 
 - 6 color themes: Forest, Sea, Lavender, Sunset, Rose, Stone. Light or dark mode follows the phone setting.
 - An optional background scene for each theme: a calm landscape drawn in the theme's colors.
-- Languages: English, Hungarian, German, Spanish, French, Italian, Polish. On first launch the app uses the phone's language.
+- 20 languages: English, Hungarian, German, Spanish, French, Italian, Polish, Portuguese (Brazil), Dutch, Swedish, Danish, Norwegian, Finnish, Czech, Slovak, Romanian, Croatian, Ukrainian, Russian and Turkish. On first launch the app uses the phone's language.
 - **Share the app** in Settings opens the phone's share sheet, or copies the link where there is none.
 
 ### Help
 
-- **Help & about** in Settings has short instructions, the list of changes, the privacy note and the version.
-- On first launch the app offers the help page.
-- After an update it shows once what is new.
+- **Help & about** in Settings has short instructions, the list of changes, the privacy note, the voice credits and the version.
+- On first launch the app offers the help page, and after an update it shows once what is new.
 
 ## Install
 
@@ -96,6 +105,7 @@ When a new version is published, the app shows "A new version is available" → 
 | Action | How |
 |---|---|
 | Start or stop | tap the circle |
+| Power breathing: end the hold | tap the circle when you need air |
 | Tabata: pause or stop | tap the number to pause, hold it to stop |
 | Tabata: next part | ⏭ button, or next on the lock screen or headset |
 | Pause or resume | lock screen controls or headset button; while paused, tap the circle to continue |
@@ -109,27 +119,29 @@ When a new version is published, the app shows "A new version is available" → 
 
 - There is no account, no sign-up, no analytics and no cookies.
 - Settings and the journal stay in the browser's local storage on your phone.
-- GitHub Pages serves the app files. Beyond that the app makes no requests, and the font is bundled.
+- GitHub Pages serves the app files. Beyond that the app makes no requests, and the font and voices are bundled.
 - Clearing the browser data deletes the local storage, so save a backup from time to time (Settings → Backup).
 
 ## Known limitations
 
 - **iPhone:**
   - Safari does not support vibration.
-  - Full screen and the back-gesture handling only work on Android.
-- **Voice guidance** depends on the text-to-speech voices installed on the phone.
+  - Full screen, the back-gesture handling and lowering your own music during Tabata only work on Android.
+- **Voice guidance with the phone voice** depends on the text-to-speech voices installed on the phone. Croatian and Turkish have no recorded voice, and some languages have only a female or only a male one.
 - **Volume:** the phone's media volume also limits the sounds and signals.
-- **Screen off:** this needs some sound on (breathing sound, chime or nature sound). If every sound is off, the browser may slow down or pause the timer while the screen is locked. Some phones' battery savers can also stop the app in the background.
+- **Screen off:** this needs some sound on (breathing sound, chime or background sound). If every sound is off, the browser may slow down or pause the timer while the screen is locked. Some phones' battery savers can also stop the app in the background.
+- **Landscape:** breathing stays in portrait where the browser allows locking it, which is usually only in full screen. Elsewhere the breathing screen has a landscape layout too.
 
 ## Development
 
-The app is a single HTML file with HTML, CSS and JavaScript. It uses no framework and has no build step. Sounds are synthesized with the Web Audio API, and the background scenes are drawn as SVG.
+The app is a single HTML file with HTML, CSS and JavaScript. It uses no framework and has no build step. Sounds are synthesized with the Web Audio API, and the background scenes are drawn as SVG. The recorded voices are pre-generated MP3 files.
 
 | File | Purpose |
 |---|---|
 | [index.html](index.html) | the whole app: UI, timing, sounds, translations |
 | [sw.js](sw.js) | service worker: offline cache and update notice |
 | [manifest.json](manifest.json) | install data, icons, shortcuts |
+| [voice/](voice) | recorded voices: one MP3 per language and gender, `voices.json` with the word positions, [CREDITS.txt](voice/CREDITS.txt) |
 | [fonts.css](fonts.css), [fonts/](fonts) | the Inter font |
 | `*.png` | icons |
 | [setup.html](setup.html) | only for the earlier self-hosted home-server version |
@@ -140,21 +152,13 @@ The app is a single HTML file with HTML, CSS and JavaScript. It uses no framewor
 **Run locally:** start any static web server in this folder, for example `python -m http.server 8000`, and open http://localhost:8000. The service worker also works on localhost.
 
 **Tests:** run `npm install` once, then `npm test`. Playwright runs the tests in headless Chromium against a small built-in web server. They cover:
-- loading in every language;
-- a full breathing session and the journal;
-- pause and resume with the lock-screen data;
-- catching up after the browser was throttled;
-- the rhythm picker;
-- Tabata and EMOM, pause, skip and long-press stop;
-- the landscape layout;
-- sharing the app;
-- that every language has the same texts;
-- settings navigation;
-- backup and restore;
-- shortcuts;
-- offline start;
-- the daily goal and calendar;
-- the "what's new" notice.
+- loading in every language, and that every language has the same texts;
+- breathing sessions, the journal, pause and resume, the lock-screen data and catching up after throttling;
+- the rhythm library, power breathing, Kapalbhati, alternate nostril, custom rhythms, sequences, breath counts, endless sessions, the countdown and the coherent pace;
+- voice guidance timing and the recorded voices;
+- badges and statistics;
+- Tabata: presets, pause, skip, long-press stop, saved workouts, warm-up and cool-down, colors, shared links and the own-music mode;
+- the landscape layout, settings navigation, backup and restore, sharing, shortcuts, offline start and the "what's new" notice.
 
 **Publishing:** every push to `main` runs the tests first. The site is published only if they all pass, about 2–3 minutes in total. The workflow also:
 - writes a new version into `sw.js`, which is how installed apps notice an update;
@@ -163,11 +167,14 @@ The app is a single HTML file with HTML, CSS and JavaScript. It uses no framewor
 **Releasing:** add an entry at the top of the `NEWS` list in `index.html`. Its version becomes the app version, and installed apps show the "what's new" notice once.
 
 **Extending:**
-- **New language:** add a block to the `T` dictionary in `index.html` with the same keys as the existing ones.
-- **New rhythm:** add it to the `R` table and the `RIDS` list, and add an `r_<id>` label in every language.
+- **New language:** add a block to the `T` dictionary in `index.html` with the same keys as the existing ones. A test checks that no key is missing.
+- **New rhythm:** add it to the `R` table and the `BIDS` list, and add an `r_<id>` name and a `d_<id>` description in every language.
+- **Recorded voices:** the MP3 files were made with [Piper](https://github.com/OHF-Voice/piper1-gpl). Each word was generated four times and the shortest take kept, because the models sometimes run on.
 
 ## License
 
 The code is under the [MIT License](LICENSE).
 
 The font is [Inter](https://rsms.me/inter/), under the SIL Open Font License 1.1 ([fonts/OFL-Inter.txt](fonts/OFL-Inter.txt)). On Apple devices the system font (SF Pro) is used instead.
+
+The recorded voices were generated with Piper voice models; their training data licenses (CC0, CC BY, Apache 2.0 and others) are listed in [voice/CREDITS.txt](voice/CREDITS.txt).

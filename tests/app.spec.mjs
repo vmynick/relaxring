@@ -22,8 +22,9 @@ const openSettings = async (page, sub) => {
 test('minden nyelven hiba nélkül betölt', async ({ page }) => {
   await seed(page);
   await page.goto('/');
-  for (const [lang, title, start] of [['hu', 'Légző körök', 'Indítás'], ['en', 'Breathing Circles', 'Start'], ['de', 'Atemkreise', 'Start'],
-    ['es', 'Círculos de respiración', 'Empezar'], ['fr', 'Cercles de respiration', 'Démarrer'], ['it', 'Cerchi del respiro', 'Inizia'], ['pl', 'Kręgi oddechu', 'Start']]) {
+  const langs = await page.evaluate(() => Object.entries(T).map(([l, x]) => [l, x.title, x.start]));
+  expect(langs.length).toBe(20);
+  for (const [lang, title, start] of langs) {
     await page.evaluate(l => { const s = JSON.parse(localStorage.getItem('legzo')); s.lang = l; localStorage.setItem('legzo', JSON.stringify(s)); }, lang);
     await page.reload();
     await expect(page).toHaveTitle(title);
@@ -47,7 +48,7 @@ test('minden nyelvben ugyanazok a szövegek vannak meg', async ({ page }) => {
   });
   expect(diff).toEqual({});
   // ebben a sorrendben jelennek meg a nyelvválasztóban
-  expect(await page.evaluate(() => Object.keys(T))).toEqual(['hu', 'en', 'de', 'es', 'fr', 'it', 'pl']);
+  expect(await page.evaluate(() => Object.keys(T))).toEqual(['hu', 'en', 'de', 'es', 'fr', 'it', 'pl', 'pt', 'nl', 'sv', 'da', 'nb', 'fi', 'cs', 'sk', 'ro', 'hr', 'uk', 'ru', 'tr']);
 });
 
 test('első indításkor a telefon nyelvét választja', async ({ browser }) => {
@@ -79,7 +80,7 @@ test('szünet és folytatás, a lezárási vezérlő adatai', async ({ page }) =
   await page.goto('/');
   await page.locator('#ringBtn').click();
   await page.clock.runFor(1_100);
-  expect(await page.evaluate(() => navigator.mediaSession.metadata.title)).toBe('RelaxRing – Nyugtató');
+  expect(await page.evaluate(() => navigator.mediaSession.metadata.title)).toBe('RelaxRing+ – Nyugtató');
   // a felirat a szakaszváltáskor nem frissül (egyes telefonokon minden frissítés értesítési hangot ad)
   await page.evaluate(() => { window.metaAtStart = navigator.mediaSession.metadata; });
   await page.clock.runFor(4_000);                    // belégzés → kilégzés
@@ -161,6 +162,198 @@ test('szünet után is pontosan a másodpercre vált, és újra bemondja a szaka
   expect(hold[1]).toBeLessThan(10);
 });
 
+test('ritmuskönyvtár: csoportok, leírások, legalább 15 beépített technika', async ({ page }) => {
+  await seed(page);
+  await page.goto('/');
+  await openSettings(page, 'rhythms');
+  for (const g of ['Nyugalom', 'Alvás', 'Fókusz', 'Energia', 'Saját ritmusok', 'Sorozatok']) await expect(page.locator('#rhOpts h3', { hasText: g })).toBeVisible();
+  expect(await page.evaluate(() => BIDS.length)).toBeGreaterThanOrEqual(15);
+  await expect(page.locator('.rrow[data-id="nadi"] small')).toContainText('orrlyuk');
+});
+
+test('ciklusos légzés: 30 mély légzés, visszatartás koppintásig, a napló megőrzi', async ({ page }) => {
+  await page.clock.install();
+  await seed(page, { mode: 'whm', shown: ['whm', 'box', 'calm'], whr: 1, hvOk: true });
+  await page.goto('/');
+  await page.locator('#ringBtn').click();
+  await expect(page.locator('#ph')).toHaveText('Lélegezz');
+  await expect(page.locator('#ct')).toHaveText('30');
+  await page.clock.runFor(3_100);
+  await expect(page.locator('#ct')).toHaveText('29');
+  await page.clock.runFor(87_000);
+  await expect(page.locator('#ph')).toHaveText('Tartsd kint');
+  await expect(page.locator('#sub')).toHaveText('koppints, ha levegő kell');
+  await page.clock.runFor(42_000);
+  await expect(page.locator('#ct')).toHaveText('42');
+  await page.locator('#ringBtn').click();            // levegő kell: vége a visszatartásnak
+  await expect(page.locator('#ph')).toHaveText('Belégzés');
+  await page.clock.runFor(20_000);
+  await expect(page.locator('#ph')).toHaveText('Szép volt');
+  const h = (await stored(page)).hist.pop();
+  expect(h.r).toBe('whm');
+  expect(h.ret).toEqual([42]);
+});
+
+test('hiperventilációs gyakorlat előtt egyszer figyelmeztet', async ({ page }) => {
+  await seed(page, { mode: 'kapal', shown: ['kapal', 'box', 'calm'] });
+  await page.goto('/');
+  page.once('dialog', d => d.dismiss());
+  await page.locator('#ringBtn').click();
+  expect(await page.evaluate(() => run)).toBe(false);
+  page.once('dialog', d => d.accept());
+  await page.locator('#ringBtn').click();
+  expect(await page.evaluate(() => run)).toBe(true);
+  expect((await stored(page)).hvOk).toBe(true);
+});
+
+test('Kapalbhati: másodpercenként egy kifújás, a kör megrándul', async ({ page }) => {
+  await page.clock.install();
+  await seed(page, { mode: 'kapal', shown: ['kapal', 'box', 'calm'], hvOk: true });
+  await page.goto('/');
+  await page.locator('#ringBtn').click();
+  await expect(page.locator('#ph')).toHaveText('Kifújás');
+  await expect(page.locator('#ct')).toHaveText('30');
+  await page.clock.runFor(1_100);
+  await expect(page.locator('#ct')).toHaveText('29');
+  await expect(page.locator('#r1')).toHaveClass(/pulse/);
+});
+
+test('váltott orrlyuk: a kör alatt és a bemondásban is az oldal', async ({ page }) => {
+  await page.clock.install();
+  await fakeVoice(page);
+  await seed(page, { mode: 'nadi', shown: ['nadi', 'box', 'calm'], speak: true });
+  await page.goto('/');
+  await page.locator('#ringBtn').click();
+  await expect(page.locator('#sub')).toHaveText('bal orrlyukon');
+  await expect(page.locator('#sub')).toBeVisible();
+  await page.clock.runFor(4_100);
+  await expect(page.locator('#sub')).toHaveText('jobb orrlyukon');
+  const said = await page.evaluate(() => window.said.map(s => s[0]));
+  expect(said.slice(0, 2)).toEqual(['Belégzés, bal orrlyukon', 'Kilégzés, jobb orrlyukon']);
+});
+
+test('saját ritmusok: új, átnevezés, a főképernyőre', async ({ page }) => {
+  await seed(page);
+  await page.goto('/');
+  await openSettings(page, 'rhythms');
+  await page.locator('#addOwn').click();
+  const ed = page.locator('.editor');
+  await ed.locator('input').fill('Esti');
+  await ed.locator('.stepper').first().locator('button[data-d="1"]').click();   // belégzés 4 → 5
+  await page.locator('.rrow', { hasText: 'Esti' }).click();
+  const s = await stored(page);
+  expect(s.customs.map(c => c.n)).toEqual(['', 'Esti']);
+  expect(s.customs[1].p).toEqual([5, 0, 6, 0]);
+  await expect(page.locator('#modes button', { hasText: 'Esti' })).toHaveCount(1);
+});
+
+test('sorozat: lépésenként vált ritmust, a hossza a lépések összege', async ({ page }) => {
+  await page.clock.install();
+  await seed(page, { mode: 'q1', shown: ['q1', 'box', 'calm'], seqs: [{ id: 'q1', n: 'Teszt', s: [['equal', 1], ['calm', 1]] }] });
+  await page.goto('/');
+  await expect(page.locator('#modes button[data-m="q1"] small')).toHaveText('2′');
+  await page.locator('#ringBtn').click();
+  expect(await page.evaluate(() => cur.map(x => x[1]).join())).toBe('4,4');
+  await page.clock.runFor(65_000);                   // az első perc utáni első körtől a második lépés
+  expect(await page.evaluate(() => cur.map(x => x[1]).join())).toBe('4,6');
+  await expect(page.locator('#meta')).toContainText('2/2');
+  await page.clock.runFor(60_000);
+  await expect(page.locator('#ph')).toHaveText('Szép volt');
+  expect((await stored(page)).hist.pop()).toMatchObject({ r: 'q1', n: 'Teszt' });
+});
+
+test('gyakorlás hossza: légzésszám és visszaszámlálás', async ({ page }) => {
+  await page.clock.install();
+  await seed(page, { mode: 'box', durType: 'br', breaths: 2, cd: 3 });
+  await page.goto('/');
+  await expect(page.locator('#meta')).toContainText('2 légzés');
+  await page.locator('#ringBtn').click();
+  await expect(page.locator('#ph')).toHaveText('Készülj');
+  await expect(page.locator('#ct')).toHaveText('3');
+  await page.clock.runFor(3_100);
+  await expect(page.locator('#ph')).toHaveText('Belégzés');
+  await expect(page.locator('#meta')).toContainText('1/2 légzés');
+  await page.clock.runFor(32_000);                   // 2 × 16 mp
+  await expect(page.locator('#ph')).toHaveText('Szép volt');
+  expect((await stored(page)).hist.pop().s).toBe(32);   // a visszaszámlálás nem számít bele
+});
+
+test('végtelen gyakorlás: nem áll le magától', async ({ page }) => {
+  await page.clock.install();
+  await seed(page, { mode: 'calm', durType: 'inf', dur: 1 });   // a perc-beállítás ilyenkor nem számít
+  await page.goto('/');
+  await page.locator('#ringBtn').click();
+  await page.clock.runFor(130_000);
+  expect(await page.evaluate(() => run)).toBe(true);
+});
+
+test('koherens tempó: a beállított légzésszám percenként', async ({ page }) => {
+  await seed(page, { mode: 'coh', shown: ['coh', 'box', 'calm'], pace: 0 });
+  await page.goto('/');
+  await expect(page.locator('#modes button[data-m="coh"] small')).toHaveText('3·3');
+  await openSettings(page, 'rhythms');
+  await expect(page.locator('#pacev')).toHaveText('10 légzés/perc (3·3)');
+});
+
+test('régi mentés: az egyetlen saját ritmus átkerül a listába', async ({ page }) => {
+  await seed(page, { own: [5, 1, 7, 2], shown: ['own', 'box', 'calm'] });
+  await page.goto('/');
+  const s = await page.evaluate(() => ({ own: st.own, customs: st.customs }));
+  expect(s.own).toBeUndefined();
+  expect(s.customs[0]).toMatchObject({ id: 'own', p: [5, 1, 7, 2] });
+  await expect(page.locator('#modes button[data-m="own"] small')).toHaveText('5·1·7·2');
+});
+
+test('kitüntetések és statisztika: kikapcsolható, a régi naplóból is számol', async ({ page }) => {
+  const d = k => { const x = new Date(); x.setDate(x.getDate() - k); return dayKey(x); };
+  await seed(page, { sessions: 9, log: { [d(1)]: 600, [d(2)]: 600, [d(3)]: 600 } });
+  await page.goto('/');
+  await openSettings(page, 'journal');
+  await expect(page.locator('#statsBox .badge')).toHaveCount(0);   // alapból ki van kapcsolva
+  await page.locator('#statsSw').click();
+  await expect(page.locator('#statsBox .badge')).toHaveCount(16);
+  for (const b of ['Első lépés', '3 nap sorban']) await expect(page.locator('#statsBox .badge.on', { hasText: b })).toHaveCount(1);
+  await expect(page.locator('#statsBox .badge.on', { hasText: '7 nap sorban' })).toHaveCount(0);
+  await expect(page.locator('#statsBox')).toContainText('2. szint');   // 30 perc
+  expect((await stored(page)).stats).toBe(true);
+});
+
+test('új kitüntetésnél a gyakorlás után szól, és a gyakorlás bekerül a listába', async ({ page }) => {
+  await page.clock.install();
+  await seed(page, { mode: 'box', dur: 1, stats: true });
+  await page.goto('/');
+  await page.locator('#ringBtn').click();
+  await page.clock.runFor(65_000);
+  await expect(page.locator('#ntext')).toHaveText('Új kitüntetés: Első lépés');
+  await openSettings(page, 'journal');
+  await expect(page.locator('#statsBox .hrow').first()).toContainText('Doboz');
+  await expect(page.locator('#statsBox .bar').first()).toContainText('Doboz');
+});
+
+test('felvett hang: betöltődik, a váltáskor szól, a telefon felolvasója nem kell hozzá', async ({ page }) => {
+  await page.clock.install();
+  await fakeVoice(page);
+  await seed(page, { mode: 'nadi', shown: ['nadi', 'box', 'calm'], speak: true, vk: 'f' });
+  await page.goto('/');
+  await expect.poll(() => page.evaluate(() => !!vbuf)).toBe(true);
+  await page.evaluate(() => { window.rec = []; const o = playRec; playRec = k => { window.rec.push(k.join('+')); return o(k); }; });
+  await page.locator('#ringBtn').click();
+  await page.clock.runFor(4_100);
+  expect(await page.evaluate(() => window.rec)).toEqual(['in+viaL', 'out+viaR']);
+  expect(await page.evaluate(() => window.said.length)).toBe(0);
+});
+
+test('a vezetés hangja: ahol nincs felvett hang, ott nem választható', async ({ page }) => {
+  await seed(page, { lang: 'tr' });
+  await page.goto('/');
+  await openSettings(page, 'sound');
+  await expect(page.locator('#vkOpts button[data-k="f"]')).toBeDisabled();
+  await expect(page.locator('#vkOpts button[data-k="tts"]')).toBeEnabled();
+  const vox = await page.evaluate(() => VOX);
+  expect(Object.keys(vox).length).toBe(18);
+  expect(vox.hu.f.clips.in[1]).toBeGreaterThan(.3);
+});
+
 test('háttérben lemaradt másodpercek pótlása', async ({ page }) => {
   await page.clock.install();
   await seed(page, { mode: 'box' });
@@ -186,7 +379,7 @@ test('Tabata: EMOM-terv, edzés, külön számolás', async ({ page }) => {
   await page.goto('/');
   await page.locator('#tbPre button[data-p="EMOM"]').click();
   expect(await page.evaluate(() => tabataPlan().some(p => p[0] === 'rest'))).toBe(false);
-  await page.evaluate(() => { Object.assign(st.tab, { work: 5, rest: 5, rounds: 2, sets: 1, prep: 0 }); save(); });
+  await page.evaluate(() => { Object.assign(tw(), { work: 5, rest: 5, rounds: 2, sets: 1, prep: 0 }); save(); });
   await page.locator('#ringBtn').click();
   await expect(page.locator('html')).toHaveAttribute('data-tb', 'work');
   await page.clock.runFor(5_100);
@@ -233,6 +426,62 @@ test('Tabata: koppintás szünet, ⏭ ugrás, hosszú nyomás leállít', async 
   expect(await page.evaluate(() => run)).toBe(false);
   await expect(page.locator('#skipBtn')).toBeHidden();
   expect((await stored(page)).tabN || 0).toBe(0);    // félbehagyott edzés nem számít
+});
+
+test('Tabata: mentett edzések, bemelegítés, levezetés, saját szín', async ({ page }) => {
+  await page.clock.install();
+  await seed(page, { mode: 'tabata', shown: ['box', '478', 'tabata'], tab: { work: 20, rest: 10, rounds: 1, sets: 1, prep: 0 } });
+  await page.goto('/');
+  await openSettings(page, 'tabata');
+  await expect(page.locator('#tbList .rrow')).toHaveCount(1);       // a régi beállításból lett az első edzés
+  await page.locator('#addW').click();
+  await page.locator('#tbList .editor input').fill('Reggeli');
+  await expect(page.locator('#tbList .rrow')).toHaveCount(2);
+  await page.locator('#tsteps .stepper', { hasText: 'Bemelegítés' }).locator('button[data-d="1"]').click();   // 30 mp
+  await page.locator('#tsteps .stepper', { hasText: 'Levezetés' }).locator('button[data-d="1"]').click();
+  await page.locator('.tlook', { hasText: 'Munka' }).locator('.sw button[data-c="#7B4FD0"]').click();
+  const plan = await page.evaluate(() => tabataPlan().map(p => p[0]));
+  expect(plan.slice(0, 3)).toEqual(['warm', 'prep', 'work']);
+  expect(plan.at(-1)).toBe('cool');
+  await page.keyboard.press('Escape');
+  await page.keyboard.press('Escape');
+  await expect(page.locator('#tbSel')).toBeVisible();                 // több edzésnél választó a főképernyőn
+  await expect(page.locator('#modes button[data-m="tabata"] span')).toHaveText('Reggeli');
+  await page.locator('#ringBtn').click();
+  await expect(page.locator('html')).toHaveAttribute('data-tb', 'warm');
+  await page.clock.runFor(40_100);                                    // 30 bemelegítés + 10 felkészülés
+  await expect(page.locator('html')).toHaveAttribute('data-tb', 'work');
+  expect(await page.evaluate(() => document.documentElement.style.getPropertyValue('--tbc'))).toBe('#7B4FD0');
+});
+
+test('Tabata: hosszú szakasz perc:mp alakban, kisebb betűvel', async ({ page }) => {
+  await seed(page, { mode: 'tabata', shown: ['box', '478', 'tabata'], tab: { work: 20, rest: 10, rounds: 1, sets: 1, prep: 0, wu: 300 } });
+  await page.goto('/');
+  await page.locator('#ringBtn').click();
+  await expect(page.locator('#ct')).toHaveText('5:00');
+  await expect(page.locator('#ct')).toHaveClass(/long/);
+});
+
+test('Tabata: megosztott edzés linkje, mentés megnyitáskor', async ({ page }) => {
+  await seed(page);
+  await page.goto('/');
+  const url = await page.evaluate(() => wLink(Object.assign({}, tw(), { n: 'Közös', work: 45, rest: 15, ex: 'Guggolás\nHasprés' })));
+  expect(url).toMatch(/^https:\/\/vmynick\.github\.io\/relaxring\/\?w=[\w-]+$/);
+  page.once('dialog', d => d.accept());
+  await page.goto('/' + url.slice(url.indexOf('?')));
+  await expect.poll(() => page.evaluate(() => st.tabs.length)).toBe(2);
+  expect(await page.evaluate(() => ({ n: tw().n, work: tw().work, ex: tw().ex, mode: st.mode }))).toEqual({ n: 'Közös', work: 45, ex: 'Guggolás\nHasprés', mode: 'tabata' });
+  expect(new URL(page.url()).search).toBe('');
+});
+
+test('Tabata saját zene mellett: nem indul a hosszú hang, a jelzések klipekből', async ({ page }) => {
+  await page.clock.install();
+  await seed(page, { mode: 'tabata', shown: ['box', '478', 'tabata'], music: true, tab: { work: 5, rest: 5, rounds: 1, sets: 1, prep: 0 } });
+  await page.goto('/');
+  await page.locator('#ringBtn').click();
+  expect(await page.evaluate(() => !media || media.paused)).toBe(true);
+  await expect.poll(() => page.evaluate(() => Object.keys(clipUrl).length)).toBeGreaterThan(2);
+  expect(await page.evaluate(() => !ac || ac.state !== 'running')).toBe(true);
 });
 
 test('Tabata: az utolsó szakasz átugrása befejezi az edzést', async ({ page }) => {

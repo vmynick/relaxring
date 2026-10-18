@@ -1,8 +1,8 @@
 {
   "id": "/",
-  "name": "RelaxRing – Breathing Circles",
-  "short_name": "RelaxRing",
-  "description": "Breathing exercises (box, 4-7-8, sigh, coherent, custom) and a Tabata/HIIT interval timer.",
+  "name": "RelaxRing+ – Breathing Circles",
+  "short_name": "RelaxRing+",
+  "description": "15 breathing techniques (box, 4-7-8, coherent, Wim Hof-style, alternate nostril, custom) and a Tabata/HIIT interval timer, in 20 languages.",
   "lang": "en",
   "start_url": "./",
   "scope": "./",

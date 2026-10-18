@@ -1,0 +1,47 @@
+RelaxRing+ – recorded voices
+============================
+
+The voice files in this folder (*.mp3) were generated with Piper
+(https://github.com/OHF-Voice/piper1-gpl) from the voice models published at
+https://huggingface.co/rhasspy/piper-voices. Each file holds the short phase
+words of one language (inhale, hold, exhale, ...); voices.json lists where each
+word starts and how long it is.
+
+Voice models and the licenses of the data they were trained on:
+
+Language    File        Piper model                   Training data license
+----------  ----------  ----------------------------  ---------------------------------------------
+Hungarian   hu-f.mp3    hu_HU-anna-medium             CC0 (github.com/OHF-Voice/voice-datasets)
+Hungarian   hu-m.mp3    hu_HU-imre-medium             CC0 (github.com/OHF-Voice/voice-datasets)
+English     en-f.mp3    en_GB-alba-medium             CC BY 4.0 (datashare.ed.ac.uk/handle/10283/3270)
+English     en-m.mp3    en_US-joe-medium              CC0 (github.com/OHF-Voice/voice-datasets)
+German      de-f.mp3    de_DE-kerstin-low             CC0 (github.com/rhasspy/dataset-voice-kerstin)
+German      de-m.mp3    de_DE-thorsten-medium         CC0 (github.com/thorstenMueller/Thorsten-Voice)
+Spanish     es-f.mp3    es_ES-sharvard-medium, sp. 1  CC BY 3.0 (datashare.ed.ac.uk/handle/10283/574)
+Spanish     es-m.mp3    es_ES-davefx-medium           CC0 (github.com/OHF-Voice/voice-datasets)
+French      fr-f.mp3    fr_FR-siwis-medium            CC BY 4.0 (datashare.is.ed.ac.uk/handle/10283/2353)
+French      fr-m.mp3    fr_FR-mls-medium, sp. 13      CC BY 4.0 (Multilingual LibriSpeech, openslr.org/94)
+Italian     it-f.mp3    it_IT-serena-medium           CC BY 4.0 (huggingface.co/datasets/committa/serena-synthetic-it-27h)
+Italian     it-m.mp3    it_IT-riccardo-x_low          M-AILABS Speech Dataset license (caito.de/2019/01/03/the-m-ailabs-speech-dataset)
+Polish      pl-f.mp3    pl_PL-gosia-medium            CC0 (github.com/OHF-Voice/voice-datasets)
+Polish      pl-m.mp3    pl_PL-darkman-medium          CC0 (github.com/OHF-Voice/voice-datasets)
+Portuguese  pt-m.mp3    pt_BR-faber-medium            CC0 (github.com/OHF-Voice/voice-datasets)
+Dutch       nl-f.mp3    nl_BE-nathalie-medium         CC0 (github.com/rhasspy/dataset-voice-nathalie)
+Dutch       nl-m.mp3    nl_NL-pim-medium              CC0 (github.com/OHF-Voice/voice-datasets)
+Swedish     sv-f.mp3    sv_SE-alma-medium             CC BY 4.0 (NST Swedish TTS, Språkbanken; huggingface.co/yeagersthlm/piper-voice-sv-alma)
+Swedish     sv-m.mp3    sv_SE-nst-medium              CC0 (nb.no/sprakbanken, oai-nb-no-sbr-17)
+Danish      da-m.mp3    da_DK-talesyntese-medium      CC0 (nb.no/sprakbanken, oai-nb-no-sbr-21)
+Norwegian   nb-m.mp3    no_NO-talesyntese-medium      CC0 (nb.no/sprakbanken, oai-nb-no-sbr-15)
+Finnish     fi-m.mp3    fi_FI-harri-medium            CC0 (kaggle.com/bryanpark/finnish-single-speaker-speech-dataset)
+Czech       cs-f.mp3    cs_CZ-kasandra-medium         CC BY 4.0 (huggingface.co/ondrazarici/Cassandra-Kasandra-piper-cz)
+Czech       cs-m.mp3    cs_CZ-jirka-medium            CC0 (github.com/OHF-Voice/voice-datasets)
+Slovak      sk-f.mp3    sk_SK-lili-medium             CC0 (github.com/OHF-Voice/voice-datasets)
+Romanian    ro-m.mp3    ro_RO-mihai-medium            CC0 (github.com/OHF-Voice/voice-datasets)
+Ukrainian   uk-f.mp3    uk_UA-tetiana-high            Apache 2.0 (github.com/egorsmkv/ukrainian-tts-datasets)
+Ukrainian   uk-m.mp3    uk_UA-mykyta-high             Apache 2.0 (github.com/egorsmkv/ukrainian-tts-datasets)
+Russian     ru-m.mp3    ru_RU-denis-medium            CC0 (github.com/OHF-Voice/voice-datasets)
+
+Croatian and Turkish have no recorded voice: no Piper model with a license that
+allows redistribution was available, so the app uses the phone's own
+text-to-speech voice for them. Where only one voice is listed for a language,
+the other gender was not available under such a license either.
