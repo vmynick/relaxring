@@ -107,6 +107,60 @@ test('szünet és folytatás, a lezárási vezérlő adatai', async ({ page }) =
   expect(await page.evaluate(() => navigator.mediaSession.playbackState)).toBe('none');
 });
 
+// Felolvasó helyett egy próbababa: feljegyzi, mit és mikor mondana, és 300 ms múlva jelzi, hogy megszólalt
+const fakeVoice = page => page.addInitScript(() => {
+  window.said = [];
+  const synth = { speaking: false, pending: false, cancel() {}, addEventListener() {},
+    getVoices: () => ['hu-HU', 'en-US', 'de-DE', 'es-US', 'fr-FR', 'it-IT', 'pl-PL'].map(lang => ({ lang, name: lang })),
+    speak(u) { window.said.push([u.text, u.lang, Math.round(performance.now())]); setTimeout(() => u.onstart && u.onstart(), 300); } };
+  Object.defineProperty(window, 'speechSynthesis', { value: synth, configurable: true });
+  window.SpeechSynthesisUtterance = class { constructor(t) { this.text = t; } };
+});
+
+test('hangos vezetés: a következő szakasz neve a felolvasó késésével előbb indul', async ({ page }) => {
+  await page.clock.install();
+  await fakeVoice(page);
+  await seed(page, { mode: 'box', speak: true, ttsLag: 300 });
+  await page.goto('/');
+  await page.locator('#ringBtn').click();
+  const start = await page.evaluate(() => t0);
+  await page.clock.runFor(3_800);
+  await expect(page.locator('#ph')).toHaveText('Belégzés');
+  let said = await page.evaluate(() => window.said);
+  expect(said.map(s => s[0])).toEqual(['Belégzés', 'Tartás']);   // a Tartás már elindult, a felirat még nem váltott
+  expect(said[1][2] - start).toBeGreaterThanOrEqual(3_690);
+  expect(said[1][2] - start).toBeLessThanOrEqual(3_710);
+  await page.clock.runFor(300);
+  await expect(page.locator('#ph')).toHaveText('Tartás');
+  await page.clock.runFor(1_000);
+  said = await page.evaluate(() => window.said);
+  expect(said.map(s => s[0])).toEqual(['Belégzés', 'Tartás']);   // a váltáskor nem mondja újra
+  expect(await page.evaluate(() => st.ttsLag)).toBe(300);         // a mért késés
+});
+
+test('szünet után is pontosan a másodpercre vált, és újra bemondja a szakaszt', async ({ page }) => {
+  await page.clock.install();
+  await fakeVoice(page);
+  await seed(page, { mode: 'box', speak: true, ttsLag: 300 });
+  await page.goto('/');
+  await page.evaluate(() => {                        // minden váltásnál: hány ms-mal az egész másodperc után történt
+    window.late = [];
+    new MutationObserver(() => { if (run && !paused) window.late.push([ph.textContent, Math.round(performance.now() - t0 - elapsed * 1000)]); })
+      .observe(ph, { childList: true, characterData: true, subtree: true });
+  });
+  await page.locator('#ringBtn').click();
+  await page.clock.runFor(3_800);                    // a Tartás már elhangzott
+  await page.evaluate(() => pause());
+  await page.clock.runFor(5_130);                    // nem kerek szünet: a 250 ms-os ütem elcsúszik hozzá képest
+  await page.locator('#ringBtn').click();
+  await page.clock.runFor(1_000);
+  const said = await page.evaluate(() => window.said.map(s => s[0]));
+  expect(said).toEqual(['Belégzés', 'Tartás', 'Tartás']);   // a szünet törölte, a folytatás után újra elhangzik
+  const late = await page.evaluate(() => window.late);
+  const hold = late.filter(([t]) => t === 'Tartás').pop();
+  expect(hold[1]).toBeLessThan(10);
+});
+
 test('háttérben lemaradt másodpercek pótlása', async ({ page }) => {
   await page.clock.install();
   await seed(page, { mode: 'box' });
@@ -237,6 +291,7 @@ test('Beállítások: almenü, vissza és bezárás', async ({ page }) => {
   await page.goto('/');
   await openSettings(page, 'sound');
   await expect(page.locator('#sheetTitle')).toHaveText('Hang');
+  await expect(page.locator('#vibSw')).toBeVisible();   // a rezgés a Hang oldalon van
   await page.keyboard.press('Escape');               // mint a telefon vissza mozdulata
   await expect(page.locator('#sheetTitle')).toHaveText('Beállítások');
   await page.keyboard.press('Escape');

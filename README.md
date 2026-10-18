@@ -35,7 +35,7 @@ A breathing-exercise app and interval timer for your phone. Breathing circles sh
   - Optional nature sound under the session: rain, stream, fire or wind.
   
   The phone synthesizes all of them, so there are no audio files to download.
-- **Voice guidance:** the phone's text-to-speech voice reads out each phase. If no voice is installed for the selected language, the app tells you.
+- **Voice guidance:** the phone's text-to-speech voice reads out each phase. The app measures how long the voice takes to start and starts it that much early, so you hear it as the counter changes. If no voice is installed for the selected language, the app tells you.
 - **Screen off:** sessions keep running with the screen locked. The lock screen shows "RelaxRing – Inhale" with pause, resume and stop, and a headset button pauses too. An incoming call pauses the session. Some sound must be on for this to work.
 
 ### Workouts (Tabata)

@@ -70,7 +70,7 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--c1);outline-off
 .label{position:relative;text-align:center;color:var(--on-c1);pointer-events:none}
 #ph{font-family:var(--display);font-size:29px;font-weight:700;line-height:1.1;letter-spacing:-.01em}
 #ct{font-family:var(--display);font-size:83px;font-weight:700;line-height:1;font-variant-numeric:tabular-nums;letter-spacing:-.03em;margin-top:2px}
-#sub{display:none;font-size:18px;font-weight:600;color:var(--muted);margin-top:6px}
+#sub{display:none;font-size:18px;font-weight:600;color:var(--muted);margin-top:6px;max-width:calc(var(--D)*.66);margin-left:auto;margin-right:auto;text-wrap:balance}   /* hosszabb nyelveken a körön belül tördel */
 .idle .label{color:var(--fg)}
 .idle #ct{display:none}
 .idle #sub{display:block}
@@ -80,7 +80,7 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--c1);outline-off
 
 /* alsó sor: állapot és a beállítások gomb */
 .bottom{width:100%;display:grid;--side:52px;grid-template-columns:var(--side) 1fr var(--side);align-items:center;gap:8px}
-.meta{grid-column:2;font-size:18px;font-weight:700;color:var(--muted);font-variant-numeric:tabular-nums;text-align:center;line-height:1.3}
+.meta{grid-column:2;font-size:clamp(15px,4.6vw,18px);font-weight:700;color:var(--muted);font-variant-numeric:tabular-nums;text-align:center;line-height:1.3}
 #setBtn{grid-column:1;grid-row:1}
 .rbtns{grid-column:3;grid-row:1;display:flex;justify-content:flex-end;gap:8px}
 .bottom:has(#skipBtn:not([hidden])):has(#exitBtn:not([hidden])){--side:112px}   /* ⏭ és X együtt: a két oldal egyforma, a felirat középen marad */
@@ -103,7 +103,7 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--c1);outline-off
 @keyframes up{from{transform:translate(-50%,40px);opacity:0}}
 @media (prefers-reduced-motion:reduce){.sheet{animation:none}}
 .sheet-head{display:flex;align-items:center;justify-content:space-between;padding:18px max(18px,env(safe-area-inset-right,0px)) 10px max(18px,env(safe-area-inset-left,0px))}
-.sheet-head h2{flex:1;min-width:0;margin:0;font-size:26px;font-weight:800;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;outline:none}
+.sheet-head h2{flex:1;min-width:0;margin:0;font-size:min(26px,6.5vw);font-weight:800;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;outline:none}
 /* almenük: egyszerre egy oldal látszik; a lap mindig teljes magas, így lapozáskor nem ugrál */
 .sheet{height:calc(100% - max(24px,env(safe-area-inset-top,0px)))}
 .back{flex:none;width:40px;height:40px;margin:0 4px 0 -8px;border:0;border-radius:50%;background:transparent;color:var(--c1);display:grid;place-items:center;cursor:pointer}
@@ -175,7 +175,8 @@ a.navi{text-decoration:none;box-sizing:border-box}
 .opts.rh{padding-top:14px}
 .opts.rh button{text-align:left}
 /* saját ritmus: négy léptető */
-.steps{display:grid;gap:6px;padding:0 0 14px}
+.steps{display:grid;grid-template-columns:minmax(0,1fr);gap:6px;padding:0 0 14px}
+.steps .stepper span{white-space:normal;line-height:1.2}   /* hosszú név (pl. „Przerwa między seriami”): két sorba tör, a gombok helyben maradnak */
 .stepper{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--bg);border-radius:12px;padding:6px 6px 6px 14px}
 .stepper span{font-size:19px;font-weight:700;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .stepper div{display:flex;align-items:center;gap:4px;flex:none}
@@ -265,6 +266,7 @@ html.tb-run #ph{max-width:94vw;margin:0 auto;white-space:nowrap}
 .app.scenic .hint{text-shadow:0 0 10px var(--bg),0 0 3px var(--bg)}
 .app.scenic .meta{justify-self:center;background:color-mix(in srgb,var(--surface) 80%,transparent);border-radius:14px;padding:6px 14px;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
 
+@media (max-width:370px){.modes button{font-size:18px}}   /* keskeny telefonon is kiférjen pl. a „Cohérence” */
 @media (max-height:640px){#ph{font-size:24px}#ct{font-size:64px}.modes button{padding:8px 4px;font-size:18px}.modes button small{font-size:14px}}
 /* Fekvő telefon: balra a körök, jobbra a ritmusválasztó, a Tabata-beállítások és az alsó sor.
    Tabata-edzés közben a számlálóé az egész képernyő: balra az óriási szám, jobbra a szakasz és a kör; az egész középső rész a koppintási felület. */
@@ -425,7 +427,6 @@ html.tb-run #ph{max-width:94vw;margin:0 auto;white-space:nowrap}
         <div class="item slider"><input type="range" id="dur" min="1" max="30" step="1" value="5"></div>
         <div class="item"><span><span data-i="sleepMode"></span><small class="desc" data-i="sleepInfo"></small></span><button class="switch" id="sleepSw" role="switch" aria-checked="false" data-ia="sleepMode"></button></div>
         <div class="item" id="fullItem"><span><span data-i="full"></span><small class="desc" data-i="fullInfo"></small></span><button class="switch" id="fullSw" role="switch" aria-checked="true" data-ia="full"></button></div>
-        <div class="item"><span data-i="vibration"></span><button class="switch" id="vibSw" role="switch" aria-checked="true" data-ia="vibration"></button></div>
       </div>
     </div>
 
@@ -450,6 +451,9 @@ html.tb-run #ph{max-width:94vw;margin:0 auto;white-space:nowrap}
       <div class="group">
         <div class="item"><span data-i="speak"></span><button class="switch" id="speakSw" role="switch" aria-checked="false" data-ia="speak"></button></div>
         <div class="note" id="voiceNote" hidden></div>
+      </div>
+      <div class="group">
+        <div class="item"><span data-i="vibration"></span><button class="switch" id="vibSw" role="switch" aria-checked="true" data-ia="vibration"></button></div>
       </div>
     </div>
 
@@ -612,12 +616,12 @@ const T={
     share:'App teilen',shareTxt:'Atemübungen und Tabata-Timer: kostenlos, ohne Werbung und ohne Anmeldung.',copied:'Link kopiert',skip:'Nächster Abschnitt',
     hintTb:'Zahl antippen: Pause, gedrückt halten: Stopp',tapResumeTb:'zum Fortsetzen antippen · gedrückt halten zum Stoppen'},
   es:{name:'Español',locale:'es-ES',title:'Círculos de respiración',modes:'Ritmo de respiración',
-    r_box:'Caja',r_478:'Dormir',r_calm:'Calma',r_sigh:'Suspiro',r_coh:'Coherente',r_relax:'Relax',r_slow:'Pausado',r_own:'Propio',r_tabata:'Tabata',
+    r_box:'Cuadrada',r_478:'Dormir',r_calm:'Calma',r_sigh:'Suspiro',r_coh:'Coherente',r_relax:'Relax',r_slow:'Pausado',r_own:'Propio',r_tabata:'Tabata',
     in:'Inhala',in2:'Un poco más',hold:'Mantén',out:'Exhala',work:'Trabajo',rest:'Descanso',prep:'Prepárate',next:'Siguiente',
     sighInfo:'Suspiro: dos inhalaciones seguidas (con la segunda tomas un poco más de aire) y luego una exhalación larga. Alivia el estrés rápidamente; bastan 1–3 minutos.',
-    amb:'Sonido de la naturaleza',ambVol:'Volumen del sonido de la naturaleza',a_off:'No',a_eso:'Lluvia',a_patak:'Arroyo',a_tuz:'Fuego',a_szel:'Viento',
+    amb:'Sonido de la naturaleza',ambVol:'Volumen del sonido de la naturaleza',a_off:'Ninguno',a_eso:'Lluvia',a_patak:'Arroyo',a_tuz:'Fuego',a_szel:'Viento',
     exTitle:'Ejercicios (uno por línea)',exPh:'Sentadillas\nFlexiones\nAbdominales\nZancadas',
-    exInfo:'Si la rellenas, durante el trabajo se ve el ejercicio actual y en el descanso el siguiente; la guía por voz los lee. Si hay menos ejercicios que rondas, la lista vuelve a empezar.',
+    exInfo:'Si escribes ejercicios, durante el trabajo se ve el actual y en el descanso el siguiente; la guía por voz los lee. Si hay menos ejercicios que rondas, la lista vuelve a empezar.',
     backup:'Copia de seguridad',backupInfo:'Tu diario y tus ajustes solo están en este teléfono. Guárdalos en un archivo y cárgalos después de reinstalar o en un teléfono nuevo.',
     exportBtn:'Guardar en archivo',importBtn:'Restaurar',importAsk:'¿Restaurar esta copia? Los ajustes se sustituyen y el diario se combina.',
     importBad:'Este archivo no es una copia de RelaxRing.',importOk:'Copia restaurada.',
@@ -632,7 +636,7 @@ const T={
     paused:'Pausa',tapResume:'toca para continuar',resume:'Continuar',
     details:'Detalles',goal:'Objetivo diario',goalToday:(m,g)=>`Hoy ${m} / ${g} min`,goalWeek:n=>`Objetivo cumplido ${n} ${n===1?'día':'días'} esta semana.`,
     last7:'Últimos 7 días',month:'Calendario mensual',monthSum:(d,m)=>`${d} ${d===1?'día activo':'días activos'} · ${m} min`,prevMonth:'Mes anterior',nextMonth:'Mes siguiente',
-    about:'Ayuda e información',howTo:'Cómo se usa',whatsNew:'Novedades',privacy:'Privacidad',source:'Código fuente',license:'Licencia',version:'Versión',
+    about:'Ayuda e info',howTo:'Cómo se usa',whatsNew:'Novedades',privacy:'Privacidad',source:'Código fuente',license:'Licencia',version:'Versión',
     privacyTxt:'La app no recoge ni envía datos: sin cuenta, analítica ni cookies. Los ajustes y el diario se quedan en este dispositivo, en el almacenamiento del navegador.',
     help:['Toca el círculo para empezar una sesión; vuelve a tocarlo para parar.',
       'Elige el ritmo arriba; en Ajustes → Ritmos decides cuáles 3 aparecen.',
@@ -705,7 +709,7 @@ const T={
     sighInfo:'Sospiro: due inspirazioni di seguito (con la seconda prendi ancora un po’ d’aria), poi una lunga espirazione. Un antistress rapido; bastano 1–3 minuti.',
     amb:'Suono della natura',ambVol:'Volume del suono della natura',a_off:'Nessuno',a_eso:'Pioggia',a_patak:'Ruscello',a_tuz:'Fuoco',a_szel:'Vento',
     exTitle:'Esercizi (uno per riga)',exPh:'Squat\nPiegamenti\nAddominali\nAffondi',
-    exInfo:'Se la compili, durante il lavoro vedi l’esercizio in corso e durante il riposo il prossimo; la guida vocale li legge. Se gli esercizi sono meno dei giri, la lista ricomincia da capo.',
+    exInfo:'Se scrivi degli esercizi, durante il lavoro vedi quello in corso e durante il riposo il prossimo; la guida vocale li legge. Se gli esercizi sono meno dei giri, la lista ricomincia da capo.',
     backup:'Backup',backupInfo:'Il diario e le impostazioni sono solo su questo telefono. Salvali in un file e ricaricali dopo una reinstallazione o su un telefono nuovo.',
     exportBtn:'Salva su file',importBtn:'Ripristina',importAsk:'Ripristinare questo backup? Le impostazioni vengono sostituite, il diario viene unito.',
     importBad:'Questo file non è un backup di RelaxRing.',importOk:'Backup ripristinato.',
@@ -732,11 +736,11 @@ const T={
     welcome:'Ciao! Dai un’occhiata veloce a come funziona.',helpBtn:'Aiuto',newsTxt:'L’app è stata aggiornata. Scopri le novità!',newsBtn:'Novità',
     tabInfo:'Durante l’allenamento lo schermo è rosso nel lavoro, verde nel riposo e giallo nella preparazione. Negli ultimi 3 secondi di ogni fase suona un bip; il volume dipende anche dal volume multimediale del telefono.',
     tround:x=>`Giro ${x}`,tset:s=>`Serie ${s}`,rounds:n=>`${n} giri`,tabN:n=>`Allenamenti Tabata finora: ${n}`,
-    session:'Sessione',duration:'Durata',sleepMode:'Modalità sonno',sleepInfo:'Lo schermo si scurisce lentamente; alla fine niente campana.',
+    session:'Sessione',duration:'Durata',sleepMode:'Modalità sonno',sleepInfo:'Lo schermo si scurisce lentamente; alla fine nessun rintocco.',
     full:'Schermo intero',fullInfo:'Le barre di stato e di navigazione si nascondono durante la sessione.',vibration:'Vibrazione',
-    sound:'Suono',breath:'Suono del respiro',chime:'Campana',speak:'Guida vocale',noVoice:'Questo telefono non ha una voce di sintesi in italiano.',
-    volume:'Volume',theme:'Tema colore',language:'Lingua',breathKind:'Tipo di suono del respiro',chimeKind:'Tipo di campana',close:'Chiudi',
-    v_lagy:'Morbido',v_ocean:'Oceano',v_pad:'Pad',v_tal:'Ciotola',c_csengo:'Campanello',c_tal:'Ciotola',c_fa:'Legno',c_csepp:'Goccia',c_piezo:'Piezo',
+    sound:'Suono',breath:'Suono del respiro',chime:'Rintocco',speak:'Guida vocale',noVoice:'Questo telefono non ha una voce di sintesi in italiano.',
+    volume:'Volume',theme:'Tema colore',language:'Lingua',breathKind:'Tipo di suono del respiro',chimeKind:'Tipo di rintocco',close:'Chiudi',
+    v_lagy:'Dolce',v_ocean:'Oceano',v_pad:'Pad',v_tal:'Ciotola',c_csengo:'Campana',c_tal:'Ciotola',c_fa:'Legno',c_csepp:'Goccia',c_piezo:'Piezo',
     t_erdo:'Bosco',t_tenger:'Mare',t_levendula:'Lavanda',t_naplemente:'Tramonto',t_rozsa:'Rosa',t_ko:'Pietra',
     scene:'Paesaggio di sfondo',sceneInfo:'Un paesaggio tranquillo in tinta con il tema, dietro i cerchi.',
     newVer:'È disponibile una nuova versione.',update:'Aggiorna',installTxt:'Aggiungila alla schermata Home per usarla come app.',install:'Installa',
@@ -745,11 +749,11 @@ const T={
     hintTb:'Tocca il numero per la pausa, tienilo premuto per fermare',tapResumeTb:'tocca per continuare · tieni premuto per fermare'},
   pl:{name:'Polski',locale:'pl-PL',title:'Kręgi oddechu',modes:'Rytm oddechu',
     r_box:'Kwadrat',r_478:'Sen',r_calm:'Spokój',r_sigh:'Westchnij',r_coh:'Rezonans',r_relax:'Relaks',r_slow:'Wolniej',r_own:'Własny',r_tabata:'Tabata',
-    in:'Wdech',in2:'Jeszcze trochę',hold:'Zatrzymaj',out:'Wydech',work:'Praca',rest:'Przerwa',prep:'Przygotuj się',next:'Następnie',
+    in:'Wdech',in2:'Jeszcze trochę',hold:'Trzymaj',out:'Wydech',work:'Praca',rest:'Przerwa',prep:'Przygotuj się',next:'Następnie',
     sighInfo:'Westchnienie: dwa wdechy jeden po drugim (drugim dobierasz jeszcze trochę powietrza), potem długi wydech. Szybko łagodzi stres; wystarczą 1–3 minuty.',
     amb:'Odgłosy natury',ambVol:'Głośność odgłosów natury',a_off:'Brak',a_eso:'Deszcz',a_patak:'Strumień',a_tuz:'Ogień',a_szel:'Wiatr',
     exTitle:'Ćwiczenia (jedno w wierszu)',exPh:'Przysiady\nPompki\nBrzuszki\nWykroki',
-    exInfo:'Jeśli ją wypełnisz, podczas pracy widać bieżące ćwiczenie, a w przerwie następne; przewodnik głosowy je odczytuje. Jeśli ćwiczeń jest mniej niż rund, lista zaczyna się od nowa.',
+    exInfo:'Jeśli wpiszesz ćwiczenia, podczas pracy widać bieżące, a w przerwie następne; przewodnik głosowy je odczytuje. Jeśli ćwiczeń jest mniej niż rund, lista zaczyna się od nowa.',
     backup:'Kopia zapasowa',backupInfo:'Dziennik i ustawienia są tylko na tym telefonie. Zapisz je do pliku i wczytaj po ponownej instalacji lub na nowym telefonie.',
     exportBtn:'Zapisz do pliku',importBtn:'Przywróć',importAsk:'Przywrócić tę kopię? Ustawienia zostaną zastąpione, a dziennik scalony.',
     importBad:'Ten plik nie jest kopią RelaxRing.',importOk:'Kopia przywrócona.',
@@ -764,7 +768,7 @@ const T={
     paused:'Pauza',tapResume:'dotknij, aby kontynuować',resume:'Kontynuuj',
     details:'Szczegóły',goal:'Cel dzienny',goalToday:(m,g)=>`Dziś ${m} / ${g} min`,goalWeek:n=>`Cel osiągnięty w tym tygodniu: ${n} ${n===1?'dzień':'dni'}.`,
     last7:'Ostatnie 7 dni',month:'Kalendarz miesięczny',monthSum:(d,m)=>`Aktywne dni: ${d} · ${m} min`,prevMonth:'Poprzedni miesiąc',nextMonth:'Następny miesiąc',
-    about:'Pomoc i informacje',howTo:'Jak używać',whatsNew:'Nowości',privacy:'Prywatność',source:'Kod źródłowy',license:'Licencja',version:'Wersja',
+    about:'Pomoc i info',howTo:'Jak używać',whatsNew:'Nowości',privacy:'Prywatność',source:'Kod źródłowy',license:'Licencja',version:'Wersja',
     privacyTxt:'Aplikacja nie zbiera ani nie wysyła żadnych danych: bez konta, analityki i ciasteczek. Ustawienia i dziennik zostają na tym urządzeniu, w pamięci przeglądarki.',
     help:['Dotknij koła, aby rozpocząć sesję; dotknij ponownie, aby ją zatrzymać.',
       'Rytm wybierasz u góry; które 3 są widoczne, ustawisz w Ustawienia → Rytmy.',
@@ -793,6 +797,14 @@ let L=T.hu,shownNote=null;
 // Újdonságok, a legfrissebb elöl. Az első elem verziója az app verziója; ha nagyobb, mint amit a felhasználó
 // utoljára látott, indításkor egyszer szólunk („Mi újság”). Új kiadásnál ide kerül egy új elem.
 const NEWS=[
+  {v:'1.2.1',d:'2026-10-18',
+    hu:['A hangos vezetés a számláló váltásával együtt szólal meg','A Rezgés kapcsoló a Hang menübe került','Javított feliratok keskeny telefonokon és az új nyelveken'],
+    en:['Voice guidance now speaks as the counter changes','The Vibration switch moved to the Sound menu','Better-fitting labels on narrow phones and in the new languages'],
+    de:['Die Sprachansage kommt jetzt mit dem Wechsel des Zählers','Der Schalter Vibration ist jetzt im Menü Klang','Besser passende Beschriftungen auf schmalen Telefonen und in den neuen Sprachen'],
+    es:['La guía por voz suena justo cuando cambia el contador','El interruptor de vibración está ahora en el menú Sonido','Textos mejor ajustados en teléfonos estrechos y en los nuevos idiomas'],
+    fr:['Le guidage vocal parle au moment où le compteur change','L’interrupteur Vibration est maintenant dans le menu Son','Libellés mieux ajustés sur les petits écrans et dans les nouvelles langues'],
+    it:['La guida vocale parla proprio quando cambia il contatore','L’interruttore Vibrazione ora è nel menu Suono','Testi che si adattano meglio ai telefoni stretti e alle nuove lingue'],
+    pl:['Przewodnik głosowy mówi w chwili zmiany licznika','Przełącznik wibracji jest teraz w menu Dźwięk','Lepiej dopasowane napisy na wąskich telefonach i w nowych językach']},
   {v:'1.2',d:'2026-10-18',
     hu:['Tabata: a számra koppintva szünet, hosszan nyomva leáll; ⏭ gomb a következő szakaszhoz (a lezárási képernyőn is)','Tabata fekvő nézetben, óriási számmal','Új nyelvek: spanyol, francia, olasz, lengyel','Az app megosztása a Beállításokban'],
     en:['Tabata: tap the number to pause, hold it to stop; ⏭ jumps to the next part (also on the lock screen)','Tabata in landscape with a huge number','New languages: Spanish, French, Italian, Polish','Share the app from Settings'],
@@ -855,7 +867,7 @@ function patternLabel(id){
 }
 
 let st={mode:'box',shown:['box','478','calm'],own:[4,4,6,0],vol:35,tone:true,bell:true,vib:true,sleep:false,speak:false,full:true,scene:false,dur:5,
-  color:'erdo',voice:'lagy',chime:'csengo',log:{},sessions:0,tab:{},tabN:0,tvol:80,amb:'off',ambVol:50,goal:5};
+  color:'erdo',voice:'lagy',chime:'csengo',log:{},sessions:0,tab:{},tabN:0,tvol:80,amb:'off',ambVol:50,goal:5,ttsLag:250};
 const firstRun=(()=>{try{return !localStorage.getItem('legzo')}catch(e){return false}})();
 try{Object.assign(st,JSON.parse(localStorage.getItem('legzo')||'{}'))}catch(e){}
 if(!T[st.lang]){const n=(navigator.language||'hu').slice(0,2).toLowerCase();st.lang=T[n]?n:'en'}   // első indításkor a telefon nyelve
@@ -1001,11 +1013,27 @@ function ttsVoice(){
   return vs.find(v=>v.lang.toLowerCase().replace('_','-')===L.locale.toLowerCase())||vs.find(v=>v.lang.toLowerCase().startsWith(st.lang))||null;
 }
 function speak(kind){speakText(L[kind])}
+// A felolvasó motor késve szólal meg (Androidon pár tized másodperc). Minden bemondásnál mérjük a késést (a start eseményig),
+// és átlagoljuk; a következő szakasz nevét ennyivel a váltás előtt indítjuk (sayAhead), így a számláló váltásával együtt hallatszik.
 function speakText(text){
   if(!st.speak||!('speechSynthesis' in window))return;
   const v=ttsVoice();if(!v)return;
   const u=new SpeechSynthesisUtterance(text);u.voice=v;u.lang=v.lang;u.rate=.9;u.volume=Math.min(1,.25+st.vol/100);
-  speechSynthesis.cancel();setTimeout(()=>speechSynthesis.speak(u),st.bell?250:0);
+  let t=0;u.onstart=()=>{st.ttsLag=Math.round(st.ttsLag*.7+Math.min(800,performance.now()-t)*.3)};
+  const busy=speechSynthesis.speaking||speechSynthesis.pending;if(busy)speechSynthesis.cancel();
+  setTimeout(()=>{t=performance.now();speechSynthesis.speak(u)},busy?30:0);   // közvetlenül a cancel után a Chrome néha elnyeli
+}
+let sayT=0,said='';                                  // said: az előre bemondott szakasz kulcsa (kör:sorszám)
+function phaseText(p){const [kind,,,,exn]=p;return !tb?L[kind]:kind==='work'&&exn?exn:exn?`${L[kind]}. ${L.next}: ${exn}`:L[kind]}
+function upcoming(){                                 // a következő szakasz: [kulcs, szakasz], vagy null, ha itt vége
+  if(i+1<cur.length)return [cyc+':'+(i+1),cur[i+1]];
+  if(tb||elapsed+left>=st.dur*60)return null;
+  return [(cyc+1)+':0',pattern(st.mode==='tabata'?runMode:st.mode)[0]];
+}
+function sayAhead(){
+  clearTimeout(sayT);
+  const nx=upcoming();if(!nx||!st.speak||paused)return;
+  sayT=setTimeout(()=>{if(!run||paused)return;said=nx[0];speakText(phaseText(nx[1]))},t0+(elapsed+left)*1000-st.ttsLag-performance.now());
 }
 function voiceNote(){
   const n=$('voiceNote');
@@ -1093,22 +1121,22 @@ function phase(){
     if(!tb&&st.mode!=='tabata')runMode=st.mode;      // légzés közben a Beállításokban váltott ritmus a következő körtől él
     cur=pattern(runMode);
   }
-  const [kind,secs]=cur[i];
-  ph.textContent=L[kind];left=secs;ct.textContent=left;
+  const [kind,secs]=cur[i],pre=said===cyc+':'+i;    // pre: a nevét már előre bemondtuk
+  ph.textContent=L[kind];left=secs;ct.textContent=left;said='';
   if(tb){                                            // a képernyő színe jelzi a szakaszt (CSS: html[data-tb])
     const exn=cur[i][4];document.documentElement.dataset.tb=kind;ph.style.fontSize=ph.style.whiteSpace='';
     if(kind==='work'&&exn)ph.textContent=exn;        // munka közben a gyakorlat neve, pihenőnél alul a következő
     fitPh();                                         // hosszú név vagy szó (pl. „Préparez-vous”): kisebb betű
     if(!mute){
       if(kind==='work'){beep(1500,.6);tbBuzz(400)}else if(kind==='rest'){beep(750,.3,2);tbBuzz([150,100,150])}
-      speakText(kind==='work'&&exn?exn:exn?`${L[kind]}. ${L.next}: ${exn}`:L[kind]);
+      if(!pre)speakText(phaseText(cur[i]));
     }
-    mediaMeta();return;
+    sayAhead();mediaMeta();return;
   }
   if(kind==='in')curBig=1;else if(kind==='in2')curBig=1.2;else if(kind==='out')curBig=0;
   if(kind!=='hold')size(curBig,secs);
-  if(!mute){sound(kind,curBig,secs);speak(kind);buzz()}
-  mediaMeta();
+  if(!mute){sound(kind,curBig,secs);if(!pre)speak(kind);buzz()}
+  sayAhead();mediaMeta();
 }
 function fitPh(){   // hosszú gyakorlatnév: kisebb betű, hogy egy sorba férjen; nagyon hosszúnál inkább tördel
   const w=ph.scrollWidth,max=ph.clientWidth;if(w<=max)return;
@@ -1129,13 +1157,16 @@ function showMeta(){
 }
 // Időzítés a valós órához igazítva: ha a böngésző a háttérben (lezárt képernyőnél) ritkábban hív, a lemaradt
 // másodperceket bepótoljuk; nagy lemaradásnál hangok nélkül, hogy ne szóljon egyszerre sok jelzés.
-let t0=0,paused=false,pauseAt=0,mute=false;
+// A 250 ms-os ütem mellett a következő egész másodpercre külön időzítő is szól, így a váltás (szám, hang, bemondás) pontosan akkor van.
+let t0=0,paused=false,pauseAt=0,mute=false,tickT=0;
 function tick(){
+  clearTimeout(tickT);
   if(!run||paused)return;
   const due=Math.floor((performance.now()-t0)/1000);
   mute=due-elapsed>3;
   while(run&&!paused&&elapsed<due){if(due-elapsed===1)mute=false;step()}
   mute=false;
+  if(run&&!paused)tickT=setTimeout(tick,t0+(elapsed+1)*1000-performance.now()+2);
 }
 function step(){
   elapsed++;left--;
@@ -1151,6 +1182,7 @@ function pause(){
   if(!run||paused)return;
   paused=true;pauseAt=performance.now();
   if(voice)voice.quiet(.5);ambStop(1);if('speechSynthesis' in window)speechSynthesis.cancel();
+  clearTimeout(sayT);clearTimeout(tickT);said='';    // az előre bemondott név a folytatás után a váltáskor újra elhangzik
   if(st.sleep&&!tb)setDim(getComputedStyle(dim).opacity,0);     // az elsötétülés is megáll
   clearTimeout(focusT);app.classList.remove('focus');app.classList.add('paused');
   ph.style.fontSize=ph.style.whiteSpace='';ph.textContent=L.paused;sub.textContent=tb?L.tapResumeTb:L.tapResume;ringBtn.setAttribute('aria-label',L.resume);
@@ -1169,7 +1201,7 @@ function resume(){
     if(st.sleep)setDim(.9,Math.max(1,st.dur*60-elapsed));
   }
   if(media&&media.paused)media.play().catch(()=>{});
-  showMeta();mediaMeta();focusLater();
+  showMeta();mediaMeta();focusLater();sayAhead();tick();
 }
 
 // Lezárt képernyő: a Web Audio nem vesz részt az Android médiamenetében, ezért mellette egy önálló <audio> elem is szól.
@@ -1244,7 +1276,7 @@ function start(){
   closeSheet();ensureAudio();tb=st.mode==='tabata';runMode=st.mode;
   document.documentElement.classList.toggle('tb-run',tb);
   run=true;paused=false;finished=false;i=0;cyc=1;elapsed=0;curBig=0;t0=performance.now();app.classList.remove('idle','paused');
-  phase();mediaStart();mediaNext(tb);tm=setInterval(tick,250);ringBtn.setAttribute('aria-label',tb?L.paused:L.stop);lock();showMeta();focusLater(1200);keepStorage();
+  phase();mediaStart();mediaNext(tb);tm=setInterval(tick,250);tick();ringBtn.setAttribute('aria-label',tb?L.paused:L.stop);lock();showMeta();focusLater(1200);keepStorage();
   skipBtn.hidden=!tb;
   if(!tb&&st.amb!=='off')ambStart(4);
   if(st.sleep&&!tb){setDim(0,0);requestAnimationFrame(()=>requestAnimationFrame(()=>setDim(.9,st.dur*60)))}
@@ -1257,14 +1289,14 @@ function skip(){
   if(paused)resume();
   elapsed+=left;t0=performance.now()-elapsed*1000;i++;
   if(i>=cur.length){finish();return}
-  phase();showMeta();
+  phase();showMeta();tick();
 }
 let finished=false;
 function idleLabel(){ph.style.fontSize=ph.style.whiteSpace='';ph.textContent=finished?L.done:L.start;sub.textContent=finished?L.again:L.tap;ringBtn.setAttribute('aria-label',L.start)}
 function stop(keepFull){
   if(!run)return;
   if(!keepFull)leaveFull();
-  run=false;paused=false;app.classList.remove('paused');clearInterval(tm);mediaStop();mediaNext(false);skipBtn.hidden=true;
+  run=false;paused=false;app.classList.remove('paused');clearInterval(tm);clearTimeout(tickT);clearTimeout(sayT);said='';mediaStop();mediaNext(false);skipBtn.hidden=true;
   size(0,1.2);if(voice)voice.quiet(.8);ambStop(keepFull?10:2);   // alvás mód végén lassan halkul
   if('speechSynthesis' in window)speechSynthesis.cancel();
   clearTimeout(focusT);app.classList.remove('focus');hint.classList.remove('show');
