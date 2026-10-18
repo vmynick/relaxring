@@ -47,6 +47,17 @@ test('minden nyelvben ugyanazok a szövegek vannak meg', async ({ page }) => {
     return out;
   });
   expect(diff).toEqual({});
+  // a nyelvválasztóban a nyelvek saját nevükön
+  expect(await page.evaluate(() => Object.values(T).map(x => x.name))).toEqual(['Magyar', 'English', 'Deutsch', 'Español', 'Français', 'Italiano', 'Polski',
+    'Português', 'Nederlands', 'Svenska', 'Dansk', 'Norsk', 'Suomi', 'Čeština', 'Slovenčina', 'Română', 'Hrvatski', 'Українська', 'Русский', 'Türkçe']);
+  // egy nyelvi blokkban egy kulcs csak egyszer szerepelhet (a későbbi csendben felülírná az elsőt)
+  const src = await (await page.request.get('/index.html')).text();
+  const dict = src.slice(src.indexOf('const T={'), src.indexOf('\n};', src.indexOf('const T={')));
+  for (const block of dict.split(/\n {2}(?=[a-z]{2}:\{name:)/).slice(1)) {
+    const keys = [...block.matchAll(/(?<=[{,]\s*)([A-Za-z_][\w]*):(?=['`(\[a-z])/g)].map(m => m[1]);
+    const dup = keys.filter((k, i) => keys.indexOf(k) !== i);
+    expect(dup, block.slice(0, 2)).toEqual([]);
+  }
   // ebben a sorrendben jelennek meg a nyelvválasztóban
   expect(await page.evaluate(() => Object.keys(T))).toEqual(['hu', 'en', 'de', 'es', 'fr', 'it', 'pl', 'pt', 'nl', 'sv', 'da', 'nb', 'fi', 'cs', 'sk', 'ro', 'hr', 'uk', 'ru', 'tr']);
 });
