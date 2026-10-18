@@ -19,16 +19,43 @@ const openSettings = async (page, sub) => {
   if (sub) await page.locator(`.navi[data-go="${sub}"]`).click();
 };
 
-test('három nyelven hiba nélkül betölt', async ({ page }) => {
+test('minden nyelven hiba nélkül betölt', async ({ page }) => {
   await seed(page);
   await page.goto('/');
-  for (const [lang, title, start] of [['hu', 'Légző körök', 'Indítás'], ['en', 'Breathing Circles', 'Start'], ['de', 'Atemkreise', 'Start']]) {
+  for (const [lang, title, start] of [['hu', 'Légző körök', 'Indítás'], ['en', 'Breathing Circles', 'Start'], ['de', 'Atemkreise', 'Start'],
+    ['es', 'Círculos de respiración', 'Empezar'], ['fr', 'Cercles de respiration', 'Démarrer'], ['it', 'Cerchi del respiro', 'Inizia'], ['pl', 'Kręgi oddechu', 'Start']]) {
     await page.evaluate(l => { const s = JSON.parse(localStorage.getItem('legzo')); s.lang = l; localStorage.setItem('legzo', JSON.stringify(s)); }, lang);
     await page.reload();
     await expect(page).toHaveTitle(title);
     await expect(page.locator('#ph')).toHaveText(start);
     await expect(page.locator('#modes button')).toHaveCount(3);
   }
+});
+
+test('minden nyelvben ugyanazok a szövegek vannak meg', async ({ page }) => {
+  await seed(page);
+  await page.goto('/');
+  const diff = await page.evaluate(() => {
+    const ref = T.en, out = {};
+    for (const l in T) {
+      const miss = Object.keys(ref).filter(k => !(k in T[l]) || typeof T[l][k] !== typeof ref[k]);
+      const extra = Object.keys(T[l]).filter(k => !(k in ref));
+      if (T[l].help.length !== ref.help.length) miss.push('help.length');
+      if (miss.length || extra.length) out[l] = { miss, extra };
+    }
+    return out;
+  });
+  expect(diff).toEqual({});
+  // ebben a sorrendben jelennek meg a nyelvválasztóban
+  expect(await page.evaluate(() => Object.keys(T))).toEqual(['hu', 'en', 'de', 'es', 'fr', 'it', 'pl']);
+});
+
+test('első indításkor a telefon nyelvét választja', async ({ browser }) => {
+  const ctx = await browser.newContext({ locale: 'fr-FR' });
+  const page = await ctx.newPage();
+  await page.goto('/');
+  await expect(page.locator('#ph')).toHaveText('Démarrer');
+  await ctx.close();
 });
 
 test('légzés: szakaszok, befejezés és naplózás', async ({ page }) => {
@@ -115,6 +142,94 @@ test('Tabata: EMOM-terv, edzés, külön számolás', async ({ page }) => {
   const s = await stored(page);
   expect(s.tabN).toBe(1);
   expect(s.sessions || 0).toBe(0);
+});
+
+test('Tabata: koppintás szünet, ⏭ ugrás, hosszú nyomás leállít', async ({ page }) => {
+  await page.clock.install();
+  await seed(page, { mode: 'tabata', shown: ['box', '478', 'tabata'], tab: { work: 20, rest: 10, rounds: 2, sets: 1, prep: 0 } });
+  await page.goto('/');
+  const ring = page.locator('#ringBtn');
+  await expect(page.locator('#skipBtn')).toBeHidden();
+  await ring.click();
+  await expect(page.locator('html')).toHaveAttribute('data-tb', 'work');
+  await expect(page.locator('#skipBtn')).toBeVisible();
+  await page.clock.runFor(3_100);
+  await ring.click();                                // koppintás: szünet, nem leállítás
+  expect(await page.evaluate(() => ({ run, paused }))).toEqual({ run: true, paused: true });
+  await expect(page.locator('#ph')).toHaveText('Szünet');
+  await expect(page.locator('#sub')).toHaveText('koppints a folytatáshoz · hosszan nyomva leáll');
+  await page.clock.runFor(5_000);
+  expect(await page.evaluate(() => elapsed)).toBe(3);
+  await ring.click();                                // újabb koppintás: folytatás
+  expect(await page.evaluate(() => paused)).toBe(false);
+  await page.mouse.click(5, 5);                      // a körön kívül: előjön az alsó sor
+  await page.locator('#skipBtn').click();            // ⏭ a pihenőre
+  await expect(page.locator('html')).toHaveAttribute('data-tb', 'rest');
+  expect(await page.evaluate(() => ({ elapsed, left }))).toEqual({ elapsed: 20, left: 10 });
+  await page.clock.runFor(1_250);                    // az időzítő 250 ms-onként néz rá
+  expect(await page.evaluate(() => left)).toBe(9);
+  const box = await ring.boundingBox();
+  await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+  await page.mouse.down();
+  await page.clock.runFor(300);
+  expect(await page.evaluate(() => run)).toBe(true); // rövid nyomás még nem állít le
+  await page.clock.runFor(600);
+  expect(await page.evaluate(() => run)).toBe(false);
+  await page.mouse.up();                             // a felengedés utáni koppintás nem indít újra
+  expect(await page.evaluate(() => run)).toBe(false);
+  await expect(page.locator('#skipBtn')).toBeHidden();
+  expect((await stored(page)).tabN || 0).toBe(0);    // félbehagyott edzés nem számít
+});
+
+test('Tabata: az utolsó szakasz átugrása befejezi az edzést', async ({ page }) => {
+  await page.clock.install();
+  await seed(page, { mode: 'tabata', shown: ['box', '478', 'tabata'], tab: { work: 20, rest: 10, rounds: 1, sets: 1, prep: 0 } });
+  await page.goto('/');
+  await page.locator('#ringBtn').click();
+  await page.evaluate(() => skip());
+  await expect(page.locator('#ph')).toHaveText('Szép volt');
+  expect((await stored(page)).tabN).toBe(1);
+});
+
+test('fekvő nézet: kétoszlopos főképernyő, Tabatánál óriási szám', async ({ page }) => {
+  await page.setViewportSize({ width: 844, height: 390 });
+  await seed(page, { mode: 'tabata', shown: ['box', '478', 'tabata'], tab: { work: 20, rest: 10, rounds: 8, sets: 1, prep: 0 } });
+  await page.goto('/');
+  await expect(page.locator('#notice')).toBeVisible();   // a „mi újság” sáv mellett is minden kifér
+  const inView = sel => page.locator(sel).evaluate(e => { const r = e.getBoundingClientRect(); return r.top >= 0 && r.bottom <= innerHeight && r.left >= 0 && r.right <= innerWidth; });
+  for (const sel of ['#setBtn', '#tbPre', '#tsteps2', '#tvol2', '#modes'])
+    expect(await inView(sel), sel).toBe(true);
+  const stage = await page.locator('.stage').boundingBox(), modes = await page.locator('#modes').boundingBox();
+  expect(modes.x).toBeGreaterThan(stage.x + stage.width - 1);   // a körök balra, a vezérlők jobbra
+  await page.locator('#ringBtn').click();
+  await expect(page.locator('#modes')).toBeHidden();
+  const ct = await page.locator('#ct').boundingBox(), ph = await page.locator('#ph').boundingBox();
+  expect(ct.height).toBeGreaterThan(200);
+  expect(ph.x).toBeGreaterThan(ct.x + ct.width - 1);            // a szakasz neve a szám mellett
+  expect(await inView('#skipBtn')).toBe(true);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(844);
+});
+
+test('az app megosztása a Beállításokból', async ({ page }) => {
+  await page.addInitScript(() => { navigator.share = async d => { window.shared = d; }; });
+  await seed(page);
+  await page.goto('/');
+  await openSettings(page);
+  await page.locator('#shareBtn').click();
+  const d = await page.evaluate(() => window.shared);
+  expect(d.url).toBe('https://vmynick.github.io/relaxring/');
+  expect(d.text).toContain('Tabata');
+});
+
+test('megosztás megosztó lap nélkül: a link a vágólapra kerül', async ({ page, context }) => {
+  await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+  await page.addInitScript(() => { Object.defineProperty(Navigator.prototype, 'share', { value: undefined }); });
+  await seed(page);
+  await page.goto('/');
+  await openSettings(page);
+  await page.locator('#shareBtn').click();
+  await expect(page.locator('#shareNote')).toHaveText('Link másolva');
+  expect(await page.evaluate(() => navigator.clipboard.readText())).toBe('https://vmynick.github.io/relaxring/');
 });
 
 test('Beállítások: almenü, vissza és bezárás', async ({ page }) => {
@@ -211,4 +326,5 @@ test('manifest: angol gyorsindítók', async ({ request }) => {
   const m = await (await request.get('/manifest.json')).json();
   expect(m.lang).toBe('en');
   expect(m.shortcuts.map(s => s.short_name)).toEqual(['Sleep 4-7-8', 'Box', 'Calm', 'Coherent']);
+  expect(m.orientation).toBeUndefined();             // a Tabata fekve is megy; a légzést az app zárja állóra, ahol lehet
 });

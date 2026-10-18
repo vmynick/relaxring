@@ -53,6 +53,8 @@ A breathing-exercise app and interval timer for your phone. Breathing circles sh
   - a different tone at the start of work and of rest,
   - stronger vibration.
 - **Exercise list:** the current exercise shows during work and the next one during rest. Voice guidance reads them out.
+- **Safe controls:** tapping the number pauses the workout and holding it stops, so a sweaty touch cannot end it by mistake. ⏭ jumps to the next part, also from the lock screen.
+- **Landscape:** turn the phone sideways and the countdown fills the screen next to the exercise name.
 
 ### Journal and backup
 
@@ -66,7 +68,8 @@ A breathing-exercise app and interval timer for your phone. Breathing circles sh
 
 - 6 color themes: Forest, Sea, Lavender, Sunset, Rose, Stone. Light or dark mode follows the phone setting.
 - An optional background scene for each theme: a calm landscape drawn in the theme's colors.
-- Languages: English, Hungarian, German. On first launch the app uses the phone's language.
+- Languages: English, Hungarian, German, Spanish, French, Italian, Polish. On first launch the app uses the phone's language.
+- **Share the app** in Settings opens the phone's share sheet, or copies the link where there is none.
 
 ### Help
 
@@ -93,6 +96,8 @@ When a new version is published, the app shows "A new version is available" → 
 | Action | How |
 |---|---|
 | Start or stop | tap the circle |
+| Tabata: pause or stop | tap the number to pause, hold it to stop |
+| Tabata: next part | ⏭ button, or next on the lock screen or headset |
 | Pause or resume | lock screen controls or headset button; while paused, tap the circle to continue |
 | Switch rhythm | buttons at the top |
 | Settings | bottom-left button |
@@ -135,12 +140,15 @@ The app is a single HTML file with HTML, CSS and JavaScript. It uses no framewor
 **Run locally:** start any static web server in this folder, for example `python -m http.server 8000`, and open http://localhost:8000. The service worker also works on localhost.
 
 **Tests:** run `npm install` once, then `npm test`. Playwright runs the tests in headless Chromium against a small built-in web server. They cover:
-- loading in all three languages;
+- loading in every language;
 - a full breathing session and the journal;
 - pause and resume with the lock-screen data;
 - catching up after the browser was throttled;
 - the rhythm picker;
-- Tabata and EMOM;
+- Tabata and EMOM, pause, skip and long-press stop;
+- the landscape layout;
+- sharing the app;
+- that every language has the same texts;
 - settings navigation;
 - backup and restore;
 - shortcuts;

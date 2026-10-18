@@ -64,7 +64,7 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--c1);outline-off
 #r3{width:var(--D);border:2px solid var(--c3);opacity:.6}
 #r2{width:calc(var(--D)*.72);background:var(--c2);opacity:.55}
 #r1{width:calc(var(--D)*.5);background:var(--c1)}
-#ringBtn{position:absolute;width:calc(var(--D)*.86);aspect-ratio:1;max-width:100%;padding:0;border:0;border-radius:50%;background:transparent;cursor:pointer}
+#ringBtn{position:absolute;width:calc(var(--D)*.86);aspect-ratio:1;max-width:100%;padding:0;border:0;border-radius:50%;background:transparent;cursor:pointer;-webkit-touch-callout:none;touch-action:manipulation}
 #ringBtn:focus-visible{outline-offset:4px}
 .stage:has(#ringBtn:active) #r1{filter:brightness(.93)}
 .label{position:relative;text-align:center;color:var(--on-c1);pointer-events:none}
@@ -79,10 +79,12 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--c1);outline-off
 .hint.show{opacity:1}
 
 /* alsó sor: állapot és a beállítások gomb */
-.bottom{width:100%;display:grid;grid-template-columns:52px 1fr 52px;align-items:center;gap:8px}
+.bottom{width:100%;display:grid;--side:52px;grid-template-columns:var(--side) 1fr var(--side);align-items:center;gap:8px}
 .meta{grid-column:2;font-size:18px;font-weight:700;color:var(--muted);font-variant-numeric:tabular-nums;text-align:center;line-height:1.3}
 #setBtn{grid-column:1;grid-row:1}
-#exitBtn{grid-column:3;grid-row:1;transition:background .2s,color .2s}
+.rbtns{grid-column:3;grid-row:1;display:flex;justify-content:flex-end;gap:8px}
+.bottom:has(#skipBtn:not([hidden])):has(#exitBtn:not([hidden])){--side:112px}   /* ⏭ és X együtt: a két oldal egyforma, a felirat középen marad */
+#exitBtn{transition:background .2s,color .2s}
 #exitBtn.armed{background:#E5352B;color:#fff}       /* első koppintás után: még egy koppintás kilép */
 .gear{width:52px;height:52px;border:0;border-radius:50%;background:var(--surface);color:var(--fg);display:grid;place-items:center;cursor:pointer}
 .gear svg{width:26px;height:26px}
@@ -247,6 +249,9 @@ html.tb-run #sub{display:block;color:var(--tbt);font-size:clamp(24px,4.2vh,38px)
 .tbsteps .stepper button{width:34px;height:34px;font-size:20px;background:var(--bg)}
 .tbsteps .stepper output{font-size:22px}
 html.tb-run #ringBtn:focus-visible{outline-color:color-mix(in srgb,var(--tbt) 45%,transparent)}
+/* Tabata: a számra koppintás szünet, hosszan nyomva leáll; nyomás közben a felirat elhalványul, így látszik, hogy tartani kell */
+html.tb-run .label{transition:opacity .2s}
+html.tb-run .stage.holding .label{opacity:.25;transition:opacity .65s linear .15s}
 .tbpre{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;padding:0}
 .tbpre button{background:var(--surface);text-align:center;padding:7px 4px}
 .group textarea{display:block;width:100%;box-sizing:border-box;min-height:120px;margin:0 0 10px;border:0;border-radius:12px;background:var(--bg);color:var(--fg);
@@ -261,6 +266,24 @@ html.tb-run #ph{max-width:94vw;margin:0 auto;white-space:nowrap}
 .app.scenic .meta{justify-self:center;background:color-mix(in srgb,var(--surface) 80%,transparent);border-radius:14px;padding:6px 14px;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
 
 @media (max-height:640px){#ph{font-size:24px}#ct{font-size:64px}.modes button{padding:8px 4px;font-size:18px}.modes button small{font-size:14px}}
+/* Fekvő telefon: balra a körök, jobbra a ritmusválasztó, a Tabata-beállítások és az alsó sor.
+   Tabata-edzés közben a számlálóé az egész képernyő: balra az óriási szám, jobbra a szakasz és a kör; az egész középső rész a koppintási felület. */
+@media (orientation:landscape) and (max-height:600px){
+  .app{max-width:1000px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);grid-template-rows:auto auto 1fr auto;
+    grid-template-areas:"stage modes" "stage panel" "stage ." "stage bottom";column-gap:24px;row-gap:10px;align-items:start;overflow-y:auto}
+  .app.idle:has(.notice.show){grid-template-areas:"notice modes" "stage panel" "stage ." "stage bottom"}   /* a sáv a körök fölé kerül, így a jobb oszlop kifér */
+  .stage{grid-area:stage;align-self:stretch}
+  .notice{grid-area:notice}.modes{grid-area:modes}.tbpanel{grid-area:panel}.bottom{grid-area:bottom}
+  .tbsteps{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .tbsteps .stepper button{width:30px;height:30px}
+  html.tb-run .app{max-width:none;grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,1fr) auto;grid-template-areas:"stage" "bottom";row-gap:8px}
+  html.tb-run .modes{display:none}
+  html.tb-run .label{display:grid;grid-template-columns:auto minmax(0,auto);grid-template-rows:1fr 1fr;column-gap:5vw;align-items:center;text-align:left}
+  html.tb-run #ct{grid-column:1;grid-row:1/3;font-size:min(44vw,72vh);margin:0}
+  html.tb-run #ph{grid-column:2;grid-row:1;align-self:end;max-width:42vw;margin:0;font-size:clamp(32px,11vh,64px)}
+  html.tb-run #sub{grid-column:2;grid-row:2;align-self:start;max-width:42vw;margin:8px 0 0;font-size:clamp(22px,7vh,40px)}
+  html.tb-run #ringBtn{width:100%;height:100%;max-width:none;aspect-ratio:auto;border-radius:24px}
+}
 </style>
 <script>/* a választott színtéma már az első kirajzolás előtt */try{var c=JSON.parse(localStorage.getItem('legzo')||'{}').color;if(c&&c!=='erdo')document.documentElement.dataset.color=c}catch(e){}</script>
 </head>
@@ -295,9 +318,14 @@ html.tb-run #ph{max-width:94vw;margin:0 auto;white-space:nowrap}
       </svg>
     </button>
     <div class="meta" id="meta"></div>
-    <button class="gear exit" id="exitBtn" data-ia="exit" hidden>
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
-    </button>
+    <div class="rbtns">
+      <button class="gear" id="skipBtn" data-ia="skip" hidden>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l8 6-8 6z" fill="currentColor"/><path d="M18 6v12"/></svg>
+      </button>
+      <button class="gear exit" id="exitBtn" data-ia="exit" hidden>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
   </div>
 </div>
 <div id="dim"></div>
@@ -330,6 +358,7 @@ html.tb-run #ph{max-width:94vw;margin:0 auto;white-space:nowrap}
       <div class="group nav">
         <button class="navi" data-go="backup"><i style="--ic:#8E8E93"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v10M8 10l4 4 4-4M5 16v3h14v-3"/></svg></i><span data-i="backup"></span><em id="sv_backup"></em><b aria-hidden="true">›</b></button>
         <button class="navi" data-go="about"><i style="--ic:#636366"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 11v5M12 8h.01"/></svg></i><span data-i="about"></span><em id="sv_about"></em><b aria-hidden="true">›</b></button>
+        <button class="navi" id="shareBtn"><i style="--ic:#34C759"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M8 7l4-4 4 4M6 11v9h12v-9"/></svg></i><span data-i="share"></span><em id="shareNote"></em></button>
       </div>
     </div>
 
@@ -477,7 +506,7 @@ const T={
       'Fent választhatsz ritmust; hogy melyik 3 látsszon, a Beállítások → Ritmusok részben állíthatod.',
       'Gyakorlás közben a körökön kívül minden elhalványul. Koppints a körön kívül, és visszajönnek a gombok.',
       'Lezárt képernyővel is megy: a lezárási képernyőn vagy a fülhallgató gombjával szüneteltetheted és leállíthatod.',
-      'Tabata: a főképernyőn állíthatod a munkát, a pihenőt és a köröket; edzés közben a képernyő színe jelzi a szakaszt.',
+      'Tabata: a főképernyőn állíthatod a munkát, a pihenőt és a köröket; edzés közben a képernyő színe jelzi a szakaszt. A számra koppintva szünetel, hosszan nyomva leáll, a ⏭ gomb a következő szakaszra ugrik. Fekvő telefonon nagyobb a szám.',
       'Bal alsó gomb: Beállítások. Jobb alsó X: kilépés, kétszer koppintva.',
       'A napló és a beállítások csak ezen a telefonon vannak: időnként mentsd fájlba (Beállítások → Mentés).'],
     welcome:'Üdv! Nézd meg röviden, hogyan működik.',helpBtn:'Súgó',newsTxt:'Frissült az app. Nézd meg, mi újság!',newsBtn:'Újdonságok',
@@ -491,7 +520,9 @@ const T={
     t_erdo:'Erdő',t_tenger:'Tenger',t_levendula:'Levendula',t_naplemente:'Naplemente',t_rozsa:'Rózsa',t_ko:'Kő',
     scene:'Háttérkép',sceneInfo:'A témához illő nyugodt táj a körök mögött.',
     newVer:'Új verzió érhető el.',update:'Frissítés',installTxt:'Tedd ki a kezdőképernyőre, és appként indul.',install:'Telepítés',
-    certTxt:'A telepítéshez és az ébren maradó képernyőhöz egyszer be kell állítani a tanúsítványt.',certBtn:'Beállítás'},
+    certTxt:'A telepítéshez és az ébren maradó képernyőhöz egyszer be kell állítani a tanúsítványt.',certBtn:'Beállítás',
+    share:'Az app megosztása',shareTxt:'Légzőgyakorlatok és Tabata-időzítő: ingyenes, reklám és regisztráció nélkül.',copied:'Link másolva',skip:'Következő szakasz',
+    hintTb:'A számra koppintva szünet, hosszan nyomva leáll',tapResumeTb:'koppints a folytatáshoz · hosszan nyomva leáll'},
   en:{name:'English',locale:'en-US',title:'Breathing Circles',modes:'Breathing rhythm',
     r_box:'Box',r_478:'Sleep',r_calm:'Calm',r_sigh:'Sigh',r_coh:'Coherent',r_relax:'Relax',r_slow:'Unwind',r_own:'Custom',r_tabata:'Tabata',
     in:'Inhale',in2:'Top up',hold:'Hold',out:'Exhale',work:'Work',rest:'Rest',prep:'Get ready',next:'Next',
@@ -519,7 +550,7 @@ const T={
       'Pick a rhythm at the top; choose which 3 appear in Settings → Rhythms.',
       'During a session everything except the circles fades. Tap outside the circle to bring the buttons back.',
       'It keeps running with the screen locked: pause or stop it from the lock screen or with your headset button.',
-      'Tabata: set work, rest and rounds on the main screen; during a workout the screen color shows the phase.',
+      'Tabata: set work, rest and rounds on the main screen; during a workout the screen color shows the phase. Tap the number to pause, hold it to stop; ⏭ jumps to the next part. Turn the phone sideways for a bigger number.',
       'Bottom-left button: Settings. Bottom-right X: exit, tap twice.',
       'Your journal and settings live only on this phone: save them to a file now and then (Settings → Backup).'],
     welcome:'Welcome! Take a quick look at how it works.',helpBtn:'Help',newsTxt:'The app was updated. See what\'s new!',newsBtn:'What\'s new',
@@ -533,7 +564,9 @@ const T={
     t_erdo:'Forest',t_tenger:'Sea',t_levendula:'Lavender',t_naplemente:'Sunset',t_rozsa:'Rose',t_ko:'Stone',
     scene:'Background scene',sceneInfo:'A calm landscape matching the theme, behind the circles.',
     newVer:'A new version is available.',update:'Update',installTxt:'Add it to your home screen to use it as an app.',install:'Install',
-    certTxt:'Set up the certificate once to install the app and keep the screen awake.',certBtn:'Set up'},
+    certTxt:'Set up the certificate once to install the app and keep the screen awake.',certBtn:'Set up',
+    share:'Share the app',shareTxt:'Breathing exercises and a Tabata timer: free, no ads, no sign-up.',copied:'Link copied',skip:'Next part',
+    hintTb:'Tap the number to pause, hold it to stop',tapResumeTb:'tap to continue · hold to stop'},
   de:{name:'Deutsch',locale:'de-DE',title:'Atemkreise',modes:'Atemrhythmus',
     r_box:'Box',r_478:'Schlaf',r_calm:'Ruhe',r_sigh:'Seufzer',r_coh:'Kohärent',r_relax:'Relax',r_slow:'Langsam',r_own:'Eigen',r_tabata:'Tabata',
     in:'Einatmen',in2:'Nachatmen',hold:'Halten',out:'Ausatmen',work:'Arbeit',rest:'Pause',prep:'Bereit',next:'Als Nächstes',
@@ -561,7 +594,7 @@ const T={
       'Oben wählst du den Rhythmus; welche 3 erscheinen, legst du unter Einstellungen → Rhythmen fest.',
       'Während der Übung verblasst alles außer den Kreisen. Tippe neben den Kreis, dann kommen die Tasten zurück.',
       'Läuft auch bei gesperrtem Bildschirm: Pause und Stopp über den Sperrbildschirm oder die Kopfhörertaste.',
-      'Tabata: Arbeit, Pause und Runden stellst du auf dem Startbildschirm ein; die Bildschirmfarbe zeigt den Abschnitt.',
+      'Tabata: Arbeit, Pause und Runden stellst du auf dem Startbildschirm ein; die Bildschirmfarbe zeigt den Abschnitt. Zahl antippen pausiert, gedrückt halten stoppt; ⏭ springt zum nächsten Abschnitt. Quer gehalten ist die Zahl größer.',
       'Taste unten links: Einstellungen. X unten rechts: Beenden, zweimal tippen.',
       'Tagebuch und Einstellungen sind nur auf diesem Telefon: sichere sie ab und zu in eine Datei (Einstellungen → Sicherung).'],
     welcome:'Willkommen! Schau kurz, wie es funktioniert.',helpBtn:'Hilfe',newsTxt:'Die App wurde aktualisiert. Sieh dir die Neuigkeiten an!',newsBtn:'Neuigkeiten',
@@ -575,13 +608,199 @@ const T={
     t_erdo:'Wald',t_tenger:'Meer',t_levendula:'Lavendel',t_naplemente:'Abendrot',t_rozsa:'Rose',t_ko:'Stein',
     scene:'Hintergrundbild',sceneInfo:'Eine ruhige Landschaft passend zum Farbthema hinter den Kreisen.',
     newVer:'Neue Version verfügbar.',update:'Aktualisieren',installTxt:'Zum Startbildschirm hinzufügen und als App nutzen.',install:'Installieren',
-    certTxt:'Richte einmal das Zertifikat ein, um die App zu installieren und den Bildschirm wach zu halten.',certBtn:'Einrichten'}
+    certTxt:'Richte einmal das Zertifikat ein, um die App zu installieren und den Bildschirm wach zu halten.',certBtn:'Einrichten',
+    share:'App teilen',shareTxt:'Atemübungen und Tabata-Timer: kostenlos, ohne Werbung und ohne Anmeldung.',copied:'Link kopiert',skip:'Nächster Abschnitt',
+    hintTb:'Zahl antippen: Pause, gedrückt halten: Stopp',tapResumeTb:'zum Fortsetzen antippen · gedrückt halten zum Stoppen'},
+  es:{name:'Español',locale:'es-ES',title:'Círculos de respiración',modes:'Ritmo de respiración',
+    r_box:'Caja',r_478:'Dormir',r_calm:'Calma',r_sigh:'Suspiro',r_coh:'Coherente',r_relax:'Relax',r_slow:'Pausado',r_own:'Propio',r_tabata:'Tabata',
+    in:'Inhala',in2:'Un poco más',hold:'Mantén',out:'Exhala',work:'Trabajo',rest:'Descanso',prep:'Prepárate',next:'Siguiente',
+    sighInfo:'Suspiro: dos inhalaciones seguidas (con la segunda tomas un poco más de aire) y luego una exhalación larga. Alivia el estrés rápidamente; bastan 1–3 minutos.',
+    amb:'Sonido de la naturaleza',ambVol:'Volumen del sonido de la naturaleza',a_off:'No',a_eso:'Lluvia',a_patak:'Arroyo',a_tuz:'Fuego',a_szel:'Viento',
+    exTitle:'Ejercicios (uno por línea)',exPh:'Sentadillas\nFlexiones\nAbdominales\nZancadas',
+    exInfo:'Si la rellenas, durante el trabajo se ve el ejercicio actual y en el descanso el siguiente; la guía por voz los lee. Si hay menos ejercicios que rondas, la lista vuelve a empezar.',
+    backup:'Copia de seguridad',backupInfo:'Tu diario y tus ajustes solo están en este teléfono. Guárdalos en un archivo y cárgalos después de reinstalar o en un teléfono nuevo.',
+    exportBtn:'Guardar en archivo',importBtn:'Restaurar',importAsk:'¿Restaurar esta copia? Los ajustes se sustituyen y el diario se combina.',
+    importBad:'Este archivo no es una copia de RelaxRing.',importOk:'Copia restaurada.',
+    start:'Empezar',stop:'Parar',tap:'toca el círculo',again:'toca para empezar de nuevo',done:'Muy bien',
+    hint:'Toca el círculo para parar y en cualquier otro sitio para ver el menú',min:n=>`${n} min`,round:(c,t)=>`Ronda ${c} · ${t}`,only:x=>`solo ${x}`,silent:'en silencio',
+    settings:'Ajustes',ok:'Listo',journal:'Diario',streak:'días seguidos',today:'min hoy',sessions:'sesiones',weekAria:m=>`Minutos de los últimos 7 días: ${m}`,
+    rhythms:'Ritmos',pick3:'En la pantalla principal se ven hasta 3; toca para elegir.',ownTitle:'Ritmo propio (segundos)',
+    slowInfo:'Pausado: inhalas 4 s y la exhalación se alarga de 4 a 8 s hasta el final de la sesión.',
+    tabTitle:'Tabata (segundos, cantidad)',tRounds:'Rondas',tSets:'Series',
+    tPrep:'Preparación',tBreak:'Descanso entre series',tVol:'Volumen de la señal',tSignal:'Señal',look:'Aspecto',back:'Atrás',
+    exit:'Salir',exitAgain:'Toca otra vez para salir',exitFail:'El teléfono no permitió cerrar; usa el botón atrás o el de inicio.',
+    paused:'Pausa',tapResume:'toca para continuar',resume:'Continuar',
+    details:'Detalles',goal:'Objetivo diario',goalToday:(m,g)=>`Hoy ${m} / ${g} min`,goalWeek:n=>`Objetivo cumplido ${n} ${n===1?'día':'días'} esta semana.`,
+    last7:'Últimos 7 días',month:'Calendario mensual',monthSum:(d,m)=>`${d} ${d===1?'día activo':'días activos'} · ${m} min`,prevMonth:'Mes anterior',nextMonth:'Mes siguiente',
+    about:'Ayuda e información',howTo:'Cómo se usa',whatsNew:'Novedades',privacy:'Privacidad',source:'Código fuente',license:'Licencia',version:'Versión',
+    privacyTxt:'La app no recoge ni envía datos: sin cuenta, analítica ni cookies. Los ajustes y el diario se quedan en este dispositivo, en el almacenamiento del navegador.',
+    help:['Toca el círculo para empezar una sesión; vuelve a tocarlo para parar.',
+      'Elige el ritmo arriba; en Ajustes → Ritmos decides cuáles 3 aparecen.',
+      'Durante la sesión todo se desvanece salvo los círculos. Toca fuera del círculo para que vuelvan los botones.',
+      'Sigue funcionando con la pantalla bloqueada: pausa o para desde la pantalla de bloqueo o con el botón de los auriculares.',
+      'Tabata: ajusta trabajo, descanso y rondas en la pantalla principal; durante el entrenamiento el color de la pantalla indica la fase. Toca el número para pausar y mantenlo pulsado para parar; ⏭ salta a la siguiente fase. Con el teléfono en horizontal el número se ve más grande.',
+      'Botón de abajo a la izquierda: Ajustes. X abajo a la derecha: salir, toca dos veces.',
+      'Tu diario y tus ajustes solo están en este teléfono: guárdalos de vez en cuando en un archivo (Ajustes → Copia de seguridad).'],
+    welcome:'¡Hola! Echa un vistazo rápido a cómo funciona.',helpBtn:'Ayuda',newsTxt:'La app se ha actualizado. ¡Mira las novedades!',newsBtn:'Novedades',
+    tabInfo:'Durante el entrenamiento la pantalla está roja en el trabajo, verde en el descanso y amarilla en la preparación. Pita en los últimos 3 segundos de cada fase; el volumen también depende del volumen multimedia del teléfono.',
+    tround:x=>`Ronda ${x}`,tset:s=>`Serie ${s}`,rounds:n=>`${n} rondas`,tabN:n=>`Entrenamientos Tabata hasta ahora: ${n}`,
+    session:'Sesión',duration:'Duración',sleepMode:'Modo sueño',sleepInfo:'La pantalla se oscurece poco a poco; al final no suena la campana.',
+    full:'Pantalla completa',fullInfo:'Las barras de estado y de navegación se ocultan durante la sesión.',vibration:'Vibración',
+    sound:'Sonido',breath:'Sonido de respiración',chime:'Campana',speak:'Guía por voz',noVoice:'Este teléfono no tiene voz de lectura en español.',
+    volume:'Volumen',theme:'Tema de color',language:'Idioma',breathKind:'Tipo de sonido de respiración',chimeKind:'Tipo de campana',close:'Cerrar',
+    v_lagy:'Suave',v_ocean:'Océano',v_pad:'Pad',v_tal:'Cuenco',c_csengo:'Campana',c_tal:'Cuenco',c_fa:'Madera',c_csepp:'Gota',c_piezo:'Piezo',
+    t_erdo:'Bosque',t_tenger:'Mar',t_levendula:'Lavanda',t_naplemente:'Atardecer',t_rozsa:'Rosa',t_ko:'Piedra',
+    scene:'Paisaje de fondo',sceneInfo:'Un paisaje tranquilo a juego con el tema, detrás de los círculos.',
+    newVer:'Hay una nueva versión.',update:'Actualizar',installTxt:'Añádela a la pantalla de inicio para usarla como app.',install:'Instalar',
+    certTxt:'Configura el certificado una vez para instalar la app y mantener la pantalla encendida.',certBtn:'Configurar',
+    share:'Compartir la app',shareTxt:'Ejercicios de respiración y temporizador Tabata: gratis, sin anuncios ni registro.',copied:'Enlace copiado',skip:'Siguiente fase',
+    hintTb:'Toca el número para pausar, mantenlo pulsado para parar',tapResumeTb:'toca para continuar · mantén pulsado para parar'},
+  fr:{name:'Français',locale:'fr-FR',title:'Cercles de respiration',modes:'Rythme respiratoire',
+    r_box:'Carré',r_478:'Sommeil',r_calm:'Calme',r_sigh:'Soupir',r_coh:'Cohérence',r_relax:'Détente',r_slow:'Ralenti',r_own:'Perso',r_tabata:'Tabata',
+    in:'Inspirez',in2:'Encore un peu',hold:'Retenez',out:'Expirez',work:'Effort',rest:'Repos',prep:'Préparez-vous',next:'Ensuite',
+    sighInfo:'Soupir : deux inspirations à la suite (la seconde complète les poumons), puis une longue expiration. Un antistress rapide ; 1 à 3 minutes suffisent.',
+    amb:'Son de la nature',ambVol:'Volume du son de la nature',a_off:'Aucun',a_eso:'Pluie',a_patak:'Ruisseau',a_tuz:'Feu',a_szel:'Vent',
+    exTitle:'Exercices (un par ligne)',exPh:'Squats\nPompes\nAbdos\nFentes',
+    exInfo:'Si la liste est remplie, l’exercice en cours s’affiche pendant l’effort et le suivant pendant le repos ; le guidage vocal les annonce. S’il y a moins d’exercices que de tours, la liste recommence.',
+    backup:'Sauvegarde',backupInfo:'Votre journal et vos réglages ne sont que sur ce téléphone. Enregistrez-les dans un fichier et rechargez-les après une réinstallation ou sur un nouveau téléphone.',
+    exportBtn:'Enregistrer',importBtn:'Restaurer',importAsk:'Restaurer cette sauvegarde ? Les réglages sont remplacés, le journal est fusionné.',
+    importBad:'Ce fichier n’est pas une sauvegarde RelaxRing.',importOk:'Sauvegarde restaurée.',
+    start:'Démarrer',stop:'Arrêter',tap:'touchez le cercle',again:'touchez pour recommencer',done:'Bravo',
+    hint:'Touchez le cercle pour arrêter, ailleurs pour le menu',min:n=>`${n} min`,round:(c,t)=>`Tour ${c} · ${t}`,only:x=>`seulement ${x}`,silent:'muet',
+    settings:'Réglages',ok:'OK',journal:'Journal',streak:'jours d’affilée',today:'min aujourd’hui',sessions:'séances',weekAria:m=>`Minutes des 7 derniers jours : ${m}`,
+    rhythms:'Rythmes',pick3:'Jusqu’à 3 s’affichent sur l’écran principal ; touchez pour choisir.',ownTitle:'Rythme perso (secondes)',
+    slowInfo:'Ralenti : inspiration de 4 s, l’expiration s’allonge de 4 à 8 s jusqu’à la fin de la séance.',
+    tabTitle:'Tabata (secondes, nombre)',tRounds:'Tours',tSets:'Séries',
+    tPrep:'Préparation',tBreak:'Repos entre séries',tVol:'Volume du signal',tSignal:'Signal',look:'Apparence',back:'Retour',
+    exit:'Quitter',exitAgain:'Touchez encore pour quitter',exitFail:'Le téléphone n’a pas permis de fermer ; utilisez le bouton retour ou accueil.',
+    paused:'Pause',tapResume:'touchez pour reprendre',resume:'Reprendre',
+    details:'Détails',goal:'Objectif du jour',goalToday:(m,g)=>`Aujourd’hui ${m} / ${g} min`,goalWeek:n=>`Objectif atteint ${n} ${n===1?'jour':'jours'} cette semaine.`,
+    last7:'7 derniers jours',month:'Calendrier du mois',monthSum:(d,m)=>`${d} ${d===1?'jour actif':'jours actifs'} · ${m} min`,prevMonth:'Mois précédent',nextMonth:'Mois suivant',
+    about:'Aide et infos',howTo:'Mode d’emploi',whatsNew:'Nouveautés',privacy:'Confidentialité',source:'Code source',license:'Licence',version:'Version',
+    privacyTxt:'L’app ne collecte et n’envoie aucune donnée : pas de compte, pas de statistiques, pas de cookies. Les réglages et le journal restent sur cet appareil, dans le stockage du navigateur.',
+    help:['Touchez le cercle pour démarrer une séance ; touchez-le à nouveau pour l’arrêter.',
+      'Choisissez le rythme en haut ; les 3 affichés se règlent dans Réglages → Rythmes.',
+      'Pendant la séance, tout s’estompe sauf les cercles. Touchez à côté du cercle pour faire revenir les boutons.',
+      'Fonctionne aussi écran verrouillé : mettez en pause ou arrêtez depuis l’écran de verrouillage ou avec le bouton des écouteurs.',
+      'Tabata : réglez l’effort, le repos et les tours sur l’écran principal ; pendant l’entraînement, la couleur de l’écran indique la phase. Touchez le chiffre pour la pause, maintenez-le pour arrêter ; ⏭ passe à la phase suivante. Téléphone à l’horizontale, le chiffre est plus grand.',
+      'Bouton en bas à gauche : Réglages. X en bas à droite : quitter, touchez deux fois.',
+      'Votre journal et vos réglages ne sont que sur ce téléphone : sauvegardez-les de temps en temps (Réglages → Sauvegarde).'],
+    welcome:'Bienvenue ! Voyez rapidement comment ça marche.',helpBtn:'Aide',newsTxt:'L’app a été mise à jour. Découvrez les nouveautés !',newsBtn:'Nouveautés',
+    tabInfo:'Pendant l’entraînement, l’écran est rouge pendant l’effort, vert pendant le repos et jaune pendant la préparation. Bips dans les 3 dernières secondes de chaque phase ; le volume dépend aussi du volume multimédia du téléphone.',
+    tround:x=>`Tour ${x}`,tset:s=>`Série ${s}`,rounds:n=>`${n} tours`,tabN:n=>`Entraînements Tabata jusqu’ici : ${n}`,
+    session:'Séance',duration:'Durée',sleepMode:'Mode sommeil',sleepInfo:'L’écran s’assombrit lentement ; pas de cloche à la fin.',
+    full:'Plein écran',fullInfo:'Les barres d’état et de navigation se masquent pendant la séance.',vibration:'Vibration',
+    sound:'Son',breath:'Son de respiration',chime:'Cloche',speak:'Guidage vocal',noVoice:'Ce téléphone n’a pas de voix de synthèse en français.',
+    volume:'Volume',theme:'Thème de couleur',language:'Langue',breathKind:'Type de son de respiration',chimeKind:'Type de cloche',close:'Fermer',
+    v_lagy:'Doux',v_ocean:'Océan',v_pad:'Pad',v_tal:'Bol',c_csengo:'Cloche',c_tal:'Bol',c_fa:'Bois',c_csepp:'Goutte',c_piezo:'Piezo',
+    t_erdo:'Forêt',t_tenger:'Mer',t_levendula:'Lavande',t_naplemente:'Couchant',t_rozsa:'Rose',t_ko:'Pierre',
+    scene:'Paysage de fond',sceneInfo:'Un paysage calme assorti au thème, derrière les cercles.',
+    newVer:'Une nouvelle version est disponible.',update:'Mettre à jour',installTxt:'Ajoutez-la à l’écran d’accueil pour l’utiliser comme une app.',install:'Installer',
+    certTxt:'Configurez une fois le certificat pour installer l’app et garder l’écran allumé.',certBtn:'Configurer',
+    share:'Partager l’app',shareTxt:'Exercices de respiration et minuteur Tabata : gratuit, sans pub ni inscription.',copied:'Lien copié',skip:'Phase suivante',
+    hintTb:'Touchez le chiffre pour la pause, maintenez pour arrêter',tapResumeTb:'touchez pour reprendre · maintenez pour arrêter'},
+  it:{name:'Italiano',locale:'it-IT',title:'Cerchi del respiro',modes:'Ritmo del respiro',
+    r_box:'Quadrato',r_478:'Sonno',r_calm:'Calma',r_sigh:'Sospiro',r_coh:'Coerente',r_relax:'Relax',r_slow:'Lento',r_own:'Personale',r_tabata:'Tabata',
+    in:'Inspira',in2:'Ancora un po’',hold:'Trattieni',out:'Espira',work:'Lavoro',rest:'Riposo',prep:'Preparati',next:'Prossimo',
+    sighInfo:'Sospiro: due inspirazioni di seguito (con la seconda prendi ancora un po’ d’aria), poi una lunga espirazione. Un antistress rapido; bastano 1–3 minuti.',
+    amb:'Suono della natura',ambVol:'Volume del suono della natura',a_off:'Nessuno',a_eso:'Pioggia',a_patak:'Ruscello',a_tuz:'Fuoco',a_szel:'Vento',
+    exTitle:'Esercizi (uno per riga)',exPh:'Squat\nPiegamenti\nAddominali\nAffondi',
+    exInfo:'Se la compili, durante il lavoro vedi l’esercizio in corso e durante il riposo il prossimo; la guida vocale li legge. Se gli esercizi sono meno dei giri, la lista ricomincia da capo.',
+    backup:'Backup',backupInfo:'Il diario e le impostazioni sono solo su questo telefono. Salvali in un file e ricaricali dopo una reinstallazione o su un telefono nuovo.',
+    exportBtn:'Salva su file',importBtn:'Ripristina',importAsk:'Ripristinare questo backup? Le impostazioni vengono sostituite, il diario viene unito.',
+    importBad:'Questo file non è un backup di RelaxRing.',importOk:'Backup ripristinato.',
+    start:'Inizia',stop:'Ferma',tap:'tocca il cerchio',again:'tocca per ricominciare',done:'Ben fatto',
+    hint:'Tocca il cerchio per fermare, altrove per il menu',min:n=>`${n} min`,round:(c,t)=>`Giro ${c} · ${t}`,only:x=>`solo ${x}`,silent:'muto',
+    settings:'Impostazioni',ok:'Fatto',journal:'Diario',streak:'giorni di fila',today:'min oggi',sessions:'sessioni',weekAria:m=>`Minuti degli ultimi 7 giorni: ${m}`,
+    rhythms:'Ritmi',pick3:'Nella schermata principale se ne vedono al massimo 3; tocca per scegliere.',ownTitle:'Ritmo personale (secondi)',
+    slowInfo:'Lento: inspiri per 4 s, l’espirazione si allunga da 4 a 8 s entro la fine della sessione.',
+    tabTitle:'Tabata (secondi, numero)',tRounds:'Giri',tSets:'Serie',
+    tPrep:'Preparazione',tBreak:'Pausa tra le serie',tVol:'Volume del segnale',tSignal:'Segnale',look:'Aspetto',back:'Indietro',
+    exit:'Esci',exitAgain:'Tocca di nuovo per uscire',exitFail:'Il telefono non ha permesso la chiusura; usa il tasto indietro o Home.',
+    paused:'Pausa',tapResume:'tocca per continuare',resume:'Continua',
+    details:'Dettagli',goal:'Obiettivo giornaliero',goalToday:(m,g)=>`Oggi ${m} / ${g} min`,goalWeek:n=>`Obiettivo raggiunto ${n} ${n===1?'giorno':'giorni'} questa settimana.`,
+    last7:'Ultimi 7 giorni',month:'Calendario mensile',monthSum:(d,m)=>`${d} ${d===1?'giorno attivo':'giorni attivi'} · ${m} min`,prevMonth:'Mese precedente',nextMonth:'Mese successivo',
+    about:'Aiuto e info',howTo:'Come si usa',whatsNew:'Novità',privacy:'Privacy',source:'Codice sorgente',license:'Licenza',version:'Versione',
+    privacyTxt:'L’app non raccoglie né invia dati: niente account, statistiche o cookie. Le impostazioni e il diario restano su questo dispositivo, nella memoria del browser.',
+    help:['Tocca il cerchio per iniziare una sessione; toccalo di nuovo per fermarla.',
+      'Scegli il ritmo in alto; quali 3 compaiono lo decidi in Impostazioni → Ritmi.',
+      'Durante la sessione tutto sfuma tranne i cerchi. Tocca fuori dal cerchio per far tornare i pulsanti.',
+      'Funziona anche a schermo bloccato: metti in pausa o ferma dalla schermata di blocco o con il tasto delle cuffie.',
+      'Tabata: imposta lavoro, riposo e giri nella schermata principale; durante l’allenamento il colore dello schermo indica la fase. Tocca il numero per la pausa, tienilo premuto per fermare; ⏭ passa alla fase successiva. Con il telefono in orizzontale il numero è più grande.',
+      'Pulsante in basso a sinistra: Impostazioni. X in basso a destra: esci, tocca due volte.',
+      'Il diario e le impostazioni sono solo su questo telefono: salvali ogni tanto in un file (Impostazioni → Backup).'],
+    welcome:'Ciao! Dai un’occhiata veloce a come funziona.',helpBtn:'Aiuto',newsTxt:'L’app è stata aggiornata. Scopri le novità!',newsBtn:'Novità',
+    tabInfo:'Durante l’allenamento lo schermo è rosso nel lavoro, verde nel riposo e giallo nella preparazione. Negli ultimi 3 secondi di ogni fase suona un bip; il volume dipende anche dal volume multimediale del telefono.',
+    tround:x=>`Giro ${x}`,tset:s=>`Serie ${s}`,rounds:n=>`${n} giri`,tabN:n=>`Allenamenti Tabata finora: ${n}`,
+    session:'Sessione',duration:'Durata',sleepMode:'Modalità sonno',sleepInfo:'Lo schermo si scurisce lentamente; alla fine niente campana.',
+    full:'Schermo intero',fullInfo:'Le barre di stato e di navigazione si nascondono durante la sessione.',vibration:'Vibrazione',
+    sound:'Suono',breath:'Suono del respiro',chime:'Campana',speak:'Guida vocale',noVoice:'Questo telefono non ha una voce di sintesi in italiano.',
+    volume:'Volume',theme:'Tema colore',language:'Lingua',breathKind:'Tipo di suono del respiro',chimeKind:'Tipo di campana',close:'Chiudi',
+    v_lagy:'Morbido',v_ocean:'Oceano',v_pad:'Pad',v_tal:'Ciotola',c_csengo:'Campanello',c_tal:'Ciotola',c_fa:'Legno',c_csepp:'Goccia',c_piezo:'Piezo',
+    t_erdo:'Bosco',t_tenger:'Mare',t_levendula:'Lavanda',t_naplemente:'Tramonto',t_rozsa:'Rosa',t_ko:'Pietra',
+    scene:'Paesaggio di sfondo',sceneInfo:'Un paesaggio tranquillo in tinta con il tema, dietro i cerchi.',
+    newVer:'È disponibile una nuova versione.',update:'Aggiorna',installTxt:'Aggiungila alla schermata Home per usarla come app.',install:'Installa',
+    certTxt:'Configura il certificato una volta per installare l’app e tenere lo schermo acceso.',certBtn:'Configura',
+    share:'Condividi l’app',shareTxt:'Esercizi di respirazione e timer Tabata: gratis, senza pubblicità né registrazione.',copied:'Link copiato',skip:'Fase successiva',
+    hintTb:'Tocca il numero per la pausa, tienilo premuto per fermare',tapResumeTb:'tocca per continuare · tieni premuto per fermare'},
+  pl:{name:'Polski',locale:'pl-PL',title:'Kręgi oddechu',modes:'Rytm oddechu',
+    r_box:'Kwadrat',r_478:'Sen',r_calm:'Spokój',r_sigh:'Westchnij',r_coh:'Rezonans',r_relax:'Relaks',r_slow:'Wolniej',r_own:'Własny',r_tabata:'Tabata',
+    in:'Wdech',in2:'Jeszcze trochę',hold:'Zatrzymaj',out:'Wydech',work:'Praca',rest:'Przerwa',prep:'Przygotuj się',next:'Następnie',
+    sighInfo:'Westchnienie: dwa wdechy jeden po drugim (drugim dobierasz jeszcze trochę powietrza), potem długi wydech. Szybko łagodzi stres; wystarczą 1–3 minuty.',
+    amb:'Odgłosy natury',ambVol:'Głośność odgłosów natury',a_off:'Brak',a_eso:'Deszcz',a_patak:'Strumień',a_tuz:'Ogień',a_szel:'Wiatr',
+    exTitle:'Ćwiczenia (jedno w wierszu)',exPh:'Przysiady\nPompki\nBrzuszki\nWykroki',
+    exInfo:'Jeśli ją wypełnisz, podczas pracy widać bieżące ćwiczenie, a w przerwie następne; przewodnik głosowy je odczytuje. Jeśli ćwiczeń jest mniej niż rund, lista zaczyna się od nowa.',
+    backup:'Kopia zapasowa',backupInfo:'Dziennik i ustawienia są tylko na tym telefonie. Zapisz je do pliku i wczytaj po ponownej instalacji lub na nowym telefonie.',
+    exportBtn:'Zapisz do pliku',importBtn:'Przywróć',importAsk:'Przywrócić tę kopię? Ustawienia zostaną zastąpione, a dziennik scalony.',
+    importBad:'Ten plik nie jest kopią RelaxRing.',importOk:'Kopia przywrócona.',
+    start:'Start',stop:'Stop',tap:'dotknij koła',again:'dotknij, aby zacząć od nowa',done:'Brawo',
+    hint:'Dotknij koła, aby zatrzymać, a w innym miejscu, aby otworzyć menu',min:n=>`${n} min`,round:(c,t)=>`Runda ${c} · ${t}`,only:x=>`tylko ${x}`,silent:'cisza',
+    settings:'Ustawienia',ok:'Gotowe',journal:'Dziennik',streak:'dni z rzędu',today:'min dziś',sessions:'sesje',weekAria:m=>`Minuty z ostatnich 7 dni: ${m}`,
+    rhythms:'Rytmy',pick3:'Na ekranie głównym widać najwyżej 3; dotknij, aby wybrać.',ownTitle:'Własny rytm (sekundy)',
+    slowInfo:'Wolniej: wdech 4 s, a wydech wydłuża się z 4 do 8 s do końca sesji.',
+    tabTitle:'Tabata (sekundy, liczba)',tRounds:'Rundy',tSets:'Serie',
+    tPrep:'Przygotowanie',tBreak:'Przerwa między seriami',tVol:'Głośność sygnału',tSignal:'Sygnał',look:'Wygląd',back:'Wstecz',
+    exit:'Wyjdź',exitAgain:'Dotknij ponownie, aby wyjść',exitFail:'Telefon nie pozwolił zamknąć aplikacji; użyj przycisku wstecz lub ekranu głównego.',
+    paused:'Pauza',tapResume:'dotknij, aby kontynuować',resume:'Kontynuuj',
+    details:'Szczegóły',goal:'Cel dzienny',goalToday:(m,g)=>`Dziś ${m} / ${g} min`,goalWeek:n=>`Cel osiągnięty w tym tygodniu: ${n} ${n===1?'dzień':'dni'}.`,
+    last7:'Ostatnie 7 dni',month:'Kalendarz miesięczny',monthSum:(d,m)=>`Aktywne dni: ${d} · ${m} min`,prevMonth:'Poprzedni miesiąc',nextMonth:'Następny miesiąc',
+    about:'Pomoc i informacje',howTo:'Jak używać',whatsNew:'Nowości',privacy:'Prywatność',source:'Kod źródłowy',license:'Licencja',version:'Wersja',
+    privacyTxt:'Aplikacja nie zbiera ani nie wysyła żadnych danych: bez konta, analityki i ciasteczek. Ustawienia i dziennik zostają na tym urządzeniu, w pamięci przeglądarki.',
+    help:['Dotknij koła, aby rozpocząć sesję; dotknij ponownie, aby ją zatrzymać.',
+      'Rytm wybierasz u góry; które 3 są widoczne, ustawisz w Ustawienia → Rytmy.',
+      'Podczas sesji wszystko poza kołami blednie. Dotknij obok koła, a przyciski wrócą.',
+      'Działa też przy zablokowanym ekranie: pauza i stop są na ekranie blokady i pod przyciskiem słuchawek.',
+      'Tabata: pracę, przerwę i rundy ustawisz na ekranie głównym; podczas treningu kolor ekranu pokazuje fazę. Dotknij liczby, aby zrobić pauzę, przytrzymaj, aby zatrzymać; ⏭ przechodzi do następnej fazy. Gdy telefon leży poziomo, liczba jest większa.',
+      'Przycisk w lewym dolnym rogu: Ustawienia. X w prawym dolnym rogu: wyjście, dotknij dwa razy.',
+      'Dziennik i ustawienia są tylko na tym telefonie: co jakiś czas zapisz je do pliku (Ustawienia → Kopia zapasowa).'],
+    welcome:'Cześć! Zobacz w skrócie, jak to działa.',helpBtn:'Pomoc',newsTxt:'Aplikacja została zaktualizowana. Zobacz, co nowego!',newsBtn:'Nowości',
+    tabInfo:'Podczas treningu ekran jest czerwony w czasie pracy, zielony w przerwie i żółty podczas przygotowania. W ostatnich 3 sekundach każdej fazy słychać sygnał; głośność zależy też od głośności multimediów w telefonie.',
+    tround:x=>`Runda ${x}`,tset:s=>`Seria ${s}`,rounds:n=>`Rundy: ${n}`,tabN:n=>`Dotychczasowe treningi Tabata: ${n}`,
+    session:'Sesja',duration:'Czas trwania',sleepMode:'Tryb snu',sleepInfo:'Ekran powoli ciemnieje; na końcu nie ma dzwonka.',
+    full:'Pełny ekran',fullInfo:'Pasek stanu i pasek nawigacji znikają podczas sesji.',vibration:'Wibracje',
+    sound:'Dźwięk',breath:'Dźwięk oddechu',chime:'Dzwonek',speak:'Przewodnik głosowy',noVoice:'Ten telefon nie ma polskiego głosu syntezy mowy.',
+    volume:'Głośność',theme:'Motyw kolorystyczny',language:'Język',breathKind:'Rodzaj dźwięku oddechu',chimeKind:'Rodzaj dzwonka',close:'Zamknij',
+    v_lagy:'Miękki',v_ocean:'Ocean',v_pad:'Pad',v_tal:'Misa',c_csengo:'Dzwonek',c_tal:'Misa',c_fa:'Drewno',c_csepp:'Kropla',c_piezo:'Piezo',
+    t_erdo:'Las',t_tenger:'Morze',t_levendula:'Lawenda',t_naplemente:'Zachód',t_rozsa:'Róża',t_ko:'Kamień',
+    scene:'Krajobraz w tle',sceneInfo:'Spokojny krajobraz w kolorach motywu, za kołami.',
+    newVer:'Dostępna jest nowa wersja.',update:'Aktualizuj',installTxt:'Dodaj ją do ekranu głównego, aby używać jej jak aplikacji.',install:'Zainstaluj',
+    certTxt:'Skonfiguruj raz certyfikat, aby zainstalować aplikację i utrzymać włączony ekran.',certBtn:'Skonfiguruj',
+    share:'Udostępnij aplikację',shareTxt:'Ćwiczenia oddechowe i minutnik Tabata: za darmo, bez reklam i rejestracji.',copied:'Link skopiowany',skip:'Następna faza',
+    hintTb:'Dotknij liczby, aby zrobić pauzę, przytrzymaj, aby zatrzymać',tapResumeTb:'dotknij, aby kontynuować · przytrzymaj, aby zatrzymać'}
 };
 let L=T.hu,shownNote=null;
 
 // Újdonságok, a legfrissebb elöl. Az első elem verziója az app verziója; ha nagyobb, mint amit a felhasználó
 // utoljára látott, indításkor egyszer szólunk („Mi újság”). Új kiadásnál ide kerül egy új elem.
 const NEWS=[
+  {v:'1.2',d:'2026-10-18',
+    hu:['Tabata: a számra koppintva szünet, hosszan nyomva leáll; ⏭ gomb a következő szakaszhoz (a lezárási képernyőn is)','Tabata fekvő nézetben, óriási számmal','Új nyelvek: spanyol, francia, olasz, lengyel','Az app megosztása a Beállításokban'],
+    en:['Tabata: tap the number to pause, hold it to stop; ⏭ jumps to the next part (also on the lock screen)','Tabata in landscape with a huge number','New languages: Spanish, French, Italian, Polish','Share the app from Settings'],
+    de:['Tabata: Zahl antippen pausiert, gedrückt halten stoppt; ⏭ springt zum nächsten Abschnitt (auch auf dem Sperrbildschirm)','Tabata im Querformat mit riesiger Zahl','Neue Sprachen: Spanisch, Französisch, Italienisch, Polnisch','App teilen in den Einstellungen'],
+    es:['Tabata: toca el número para pausar y mantenlo pulsado para parar; ⏭ salta a la siguiente fase (también en la pantalla de bloqueo)','Tabata en horizontal con un número enorme','Nuevos idiomas: español, francés, italiano y polaco','Comparte la app desde Ajustes'],
+    fr:['Tabata : touchez le chiffre pour la pause, maintenez pour arrêter ; ⏭ passe à la phase suivante (aussi sur l’écran de verrouillage)','Tabata à l’horizontale avec un chiffre géant','Nouvelles langues : espagnol, français, italien, polonais','Partagez l’app depuis les Réglages'],
+    it:['Tabata: tocca il numero per la pausa, tienilo premuto per fermare; ⏭ passa alla fase successiva (anche dalla schermata di blocco)','Tabata in orizzontale con un numero enorme','Nuove lingue: spagnolo, francese, italiano, polacco','Condividi l’app dalle Impostazioni'],
+    pl:['Tabata: dotknij liczby, aby zrobić pauzę, przytrzymaj, aby zatrzymać; ⏭ przechodzi do następnej fazy (także na ekranie blokady)','Tabata w poziomie z ogromną liczbą','Nowe języki: hiszpański, francuski, włoski, polski','Udostępnianie aplikacji w Ustawieniach']},
   {v:'1.1',d:'2026-10-17',
     hu:['Lezárt képernyővel is fut, a lezárási képernyőn szüneteltethető és leállítható','Napló: napi cél, havi naptár, heti célnapok','Súgó és névjegy, újdonságok frissítés után','Angol nevű gyorsindítók az app ikonján'],
     en:['Keeps running with the screen locked; pause or stop it from the lock screen','Journal: daily goal, monthly calendar, goal days this week','Help & about page, what\'s new after an update','Icon shortcuts now have English names'],
@@ -878,7 +1097,8 @@ function phase(){
   ph.textContent=L[kind];left=secs;ct.textContent=left;
   if(tb){                                            // a képernyő színe jelzi a szakaszt (CSS: html[data-tb])
     const exn=cur[i][4];document.documentElement.dataset.tb=kind;ph.style.fontSize=ph.style.whiteSpace='';
-    if(kind==='work'&&exn){ph.textContent=exn;fitPh()} // munka közben a gyakorlat neve, pihenőnél alul a következő
+    if(kind==='work'&&exn)ph.textContent=exn;        // munka közben a gyakorlat neve, pihenőnél alul a következő
+    fitPh();                                         // hosszú név vagy szó (pl. „Préparez-vous”): kisebb betű
     if(!mute){
       if(kind==='work'){beep(1500,.6);tbBuzz(400)}else if(kind==='rest'){beep(750,.3,2);tbBuzz([150,100,150])}
       speakText(kind==='work'&&exn?exn:exn?`${L[kind]}. ${L.next}: ${exn}`:L[kind]);
@@ -900,7 +1120,7 @@ function planSecs(p){return p.reduce((a,x)=>a+x[1],0)}
 function showMeta(){
   if(exitArmed){meta.textContent=L.exitAgain;return}   // amíg a Kilépés élesítve van, ez a felirat marad
   if(run&&tb){const [kind,,r,s,exn]=cur[i],t=st.tab,x=`${Math.max(1,r)}/${t.rounds}`;   // a kör nagyban a szám alatt, lent a hátralévő idő
-    sub.textContent=(t.sets>1?L.tset(s)+' · ':'')+x+(kind!=='work'&&exn?` → ${exn}`:'');
+    if(!paused)sub.textContent=(t.sets>1?L.tset(s)+' · ':'')+x+(kind!=='work'&&exn?` → ${exn}`:'');   // szünetben ott a teendő
     meta.textContent=(t.sets>1?L.tset(s)+' · '+x:L.tround(x))+' · '+fmt(Math.max(0,planSecs(cur)-elapsed));return}
   if(run){meta.textContent=L.round(cyc,fmt(Math.max(0,st.dur*60-elapsed)));return}
   if(st.mode==='tabata'){meta.textContent=fmt(planSecs(tabataPlan()))+' · '+L.rounds(st.tab.rounds*st.tab.sets);return}
@@ -933,15 +1153,15 @@ function pause(){
   if(voice)voice.quiet(.5);ambStop(1);if('speechSynthesis' in window)speechSynthesis.cancel();
   if(st.sleep&&!tb)setDim(getComputedStyle(dim).opacity,0);     // az elsötétülés is megáll
   clearTimeout(focusT);app.classList.remove('focus');app.classList.add('paused');
-  ph.style.fontSize=ph.style.whiteSpace='';ph.textContent=L.paused;sub.textContent=L.tapResume;ringBtn.setAttribute('aria-label',L.resume);
+  ph.style.fontSize=ph.style.whiteSpace='';ph.textContent=L.paused;sub.textContent=tb?L.tapResumeTb:L.tapResume;ringBtn.setAttribute('aria-label',L.resume);
   if(media&&!media.paused)media.pause();
   mediaMeta();
 }
 function resume(){
   if(!run||!paused)return;
   paused=false;t0+=performance.now()-pauseAt;ensureAudio();
-  app.classList.remove('paused');ringBtn.setAttribute('aria-label',L.stop);
-  const [kind,,,,exn]=cur[i];ph.textContent=tb&&kind==='work'&&exn?exn:L[kind];ct.textContent=left;
+  app.classList.remove('paused');ringBtn.setAttribute('aria-label',tb?L.paused:L.stop);
+  const [kind,,,,exn]=cur[i];ph.textContent=tb&&kind==='work'&&exn?exn:L[kind];ct.textContent=left;if(tb)fitPh();
   if(!tb){                                           // a félbemaradt szakasz a hátralévő időre folytatódik
     if(kind!=='hold')size(curBig,left);
     if(voice){if(kind==='in'||kind==='in2')voice.inhale(left);else if(kind==='out')voice.exhale(left);else voice.hold(curBig)}
@@ -994,6 +1214,8 @@ if('mediaSession' in navigator){
   const acts={play:()=>resume(),pause:()=>pause(),stop:()=>stop()};
   for(const a in acts)try{navigator.mediaSession.setActionHandler(a,acts[a])}catch(e){}
 }
+// Tabata közben a lezárási képernyőn (és a fülhallgató „következő” gombjával) is lehet a következő szakaszra ugrani
+function mediaNext(on){if('mediaSession' in navigator)try{navigator.mediaSession.setActionHandler('nexttrack',on?skip:null)}catch(e){}}
 async function lock(){try{wake=await navigator.wakeLock.request('screen')}catch(e){wake=null}}
 function unlock(){try{wake&&wake.release()}catch(e){}wake=null}
 // A telepített app eleve teljes képernyős (manifest display: fullscreen), így nincs rendszersáv és Chrome-felirat sem.
@@ -1008,23 +1230,41 @@ function goFull(){
   document.documentElement.requestFullscreen({navigationUI:'hide'}).then(()=>fsTried=true,()=>{});
 }
 function leaveFull(){if(document.fullscreenElement)document.exitFullscreen().catch(()=>{})}
+// Tájolás: a manifest nem rögzíti, így a Tabata fekve is megy (a telefon a földön vagy a polcon áll), és a telefon
+// automatikus forgatás kapcsolója dönt. A légzés állóra zárva marad, ahol a böngésző engedi a zárolást (teljes képernyő);
+// ahol nem, ott a légzőképernyőnek is van fekvő elrendezése.
+function orient(){
+  const o=screen.orientation;if(!o||!o.lock)return;
+  try{if(st.mode==='tabata')o.unlock();else o.lock('portrait').catch(()=>{})}catch(e){}
+}
+document.addEventListener('fullscreenchange',orient);
 function setDim(op,secs){dim.style.transition=`opacity ${secs}s linear`;dim.style.opacity=op}
 function start(){
   fsTried=false;goFull();
   closeSheet();ensureAudio();tb=st.mode==='tabata';runMode=st.mode;
   document.documentElement.classList.toggle('tb-run',tb);
   run=true;paused=false;finished=false;i=0;cyc=1;elapsed=0;curBig=0;t0=performance.now();app.classList.remove('idle','paused');
-  phase();mediaStart();tm=setInterval(tick,250);ringBtn.setAttribute('aria-label',L.stop);lock();showMeta();focusLater(1200);keepStorage();
+  phase();mediaStart();mediaNext(tb);tm=setInterval(tick,250);ringBtn.setAttribute('aria-label',tb?L.paused:L.stop);lock();showMeta();focusLater(1200);keepStorage();
+  skipBtn.hidden=!tb;
   if(!tb&&st.amb!=='off')ambStart(4);
   if(st.sleep&&!tb){setDim(0,0);requestAnimationFrame(()=>requestAnimationFrame(()=>setDim(.9,st.dur*60)))}
-  if((st.hint2||0)<3){st.hint2=(st.hint2||0)+1;save();hint.classList.add('show');setTimeout(()=>hint.classList.remove('show'),5000)}
+  const hk=tb?'hintTb':'hint2';hint.textContent=L[tb?'hintTb':'hint'];   // az első 3 alkalommal (légzésnél és Tabatánál külön) rövid tipp
+  if((st[hk]||0)<3){st[hk]=(st[hk]||0)+1;save();hint.classList.add('show');setTimeout(()=>hint.classList.remove('show'),5000)}
+}
+// ⏭ a Tabata-terv következő szakaszára: a hátralévő másodpercek kimaradnak, és az óra úgy igazodik, hogy az új szakasz egész másodperccel induljon
+function skip(){
+  if(!run||!tb)return;
+  if(paused)resume();
+  elapsed+=left;t0=performance.now()-elapsed*1000;i++;
+  if(i>=cur.length){finish();return}
+  phase();showMeta();
 }
 let finished=false;
 function idleLabel(){ph.style.fontSize=ph.style.whiteSpace='';ph.textContent=finished?L.done:L.start;sub.textContent=finished?L.again:L.tap;ringBtn.setAttribute('aria-label',L.start)}
 function stop(keepFull){
   if(!run)return;
   if(!keepFull)leaveFull();
-  run=false;paused=false;app.classList.remove('paused');clearInterval(tm);mediaStop();
+  run=false;paused=false;app.classList.remove('paused');clearInterval(tm);mediaStop();mediaNext(false);skipBtn.hidden=true;
   size(0,1.2);if(voice)voice.quiet(.8);ambStop(keepFull?10:2);   // alvás mód végén lassan halkul
   if('speechSynthesis' in window)speechSynthesis.cancel();
   clearTimeout(focusT);app.classList.remove('focus');hint.classList.remove('show');
@@ -1040,7 +1280,25 @@ function finish(){
   if(sleeping)setDim(.97,2);                         // alvás módban sötét (és teljes képernyős) marad, a képernyő magától kikapcsolhat
 }
 let undim=false;                                     // alvás mód után az első koppintás csak felébreszti a képernyőt
-ringBtn.onclick=()=>{if(undim){undim=false;return}if(run&&paused){resume();return}run?stop():start()};
+// Légzésnél a körre koppintás leállít. Tabata közben csak szüneteltet (izzadt kézzel könnyű véletlenül hozzáérni),
+// a leállításhoz hosszan kell nyomni. A hosszú nyomás utáni koppintás (ha a böngésző küld ilyet) nem indít újra.
+const LONG=800,stageEl=ringBtn.parentElement,skipBtn=$('skipBtn');let lpT=0,lpDone=false;
+function lpEnd(){clearTimeout(lpT);stageEl.classList.remove('holding')}
+ringBtn.addEventListener('pointerdown',()=>{
+  lpDone=false;if(!(run&&tb))return;
+  stageEl.classList.add('holding');
+  lpT=setTimeout(()=>{lpEnd();lpDone=true;tbBuzz(200);stop()},LONG);
+});
+['pointerup','pointercancel','pointerleave'].forEach(t=>ringBtn.addEventListener(t,lpEnd));
+ringBtn.addEventListener('contextmenu',e=>{if(run&&tb||lpDone)e.preventDefault()});
+ringBtn.onclick=()=>{
+  if(lpDone){lpDone=false;return}
+  if(undim){undim=false;return}
+  if(run&&paused){resume();return}
+  if(run&&tb){pause();return}
+  run?stop():start();
+};
+skipBtn.onclick=skip;
 function renderModes(){
   const box=$('modes');
   box.innerHTML=RIDS.filter(id=>st.shown.includes(id)).map(id=>`<button data-m="${id}" aria-pressed="${st.mode===id}"><span>${L['r_'+id]}</span><small>${patternLabel(id)}</small></button>`).join('');
@@ -1063,7 +1321,8 @@ app.addEventListener('pointerdown',e=>{
   app.classList.contains('focus')?wakeUI():focusLater();
 },true);
 app.addEventListener('pointerup',e=>{if(run&&e.target!==ringBtn)goFull()});   // érintésnél a felengedés számít koppintásnak
-document.addEventListener('keydown',()=>{if(run)wakeUI()});
+document.addEventListener('keydown',e=>{if(!run)return;wakeUI();if(e.key==='Escape'&&sheet.hidden)stop()});   // billentyűzetről: Esc leállít (a hosszú nyomás helyett)
+addEventListener('resize',()=>{if(run&&tb){ph.style.fontSize=ph.style.whiteSpace='';fitPh()}});                // forgatás után a felirat új méretéhez
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')wakeUI()});
 
 // ---------------------------------------------------------------- beállítások
@@ -1164,7 +1423,7 @@ function tabSet(k,v){st.tab[TKEYS[k]]=v}
 // Előbeállítások a főképernyőn; pihenő 0 = EMOM (minden perc elején indul egy kör)
 const TPRE={Tabata:[20,10,8,'20/10 ×8'],HIIT:[40,20,8,'40/20 ×8'],EMOM:[60,0,10,'1′ ×10']};
 function renderTabPanel(){
-  const p=$('tbPanel');p.hidden=st.mode!=='tabata';if(p.hidden)return;
+  const p=$('tbPanel');p.hidden=st.mode!=='tabata';orient();if(p.hidden)return;
   const t=st.tab,pre=$('tbPre');
   pre.innerHTML=Object.entries(TPRE).map(([n,[w,r,k,lab]])=>`<button data-p="${n}" aria-pressed="${t.work===w&&t.rest===r&&t.rounds===k&&t.sets===1}">${n}<small>${lab}</small></button>`).join('');
   pre.querySelectorAll('button').forEach(b=>b.onclick=()=>{const [w,r,k]=TPRE[b.dataset.p];Object.assign(st.tab,{work:w,rest:r,rounds:k,sets:1});
@@ -1262,7 +1521,7 @@ function applyLang(id){
   opts(langOpts,T,'lang',applyLang,id=>T[id].name);
   buildSwatches();renderRhythms();renderModes();renderStats();voiceNote();setTitle();navSummary();
   durv.textContent=L.min(st.dur);
-  if(run){ph.textContent=L[cur[i][0]];ringBtn.setAttribute('aria-label',L.stop)}else idleLabel();
+  if(run){ph.textContent=L[cur[i][0]];ringBtn.setAttribute('aria-label',tb?L.paused:L.stop)}else idleLabel();
   if(shownNote)note(...shownNote);
   showMeta();
 }
@@ -1323,6 +1582,15 @@ $('impFile').onchange=async e=>{
   closeSheet();location.reload();
 };
 try{if(sessionStorage.getItem('imported')){sessionStorage.removeItem('imported');note('importOk','ok',()=>notice.classList.remove('show'))}}catch(e){}
+
+// Az app megosztása: a telefon megosztó lapja; ahol nincs, a link a vágólapra kerül. Mindig a nyilvános címet adjuk,
+// az otthoni szerveré (relaxring.local) másnak nem nyílna meg.
+const SHARE_URL='https://vmynick.github.io/relaxring/';
+$('shareBtn').onclick=async()=>{
+  if(navigator.share)try{await navigator.share({title:'RelaxRing',text:L.shareTxt,url:SHARE_URL});return}catch(e){if(e.name==='AbortError')return}
+  const em=$('shareNote');
+  try{await navigator.clipboard.writeText(SHARE_URL);em.textContent=L.copied;setTimeout(()=>em.textContent='',3000)}catch(e){prompt(L.share,SHARE_URL)}
+};
 
 // Első indításkor a rövid súgót ajánljuk, frissítés után (egyszer) az újdonságokat
 function openAbout(news){notice.classList.remove('show');openSheet();openPage('about');if(news)$('newsList').scrollIntoView({block:'start'})}
