@@ -12,15 +12,15 @@ normalized. White and brown noise are synthesized by the app.
 
 File        Freesound sound                                              Recordist
 ----------  -----------------------------------------------------------  ----------------
-eso.mp3     Soft rain on a tile roof                                     richwise
+rain.mp3    Soft rain on a tile roof                                     richwise
             https://freesound.org/people/richwise/sounds/466241/
-patak.mp3   Relaxing, Mountains, Rivers, Streams, Running Water          INNORECORDS
+stream.mp3  Relaxing, Mountains, Rivers, Streams, Running Water          INNORECORDS
             https://freesound.org/people/INNORECORDS/sounds/469009/
-tuz.mp3     Fireplace crackling wood little flame                        BonnyOrbit
+fire.mp3    Fireplace crackling wood little flame                        BonnyOrbit
             https://freesound.org/people/BonnyOrbit/sounds/484338/
-szel.mp3    a gentle breeze, wind 3                                      mario1298
+wind.mp3    a gentle breeze, wind 3                                      mario1298
             https://freesound.org/people/mario1298/sounds/181252/
-hullam.mp3  4. waves, close recording, beach, portugal                   VMan533
+waves.mp3   4. waves, close recording, beach, portugal                   VMan533
             https://freesound.org/people/VMan533/sounds/575902/
-madar.mp3   Dawn chorus - Hampshire countryside Springtime               richwise
+birds.mp3   Dawn chorus - Hampshire countryside Springtime               richwise
             https://freesound.org/people/richwise/sounds/466242/

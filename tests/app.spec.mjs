@@ -600,6 +600,27 @@ test('Beállítások: almenü, vissza és bezárás', async ({ page }) => {
   await expect(page.locator('#sheetTitle')).toHaveText('Beállítások');
   await page.keyboard.press('Escape');
   await expect(page.locator('#sheet')).toBeHidden();
+  await openSettings(page, 'rhythms');                 // a Kész gomb: aloldalról a főmenübe, a főmenüből bezár
+  await page.locator('#doneBtn').click();
+  await expect(page.locator('#sheetTitle')).toHaveText('Beállítások');
+  await page.locator('#doneBtn').click();
+  await expect(page.locator('#sheet')).toBeHidden();
+});
+
+test('forrásjegyzékek az appon belül nyílnak, a vissza a Súgóba visz', async ({ page }) => {
+  await seed(page);
+  await page.goto('/');
+  await openSettings(page, 'about');
+  await page.locator('[data-cred="amb/CREDITS.txt"]').click();
+  await expect(page.locator('#sheetTitle')).toHaveText('Természethangok');
+  await expect(page.locator('#credTxt')).toContainText('freesound.org/people/richwise/sounds/466241');
+  expect(page.url()).not.toContain('CREDITS');
+  await page.locator('#backBtn').click();
+  await expect(page.locator('#sheetTitle')).toHaveText('Súgó és névjegy');
+  await page.locator('[data-cred="voice/CREDITS.txt"]').click();
+  await expect(page.locator('#credTxt')).toContainText('Piper');
+  await page.keyboard.press('Escape');               // a telefon vissza mozdulata is a Súgóba lép
+  await expect(page.locator('#sheetTitle')).toHaveText('Súgó és névjegy');
 });
 
 test('mentés fájlba és visszatöltés', async ({ page }, info) => {

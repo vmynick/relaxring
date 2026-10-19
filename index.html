@@ -229,6 +229,7 @@ a.navi{text-decoration:none;box-sizing:border-box}
 .tchart polyline{fill:none;stroke:var(--c1);stroke-width:2.5;stroke-linejoin:round}
 .tchart circle{fill:var(--c1)}
 .tchart text{font:600 12px var(--body);fill:var(--muted)}
+.cred{margin:0;padding:10px 0 14px;white-space:pre-wrap;overflow-wrap:anywhere;font:12.5px/1.45 ui-monospace,"Cascadia Mono",Consolas,monospace;color:var(--fg)}
 #infoTxt h4{margin:14px 0 4px;font:700 17px/1.3 var(--body);color:var(--c1)}
 #infoTxt h4:first-child{margin-top:8px}
 #infoTxt p{margin:0 0 8px;font-size:17px;line-height:1.45}
@@ -491,8 +492,8 @@ html.tb-run #ph{max-width:94vw;margin:0 auto;white-space:nowrap}
       <div class="group nav">
         <a class="navi" href="https://github.com/vmynick/relaxring" target="_blank" rel="noopener"><span data-i="source"></span><em>GitHub</em><b aria-hidden="true">›</b></a>
         <a class="navi" href="https://github.com/vmynick/relaxring/blob/main/LICENSE" target="_blank" rel="noopener"><span data-i="license"></span><em>MIT</em><b aria-hidden="true">›</b></a>
-        <a class="navi" href="voice/CREDITS.txt" target="_blank" rel="noopener"><span data-i="voiceCredits"></span><em>Piper</em><b aria-hidden="true">›</b></a>
-        <a class="navi" href="amb/CREDITS.txt" target="_blank" rel="noopener"><span data-i="ambCredits"></span><em>Freesound</em><b aria-hidden="true">›</b></a>
+        <button class="navi" data-cred="voice/CREDITS.txt" data-ct="voiceCredits"><span data-i="voiceCredits"></span><em>Piper</em><b aria-hidden="true">›</b></button>
+        <button class="navi" data-cred="amb/CREDITS.txt" data-ct="ambCredits"><span data-i="ambCredits"></span><em>Freesound</em><b aria-hidden="true">›</b></button>
       </div>
     </div>
 
@@ -559,6 +560,7 @@ html.tb-run #ph{max-width:94vw;margin:0 auto;white-space:nowrap}
     </div>
 
     <div class="page" data-page="info" hidden><div id="infoBody"></div></div>
+    <div class="page" data-page="credits" hidden><div class="group"><pre class="cred" id="credTxt"></pre></div></div>
 
     <div class="page" data-page="programs" hidden>
       <div class="group" id="progList"></div>
@@ -2749,6 +2751,10 @@ let L=T.hu,shownNote=null;
 // Újdonságok, a legfrissebb elöl. Az első elem verziója az app verziója; ha nagyobb, mint amit a felhasználó
 // utoljára látott, indításkor egyszer szólunk („Mi újság”). Új kiadásnál ide kerül egy új elem.
 const NEWS=[
+  {v:'1.4.1',d:'2026-10-19',
+    hu:['A Kész gomb almenüből a Beállítások főmenüjébe visz','A forrásjegyzékek (Piper, Freesound) az appon belül nyílnak meg, onnan vissza lehet lépni'],
+    en:['Done in a settings page takes you back to the Settings menu','The credits (Piper, Freesound) open inside the app, so you can go back'],
+    de:['„Fertig“ führt aus einer Unterseite zurück ins Einstellungsmenü','Die Quellenangaben (Piper, Freesound) öffnen sich in der App, mit Weg zurück']},
   {v:'1.4',d:'2026-10-19',
     hu:['Visszatartás-teszt (BOLT és maximális), grafikonnal a naplóban','Többnapos programok: alapozó, jobb alvás, energia és fókusz','Részletes leírás minden technikához (ⓘ a Ritmusoknál)',
       'Hangulat a gyakorlás előtt és után (a Gyakorlásnál kapcsolható be)','Tabata: gyakorlatonként saját idő, félidő- és figyelmeztető jelzés, metronóm, 6 új hang, saját hangfájl',
@@ -3132,20 +3138,20 @@ const AMB={
 };
 let amb=null,ambGain=null;
 function ambOut(){if(!ambGain){ambGain=ac.createGain();ambGain.connect(master)}ambGain.gain.value=(st.ambVol/100)**1.5*1.2;return ambGain}
-// Felvett természethangok (CC0, amb/<név>.mp3, lásd amb/CREDITS.txt): első használatkor töltődnek le, utána a gyorsítótárból
+// Felvett természethangok (CC0, amb/<angol név>.mp3, lásd amb/CREDITS.txt; a beállításban a régi magyar azonosító marad): első használatkor töltődnek le, utána a gyorsítótárból
 // jönnek. Amíg nincs meg (vagy offline, ha még sosem töltődött le), a szintetizált változat szól, és ha közben megérkezik,
 // 2 mp alatt átúsztatunk rá. Egyszerre csak a választott hang marad dekódolva a memóriában.
-const AMBREC={eso:1.6,patak:2.3,tuz:1.6,szel:2.6,hullam:1.8,madar:1},abuf={},aload={};let ambGen=0;   // erősítés: kb. a szintetizált hang szintje
+const AMBREC={eso:['rain',1.6],patak:['stream',2.3],tuz:['fire',1.6],szel:['wind',2.6],hullam:['waves',1.8],madar:['birds',1]},abuf={},aload={};let ambGen=0;   // fájlnév, erősítés (kb. a szintetizált hang szintje)
 function ambLoad(k){
   if(!AMBREC[k]||abuf[k])return null;
   for(const x in abuf)if(x!==k)delete abuf[x];
-  return aload[k]||(aload[k]=fetch('amb/'+k+'.mp3').then(r=>{if(!r.ok)throw 0;return r.arrayBuffer()})
+  return aload[k]||(aload[k]=fetch('amb/'+AMBREC[k][0]+'.mp3').then(r=>{if(!r.ok)throw 0;return r.arrayBuffer()})
     .then(b=>new (window.OfflineAudioContext||window.webkitOfflineAudioContext)(2,1,44100).decodeAudioData(b))
     .then(b=>{abuf[k]=b;delete aload[k];return b}).catch(()=>{delete aload[k];return null}));
 }
 function ambRec(k,fade,gen){
   const b=abuf[k],src=ac.createBufferSource(),g=ac.createGain();src.buffer=b;src.loop=true;g.gain.value=0;src.connect(g);g.connect(ambOut());
-  src.start(0,Math.random()*b.duration);ramp(g.gain,AMBREC[k],fade);
+  src.start(0,Math.random()*b.duration);ramp(g.gain,AMBREC[k][1],fade);
   return {gen,stop(d){ramp(g.gain,0,d);setTimeout(()=>{try{src.stop()}catch(e){}g.disconnect()},d*1000+150)}};
 }
 function ambStart(fade){
@@ -3824,7 +3830,7 @@ const sheet=$('sheet'),backdrop=$('backdrop'),setBtn=$('setBtn'),voiceOpts=$('vo
 const PAGES={journal:'journal',rhythms:'rhythms',tabata:'r_tabata',session:'session',programs:'programs',sound:'sound',look:'look',lang:'language',backup:'backup',about:'about'};
 let page='main',cwMain=null,cwPage=null;
 function watch(fn){if(!('CloseWatcher' in window))return null;try{const w=new CloseWatcher();w.onclose=fn;return w}catch(e){return null}}
-function setTitle(){const h=$('sheetTitle');h.textContent=page==='info'?rname(infoId):L[PAGES[page]||'settings'];fitText(h,16)}
+function setTitle(){const h=$('sheetTitle');h.textContent=page==='info'?rname(infoId):page==='credits'?L[credKey]:L[PAGES[page]||'settings'];fitText(h,16)}
 function showPage(p){
   page=p;sheet.querySelectorAll('.page').forEach(x=>x.hidden=x.dataset.page!==p);
   $('backBtn').hidden=p==='main';setTitle();$('sheetBody').scrollTop=0;
@@ -3853,16 +3859,23 @@ function openSheet(){
   cwMain=watch(()=>{cwMain=null;closeSheet()});$('doneBtn').focus();
 }
 function openPage(p){showPage(p);cwPage=watch(()=>{cwPage=null;showPage('main')});$('sheetTitle').focus({preventScroll:true})}
-function backToMain(){if(cwPage){cwPage.destroy();cwPage=null}if(page==='info')openPage('rhythms');else showPage('main')}
+// Az aloldal aloldalai (leírás, forrásjegyzék) a szülőjükre lépnek vissza; a Kész gomb aloldalról a főmenübe visz
+const UP={info:'rhythms',credits:'about'};
+function backToMain(){if(cwPage){cwPage.destroy();cwPage=null}if(UP[page])openPage(UP[page]);else showPage('main')}
+function doneBtn(){if(page==='main'){closeSheet();return}if(cwPage){cwPage.destroy();cwPage=null}showPage('main')}
+function openSub(p){if(cwPage){cwPage.destroy();cwPage=null}showPage(p);cwPage=watch(()=>{cwPage=null;openPage(UP[p])});$('sheetTitle').focus({preventScroll:true})}
+// Forrásjegyzék (felvett hangok, természethangok) az appon belül: a telepített, teljes képernyős appból nincs visszaút egy .txt-ről
+let credKey='voiceCredits';
+function openCredits(url,key){
+  credKey=key;openSub('credits');const pre=$('credTxt');pre.textContent='…';
+  fetch(url).then(r=>{if(!r.ok)throw 0;return r.text()}).then(t=>{if(page==='credits'&&credKey===key)pre.textContent=t}).catch(()=>{pre.textContent=L.infoNone});
+}
+document.querySelectorAll('[data-cred]').forEach(b=>b.onclick=()=>openCredits(b.dataset.cred,b.dataset.ct));
 // Részletes leírás egy technikáról (mire jó, hogyan, mire figyelj, forrás): info/<nyelv>.json, az első megnyitáskor
 // töltődik le, utána a gyorsítótárból jön. A Ritmusok oldaláról nyílik, és oda is lép vissza.
 let infoId='';const INFO={};
 function infoData(){const l=st.lang;return INFO[l]||(INFO[l]=fetch(`info/${l}.json`).then(r=>r.ok?r.json():{}).catch(()=>{delete INFO[l];return {}}))}
-function openInfo(id){
-  infoId=id;if(cwPage){cwPage.destroy();cwPage=null}
-  showPage('info');cwPage=watch(()=>{cwPage=null;openPage('rhythms')});$('sheetTitle').focus({preventScroll:true});
-  renderInfo();
-}
+function openInfo(id){infoId=id;openSub('info');renderInfo()}
 function renderInfo(){
   const id=infoId;
   $('infoBody').innerHTML=`<div class="group"><div class="item"><span><b>${esc(rname(id))}</b><small class="desc">${esc(L['d_'+id])}</small></span><em class="ipat">${esc(patternLabel(id))}</em></div></div>`+
@@ -3876,7 +3889,7 @@ function closeSheet(){
   [cwPage,cwMain].forEach(w=>w&&w.destroy());cwPage=cwMain=null;
   sheet.hidden=backdrop.hidden=true;setBtn.setAttribute('aria-expanded','false');setBtn.focus({preventScroll:true});if(run)focusLater();
 }
-setBtn.onclick=openSheet;$('doneBtn').onclick=closeSheet;backdrop.onclick=closeSheet;$('backBtn').onclick=backToMain;
+setBtn.onclick=openSheet;$('doneBtn').onclick=doneBtn;backdrop.onclick=closeSheet;$('backBtn').onclick=backToMain;
 sheet.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>openPage(b.dataset.go));
 if(!('CloseWatcher' in window))document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!sheet.hidden){page==='main'?closeSheet():backToMain()}});
 
