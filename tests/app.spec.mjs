@@ -330,7 +330,7 @@ test('kitüntetések és statisztika: kikapcsolható, a régi naplóból is szá
 });
 
 test('új kitüntetésnél a gyakorlás után szól, és a gyakorlás bekerül a listába', async ({ page }) => {
-  await page.clock.install();
+  await page.clock.install({ time: new Date('2026-10-15T12:00:00') });   // délben: hajnalban a „Korán kelő” is járna
   await seed(page, { mode: 'box', dur: 1, stats: true });
   await page.goto('/');
   await page.locator('#ringBtn').click();
