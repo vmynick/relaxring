@@ -1,0 +1,92 @@
+{
+ "calm": {
+  "what": "Saktar ner till ungefär 6 andetag i minuten, med en utandning som är längre än inandningen. En lång utandning ställer om nervsystemet mot vila: bra i spända stunder, på kvällen eller när du vill lugna dig.",
+  "how": "Andas mjukt in genom näsan i 4 s, först ner i magen, och andas sedan långsamt ut i 6 s genom näsan eller spetsade läppar. Mjukt och tyst. 3–5 minuter räcker.",
+  "care": "Det ska kännas lätt. Om luften tryter, korta utandningen eller ta en paus.",
+  "src": "Långsam andning med längre utandning: Zaccaro m.fl., Frontiers in Human Neuroscience, 2018 (systematisk översikt)."
+ },
+ "sigh": {
+  "what": "Två inandningar i rad och sedan en lång utandning. Den korta andra inandningen öppnar hopfallna lungblåsor och den långa utandningen släpper ut koldioxid. Ett av de snabbaste sätten att sänka stressen.",
+  "how": "Andas in genom näsan i 2 s, fyll på med en kort extra klunk luft i 1 s och andas sedan långsamt ut genom munnen i 6 s. 1–5 minuter, i en spänd stund eller som daglig vana.",
+  "care": "Påfyllningen ska vara liten, tvinga inte. Sluta om du blir yr.",
+  "src": "Balban m.fl., Cell Reports Medicine, 2023: fem minuter cykliska suckar om dagen förbättrade humöret och sänkte andningsfrekvensen mer än mindfulnessmeditation."
+ },
+ "coh": {
+  "what": "Jämn, långsam andning, ungefär 6 i minuten. Runt det tempot är hjärtfrekvensvariabiliteten som störst (resonans), vilket gynnar lugn och stresstålighet.",
+  "how": "Andas jämnt genom näsan, in- och utandning lika långa, utan pauser. Ställ in tempot under rytmlistan, från 4,3 till 10 andetag i minuten; de flesta trivs bäst med 5,5–6. 10–20 minuter om dagen.",
+  "care": "Det ska vara bekvämt. Känner du lufthunger, välj ett snabbare tempo.",
+  "src": "Lehrer & Gevirtz, Frontiers in Psychology, 2014 (biofeedback av hjärtfrekvensvariabilitet)."
+ },
+ "relax": {
+  "what": "En kort paus efter inandningen och en lång utandning. Saktar ner och släpper spänningar, särskilt i axlar och bröst.",
+  "how": "Andas in genom näsan i 4 s, håll mjukt i 2 s och andas sedan långsamt ut i 6 s. Låt axlarna sjunka vid varje utandning.",
+  "care": "Håll utan ansträngning, med öppen hals. Känns det obekvämt, välj hellre rytmen Lugn.",
+  "src": "En variant av långsam andning med längre utandning (se Zaccaro m.fl., 2018)."
+ },
+ "equal": {
+  "what": "In- och utandning lika långa. Balanserande och en bra start om andningsövningar är nya för dig.",
+  "how": "Andas in genom näsan i 4 s och ut i 4 s, jämnt, utan pauser. När det känns lätt kan du förlänga båda med en egen rytm.",
+  "care": "Inga särskilda risker; håll dig avslappnad.",
+  "src": "Sama vritti (lika andning) från yogatraditionen."
+ },
+ "478": {
+  "what": "En lång paus och en ännu längre utandning. Används ofta för att lugna sig och somna.",
+  "how": "Andas tyst in genom näsan i 4 s, håll i 7 s och andas sedan ut genom munnen i 8 s med ett mjukt susande ljud. Börja med 4 varv, i sängen eller sittande.",
+  "care": "Den långa pausen kan vara svår i början: gör en egen rytm med kortare paus. Har du hjärt- eller lungsjukdom, fråga din läkare först.",
+  "src": "Gjord känd av läkaren Andrew Weil, baserad på pranayama. Det vetenskapliga stödet är än så länge begränsat."
+ },
+ "slow": {
+  "what": "Utandningen växer från 4 till 8 s mot slutet av passet, så att du saktar ner steg för steg, nästan utan att märka det.",
+  "how": "Andas in genom näsan i 4 s och följ cirkeln på utandningen när den blir längre. Perfekt före sömnen eller efter en hektisk dag, 10–15 minuter.",
+  "care": "Blir de långa utandningarna obekväma, välj ett kortare pass.",
+  "src": "Bygger på långsam andning med växande utandning (se Zaccaro m.fl., 2018)."
+ },
+ "long": {
+  "what": "Utandningen är dubbelt så lång som inandningen (förhållandet 1:2): djup avslappning före sänggåendet.",
+  "how": "Andas in genom näsan i 4 s och sedan långsamt ut i 8 s genom näsan eller spetsade läppar. Liggande, 5–10 minuter.",
+  "care": "Är 8 s för långt, börja med rytmen Lugn (4·6).",
+  "src": "Andningsförhållandet 1:2 kommer från yogapraktiken; se även Zaccaro m.fl., 2018."
+ },
+ "bee": {
+  "what": "Nynna på utandningen, som ett bi. Den mjuka vibrationen och den långa utandningen lugnar och hjälper dig att somna.",
+  "how": "Andas in genom näsan i 4 s och nynna sedan genom näsan med stängd mun i 8 s (”mmm”). Du kan stänga öronen med tummarna. 5–10 varv.",
+  "care": "Nynna mjukt, utan att anstränga halsen. Hoppa över vid öroninflammation.",
+  "src": "Bhramari pranayama; Kuppusamy m.fl., Journal of Traditional and Complementary Medicine, 2018 (översikt)."
+ },
+ "box": {
+  "what": "Fyra lika delar: in, håll, ut, håll. Hjälper dig att hålla dig samlad och fokuserad under press; används av soldater, idrottare och räddningspersonal.",
+  "how": "Andas in genom näsan i 4 s, håll i 4 s, andas ut i 4 s, håll i 4 s. Sitt upprätt, 3–5 minuter.",
+  "care": "Pauserna ska vara avslappnade. Är de svåra, gör en egen rytm med delar på 3 s och öka sakta.",
+  "src": "Känd som taktisk andning; populär genom den före detta Navy SEAL-soldaten Mark Divine."
+ },
+ "tri": {
+  "what": "In, håll, ut, 4 s var: en enkel fokusövning, lättare än boxandning.",
+  "how": "Andas in genom näsan i 4 s, håll i 4 s, andas ut i 4 s och börja om utan paus.",
+  "care": "Håll avslappnat, med öppen hals.",
+  "src": "En variant av boxandning."
+ },
+ "nadi": {
+  "what": "Andas genom ett näsborre i taget, växelvis. Lugnande och balanserande; hjälper dig att fokusera.",
+  "how": "Stäng höger näsborre med tummen och andas in genom vänster i 4 s; stäng vänster med ringfingret och andas ut genom höger i 4 s; andas in genom höger, ut genom vänster. Raden under cirkeln och rösten säger vilken sida.",
+  "care": "Inte med täppt näsa. Andas mjukt, tvinga aldrig luften.",
+  "src": "Nadi shodhana pranayama; Ghiya, International Journal of Research in Medical Sciences, 2017 (översikt av kliniska studier)."
+ },
+ "wake": {
+  "what": "En lång inandning och en kort, kraftig utandning. Väcker och ger energi, till exempel på morgonen eller efter lunch.",
+  "how": "Andas in djupt genom näsan i 4 s och andas sedan ut kraftigt genom munnen i 2 s. 1–3 minuter, sittande eller stående.",
+  "care": "Blir du yr, sakta ner eller sluta.",
+  "src": "Uppiggande rytmer betonar inandningen; se Zaccaro m.fl., 2018."
+ },
+ "kapal": {
+  "what": "Snabba, kraftiga utandningar genom näsan; inandningen sker av sig själv. Uppiggande och värmande.",
+  "how": "Sitt upprätt. Dra in magen snabbt för att pressa ut luften genom näsan ungefär en gång i sekunden; låt inandningen komma passivt. Efter 30 utandningar andas du in djupt, håller i 15 s och vilar sedan.",
+  "care": "Bara sittande. Undvik vid graviditet, högt blodtryck, hjärtsjukdom, epilepsi, bråck eller nyligen genomgången bukoperation. Sluta om du blir yr.",
+  "src": "Kapalabhati, en rengörande teknik inom hathayoga (Hatha Yoga Pradipika)."
+ },
+ "whm": {
+  "what": "30 djupa andetag, sedan en lång paus med tomma lungor och en kort med fulla. Ger energi och låter dig känna dina gränser. En studie visade att sådan träning kan påverka kroppens stress- och immunsvar.",
+  "how": "Andas in fullt genom näsa eller mun och släpp utan kraft, 30 gånger. Efter sista utandningen håller du så länge det känns bekvämt och trycker på cirkeln när du behöver luft. Andas sedan in fullt och håll i 15 s. 1–4 varv.",
+  "care": "Bara sittande eller liggande. Aldrig i vatten, när du kör eller står: du kan svimma. Undvik vid graviditet, epilepsi, hjärtsjukdom eller högt blodtryck.",
+  "src": "Kox m.fl., PNAS, 2014: viljestyrd aktivering av det sympatiska nervsystemet och dämpning av det medfödda immunsvaret."
+ }
+}

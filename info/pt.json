@@ -1,0 +1,92 @@
+{
+ "calm": {
+  "what": "Desacelera para cerca de 6 respirações por minuto, com a expiração mais longa que a inspiração. Expirar longo leva o sistema nervoso ao repouso: bom em momentos de tensão, à noite ou sempre que quiser se acalmar.",
+  "how": "Inspire suavemente pelo nariz por 4 s, enchendo primeiro a barriga, e expire devagar por 6 s pelo nariz ou com os lábios franzidos. Suave e silencioso. 3 a 5 minutos bastam.",
+  "care": "Deve ser fácil. Se faltar ar, encurte a expiração ou faça uma pausa.",
+  "src": "Respiração lenta com expiração mais longa: Zaccaro et al., Frontiers in Human Neuroscience, 2018 (revisão sistemática)."
+ },
+ "sigh": {
+  "what": "Duas inspirações seguidas e uma expiração longa. A segunda inspiração, curta, reabre os alvéolos colapsados, e a expiração longa libera gás carbônico. Uma das formas mais rápidas de baixar o estresse.",
+  "how": "Inspire pelo nariz por 2 s, acrescente por cima um gole extra de ar de 1 s e expire devagar pela boca por 6 s. De 1 a 5 minutos, num momento tenso ou como hábito diário.",
+  "care": "O gole extra deve ser pequeno, sem forçar. Pare se ficar tonto.",
+  "src": "Balban et al., Cell Reports Medicine, 2023: cinco minutos diários de suspiro cíclico melhoraram o humor e diminuíram a frequência respiratória mais do que a meditação mindfulness."
+ },
+ "coh": {
+  "what": "Respiração lenta e regular, cerca de 6 por minuto. Perto desse ritmo a variabilidade da frequência cardíaca é máxima (ressonância), o que favorece a calma e a resistência ao estresse.",
+  "how": "Respire de forma uniforme pelo nariz, inspiração e expiração com a mesma duração, sem pausas. Ajuste o ritmo abaixo da lista de ritmos, de 4,3 a 10 respirações por minuto; para a maioria, 5,5–6 é o melhor. 10 a 20 minutos por dia.",
+  "care": "Deve ser confortável. Se sentir fome de ar, escolha um ritmo mais rápido.",
+  "src": "Lehrer e Gevirtz, Frontiers in Psychology, 2014 (biofeedback da variabilidade da frequência cardíaca)."
+ },
+ "relax": {
+  "what": "Uma pausa curta depois da inspiração e uma expiração longa. Desacelera e solta a tensão, sobretudo nos ombros e no peito.",
+  "how": "Inspire pelo nariz por 4 s, segure suavemente por 2 s e expire devagar por 6 s. A cada expiração, deixe os ombros caírem.",
+  "care": "Segure sem esforço, com a garganta aberta. Se a pausa incomodar, use o ritmo Calma.",
+  "src": "Uma variante da respiração lenta com expiração mais longa (ver Zaccaro et al., 2018)."
+ },
+ "equal": {
+  "what": "Inspiração e expiração com a mesma duração. Equilibra e é um bom começo se exercícios de respiração forem novidade para você.",
+  "how": "Inspire pelo nariz por 4 s e expire por 4 s, de forma uniforme, sem pausas. Quando ficar fácil, aumente as duas com um ritmo próprio.",
+  "care": "Não há riscos especiais; mantenha-se relaxado.",
+  "src": "Sama vritti (respiração igual), da tradição do yoga."
+ },
+ "478": {
+  "what": "Uma retenção longa e uma expiração ainda mais longa. Muito usada para se acalmar e adormecer.",
+  "how": "Inspire em silêncio pelo nariz por 4 s, segure por 7 s e expire pela boca por 8 s com um sopro suave. Comece com 4 ciclos, na cama ou sentado.",
+  "care": "A retenção longa pode ser difícil no começo: crie um ritmo próprio com retenção mais curta. Se tiver doença cardíaca ou pulmonar, consulte antes o seu médico.",
+  "src": "Popularizada pelo médico Andrew Weil, com base no pranayama. As evidências científicas ainda são limitadas."
+ },
+ "slow": {
+  "what": "A expiração cresce de 4 para 8 s até o fim da sessão, assim você desacelera passo a passo quase sem perceber.",
+  "how": "Inspire pelo nariz por 4 s e acompanhe o círculo na expiração, que vai ficando mais longa. Ideal antes de dormir ou depois de um dia corrido, 10 a 15 minutos.",
+  "care": "Se as expirações longas ficarem desconfortáveis, escolha uma sessão mais curta.",
+  "src": "Baseia-se na respiração lenta com expiração crescente (ver Zaccaro et al., 2018)."
+ },
+ "long": {
+  "what": "A expiração dura o dobro da inspiração (proporção 1:2): relaxamento profundo antes de deitar.",
+  "how": "Inspire pelo nariz por 4 s e expire devagar por 8 s pelo nariz ou com os lábios franzidos. Deitado, 5 a 10 minutos.",
+  "care": "Se 8 s for demais, comece pelo ritmo Calma (4·6).",
+  "src": "A proporção respiratória 1:2 vem da prática do yoga; ver também Zaccaro et al., 2018."
+ },
+ "bee": {
+  "what": "Zumbir ao expirar, como uma abelha. A vibração suave e a expiração longa acalmam e ajudam a dormir.",
+  "how": "Inspire pelo nariz por 4 s e depois zumba pelo nariz, de boca fechada, por 8 s (“mmm”). Pode tapar os ouvidos com os polegares. 5 a 10 ciclos.",
+  "care": "Zumba suavemente, sem forçar a garganta. Evite se tiver infecção de ouvido.",
+  "src": "Bhramari pranayama; Kuppusamy et al., Journal of Traditional and Complementary Medicine, 2018 (revisão)."
+ },
+ "box": {
+  "what": "Quatro partes iguais: inspirar, segurar, expirar, segurar. Ajuda a manter a calma e o foco sob pressão; é usada por militares, atletas e socorristas.",
+  "how": "Inspire pelo nariz por 4 s, segure 4 s, expire por 4 s, segure 4 s. Sentado com a coluna ereta, 3 a 5 minutos.",
+  "care": "As retenções devem ser relaxadas. Se forem difíceis, crie um ritmo próprio com partes de 3 s e progrida aos poucos.",
+  "src": "Conhecida como respiração tática; popularizada pelo ex-Navy SEAL Mark Divine."
+ },
+ "tri": {
+  "what": "Inspirar, segurar, expirar, 4 s cada: um exercício simples de foco, mais fácil que a respiração quadrada.",
+  "how": "Inspire pelo nariz por 4 s, segure 4 s, expire por 4 s e recomece sem pausa.",
+  "care": "Mantenha a retenção relaxada, com a garganta aberta.",
+  "src": "Uma variante da respiração quadrada."
+ },
+ "nadi": {
+  "what": "Respirar por uma narina de cada vez, alternando. Acalma, equilibra e ajuda a focar.",
+  "how": "Tape a narina direita com o polegar e inspire pela esquerda por 4 s; tape a esquerda com o anelar e expire pela direita por 4 s; inspire pela direita, expire pela esquerda. A linha abaixo do círculo e a voz indicam o lado.",
+  "care": "Não faça com o nariz entupido. Respire suavemente, nunca force o ar.",
+  "src": "Nadi shodhana pranayama; Ghiya, International Journal of Research in Medical Sciences, 2017 (revisão de ensaios clínicos)."
+ },
+ "wake": {
+  "what": "Uma inspiração longa e uma expiração curta e vigorosa. Desperta e dá energia, por exemplo de manhã ou depois do almoço.",
+  "how": "Inspire fundo pelo nariz por 4 s e expire com firmeza pela boca por 2 s. 1 a 3 minutos, sentado ou em pé.",
+  "care": "Se ficar tonto, desacelere ou pare.",
+  "src": "Ritmos energizantes enfatizam a inspiração; ver Zaccaro et al., 2018."
+ },
+ "kapal": {
+  "what": "Expirações rápidas e fortes pelo nariz; a inspiração acontece sozinha. Energiza e aquece.",
+  "how": "Sente-se ereto. Contraia a barriga de repente para expulsar o ar pelo nariz, mais ou menos uma vez por segundo; deixe a inspiração vir passivamente. Depois de 30 expirações, inspire fundo, segure 15 s e descanse.",
+  "care": "Só sentado. Evite na gravidez e em caso de pressão alta, doença cardíaca, epilepsia, hérnia ou cirurgia abdominal recente. Pare se ficar tonto.",
+  "src": "Kapalabhati, técnica de limpeza do hatha yoga (Hatha Yoga Pradipika)."
+ },
+ "whm": {
+  "what": "30 respirações profundas, depois uma retenção longa com os pulmões vazios e uma curta com eles cheios. Energiza e mostra os seus limites. Um estudo mostrou que esse treino pode influenciar as respostas de estresse e imunológica do corpo.",
+  "how": "Inspire por completo pelo nariz ou pela boca e solte sem esforço, 30 vezes. Após a última expiração, segure enquanto for confortável e toque no círculo quando precisar de ar. Depois inspire por completo e segure 15 s. 1 a 4 rodadas.",
+  "care": "Só sentado ou deitado. Nunca na água, dirigindo ou em pé: você pode desmaiar. Evite na gravidez e em caso de epilepsia, doença cardíaca ou pressão alta.",
+  "src": "Kox et al., PNAS, 2014: ativação voluntária do sistema nervoso simpático e atenuação da resposta imune inata."
+ }
+}

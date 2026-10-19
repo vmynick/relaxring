@@ -1,0 +1,92 @@
+{
+ "calm": {
+  "what": "Slows you down to about 6 breaths a minute with an exhale longer than the inhale. A long exhale shifts the nervous system toward rest, so it suits stressful moments, the evening, or any time you want to settle.",
+  "how": "Breathe in gently through the nose for 4 s, letting the belly rise first, then breathe out slowly for 6 s through the nose or pursed lips. Keep it soft and quiet. 3–5 minutes is enough.",
+  "care": "It should feel easy. If you run short of air, shorten the exhale or take a break.",
+  "src": "Slow breathing with a longer exhale: Zaccaro et al., Frontiers in Human Neuroscience, 2018 (systematic review)."
+ },
+ "sigh": {
+  "what": "A double inhale followed by a long exhale. The short second inhale reopens collapsed air sacs and the long exhale releases carbon dioxide. One of the quickest ways to bring stress down.",
+  "how": "Breathe in through the nose for 2 s, add a short extra sip of air on top for 1 s, then breathe out slowly through the mouth for 6 s. 1–5 minutes, in a tense moment or as a daily habit.",
+  "care": "Keep the top-up small, do not force it. Stop if you feel dizzy.",
+  "src": "Balban et al., Cell Reports Medicine, 2023: five minutes of cyclic sighing a day improved mood and lowered breathing rate more than mindfulness meditation."
+ },
+ "coh": {
+  "what": "Even, slow breathing at about 6 breaths a minute. Near this pace heart rate variability is highest (resonance), which supports calm and resilience to stress.",
+  "how": "Breathe smoothly through the nose, in and out for the same length, without pauses. Set the pace under the rhythm list, from 4.3 to 10 breaths a minute; most people find 5.5–6 best. 10–20 minutes a day.",
+  "care": "It should be comfortable. If you feel air hunger, choose a faster pace.",
+  "src": "Lehrer & Gevirtz, Frontiers in Psychology, 2014 (heart rate variability biofeedback)."
+ },
+ "relax": {
+  "what": "A short pause after the inhale and a long exhale. It slows you down and lets go of tension, especially in the shoulders and chest.",
+  "how": "Breathe in through the nose for 4 s, hold softly for 2 s, then breathe out slowly for 6 s. Let the shoulders drop with every exhale.",
+  "care": "Hold without effort, with an open throat. If the hold feels uncomfortable, use the Calm rhythm instead.",
+  "src": "A variant of slow breathing with a longer exhale (see Zaccaro et al., 2018)."
+ },
+ "equal": {
+  "what": "Inhale and exhale of the same length. Balancing, and a good place to start if breathing exercises are new to you.",
+  "how": "Breathe in through the nose for 4 s and out for 4 s, smoothly, without pauses. When it feels easy, lengthen both with a custom rhythm.",
+  "care": "There are no special risks; keep it relaxed.",
+  "src": "Sama vritti (equal breathing) from the yoga tradition."
+ },
+ "478": {
+  "what": "A long hold and an even longer exhale. Widely used to calm down and to fall asleep.",
+  "how": "Breathe in quietly through the nose for 4 s, hold for 7 s, then breathe out through the mouth for 8 s with a soft whooshing sound. Start with 4 rounds, in bed or sitting.",
+  "care": "The long hold can be hard at first: make a custom rhythm with a shorter hold. If you have heart or lung disease, ask your doctor first.",
+  "src": "Popularized by Andrew Weil, MD, based on pranayama. Scientific evidence is still limited."
+ },
+ "slow": {
+  "what": "The exhale grows from 4 to 8 s by the end of the session, so you slow down step by step almost without noticing.",
+  "how": "Breathe in through the nose for 4 s and follow the circle on the exhale as it gets longer. Ideal before sleep or after a busy day, for 10–15 minutes.",
+  "care": "If the long exhales become uncomfortable, choose a shorter session.",
+  "src": "Builds on slow breathing with a lengthening exhale (see Zaccaro et al., 2018)."
+ },
+ "long": {
+  "what": "The exhale is twice as long as the inhale (a 1:2 ratio): deep relaxation before bed.",
+  "how": "Breathe in through the nose for 4 s, then out slowly for 8 s through the nose or pursed lips. Lying down, for 5–10 minutes.",
+  "care": "If 8 s is too long, start with the Calm rhythm (4·6).",
+  "src": "The 1:2 breathing ratio from yoga practice; see also Zaccaro et al., 2018."
+ },
+ "bee": {
+  "what": "Humming on the exhale, like a bee. The gentle vibration and the long exhale soothe and help you fall asleep.",
+  "how": "Breathe in through the nose for 4 s, then hum through the nose with your mouth closed for 8 s (“mmm”). You can close your ears with your thumbs. 5–10 rounds.",
+  "care": "Hum gently, without straining your throat. Skip it if you have an ear infection.",
+  "src": "Bhramari pranayama; Kuppusamy et al., Journal of Traditional and Complementary Medicine, 2018 (review)."
+ },
+ "box": {
+  "what": "Four equal parts: in, hold, out, hold. It helps you stay composed and focused under pressure; soldiers, athletes and first responders use it.",
+  "how": "Breathe in through the nose for 4 s, hold for 4 s, breathe out for 4 s, hold for 4 s. Sit upright, for 3–5 minutes.",
+  "care": "The holds should stay relaxed. If they are hard, make a custom rhythm with 3 s parts and build up slowly.",
+  "src": "Known as tactical breathing; popularized by former Navy SEAL Mark Divine."
+ },
+ "tri": {
+  "what": "In, hold, out, 4 s each: a simple focusing exercise, easier than box breathing.",
+  "how": "Breathe in through the nose for 4 s, hold for 4 s, breathe out for 4 s, then start again without a pause.",
+  "care": "Keep the hold relaxed, with an open throat.",
+  "src": "A variant of box breathing."
+ },
+ "nadi": {
+  "what": "Breathing through one nostril at a time, alternating sides. Calming and balancing; it helps you focus.",
+  "how": "Close the right nostril with your thumb and breathe in through the left for 4 s; close the left with your ring finger and breathe out through the right for 4 s; breathe in through the right, out through the left. The line under the circle and the voice tell you which side.",
+  "care": "Not with a blocked nose. Breathe gently; never force the air.",
+  "src": "Nadi shodhana pranayama; Ghiya, International Journal of Research in Medical Sciences, 2017 (review of clinical trials)."
+ },
+ "wake": {
+  "what": "A long inhale and a short, brisk exhale. It wakes you up and gives energy, for example in the morning or after lunch.",
+  "how": "Breathe in deeply through the nose for 4 s, then out firmly through the mouth for 2 s. 1–3 minutes, sitting or standing.",
+  "care": "If you feel dizzy, slow down or stop.",
+  "src": "Energizing patterns stress the inhale; see Zaccaro et al., 2018."
+ },
+ "kapal": {
+  "what": "Quick, forceful exhales through the nose while the inhale happens by itself. Energizing and warming.",
+  "how": "Sit upright. Pull the belly in sharply to push the air out through the nose, about once a second; let the inhale come passively. After 30 exhales breathe in deeply, hold for 15 s, then rest.",
+  "care": "Only sitting. Avoid it if you are pregnant or have high blood pressure, heart disease, epilepsy, a hernia or recent abdominal surgery. Stop if you feel dizzy.",
+  "src": "Kapalbhati, a cleansing technique of hatha yoga (Hatha Yoga Pradipika)."
+ },
+ "whm": {
+  "what": "30 deep breaths, then a long hold on empty lungs and a short hold on full lungs. Energizing, and it lets you feel your limits. A study showed that this kind of training can influence the body's stress and immune responses.",
+  "how": "Breathe in fully through the nose or mouth and let go without force, 30 times. After the last exhale, hold for as long as it is comfortable and tap the circle when you need air. Then breathe in fully and hold for 15 s. 1–4 rounds.",
+  "care": "Only sitting or lying down. Never in water, while driving or standing: you may faint. Avoid it if you are pregnant or have epilepsy, heart disease or high blood pressure.",
+  "src": "Kox et al., PNAS, 2014: voluntary activation of the sympathetic nervous system and attenuation of the innate immune response."
+ }
+}

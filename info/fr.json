@@ -1,0 +1,92 @@
+{
+ "calm": {
+  "what": "Ralentit à environ 6 respirations par minute, avec une expiration plus longue que l’inspiration. Une expiration longue oriente le système nerveux vers le repos : utile dans un moment de tension, le soir ou dès que vous voulez vous apaiser.",
+  "how": "Inspirez doucement par le nez pendant 4 s en gonflant d’abord le ventre, puis expirez lentement 6 s par le nez ou les lèvres pincées. Doux et silencieux. 3 à 5 minutes suffisent.",
+  "care": "Cela doit rester facile. Si l’air vous manque, raccourcissez l’expiration ou faites une pause.",
+  "src": "Respiration lente avec expiration prolongée : Zaccaro et al., Frontiers in Human Neuroscience, 2018 (revue systématique)."
+ },
+ "sigh": {
+  "what": "Deux inspirations à la suite, puis une longue expiration. La courte seconde inspiration rouvre les alvéoles affaissées et la longue expiration évacue le dioxyde de carbone. L’un des moyens les plus rapides de faire baisser le stress.",
+  "how": "Inspirez par le nez pendant 2 s, ajoutez par-dessus une petite gorgée d’air de 1 s, puis expirez lentement par la bouche pendant 6 s. 1 à 5 minutes, dans un moment de tension ou chaque jour.",
+  "care": "La gorgée d’air reste petite, sans forcer. Arrêtez si vous avez la tête qui tourne.",
+  "src": "Balban et al., Cell Reports Medicine, 2023 : cinq minutes de soupir cyclique par jour ont amélioré l’humeur et ralenti la respiration davantage que la méditation de pleine conscience."
+ },
+ "coh": {
+  "what": "Respiration lente et régulière, environ 6 par minute. Autour de ce rythme, la variabilité de la fréquence cardiaque est maximale (résonance), ce qui favorise le calme et la résistance au stress.",
+  "how": "Respirez régulièrement par le nez, inspiration et expiration de même durée, sans pause. Réglez le rythme sous la liste des rythmes, de 4,3 à 10 respirations par minute ; la plupart des gens préfèrent 5,5–6. 10 à 20 minutes par jour.",
+  "care": "Cela doit rester confortable. En cas de manque d’air, choisissez un rythme plus rapide.",
+  "src": "Lehrer et Gevirtz, Frontiers in Psychology, 2014 (biofeedback de la variabilité cardiaque)."
+ },
+ "relax": {
+  "what": "Une courte pause après l’inspiration et une longue expiration. Ralentit et relâche les tensions, surtout dans les épaules et la poitrine.",
+  "how": "Inspirez par le nez pendant 4 s, retenez doucement 2 s, puis expirez lentement 6 s. Laissez tomber les épaules à chaque expiration.",
+  "care": "Retenez sans effort, gorge ouverte. Si la rétention est désagréable, prenez plutôt le rythme Calme.",
+  "src": "Une variante de la respiration lente à expiration prolongée (voir Zaccaro et al., 2018)."
+ },
+ "equal": {
+  "what": "Inspiration et expiration de même durée. Équilibrant, et un bon point de départ si la respiration guidée est nouvelle pour vous.",
+  "how": "Inspirez par le nez pendant 4 s et expirez 4 s, régulièrement, sans pause. Quand c’est facile, allongez les deux avec un rythme personnel.",
+  "care": "Pas de risque particulier ; restez détendu.",
+  "src": "Sama vritti (respiration égale), issue de la tradition du yoga."
+ },
+ "478": {
+  "what": "Une longue rétention et une expiration encore plus longue. Très utilisée pour se calmer et s’endormir.",
+  "how": "Inspirez silencieusement par le nez pendant 4 s, retenez 7 s, puis expirez par la bouche pendant 8 s avec un léger souffle. Commencez par 4 cycles, au lit ou assis.",
+  "care": "La longue rétention peut être difficile au début : créez un rythme personnel avec une rétention plus courte. En cas de maladie cardiaque ou pulmonaire, demandez d’abord l’avis de votre médecin.",
+  "src": "Popularisée par le médecin Andrew Weil, à partir du pranayama. Les preuves scientifiques restent limitées."
+ },
+ "slow": {
+  "what": "L’expiration passe de 4 à 8 s au fil de la séance : vous ralentissez pas à pas, presque sans vous en rendre compte.",
+  "how": "Inspirez par le nez pendant 4 s et suivez le cercle à l’expiration, qui s’allonge. Idéal avant de dormir ou après une journée chargée, 10 à 15 minutes.",
+  "care": "Si les longues expirations deviennent inconfortables, choisissez une séance plus courte.",
+  "src": "Repose sur la respiration lente à expiration croissante (voir Zaccaro et al., 2018)."
+ },
+ "long": {
+  "what": "L’expiration dure deux fois plus longtemps que l’inspiration (rapport 1:2) : relaxation profonde avant le coucher.",
+  "how": "Inspirez par le nez pendant 4 s, puis expirez lentement 8 s par le nez ou les lèvres pincées. Allongé, 5 à 10 minutes.",
+  "care": "Si 8 s est trop long, commencez par le rythme Calme (4·6).",
+  "src": "Le rapport respiratoire 1:2 vient de la pratique du yoga ; voir aussi Zaccaro et al., 2018."
+ },
+ "bee": {
+  "what": "Fredonner à l’expiration, comme une abeille. La douce vibration et la longue expiration apaisent et aident à s’endormir.",
+  "how": "Inspirez par le nez pendant 4 s, puis fredonnez par le nez, bouche fermée, pendant 8 s (« mmm »). Vous pouvez boucher vos oreilles avec les pouces. 5 à 10 cycles.",
+  "care": "Fredonnez doucement, sans forcer la gorge. À éviter en cas d’otite.",
+  "src": "Bhramari pranayama ; Kuppusamy et al., Journal of Traditional and Complementary Medicine, 2018 (revue)."
+ },
+ "box": {
+  "what": "Quatre parties égales : inspirer, retenir, expirer, retenir. Aide à rester posé et concentré sous pression ; utilisée par des militaires, des sportifs et des secouristes.",
+  "how": "Inspirez par le nez pendant 4 s, retenez 4 s, expirez 4 s, retenez 4 s. Assis le dos droit, 3 à 5 minutes.",
+  "care": "Les rétentions restent détendues. Si c’est difficile, créez un rythme personnel en parties de 3 s et progressez doucement.",
+  "src": "Connue sous le nom de respiration tactique ; popularisée par l’ancien Navy SEAL Mark Divine."
+ },
+ "tri": {
+  "what": "Inspirer, retenir, expirer, 4 s chacun : un exercice de concentration simple, plus facile que la respiration carrée.",
+  "how": "Inspirez par le nez pendant 4 s, retenez 4 s, expirez 4 s, puis recommencez sans pause.",
+  "care": "Gardez la rétention détendue, gorge ouverte.",
+  "src": "Une variante de la respiration carrée."
+ },
+ "nadi": {
+  "what": "Respirer par une narine à la fois, en alternant. Apaisant et équilibrant ; aide à se concentrer.",
+  "how": "Bouchez la narine droite avec le pouce et inspirez par la gauche pendant 4 s ; bouchez la gauche avec l’annulaire et expirez par la droite pendant 4 s ; inspirez par la droite, expirez par la gauche. La ligne sous le cercle et la voix indiquent le côté.",
+  "care": "Pas avec le nez bouché. Respirez doucement, ne forcez jamais l’air.",
+  "src": "Nadi shodhana pranayama ; Ghiya, International Journal of Research in Medical Sciences, 2017 (revue d’essais cliniques)."
+ },
+ "wake": {
+  "what": "Une longue inspiration et une expiration courte et vive. Réveille et donne de l’énergie, par exemple le matin ou après le déjeuner.",
+  "how": "Inspirez profondément par le nez pendant 4 s, puis expirez franchement par la bouche pendant 2 s. 1 à 3 minutes, assis ou debout.",
+  "care": "Si la tête vous tourne, ralentissez ou arrêtez.",
+  "src": "Les rythmes stimulants mettent l’accent sur l’inspiration ; voir Zaccaro et al., 2018."
+ },
+ "kapal": {
+  "what": "Des expirations rapides et énergiques par le nez ; l’inspiration se fait toute seule. Tonique et réchauffant.",
+  "how": "Asseyez-vous droit. Rentrez le ventre d’un coup sec pour chasser l’air par le nez, environ une fois par seconde ; laissez l’inspiration venir passivement. Après 30 expirations, inspirez profondément, retenez 15 s, puis reposez-vous.",
+  "care": "Uniquement assis. À éviter pendant la grossesse et en cas d’hypertension, de maladie cardiaque, d’épilepsie, de hernie ou de chirurgie abdominale récente. Arrêtez si la tête vous tourne.",
+  "src": "Kapalabhati, une technique de purification du hatha yoga (Hatha Yoga Pradipika)."
+ },
+ "whm": {
+  "what": "30 respirations profondes, puis une longue rétention poumons vides et une courte poumons pleins. Tonique, cela vous fait sentir vos limites. Une étude a montré qu’un tel entraînement peut influencer les réponses de stress et immunitaire du corps.",
+  "how": "Inspirez à fond par le nez ou la bouche et relâchez sans forcer, 30 fois. Après la dernière expiration, retenez aussi longtemps que c’est confortable et touchez le cercle quand vous avez besoin d’air. Inspirez ensuite à fond et retenez 15 s. 1 à 4 tours.",
+  "care": "Uniquement assis ou allongé. Jamais dans l’eau, en conduisant ou debout : vous pourriez vous évanouir. À éviter pendant la grossesse et en cas d’épilepsie, de maladie cardiaque ou d’hypertension.",
+  "src": "Kox et al., PNAS, 2014 : activation volontaire du système nerveux sympathique et atténuation de la réponse immunitaire innée."
+ }
+}

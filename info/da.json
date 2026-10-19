@@ -1,0 +1,92 @@
+{
+ "calm": {
+  "what": "Sænker tempoet til cirka 6 åndedrag i minuttet, med en udånding der er længere end indåndingen. En lang udånding stemmer nervesystemet mod hvile: godt i pressede øjeblikke, om aftenen eller når du vil falde til ro.",
+  "how": "Træk vejret blødt ind gennem næsen i 4 s, først ned i maven, og pust så langsomt ud i 6 s gennem næsen eller spidse læber. Blødt og stille. 3–5 minutter er nok.",
+  "care": "Det skal føles let. Mangler du luft, så forkort udåndingen eller hold en pause.",
+  "src": "Langsom vejrtrækning med længere udånding: Zaccaro m.fl., Frontiers in Human Neuroscience, 2018 (systematisk oversigt)."
+ },
+ "sigh": {
+  "what": "To indåndinger i træk og så en lang udånding. Den korte anden indånding åbner sammenfaldne lungeblærer, og den lange udånding slipper kuldioxid ud. En af de hurtigste måder at sænke stress på.",
+  "how": "Træk vejret ind gennem næsen i 2 s, tag en kort ekstra slurk luft ovenpå i 1 s, og pust så langsomt ud gennem munden i 6 s. 1–5 minutter, i et presset øjeblik eller som daglig vane.",
+  "care": "Den ekstra slurk skal være lille, uden at presse. Stop, hvis du bliver svimmel.",
+  "src": "Balban m.fl., Cell Reports Medicine, 2023: fem minutters cyklisk suk om dagen forbedrede humøret og sænkede vejrtrækningstempoet mere end mindfulnessmeditation."
+ },
+ "coh": {
+  "what": "Jævn, langsom vejrtrækning, cirka 6 i minuttet. Omkring det tempo er hjertefrekvensvariabiliteten størst (resonans), hvilket fremmer ro og modstandskraft over for stress.",
+  "how": "Træk vejret jævnt gennem næsen, ind og ud lige længe, uden pauser. Indstil tempoet under rytmelisten, fra 4,3 til 10 åndedrag i minuttet; de fleste har det bedst med 5,5–6. 10–20 minutter om dagen.",
+  "care": "Det skal være behageligt. Får du lufthunger, så vælg et hurtigere tempo.",
+  "src": "Lehrer & Gevirtz, Frontiers in Psychology, 2014 (biofeedback af hjertefrekvensvariabilitet)."
+ },
+ "relax": {
+  "what": "En kort pause efter indåndingen og en lang udånding. Sænker tempoet og slipper spændinger, især i skuldre og bryst.",
+  "how": "Træk vejret ind gennem næsen i 4 s, hold blødt i 2 s, og pust så langsomt ud i 6 s. Lad skuldrene falde ved hver udånding.",
+  "care": "Hold uden anstrengelse, med åben hals. Er det ubehageligt, så vælg hellere rytmen Ro.",
+  "src": "En variant af langsom vejrtrækning med længere udånding (se Zaccaro m.fl., 2018)."
+ },
+ "equal": {
+  "what": "Ind- og udånding lige lange. Balancerende og et godt sted at starte, hvis vejrtrækningsøvelser er nye for dig.",
+  "how": "Træk vejret ind gennem næsen i 4 s og ud i 4 s, jævnt, uden pauser. Når det føles let, kan du forlænge begge med en egen rytme.",
+  "care": "Ingen særlige risici; hold dig afslappet.",
+  "src": "Sama vritti (lige vejrtrækning) fra yogatraditionen."
+ },
+ "478": {
+  "what": "En lang pause og en endnu længere udånding. Bruges ofte til at falde til ro og falde i søvn.",
+  "how": "Træk vejret stille ind gennem næsen i 4 s, hold i 7 s, og pust så ud gennem munden i 8 s med en blød susende lyd. Start med 4 runder, i sengen eller siddende.",
+  "care": "Den lange pause kan være svær i starten: lav en egen rytme med kortere pause. Har du hjerte- eller lungesygdom, så spørg din læge først.",
+  "src": "Gjort kendt af lægen Andrew Weil, baseret på pranayama. Den videnskabelige dokumentation er endnu begrænset."
+ },
+ "slow": {
+  "what": "Udåndingen vokser fra 4 til 8 s mod slutningen af sessionen, så du sænker tempoet trin for trin, næsten uden at mærke det.",
+  "how": "Træk vejret ind gennem næsen i 4 s, og følg cirklen på udåndingen, mens den bliver længere. Ideelt før søvn eller efter en travl dag, 10–15 minutter.",
+  "care": "Bliver de lange udåndinger ubehagelige, så vælg en kortere session.",
+  "src": "Bygger på langsom vejrtrækning med voksende udånding (se Zaccaro m.fl., 2018)."
+ },
+ "long": {
+  "what": "Udåndingen er dobbelt så lang som indåndingen (forholdet 1:2): dyb afspænding før sengetid.",
+  "how": "Træk vejret ind gennem næsen i 4 s, og pust så langsomt ud i 8 s gennem næsen eller spidse læber. Liggende, 5–10 minutter.",
+  "care": "Er 8 s for længe, så begynd med rytmen Ro (4·6).",
+  "src": "Vejrtrækningsforholdet 1:2 kommer fra yogapraksis; se også Zaccaro m.fl., 2018."
+ },
+ "bee": {
+  "what": "Nynnen på udåndingen, som en bi. Den bløde vibration og den lange udånding beroliger og hjælper dig med at falde i søvn.",
+  "how": "Træk vejret ind gennem næsen i 4 s, og nyn så gennem næsen med lukket mund i 8 s (”mmm”). Du kan lukke ørerne med tommelfingrene. 5–10 runder.",
+  "care": "Nyn blødt, uden at presse halsen. Spring over ved mellemørebetændelse.",
+  "src": "Bhramari pranayama; Kuppusamy m.fl., Journal of Traditional and Complementary Medicine, 2018 (oversigt)."
+ },
+ "box": {
+  "what": "Fire lige dele: ind, hold, ud, hold. Hjælper dig med at bevare roen og fokus under pres; soldater, atleter og redningsfolk bruger den.",
+  "how": "Træk vejret ind gennem næsen i 4 s, hold i 4 s, pust ud i 4 s, hold i 4 s. Siddende med ret ryg, 3–5 minutter.",
+  "care": "Pauserne skal være afslappede. Er de svære, så lav en egen rytme med dele på 3 s og byg langsomt op.",
+  "src": "Kendt som taktisk vejrtrækning; gjort populær af den tidligere Navy SEAL Mark Divine."
+ },
+ "tri": {
+  "what": "Ind, hold, ud, 4 s hver: en enkel fokusøvelse, lettere end boksvejrtrækning.",
+  "how": "Træk vejret ind gennem næsen i 4 s, hold i 4 s, pust ud i 4 s, og begynd forfra uden pause.",
+  "care": "Hold afslappet, med åben hals.",
+  "src": "En variant af boksvejrtrækning."
+ },
+ "nadi": {
+  "what": "Vejrtrækning gennem ét næsebor ad gangen, skiftevis. Beroligende og balancerende; hjælper dig med at fokusere.",
+  "how": "Luk højre næsebor med tommelfingeren og træk vejret ind gennem venstre i 4 s; luk venstre med ringfingeren og pust ud gennem højre i 4 s; ind gennem højre, ud gennem venstre. Linjen under cirklen og stemmen fortæller, hvilken side.",
+  "care": "Ikke med tilstoppet næse. Træk vejret blødt, pres aldrig luften.",
+  "src": "Nadi shodhana pranayama; Ghiya, International Journal of Research in Medical Sciences, 2017 (oversigt over kliniske forsøg)."
+ },
+ "wake": {
+  "what": "En lang indånding og en kort, kraftig udånding. Vækker og giver energi, fx om morgenen eller efter frokost.",
+  "how": "Træk vejret dybt ind gennem næsen i 4 s, og pust så kraftigt ud gennem munden i 2 s. 1–3 minutter, siddende eller stående.",
+  "care": "Bliver du svimmel, så sæt tempoet ned eller stop.",
+  "src": "Opkvikkende rytmer lægger vægt på indåndingen; se Zaccaro m.fl., 2018."
+ },
+ "kapal": {
+  "what": "Hurtige, kraftige udåndinger gennem næsen; indåndingen kommer af sig selv. Opkvikkende og opvarmende.",
+  "how": "Sid ret op. Træk maven brat ind for at puste luften ud gennem næsen cirka én gang i sekundet; lad indåndingen komme passivt. Efter 30 udåndinger trækker du vejret dybt ind, holder i 15 s og hviler.",
+  "care": "Kun siddende. Undgå det ved graviditet, forhøjet blodtryk, hjertesygdom, epilepsi, brok eller nylig maveoperation. Stop, hvis du bliver svimmel.",
+  "src": "Kapalabhati, en rensende teknik fra hathayoga (Hatha Yoga Pradipika)."
+ },
+ "whm": {
+  "what": "30 dybe åndedrag, så en lang pause med tomme lunger og en kort med fulde. Giver energi og lader dig mærke dine grænser. En undersøgelse viste, at sådan træning kan påvirke kroppens stress- og immunrespons.",
+  "how": "Træk vejret helt ind gennem næse eller mund og slip uden kraft, 30 gange. Efter sidste udånding holder du, så længe det er behageligt, og trykker på cirklen, når du har brug for luft. Træk så vejret helt ind og hold i 15 s. 1–4 runder.",
+  "care": "Kun siddende eller liggende. Aldrig i vand, under kørsel eller stående: du kan besvime. Undgå det ved graviditet, epilepsi, hjertesygdom eller forhøjet blodtryk.",
+  "src": "Kox m.fl., PNAS, 2014: viljestyret aktivering af det sympatiske nervesystem og dæmpning af det medfødte immunrespons."
+ }
+}

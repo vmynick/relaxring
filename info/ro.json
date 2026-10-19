@@ -1,0 +1,92 @@
+{
+ "calm": {
+  "what": "Încetinește la circa 6 respirații pe minut, cu expirația mai lungă decât inspirația. O expirație lungă orientează sistemul nervos spre odihnă: bună în momente tensionate, seara sau oricând vrei să te liniștești.",
+  "how": "Inspiră ușor pe nas 4 s, întâi în abdomen, apoi expiră lent 6 s pe nas sau cu buzele țuguiate. Moale și silențios. Ajung 3–5 minute.",
+  "care": "Trebuie să fie ușor. Dacă îți lipsește aerul, scurtează expirația sau fă o pauză.",
+  "src": "Respirație lentă cu expirație mai lungă: Zaccaro et al., Frontiers in Human Neuroscience, 2018 (revizuire sistematică)."
+ },
+ "sigh": {
+  "what": "Două inspirații la rând, apoi o expirație lungă. A doua inspirație, scurtă, redeschide alveolele colabate, iar expirația lungă eliberează dioxidul de carbon. Una dintre cele mai rapide căi de a scădea stresul.",
+  "how": "Inspiră pe nas 2 s, adaugă deasupra o scurtă gură de aer de 1 s, apoi expiră lent pe gură 6 s. 1–5 minute, într-un moment tensionat sau ca obicei zilnic.",
+  "care": "Gura de aer în plus rămâne mică, fără să forțezi. Oprește-te dacă amețești.",
+  "src": "Balban et al., Cell Reports Medicine, 2023: cinci minute pe zi de suspin ciclic au îmbunătățit starea de spirit și au încetinit respirația mai mult decât meditația mindfulness."
+ },
+ "coh": {
+  "what": "Respirație lentă și uniformă, circa 6 pe minut. În jurul acestui ritm variabilitatea ritmului cardiac e maximă (rezonanță), ceea ce susține calmul și rezistența la stres.",
+  "how": "Respiră uniform pe nas, inspirul și expirul la fel de lungi, fără pauze. Reglează ritmul sub lista de ritmuri, între 4,3 și 10 respirații pe minut; celor mai mulți le prinde bine 5,5–6. 10–20 de minute pe zi.",
+  "care": "Trebuie să fie confortabil. Dacă simți sete de aer, alege un ritm mai rapid.",
+  "src": "Lehrer și Gevirtz, Frontiers in Psychology, 2014 (biofeedback al variabilității ritmului cardiac)."
+ },
+ "relax": {
+  "what": "O pauză scurtă după inspirație și o expirație lungă. Te încetinește și eliberează tensiunea, mai ales din umeri și piept.",
+  "how": "Inspiră pe nas 4 s, ține ușor 2 s, apoi expiră lent 6 s. La fiecare expirație lasă umerii să coboare.",
+  "care": "Ține fără efort, cu gâtul deschis. Dacă pauza e neplăcută, alege mai bine ritmul Calm.",
+  "src": "O variantă a respirației lente cu expirație mai lungă (vezi Zaccaro et al., 2018)."
+ },
+ "equal": {
+  "what": "Inspirație și expirație de aceeași lungime. Echilibrează și e un început bun dacă exercițiile de respirație sunt noi pentru tine.",
+  "how": "Inspiră pe nas 4 s și expiră 4 s, uniform, fără pauze. Când devine ușor, prelungește-le pe amândouă cu un ritm propriu.",
+  "care": "Fără riscuri speciale; rămâi relaxat.",
+  "src": "Sama vritti (respirație egală), din tradiția yoga."
+ },
+ "478": {
+  "what": "O reținere lungă și o expirație și mai lungă. Folosită des pentru liniștire și adormire.",
+  "how": "Inspiră încet pe nas 4 s, ține 7 s, apoi expiră pe gură 8 s cu un șuierat ușor. Începe cu 4 cicluri, în pat sau așezat.",
+  "care": "La început reținerea lungă poate fi grea: fă-ți un ritm propriu cu reținere mai scurtă. Dacă ai o boală de inimă sau de plămâni, întreabă întâi medicul.",
+  "src": "Făcută cunoscută de medicul Andrew Weil, pe baza pranayamei. Dovezile științifice sunt încă limitate."
+ },
+ "slow": {
+  "what": "Expirația crește de la 4 la 8 s până la finalul sesiunii, așa că încetinești pas cu pas, aproape fără să observi.",
+  "how": "Inspiră pe nas 4 s și urmărește cercul la expirație, care se lungește. Ideal înainte de somn sau după o zi aglomerată, 10–15 minute.",
+  "care": "Dacă expirațiile lungi devin incomode, alege o sesiune mai scurtă.",
+  "src": "Se bazează pe respirația lentă cu expirație tot mai lungă (vezi Zaccaro et al., 2018)."
+ },
+ "long": {
+  "what": "Expirația e de două ori mai lungă decât inspirația (raport 1:2): relaxare profundă înainte de culcare.",
+  "how": "Inspiră pe nas 4 s, apoi expiră lent 8 s pe nas sau cu buzele țuguiate. Întins, 5–10 minute.",
+  "care": "Dacă 8 s sunt prea mult, începe cu ritmul Calm (4·6).",
+  "src": "Raportul respirator 1:2 vine din practica yoga; vezi și Zaccaro et al., 2018."
+ },
+ "bee": {
+  "what": "Fredonat la expirație, ca o albină. Vibrația blândă și expirația lungă liniștesc și ajută la adormire.",
+  "how": "Inspiră pe nas 4 s, apoi fredonează pe nas, cu gura închisă, 8 s („mmm”). Poți acoperi urechile cu degetele mari. 5–10 cicluri.",
+  "care": "Fredonează ușor, fără să-ți forțezi gâtul. Evită dacă ai o infecție la ureche.",
+  "src": "Bhramari pranayama; Kuppusamy et al., Journal of Traditional and Complementary Medicine, 2018 (revizuire)."
+ },
+ "box": {
+  "what": "Patru părți egale: inspiră, ține, expiră, ține. Te ajută să rămâi calm și concentrat sub presiune; o folosesc militari, sportivi și salvatori.",
+  "how": "Inspiră pe nas 4 s, ține 4 s, expiră 4 s, ține 4 s. Așezat cu spatele drept, 3–5 minute.",
+  "care": "Pauzele trebuie să fie relaxate. Dacă sunt grele, fă-ți un ritm propriu cu părți de 3 s și crește treptat.",
+  "src": "Cunoscută ca respirație tactică; popularizată de fostul Navy SEAL Mark Divine."
+ },
+ "tri": {
+  "what": "Inspiră, ține, expiră, câte 4 s: un exercițiu simplu de concentrare, mai ușor decât respirația pătrată.",
+  "how": "Inspiră pe nas 4 s, ține 4 s, expiră 4 s, apoi ia-o de la capăt fără pauză.",
+  "care": "Ține relaxat, cu gâtul deschis.",
+  "src": "O variantă a respirației pătrate."
+ },
+ "nadi": {
+  "what": "Respiri pe câte o nară, alternativ. Liniștește, echilibrează și te ajută să te concentrezi.",
+  "how": "Închide nara dreaptă cu degetul mare și inspiră pe stânga 4 s; închide-o pe stânga cu inelarul și expiră pe dreapta 4 s; inspiră pe dreapta, expiră pe stânga. Rândul de sub cerc și vocea îți spun partea.",
+  "care": "Nu cu nasul înfundat. Respiră ușor, nu forța niciodată aerul.",
+  "src": "Nadi shodhana pranayama; Ghiya, International Journal of Research in Medical Sciences, 2017 (revizuire a studiilor clinice)."
+ },
+ "wake": {
+  "what": "O inspirație lungă și o expirație scurtă și energică. Te trezește și îți dă energie, de exemplu dimineața sau după prânz.",
+  "how": "Inspiră adânc pe nas 4 s, apoi expiră ferm pe gură 2 s. 1–3 minute, așezat sau în picioare.",
+  "care": "Dacă amețești, încetinește sau oprește-te.",
+  "src": "Ritmurile energizante pun accentul pe inspirație; vezi Zaccaro et al., 2018."
+ },
+ "kapal": {
+  "what": "Expirații rapide și puternice pe nas; inspirația vine de la sine. Energizant și încălzitor.",
+  "how": "Stai drept. Trage brusc abdomenul ca să împingi aerul afară pe nas, cam o dată pe secundă; lasă inspirația să vină pasiv. După 30 de expirații inspiră adânc, ține 15 s, apoi odihnește-te.",
+  "care": "Doar așezat. Evită în sarcină și dacă ai tensiune mare, boli de inimă, epilepsie, hernie sau o operație abdominală recentă. Oprește-te dacă amețești.",
+  "src": "Kapalabhati, o tehnică de purificare din hatha yoga (Hatha Yoga Pradipika)."
+ },
+ "whm": {
+  "what": "30 de respirații adânci, apoi o reținere lungă cu plămânii goi și una scurtă cu plămânii plini. Energizant, îți arată limitele. Un studiu a arătat că un astfel de antrenament poate influența răspunsul corpului la stres și răspunsul imunitar.",
+  "how": "Inspiră complet pe nas sau pe gură și dă drumul fără efort, de 30 de ori. După ultima expirație ține cât timp e confortabil și atinge cercul când ai nevoie de aer. Apoi inspiră complet și ține 15 s. 1–4 runde.",
+  "care": "Doar așezat sau întins. Niciodată în apă, la volan sau în picioare: poți leșina. Evită în sarcină și dacă ai epilepsie, boli de inimă sau tensiune mare.",
+  "src": "Kox et al., PNAS, 2014: activarea voluntară a sistemului nervos simpatic și atenuarea răspunsului imunitar înnăscut."
+ }
+}

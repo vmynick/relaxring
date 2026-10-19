@@ -1,0 +1,92 @@
+{
+ "calm": {
+  "what": "Hidastaa noin 6 hengitykseen minuutissa, ja uloshengitys on sisäänhengitystä pidempi. Pitkä uloshengitys virittää hermoston lepoon: hyvä jännittävissä hetkissä, illalla tai aina, kun haluat rauhoittua.",
+  "how": "Hengitä pehmeästi nenän kautta sisään 4 s, ensin vatsaan, ja sitten hitaasti ulos 6 s nenän tai suippojen huulten kautta. Pehmeästi ja hiljaa. 3–5 minuuttia riittää.",
+  "care": "Sen pitää tuntua helpolta. Jos ilma loppuu, lyhennä uloshengitystä tai pidä tauko.",
+  "src": "Hidas hengitys pidemmällä uloshengityksellä: Zaccaro ym., Frontiers in Human Neuroscience, 2018 (systemaattinen katsaus)."
+ },
+ "sigh": {
+  "what": "Kaksi sisäänhengitystä peräkkäin ja sitten pitkä uloshengitys. Lyhyt toinen sisäänhengitys avaa painuneet keuhkorakkulat, ja pitkä uloshengitys poistaa hiilidioksidia. Yksi nopeimmista tavoista laskea stressiä.",
+  "how": "Hengitä nenän kautta sisään 2 s, lisää päälle lyhyt 1 s:n lisäsiemaus ilmaa ja hengitä sitten hitaasti suun kautta ulos 6 s. 1–5 minuuttia, jännittävällä hetkellä tai päivittäisenä tapana.",
+  "care": "Lisäsiemaus pysyy pienenä, älä pakota. Lopeta, jos huimaa.",
+  "src": "Balban ym., Cell Reports Medicine, 2023: viisi minuuttia syklistä huokailua päivässä paransi mielialaa ja hidasti hengitystä enemmän kuin mindfulness-meditaatio."
+ },
+ "coh": {
+  "what": "Tasainen, hidas hengitys, noin 6 kertaa minuutissa. Tämän tahdin tienoilla sykevälivaihtelu on suurimmillaan (resonanssi), mikä tukee rauhaa ja stressinsietoa.",
+  "how": "Hengitä tasaisesti nenän kautta, sisään ja ulos yhtä pitkään, ilman taukoja. Säädä tahti rytmiluettelon alla, 4,3–10 hengitystä minuutissa; useimmille sopii parhaiten 5,5–6. 10–20 minuuttia päivässä.",
+  "care": "Sen pitää olla mukavaa. Jos tunnet ilmannälkää, valitse nopeampi tahti.",
+  "src": "Lehrer & Gevirtz, Frontiers in Psychology, 2014 (sykevälivaihtelun biopalaute)."
+ },
+ "relax": {
+  "what": "Lyhyt tauko sisäänhengityksen jälkeen ja pitkä uloshengitys. Hidastaa ja päästää jännitystä, etenkin hartioista ja rinnasta.",
+  "how": "Hengitä nenän kautta sisään 4 s, pidätä kevyesti 2 s ja hengitä sitten hitaasti ulos 6 s. Anna hartioiden laskea jokaisella uloshengityksellä.",
+  "care": "Pidätä ilman ponnistusta, kurkku avoimena. Jos pidätys tuntuu epämukavalta, valitse mieluummin Rauha-rytmi.",
+  "src": "Pidemmän uloshengityksen hitaan hengityksen muunnelma (ks. Zaccaro ym., 2018)."
+ },
+ "equal": {
+  "what": "Yhtä pitkä sisään- ja uloshengitys. Tasapainottava ja hyvä aloitus, jos hengitysharjoitukset ovat sinulle uusia.",
+  "how": "Hengitä nenän kautta sisään 4 s ja ulos 4 s, tasaisesti, ilman taukoja. Kun se tuntuu helpolta, pidennä molempia omalla rytmillä.",
+  "care": "Ei erityisiä riskejä; pysy rentona.",
+  "src": "Sama vritti (tasainen hengitys) joogaperinteestä."
+ },
+ "478": {
+  "what": "Pitkä pidätys ja vielä pidempi uloshengitys. Paljon käytetty rauhoittumiseen ja nukahtamiseen.",
+  "how": "Hengitä hiljaa nenän kautta sisään 4 s, pidätä 7 s ja hengitä sitten suun kautta ulos 8 s pehmeästi suhisten. Aloita 4 kierroksella, sängyssä tai istuen.",
+  "care": "Pitkä pidätys voi olla aluksi vaikea: tee oma rytmi lyhyemmällä pidätyksellä. Jos sinulla on sydän- tai keuhkosairaus, kysy ensin lääkäriltä.",
+  "src": "Tunnetuksi teki lääkäri Andrew Weil pranayaman pohjalta. Tieteellinen näyttö on vielä vähäistä."
+ },
+ "slow": {
+  "what": "Uloshengitys pitenee harjoituksen loppua kohti 4:stä 8 sekuntiin, joten hidastut askel askeleelta lähes huomaamatta.",
+  "how": "Hengitä nenän kautta sisään 4 s ja seuraa uloshengityksellä ympyrää, joka pitenee. Ihanteellinen ennen nukkumaanmenoa tai kiireisen päivän jälkeen, 10–15 minuuttia.",
+  "care": "Jos pitkät uloshengitykset tuntuvat epämukavilta, valitse lyhyempi harjoitus.",
+  "src": "Perustuu hitaaseen hengitykseen pitenevällä uloshengityksellä (ks. Zaccaro ym., 2018)."
+ },
+ "long": {
+  "what": "Uloshengitys on kaksi kertaa sisäänhengityksen pituinen (suhde 1:2): syvä rentoutus ennen nukkumaanmenoa.",
+  "how": "Hengitä nenän kautta sisään 4 s ja sitten hitaasti ulos 8 s nenän tai suippojen huulten kautta. Makuulla, 5–10 minuuttia.",
+  "care": "Jos 8 s on liian pitkä, aloita Rauha-rytmillä (4·6).",
+  "src": "Hengityssuhde 1:2 tulee joogaharjoituksesta; ks. myös Zaccaro ym., 2018."
+ },
+ "bee": {
+  "what": "Hyräily uloshengityksellä, kuin mehiläinen. Pehmeä värinä ja pitkä uloshengitys rauhoittavat ja auttavat nukahtamaan.",
+  "how": "Hengitä nenän kautta sisään 4 s ja hyräile sitten suu kiinni nenän kautta 8 s (”mmm”). Voit sulkea korvat peukaloilla. 5–10 kierrosta.",
+  "care": "Hyräile pehmeästi, kurkkua rasittamatta. Jätä väliin, jos sinulla on korvatulehdus.",
+  "src": "Bhramari pranayama; Kuppusamy ym., Journal of Traditional and Complementary Medicine, 2018 (katsaus)."
+ },
+ "box": {
+  "what": "Neljä yhtä pitkää osaa: sisään, pidätys, ulos, pidätys. Auttaa pysymään tyynenä ja keskittyneenä paineen alla; sotilaat, urheilijat ja pelastajat käyttävät sitä.",
+  "how": "Hengitä nenän kautta sisään 4 s, pidätä 4 s, hengitä ulos 4 s, pidätä 4 s. Istu suorassa, 3–5 minuuttia.",
+  "care": "Pidätysten tulee olla rentoja. Jos ne ovat vaikeita, tee oma rytmi 3 s:n osilla ja etene vähitellen.",
+  "src": "Tunnetaan taktisena hengityksenä; suosituksi teki entinen Navy SEAL Mark Divine."
+ },
+ "tri": {
+  "what": "Sisään, pidätys, ulos, kukin 4 s: yksinkertainen keskittymisharjoitus, neliöhengitystä helpompi.",
+  "how": "Hengitä nenän kautta sisään 4 s, pidätä 4 s, hengitä ulos 4 s ja aloita alusta ilman taukoa.",
+  "care": "Pidätä rennosti, kurkku avoimena.",
+  "src": "Neliöhengityksen muunnelma."
+ },
+ "nadi": {
+  "what": "Hengitys yhden sieraimen kautta kerrallaan, vuorotellen. Rauhoittaa ja tasapainottaa; auttaa keskittymään.",
+  "how": "Sulje oikea sierain peukalolla ja hengitä vasemmasta sisään 4 s; sulje vasen nimettömällä ja hengitä oikeasta ulos 4 s; sisään oikeasta, ulos vasemmasta. Ympyrän alla oleva rivi ja ääni kertovat puolen.",
+  "care": "Ei tukkoisella nenällä. Hengitä pehmeästi, älä koskaan pakota ilmaa.",
+  "src": "Nadi shodhana pranayama; Ghiya, International Journal of Research in Medical Sciences, 2017 (katsaus kliinisiin tutkimuksiin)."
+ },
+ "wake": {
+  "what": "Pitkä sisäänhengitys ja lyhyt, napakka uloshengitys. Herättää ja antaa energiaa, esimerkiksi aamulla tai lounaan jälkeen.",
+  "how": "Hengitä syvään nenän kautta sisään 4 s ja sitten voimakkaasti suun kautta ulos 2 s. 1–3 minuuttia, istuen tai seisten.",
+  "care": "Jos huimaa, hidasta tai lopeta.",
+  "src": "Virkistävät rytmit korostavat sisäänhengitystä; ks. Zaccaro ym., 2018."
+ },
+ "kapal": {
+  "what": "Nopeita, voimakkaita uloshengityksiä nenän kautta; sisäänhengitys tulee itsestään. Virkistää ja lämmittää.",
+  "how": "Istu suorassa. Vedä vatsa nopeasti sisään ja puhalla ilma nenän kautta ulos noin kerran sekunnissa; anna sisäänhengityksen tulla itsestään. 30 uloshengityksen jälkeen hengitä syvään sisään, pidätä 15 s ja lepää.",
+  "care": "Vain istuen. Vältä raskauden aikana sekä jos sinulla on korkea verenpaine, sydänsairaus, epilepsia, tyrä tai tuore vatsaleikkaus. Lopeta, jos huimaa.",
+  "src": "Kapalabhati, hathajoogan puhdistusharjoitus (Hatha Yoga Pradipika)."
+ },
+ "whm": {
+  "what": "30 syvää hengitystä, sitten pitkä pidätys tyhjin keuhkoin ja lyhyt täysin keuhkoin. Virkistää ja antaa tuntea omat rajat. Tutkimus osoitti, että tällainen harjoittelu voi vaikuttaa elimistön stressi- ja immuunivasteeseen.",
+  "how": "Hengitä täyteen nenän tai suun kautta ja päästä irti ilman voimaa, 30 kertaa. Viimeisen uloshengityksen jälkeen pidätä niin kauan kuin on mukavaa ja napauta ympyrää, kun tarvitset ilmaa. Hengitä sitten täyteen ja pidätä 15 s. 1–4 kierrosta.",
+  "care": "Vain istuen tai makuulla. Ei koskaan vedessä, ajaessa tai seisten: voit pyörtyä. Vältä raskauden aikana sekä epilepsian, sydänsairauden tai korkean verenpaineen yhteydessä.",
+  "src": "Kox ym., PNAS, 2014: sympaattisen hermoston tahdonalainen aktivointi ja synnynnäisen immuunivasteen vaimentuminen."
+ }
+}

@@ -1,0 +1,26 @@
+RelaxRing+ – nature sounds
+==========================
+
+The background sounds in this folder (*.mp3) are 50-second loops cut from field
+recordings published on Freesound (https://freesound.org) under the Creative
+Commons 0 license (public domain dedication). CC0 does not require attribution;
+the sources are listed here with thanks to the recordists.
+
+Each loop was taken from a steady part of the recording, its end crossfaded into
+its start over 3 seconds so that it repeats without a click, and its level
+normalized. White and brown noise are synthesized by the app.
+
+File        Freesound sound                                              Recordist
+----------  -----------------------------------------------------------  ----------------
+eso.mp3     Soft rain on a tile roof                                     richwise
+            https://freesound.org/people/richwise/sounds/466241/
+patak.mp3   Relaxing, Mountains, Rivers, Streams, Running Water          INNORECORDS
+            https://freesound.org/people/INNORECORDS/sounds/469009/
+tuz.mp3     Fireplace crackling wood little flame                        BonnyOrbit
+            https://freesound.org/people/BonnyOrbit/sounds/484338/
+szel.mp3    a gentle breeze, wind 3                                      mario1298
+            https://freesound.org/people/mario1298/sounds/181252/
+hullam.mp3  4. waves, close recording, beach, portugal                   VMan533
+            https://freesound.org/people/VMan533/sounds/575902/
+madar.mp3   Dawn chorus - Hampshire countryside Springtime               richwise
+            https://freesound.org/people/richwise/sounds/466242/

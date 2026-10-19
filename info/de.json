@@ -1,0 +1,92 @@
+{
+ "calm": {
+  "what": "Verlangsamt auf etwa 6 Atemzüge pro Minute, mit einer Ausatmung, die länger ist als die Einatmung. Langes Ausatmen stimmt das Nervensystem auf Ruhe ein – gut in angespannten Momenten, am Abend oder immer, wenn du zur Ruhe kommen willst.",
+  "how": "Atme sanft 4 s durch die Nase ein, zuerst in den Bauch, dann langsam 6 s durch die Nase oder gespitzte Lippen aus. Leise und weich. 3–5 Minuten genügen.",
+  "care": "Es soll leicht gehen. Wird die Luft knapp, verkürze die Ausatmung oder mach eine Pause.",
+  "src": "Langsames Atmen mit längerer Ausatmung: Zaccaro et al., Frontiers in Human Neuroscience, 2018 (systematische Übersicht)."
+ },
+ "sigh": {
+  "what": "Zwei Einatmungen hintereinander, dann eine lange Ausatmung. Die kurze zweite Einatmung öffnet zusammengefallene Lungenbläschen, die lange Ausatmung gibt Kohlendioxid ab. Einer der schnellsten Wege, Stress zu senken.",
+  "how": "Atme 2 s durch die Nase ein, nimm 1 s lang einen kurzen Extraschluck Luft obendrauf und atme dann langsam 6 s durch den Mund aus. 1–5 Minuten, in einem angespannten Moment oder als tägliche Gewohnheit.",
+  "care": "Der Extraschluck bleibt klein, nicht erzwingen. Hör auf, wenn dir schwindlig wird.",
+  "src": "Balban et al., Cell Reports Medicine, 2023: fünf Minuten zyklisches Seufzen täglich verbesserten die Stimmung und senkten die Atemfrequenz stärker als Achtsamkeitsmeditation."
+ },
+ "coh": {
+  "what": "Gleichmäßiges, langsames Atmen mit etwa 6 Atemzügen pro Minute. Um dieses Tempo ist die Herzratenvariabilität am größten (Resonanz), was Ruhe und Stressresistenz fördert.",
+  "how": "Atme gleichmäßig durch die Nase, Ein- und Ausatmung gleich lang, ohne Pausen. Das Tempo stellst du unter der Rhythmusliste ein, von 4,3 bis 10 Atemzügen pro Minute; den meisten liegt 5,5–6 am besten. 10–20 Minuten täglich.",
+  "care": "Es soll angenehm sein. Bei Lufthunger wähle ein schnelleres Tempo.",
+  "src": "Lehrer & Gevirtz, Frontiers in Psychology, 2014 (Biofeedback der Herzratenvariabilität)."
+ },
+ "relax": {
+  "what": "Eine kurze Pause nach der Einatmung und eine lange Ausatmung. Verlangsamt und löst Anspannung, besonders in Schultern und Brust.",
+  "how": "Atme 4 s durch die Nase ein, halte locker 2 s, dann atme langsam 6 s aus. Lass bei jeder Ausatmung die Schultern sinken.",
+  "care": "Halte ohne Anstrengung, mit offenem Hals. Ist das Halten unangenehm, nimm lieber den Ruhe-Rhythmus.",
+  "src": "Eine Variante des langsamen Atmens mit längerer Ausatmung (siehe Zaccaro et al., 2018)."
+ },
+ "equal": {
+  "what": "Ein- und Ausatmung gleich lang. Ausgleichend und ein guter Einstieg, wenn Atemübungen neu für dich sind.",
+  "how": "Atme 4 s durch die Nase ein und 4 s aus, gleichmäßig, ohne Pausen. Wenn es leicht fällt, verlängere beides mit einem eigenen Rhythmus.",
+  "care": "Keine besonderen Risiken; bleib entspannt.",
+  "src": "Sama Vritti (gleichmäßiges Atmen) aus der Yoga-Tradition."
+ },
+ "478": {
+  "what": "Langes Anhalten und eine noch längere Ausatmung. Viele nutzen es zum Beruhigen und Einschlafen.",
+  "how": "Atme leise 4 s durch die Nase ein, halte 7 s, dann atme 8 s mit einem sanften Rauschen durch den Mund aus. Beginne mit 4 Runden, im Bett oder im Sitzen.",
+  "care": "Das lange Anhalten kann anfangs schwer sein: erstelle einen eigenen Rhythmus mit kürzerem Halten. Bei Herz- oder Lungenerkrankungen frag zuerst deine Ärztin oder deinen Arzt.",
+  "src": "Bekannt gemacht von dem Arzt Andrew Weil, auf Basis von Pranayama. Die wissenschaftliche Evidenz ist noch begrenzt."
+ },
+ "slow": {
+  "what": "Die Ausatmung wächst bis zum Ende der Übung von 4 auf 8 s, so wirst du Schritt für Schritt fast unbemerkt langsamer.",
+  "how": "Atme 4 s durch die Nase ein und folge beim Ausatmen dem Kreis, der immer länger wird. Ideal vor dem Schlafen oder nach einem vollen Tag, 10–15 Minuten.",
+  "care": "Werden die langen Ausatmungen unangenehm, wähle eine kürzere Übung.",
+  "src": "Baut auf langsamem Atmen mit sich verlängernder Ausatmung auf (siehe Zaccaro et al., 2018)."
+ },
+ "long": {
+  "what": "Die Ausatmung ist doppelt so lang wie die Einatmung (Verhältnis 1:2): tiefe Entspannung vor dem Schlafengehen.",
+  "how": "Atme 4 s durch die Nase ein, dann langsam 8 s durch die Nase oder gespitzte Lippen aus. Im Liegen, 5–10 Minuten.",
+  "care": "Sind 8 s zu lang, beginne mit dem Ruhe-Rhythmus (4·6).",
+  "src": "Das Atemverhältnis 1:2 aus der Yoga-Praxis; siehe auch Zaccaro et al., 2018."
+ },
+ "bee": {
+  "what": "Summen beim Ausatmen, wie eine Biene. Die sanfte Vibration und die lange Ausatmung beruhigen und helfen beim Einschlafen.",
+  "how": "Atme 4 s durch die Nase ein, dann summe mit geschlossenem Mund 8 s durch die Nase („mmm“). Du kannst die Ohren mit den Daumen verschließen. 5–10 Runden.",
+  "care": "Summe sanft, ohne den Hals anzustrengen. Bei einer Ohrentzündung auslassen.",
+  "src": "Bhramari Pranayama; Kuppusamy et al., Journal of Traditional and Complementary Medicine, 2018 (Übersicht)."
+ },
+ "box": {
+  "what": "Vier gleiche Teile: ein, halten, aus, halten. Hilft, unter Druck gefasst und konzentriert zu bleiben; Soldaten, Sportler und Rettungskräfte nutzen es.",
+  "how": "Atme 4 s durch die Nase ein, halte 4 s, atme 4 s aus, halte 4 s. Aufrecht sitzend, 3–5 Minuten.",
+  "care": "Das Halten bleibt locker. Fällt es schwer, erstelle einen eigenen Rhythmus mit 3-s-Teilen und steigere langsam.",
+  "src": "Als taktisches Atmen bekannt; populär gemacht vom ehemaligen Navy SEAL Mark Divine."
+ },
+ "tri": {
+  "what": "Ein, halten, aus, je 4 s: eine einfache Konzentrationsübung, leichter als die Box-Atmung.",
+  "how": "Atme 4 s durch die Nase ein, halte 4 s, atme 4 s aus und beginne ohne Pause von vorn.",
+  "care": "Halte locker, mit offenem Hals.",
+  "src": "Eine Variante der Box-Atmung."
+ },
+ "nadi": {
+  "what": "Abwechselnd durch ein Nasenloch atmen. Beruhigend und ausgleichend; hilft, dich zu konzentrieren.",
+  "how": "Verschließe das rechte Nasenloch mit dem Daumen und atme 4 s links ein; verschließe das linke mit dem Ringfinger und atme 4 s rechts aus; atme rechts ein, links aus. Die Zeile unter dem Kreis und die Stimme sagen dir die Seite.",
+  "care": "Nicht bei verstopfter Nase. Atme sanft, presse die Luft nie.",
+  "src": "Nadi Shodhana Pranayama; Ghiya, International Journal of Research in Medical Sciences, 2017 (Übersicht klinischer Studien)."
+ },
+ "wake": {
+  "what": "Eine lange Einatmung und eine kurze, kräftige Ausatmung. Macht wach und gibt Energie, etwa morgens oder nach dem Mittagessen.",
+  "how": "Atme 4 s tief durch die Nase ein, dann 2 s kräftig durch den Mund aus. 1–3 Minuten, im Sitzen oder Stehen.",
+  "care": "Wird dir schwindlig, mach langsamer oder hör auf.",
+  "src": "Belebende Rhythmen betonen die Einatmung; siehe Zaccaro et al., 2018."
+ },
+ "kapal": {
+  "what": "Schnelle, kräftige Ausatmungen durch die Nase, die Einatmung kommt von selbst. Belebend und wärmend.",
+  "how": "Sitz aufrecht. Zieh den Bauch ruckartig ein, um die Luft etwa einmal pro Sekunde durch die Nase auszustoßen; lass die Einatmung passiv kommen. Nach 30 Ausatmungen tief einatmen, 15 s halten, dann ausruhen.",
+  "care": "Nur im Sitzen. Meide es in der Schwangerschaft und bei Bluthochdruck, Herzerkrankungen, Epilepsie, Bruch oder frischer Bauch-OP. Hör auf, wenn dir schwindlig wird.",
+  "src": "Kapalabhati, eine Reinigungstechnik des Hatha-Yoga (Hatha Yoga Pradipika)."
+ },
+ "whm": {
+  "what": "30 tiefe Atemzüge, dann langes Anhalten mit leerer Lunge und kurzes mit voller. Belebend, und du spürst deine Grenzen. Eine Studie zeigte, dass solches Training die Stress- und Immunreaktion des Körpers beeinflussen kann.",
+  "how": "Atme 30-mal voll durch Nase oder Mund ein und lass ohne Kraft los. Nach der letzten Ausatmung halte, solange es angenehm ist, und tippe auf den Kreis, wenn du Luft brauchst. Dann voll einatmen und 15 s halten. 1–4 Runden.",
+  "care": "Nur im Sitzen oder Liegen. Nie im Wasser, beim Fahren oder im Stehen: du kannst ohnmächtig werden. Meide es in der Schwangerschaft und bei Epilepsie, Herzerkrankungen oder Bluthochdruck.",
+  "src": "Kox et al., PNAS, 2014: willentliche Aktivierung des sympathischen Nervensystems und Abschwächung der angeborenen Immunantwort."
+ }
+}

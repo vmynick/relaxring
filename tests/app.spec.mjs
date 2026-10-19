@@ -275,12 +275,31 @@ test('saját ritmusok: új, átnevezés, a főképernyőre', async ({ page }) =>
   await page.locator('#addOwn').click();
   const ed = page.locator('.editor');
   await ed.locator('input').fill('Esti');
-  await ed.locator('.stepper').first().locator('button[data-d="1"]').click();   // belégzés 4 → 5
+  await ed.locator('.stepper').first().locator('button[data-d="1"]').click();   // belégzés 4 → 4,5 (fél másodperces lépés)
+  await expect(ed.locator('.stepper').first().locator('output')).toHaveText('4,5');
   await page.locator('.rrow', { hasText: 'Esti' }).click();
   const s = await stored(page);
   expect(s.customs.map(c => c.n)).toEqual(['', 'Esti']);
-  expect(s.customs[1].p).toEqual([5, 0, 6, 0]);
+  expect(s.customs[1].p).toEqual([4.5, 0, 6, 0]);
   await expect(page.locator('#modes button', { hasText: 'Esti' })).toHaveCount(1);
+  await expect(page.locator('#modes button', { hasText: 'Esti' }).locator('small')).toHaveText('4,5·6');
+});
+
+test('saját ritmus fél másodpercekkel: a váltás pontosan 4,5 mp-nél, a szám felfelé kerekít', async ({ page }) => {
+  await page.clock.install();
+  await seed(page, { mode: 'own', shown: ['own', 'box', 'calm'], customs: [{ id: 'own', n: '', p: [4.5, 0, 5.5, 0] }] });
+  await page.goto('/');
+  await expect(page.locator('#modes button[data-m="own"] small')).toHaveText('4,5·5,5');
+  await page.locator('#ringBtn').click();
+  await expect(page.locator('#ct')).toHaveText('5');
+  await page.clock.runFor(4_300);
+  await expect(page.locator('#ph')).toHaveText('Belégzés');
+  await page.clock.runFor(400);
+  await expect(page.locator('#ph')).toHaveText('Kilégzés');
+  await expect(page.locator('#ct')).toHaveText('6');
+  await page.clock.runFor(5_500);
+  await expect(page.locator('#ph')).toHaveText('Belégzés');
+  expect(await page.evaluate(() => elapsed)).toBe(10);
 });
 
 test('sorozat: lépésenként vált ritmust, a hossza a lépések összege', async ({ page }) => {
@@ -665,6 +684,162 @@ test('a Kilépés gomb böngészőben rejtve marad', async ({ page }) => {
 test('manifest: angol gyorsindítók', async ({ request }) => {
   const m = await (await request.get('/manifest.json')).json();
   expect(m.lang).toBe('en');
-  expect(m.shortcuts.map(s => s.short_name)).toEqual(['Sleep 4-7-8', 'Box', 'Calm', 'Coherent']);
+  expect(m.shortcuts.map(s => s.short_name)).toEqual(['Sleep 4-7-8', 'Box', 'Calm', 'Tabata']);
+  expect(m.shortcuts[3].url).toBe('./?r=tabata');
   expect(m.orientation).toBeUndefined();             // a Tabata fekve is megy; a légzést az app zárja állóra, ahol lehet
+});
+
+test('Tabata: gyakorlatonként saját munka- és pihenőidő a sor végén („Guggolás 30/5”)', async ({ page }) => {
+  await seed(page, { mode: 'tabata', tabs: [{ id: 't1', n: '', work: 20, rest: 10, rounds: 3, sets: 1, prep: 0, brk: 60, wu: 0, cd: 0, col: {}, snd: {},
+    ex: 'Guggolás 30/5\nFekvőtámasz\nKitörés 15' }], tabSel: 't1' });
+  await page.goto('/');
+  const plan = await page.evaluate(() => tabataPlan().map(p => [p[0], p[1], p[4]]));
+  expect(plan).toEqual([['work', 30, 'Guggolás'], ['rest', 5, 'Fekvőtámasz'], ['work', 20, 'Fekvőtámasz'], ['rest', 10, 'Kitörés'], ['work', 15, 'Kitörés']]);
+  expect(await page.evaluate(() => exParse('Plank 2 perc'))).toEqual({ n: 'Plank 2 perc', w: null, r: null });   // a szám csak a sor végén számít
+});
+
+test('Tabata: félidő, figyelmeztetés a vége előtt, bemondással; metronóm munka közben', async ({ page }) => {
+  await page.clock.install();
+  await fakeVoice(page);
+  await seed(page, { mode: 'tabata', speak: true, tabs: [{ id: 't1', n: '', work: 20, rest: 10, rounds: 2, sets: 1, prep: 0, brk: 60, wu: 0, cd: 0, col: {}, snd: {},
+    ex: '', half: true, warn: 5, bpm: 60 }], tabSel: 't1' });
+  await page.goto('/');
+  await page.evaluate(() => { window.sigs = []; const o = sig; sig = id => { window.sigs.push([id, elapsed]); return o(id); }; });
+  await page.locator('#ringBtn').click();
+  expect(await page.evaluate(() => metro.length)).toBe(19);          // 20 mp munka, 60/perc: 1…19. mp
+  await page.clock.runFor(20_300);
+  const sigs = await page.evaluate(() => window.sigs);
+  expect(sigs).toContainEqual(['chirp', 10]);
+  expect(sigs).toContainEqual(['triple', 15]);
+  expect(sigs.filter(x => x[0] === 'tick').map(x => x[1])).toEqual([17, 18, 19]);
+  const said = await page.evaluate(() => window.said.map(x => x[0]));
+  expect(said).toContain('Félidő');
+  expect(said).toContain('Még 5 másodperc');
+  await page.evaluate(() => pause());
+  expect(await page.evaluate(() => metro.length)).toBe(0);
+  // a megosztott edzés megőrzi az új beállításokat
+  const w = await page.evaluate(() => wClean(JSON.parse(JSON.stringify(tw()))));
+  expect([w.half, w.warn, w.bpm]).toEqual([true, 5, 60]);
+});
+
+test('Tabata: saját jelzőhang fájlból, új beépített hangok', async ({ page }) => {
+  await seed(page, { mode: 'tabata' });
+  await page.goto('/');
+  await openSettings(page, 'tabata');
+  await expect(page.locator('#ownSndName')).toContainText('Nincs kiválasztva');
+  await page.evaluate(async () => {           // rövid WAV a „telefonról”
+    const sr = 22050, d = new Float32Array(sr / 4).map((_, k) => Math.sin(k / 5) * .5);
+    const f = new File([wavBlob(d, sr)], 'csengo.wav', { type: 'audio/wav' }), dt = new DataTransfer(); dt.items.add(f);
+    const i = document.getElementById('ownSndFile'); i.files = dt.files; i.dispatchEvent(new Event('change'));
+  });
+  await expect(page.locator('#ownSndName')).toHaveText('csengo.wav');
+  expect(await page.evaluate(() => sigList())).toContain('own');
+  await expect(page.locator('#tbLook select[data-k="work"] option[value="own"]')).toHaveText('Saját hang');
+  await expect(page.locator('#tbLook select[data-k="half"] option[value="boxing"]')).toHaveText('Bokszcsengő');
+  await page.locator('#tbLook select[data-k="work"]').selectOption('own');
+  expect((await stored(page)).tabs[0].snd.work).toBe('own');
+  await page.locator('#ownSndDel').click();
+  expect(await page.evaluate(() => [!!ownBuf, localStorage.getItem('legzo-snd'), sigList().includes('own')])).toEqual([false, null, false]);
+  expect((await stored(page)).tabs[0].snd.work).toBeUndefined();
+});
+
+test('visszatartás-teszt: BOLT a főképernyőn, eredmény a naplóban grafikonnal', async ({ page }) => {
+  await page.clock.install();
+  await seed(page, { tests: [{ t: Date.now() - 864e5, k: 'bolt', s: 20 }] });
+  await page.goto('/');
+  await openSettings(page, 'journal');
+  await expect(page.locator('#testBox')).toContainText('Utolsó: 20 mp');
+  await page.locator('#testBox .tgo[data-k="bolt"]').click();
+  await expect(page.locator('#sheet')).toBeHidden();
+  await expect(page.locator('#sub')).toContainText('fogd be az orrod');
+  await page.locator('#ringBtn').click();            // indul
+  await page.clock.runFor(24_300);
+  await expect(page.locator('#ct')).toHaveText('24');
+  await page.locator('#ringBtn').click();            // az első légszomjnál megáll
+  await expect(page.locator('#ph')).toHaveText('Eredmény');
+  await expect(page.locator('#sub')).toContainText('közepes (20–30 mp)');
+  await expect(page.locator('#sub')).toContainText('+4');
+  const s = await stored(page);
+  expect(s.tests.map(x => x.k)).toEqual(['bolt', 'bolt']);
+  expect(Math.round(s.tests[1].s)).toBe(24);
+  await page.locator('#ringBtn').click();            // vissza a főképernyőre
+  expect(await page.evaluate(() => [test, ph.textContent === L.start])).toEqual([null, true]);
+  await openSettings(page, 'journal');
+  await expect(page.locator('#testBox svg.tchart')).toHaveCount(1);
+});
+
+test('hangulat előtte és utána: kérdez a gyakorlás előtt és után, a napló átlagot mutat', async ({ page }) => {
+  await page.clock.install();
+  await seed(page, { mode: 'box', dur: 1, mood: true });
+  await page.goto('/');
+  await page.locator('#ringBtn').click();
+  await expect(page.locator('#moodQ')).toHaveText('Hogy érzed magad most?');
+  expect(await page.evaluate(() => run)).toBe(false);
+  await page.locator('#moodFaces button[data-v="2"]').click();
+  await expect(page.locator('#mood')).toBeHidden();
+  expect(await page.evaluate(() => run)).toBe(true);
+  await page.clock.runFor(65_000);
+  await expect(page.locator('#moodQ')).toHaveText('És most?');
+  await page.locator('#moodFaces button[data-v="4"]').click();
+  const s = await stored(page);
+  expect(s.hist[s.hist.length - 1].m).toEqual([2, 4]);
+  await openSettings(page, 'journal');
+  await expect(page.locator('#moodBox')).toContainText('2 → 4');
+});
+
+test('programok: a mai nap a programból fut, a beállítások maradnak, utána a következő nap jön', async ({ page }) => {
+  await page.clock.install();
+  await seed(page, { mode: 'box', dur: 10 });
+  await page.goto('/');
+  await openSettings(page, 'programs');
+  await page.locator('#progList .prog').first().locator('button[data-a="start"]').click();
+  const next = d => page.evaluate(([d, r, m]) => L.progNext(d, rname(r), L.min(m)), d);
+  await expect(page.locator('#progList')).toContainText(await next([1, 'calm', 3]));
+  await page.locator('#progList button[data-a="go"]').click();
+  await expect(page.locator('#sheet')).toBeHidden();
+  expect(await page.evaluate(() => [run, runMode, po && po.min])).toEqual([true, 'calm', 3]);
+  await expect(page.locator('#meta')).toContainText('1. nap');
+  await page.clock.runFor(181_000);
+  expect(await page.evaluate(() => run)).toBe(false);
+  const s = await stored(page);
+  expect([s.prog.day, s.mode, s.dur]).toEqual([1, 'box', 10]);
+  await openSettings(page, 'programs');
+  await expect(page.locator('#progList')).toContainText('Mára kész');
+  await expect(page.locator('#progList')).toContainText(await next([2, 'equal', 4]));
+});
+
+test('részletes leírás: a ritmus mellől nyílik, minden nyelven teljes, a vissza a Ritmusokhoz visz', async ({ page, request }) => {
+  await seed(page);
+  await page.goto('/');
+  await openSettings(page, 'rhythms');
+  await page.locator('[data-info="sigh"]').click();
+  await expect(page.locator('#sheetTitle')).toHaveText('Sóhajtás');
+  await expect(page.locator('#infoTxt h4')).toHaveText(['Mire jó', 'Hogyan', 'Mire figyelj', 'Eredet és forrás']);
+  await expect(page.locator('#infoTxt')).toContainText('Cell Reports Medicine');
+  await page.locator('#backBtn').click();
+  await expect(page.locator('#sheetTitle')).toHaveText('Ritmusok');
+  await page.locator('[data-info="box"]').click();
+  await page.locator('#infoTry').click();
+  await expect(page.locator('#sheet')).toBeHidden();
+  expect(await page.evaluate(() => [run, st.mode, st.shown.includes('box')])).toEqual([true, 'box', true]);
+  const ids = await page.evaluate(() => BIDS);
+  for (const l of await page.evaluate(() => Object.keys(T))) {
+    const j = await (await request.get(`/info/${l}.json`)).json();
+    for (const id of ids) for (const k of ['what', 'how', 'care', 'src']) expect(j[id] && j[id][k], `${l}/${id}/${k}`).toBeTruthy();
+  }
+});
+
+test('felvett természethang: első használatkor letöltődik, a szintetizáltból átúsztat rá', async ({ page }) => {
+  await page.clock.install();
+  await seed(page, { mode: 'calm', dur: 5, amb: 'eso' });
+  await page.goto('/');
+  await page.locator('#ringBtn').click();
+  expect(await page.evaluate(() => [!!amb, !!abuf.eso])).toEqual([true, false]);   // először a szintetizált szól
+  await page.clock.runFor(100);
+  await expect.poll(() => page.evaluate(() => !!abuf.eso), { timeout: 10000 }).toBe(true);
+  const r = await page.evaluate(() => ({ dur: Math.round(abuf.eso.duration), gen: amb.gen }));
+  expect(r.dur).toBe(50);
+  await page.evaluate(() => { st.amb = 'patak'; ambStart(.1); });
+  await expect.poll(() => page.evaluate(() => !!abuf.patak), { timeout: 10000 }).toBe(true);
+  expect(await page.evaluate(() => Object.keys(abuf))).toEqual(['patak']);   // egyszerre csak egy marad a memóriában
 });

@@ -1,0 +1,92 @@
+{
+ "calm": {
+  "what": "Senker tempoet til omtrent 6 pust i minuttet, med en utpust som er lengre enn innpusten. En lang utpust stemmer nervesystemet mot hvile: bra i stressede øyeblikk, om kvelden eller når du vil roe deg ned.",
+  "how": "Pust mykt inn gjennom nesen i 4 s, først ned i magen, og pust så sakte ut i 6 s gjennom nesen eller spisse lepper. Mykt og stille. 3–5 minutter holder.",
+  "care": "Det skal kjennes lett. Mangler du luft, gjør utpusten kortere eller ta en pause.",
+  "src": "Langsom pust med lengre utpust: Zaccaro mfl., Frontiers in Human Neuroscience, 2018 (systematisk oversikt)."
+ },
+ "sigh": {
+  "what": "To innpust på rad og så en lang utpust. Det korte andre innpustet åpner sammenfalte lungeblærer, og den lange utpusten slipper ut karbondioksid. En av de raskeste måtene å senke stresset på.",
+  "how": "Pust inn gjennom nesen i 2 s, ta en kort ekstra slurk luft oppå i 1 s, og pust så sakte ut gjennom munnen i 6 s. 1–5 minutter, i et stresset øyeblikk eller som daglig vane.",
+  "care": "Den ekstra slurken skal være liten, ikke press. Stopp hvis du blir svimmel.",
+  "src": "Balban mfl., Cell Reports Medicine, 2023: fem minutter syklisk sukking om dagen bedret humøret og senket pustetempoet mer enn mindfulnessmeditasjon."
+ },
+ "coh": {
+  "what": "Jevn, langsom pust, omtrent 6 i minuttet. Rundt dette tempoet er hjertefrekvensvariabiliteten størst (resonans), noe som fremmer ro og motstandskraft mot stress.",
+  "how": "Pust jevnt gjennom nesen, inn og ut like lenge, uten pauser. Still tempoet under rytmelisten, fra 4,3 til 10 pust i minuttet; de fleste har det best med 5,5–6. 10–20 minutter om dagen.",
+  "care": "Det skal være behagelig. Kjenner du lufthunger, velg et raskere tempo.",
+  "src": "Lehrer & Gevirtz, Frontiers in Psychology, 2014 (biofeedback av hjertefrekvensvariabilitet)."
+ },
+ "relax": {
+  "what": "En kort pause etter innpusten og en lang utpust. Senker tempoet og slipper spenninger, særlig i skuldre og bryst.",
+  "how": "Pust inn gjennom nesen i 4 s, hold mykt i 2 s, og pust så sakte ut i 6 s. La skuldrene synke ved hver utpust.",
+  "care": "Hold uten anstrengelse, med åpen hals. Er det ubehagelig, velg heller rytmen Ro.",
+  "src": "En variant av langsom pust med lengre utpust (se Zaccaro mfl., 2018)."
+ },
+ "equal": {
+  "what": "Inn- og utpust like lange. Balanserende, og et godt sted å begynne hvis pusteøvelser er nytt for deg.",
+  "how": "Pust inn gjennom nesen i 4 s og ut i 4 s, jevnt, uten pauser. Når det kjennes lett, kan du forlenge begge med en egen rytme.",
+  "care": "Ingen spesielle risikoer; hold deg avslappet.",
+  "src": "Sama vritti (lik pust) fra yogatradisjonen."
+ },
+ "478": {
+  "what": "En lang pause og en enda lengre utpust. Brukes mye for å roe seg ned og sovne.",
+  "how": "Pust stille inn gjennom nesen i 4 s, hold i 7 s, og pust så ut gjennom munnen i 8 s med en myk susende lyd. Begynn med 4 runder, i sengen eller sittende.",
+  "care": "Den lange pausen kan være vanskelig i starten: lag en egen rytme med kortere pause. Har du hjerte- eller lungesykdom, spør legen din først.",
+  "src": "Gjort kjent av legen Andrew Weil, basert på pranayama. Det vitenskapelige grunnlaget er foreløpig begrenset."
+ },
+ "slow": {
+  "what": "Utpusten vokser fra 4 til 8 s mot slutten av økten, slik at du roer ned steg for steg, nesten uten å merke det.",
+  "how": "Pust inn gjennom nesen i 4 s, og følg sirkelen på utpusten mens den blir lengre. Ideelt før søvn eller etter en travel dag, 10–15 minutter.",
+  "care": "Blir de lange utpustene ubehagelige, velg en kortere økt.",
+  "src": "Bygger på langsom pust med voksende utpust (se Zaccaro mfl., 2018)."
+ },
+ "long": {
+  "what": "Utpusten er dobbelt så lang som innpusten (forholdet 1:2): dyp avslapning før leggetid.",
+  "how": "Pust inn gjennom nesen i 4 s, og pust så sakte ut i 8 s gjennom nesen eller spisse lepper. Liggende, 5–10 minutter.",
+  "care": "Er 8 s for lenge, begynn med rytmen Ro (4·6).",
+  "src": "Pusteforholdet 1:2 kommer fra yogapraksis; se også Zaccaro mfl., 2018."
+ },
+ "bee": {
+  "what": "Nynning på utpusten, som en bie. Den myke vibrasjonen og den lange utpusten roer og hjelper deg å sovne.",
+  "how": "Pust inn gjennom nesen i 4 s, og nynn så gjennom nesen med lukket munn i 8 s («mmm»). Du kan lukke ørene med tomlene. 5–10 runder.",
+  "care": "Nynn mykt, uten å anstrenge halsen. Hopp over ved ørebetennelse.",
+  "src": "Bhramari pranayama; Kuppusamy mfl., Journal of Traditional and Complementary Medicine, 2018 (oversikt)."
+ },
+ "box": {
+  "what": "Fire like deler: inn, hold, ut, hold. Hjelper deg å holde deg rolig og fokusert under press; soldater, idrettsutøvere og redningspersonell bruker den.",
+  "how": "Pust inn gjennom nesen i 4 s, hold i 4 s, pust ut i 4 s, hold i 4 s. Sitt rett opp, 3–5 minutter.",
+  "care": "Pausene skal være avslappede. Er de vanskelige, lag en egen rytme med deler på 3 s og bygg sakte opp.",
+  "src": "Kjent som taktisk pust; gjort populær av tidligere Navy SEAL Mark Divine."
+ },
+ "tri": {
+  "what": "Inn, hold, ut, 4 s hver: en enkel fokusøvelse, lettere enn bokspust.",
+  "how": "Pust inn gjennom nesen i 4 s, hold i 4 s, pust ut i 4 s, og begynn på nytt uten pause.",
+  "care": "Hold avslappet, med åpen hals.",
+  "src": "En variant av bokspust."
+ },
+ "nadi": {
+  "what": "Pust gjennom ett nesebor om gangen, vekselvis. Beroligende og balanserende; hjelper deg å fokusere.",
+  "how": "Lukk høyre nesebor med tommelen og pust inn gjennom venstre i 4 s; lukk venstre med ringfingeren og pust ut gjennom høyre i 4 s; pust inn gjennom høyre, ut gjennom venstre. Linjen under sirkelen og stemmen sier hvilken side.",
+  "care": "Ikke med tett nese. Pust mykt, press aldri luften.",
+  "src": "Nadi shodhana pranayama; Ghiya, International Journal of Research in Medical Sciences, 2017 (oversikt over kliniske studier)."
+ },
+ "wake": {
+  "what": "Et langt innpust og et kort, kraftig utpust. Vekker og gir energi, for eksempel om morgenen eller etter lunsj.",
+  "how": "Pust dypt inn gjennom nesen i 4 s, og pust så kraftig ut gjennom munnen i 2 s. 1–3 minutter, sittende eller stående.",
+  "care": "Blir du svimmel, sett ned tempoet eller stopp.",
+  "src": "Oppkvikkende rytmer legger vekt på innpusten; se Zaccaro mfl., 2018."
+ },
+ "kapal": {
+  "what": "Raske, kraftige utpust gjennom nesen; innpusten kommer av seg selv. Oppkvikkende og varmende.",
+  "how": "Sitt rett opp. Trekk magen brått inn for å presse luften ut gjennom nesen omtrent én gang i sekundet; la innpusten komme passivt. Etter 30 utpust puster du dypt inn, holder i 15 s og hviler.",
+  "care": "Bare sittende. Unngå det ved graviditet, høyt blodtrykk, hjertesykdom, epilepsi, brokk eller nylig mageoperasjon. Stopp hvis du blir svimmel.",
+  "src": "Kapalabhati, en rensende teknikk i hathayoga (Hatha Yoga Pradipika)."
+ },
+ "whm": {
+  "what": "30 dype pust, så en lang pause med tomme lunger og en kort med fulle. Gir energi og lar deg kjenne grensene dine. En studie viste at slik trening kan påvirke kroppens stress- og immunrespons.",
+  "how": "Pust helt inn gjennom nese eller munn og slipp uten kraft, 30 ganger. Etter siste utpust holder du så lenge det er behagelig, og trykker på sirkelen når du trenger luft. Pust så helt inn og hold i 15 s. 1–4 runder.",
+  "care": "Bare sittende eller liggende. Aldri i vann, mens du kjører eller står: du kan besvime. Unngå det ved graviditet, epilepsi, hjertesykdom eller høyt blodtrykk.",
+  "src": "Kox mfl., PNAS, 2014: viljestyrt aktivering av det sympatiske nervesystemet og demping av den medfødte immunresponsen."
+ }
+}

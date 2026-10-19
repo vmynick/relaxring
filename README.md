@@ -14,7 +14,7 @@ A breathing-exercise app and interval timer for your phone. Breathing circles sh
 
 ### Breathing techniques
 
-15 built-in techniques in four groups. Each one has a short description in Settings → Rhythms.
+15 built-in techniques in four groups. Each one has a short description in Settings → Rhythms, and the ⓘ next to it opens a detailed page: what it is for, how to do it, what to watch out for, and its origin with a source. The **Try it** button there starts it right away.
 
 | Group | Rhythm | Pattern (seconds) |
 |---|---|---|
@@ -36,17 +36,21 @@ A breathing-exercise app and interval timer for your phone. Breathing circles sh
 
 The app warns once before Kapalbhati and Power breathing: they are hyperventilation exercises, to be done only sitting or lying down.
 
-- **Custom rhythms:** as many as you like, each with a name and its own inhale, holds and exhale.
+- **Custom rhythms:** as many as you like, each with a name and its own inhale, holds and exhale, in half-second steps.
 - **Sequences:** chain rhythms into one session, for example 3 minutes Sigh → 5 minutes Coherent → 5 minutes Sleep.
 - The main screen shows the 3 rhythms you pick. Tap the circle to start or stop.
 - **Session length:** 1–30 minutes, a number of breaths (5–100) or endless. An optional countdown (3, 5 or 10 s) comes before the start.
+- **Programs:** multi-day plans with one session a day: a 7-day foundation, 14 days to better sleep, and 10 days of energy and focus. A day counts when you finish its session; your own settings stay unchanged. On days you have not practised yet, the app offers the day's session when you open it.
+- **Breath-hold test:** the BOLT test (comfortable hold after a normal exhale) and the maximum hold, on the main screen. The results are charted in the journal, and BOLT gets a rating.
+- **Mood before and after** (optional): one tap before and after a session; the journal shows the average change.
 - **Focus mode:** while you breathe, everything except the circles fades. Tap outside the circle to bring the controls back.
 - **Sleep mode:** the screen slowly goes dark, there is no chime at the end and the nature sound fades out.
 - **Screen off:** sessions keep running with the screen locked. The lock screen shows pause, resume and stop, and a headset button pauses too. An incoming call pauses the session. Some sound must be on for this to work.
 
 ### Sound and voice
 
-- 4 breathing sounds (Soft, Ocean, Pad, Bowl), 5 chimes (Bell, Bowl, Wood, Drop, Piezo) and 8 background sounds (rain, stream, fire, wind, waves, birds, white and brown noise). The phone synthesizes all of these, so nothing has to be downloaded.
+- 4 breathing sounds (Soft, Ocean, Pad, Bowl) and 5 chimes (Bell, Bowl, Wood, Drop, Piezo), synthesized by the phone.
+- 8 background sounds. Rain, stream, fire, wind, waves and birds are real recordings (CC0, from Freesound): each downloads on first use and then works offline; until then a synthesized version plays. White and brown noise are synthesized.
 - **Voice guidance** in three kinds:
   - the phone's own text-to-speech voice. The app measures how late it starts and starts it that much early, so you hear it as the counter changes. At the start of a session the circle waits, at most 2 seconds, until the voice actually starts;
   - a recorded female or male voice for 18 languages. It sounds the same on every phone and plays exactly at the change. It downloads on first use and then works offline. Exercise names are still read by the phone voice.
@@ -59,8 +63,9 @@ The app warns once before Kapalbhati and Power breathing: they are hyperventilat
 - **Presets:** Tabata 20/10 s × 8, HIIT 40/20 s × 8, EMOM 1 min × 10.
 - **Adjustable:** work (5–90 s), rest (0–90 s), rounds (1–30), sets (1–5), get-ready time (0–30 s), rest between sets (10–180 s), warm-up and cool-down (0–15 min).
 - **Readable from across the room:** the whole screen takes the phase color, with a huge countdown. Each phase (warm-up, get ready, work, rest, cool-down) has its own color, 9 to choose from, and its own signal: high beep, double low beep, bell, gong, whistle, buzzer or none.
-- **Loud signal with its own volume:** 3-2-1 beeps before every change, and stronger vibration.
-- **Exercise list:** the current exercise shows during work and the next one during rest. Voice guidance reads them out.
+- **Loud signal with its own volume:** 3-2-1 beeps before every change, and stronger vibration. 12 signal sounds (beeps, chirp, bell, gong, boxing bell, whistle, buzzer, horn, clap, drum), or your own sound file.
+- **Cues during work:** an optional halfway signal, a warning 5–30 s before the end of work, and a metronome (40–180 a minute). Voice guidance says them too.
+- **Exercise list:** the current exercise shows during work and the next one during rest. Voice guidance reads them out. A number at the end of a line gives that exercise its own time: “Squats 40” is 40 s of work, “Squats 40/15” adds 15 s of rest after it.
 - **Safe controls:** tapping the number pauses the workout and holding it stops, so a sweaty touch cannot end it by mistake. ⏭ jumps to the next part, also from the lock screen.
 - **Landscape:** turn the phone sideways and the countdown fills the screen next to the exercise name.
 - **With your own music:** on Android the signals only lower the music playing on the phone instead of stopping it. In this mode the lock screen has no controls and the screen stays on.
@@ -96,7 +101,7 @@ The installed app:
 - starts without an internet connection;
 - runs full screen on Android, where you swipe from the edge to show the status and navigation bars;
 - keeps the screen awake during a session;
-- offers quick starts when you long-press its icon: Sleep 4-7-8, Box, Calm, Coherent.
+- offers quick starts when you long-press its icon: Sleep 4-7-8, Box, Calm, Tabata.
 
 When a new version is published, the app shows "A new version is available" → *Update*.
 
@@ -142,6 +147,8 @@ The app is a single HTML file with HTML, CSS and JavaScript. It uses no framewor
 | [sw.js](sw.js) | service worker: offline cache and update notice |
 | [manifest.json](manifest.json) | install data, icons, shortcuts |
 | [voice/](voice) | recorded voices: one MP3 per language and gender, `voices.json` with the word positions, [CREDITS.txt](voice/CREDITS.txt) |
+| [info/](info) | the detailed technique descriptions, one JSON file per language |
+| [amb/](amb) | the recorded nature sounds, [CREDITS.txt](amb/CREDITS.txt) |
 | [fonts.css](fonts.css), [fonts/](fonts) | the Inter font |
 | `*.png` | icons |
 | [setup.html](setup.html) | only for the earlier self-hosted home-server version |
@@ -154,10 +161,11 @@ The app is a single HTML file with HTML, CSS and JavaScript. It uses no framewor
 **Tests:** run `npm install` once, then `npm test`. Playwright runs the tests in headless Chromium against a small built-in web server. They cover:
 - loading in every language, and that every language has the same texts;
 - breathing sessions, the journal, pause and resume, the lock-screen data and catching up after throttling;
-- the rhythm library, power breathing, Kapalbhati, alternate nostril, custom rhythms, sequences, breath counts, endless sessions, the countdown and the coherent pace;
+- the rhythm library and its detailed descriptions, power breathing, Kapalbhati, alternate nostril, custom rhythms in half-second steps, sequences, breath counts, endless sessions, the countdown and the coherent pace;
+- the breath-hold test, mood before and after, and programs;
 - voice guidance timing and the recorded voices;
 - badges and statistics;
-- Tabata: presets, pause, skip, long-press stop, saved workouts, warm-up and cool-down, colors, shared links and the own-music mode;
+- Tabata: presets, pause, skip, long-press stop, saved workouts, warm-up and cool-down, colors, per-exercise times, halfway and warning cues, the metronome, custom signal sounds, shared links and the own-music mode;
 - the landscape layout, settings navigation, backup and restore, sharing, shortcuts, offline start and the "what's new" notice.
 
 **Android test:** `npm run test:android` runs the app in Chrome on an Android emulator or a USB-connected phone (`adb` must be on the PATH). The CI does not run it. It serves this folder to the phone and covers:
@@ -171,7 +179,8 @@ The app is a single HTML file with HTML, CSS and JavaScript. It uses no framewor
 - small screens and Chrome's page zoom;
 - Doze and battery saver with the screen off, and CPU use;
 - every recorded voice, and the phone voice in all 20 languages;
-- sleep mode, sequences and background sounds.
+- sleep mode, sequences and background sounds, including downloading the recorded ones;
+- the 1.4 features: half-second rhythms in real time, the breath-hold test, mood, programs, descriptions, and Tabata cues with the recorded voice.
 
 It writes a report with screenshots to `../emulator-teszt/jelentes.html`. To test the published site instead, pass its address: `node tests/android/emulator.mjs <folder> https://vmynick.github.io/relaxring/`.
 
@@ -193,3 +202,5 @@ The code is under the [MIT License](LICENSE).
 The font is [Inter](https://rsms.me/inter/), under the SIL Open Font License 1.1 ([fonts/OFL-Inter.txt](fonts/OFL-Inter.txt)). On Apple devices the system font (SF Pro) is used instead.
 
 The recorded voices were generated with Piper voice models; their training data licenses (CC0, CC BY, Apache 2.0 and others) are listed in [voice/CREDITS.txt](voice/CREDITS.txt).
+
+The nature sounds are CC0 (public domain) recordings from Freesound, trimmed into loops; the sources are listed in [amb/CREDITS.txt](amb/CREDITS.txt).

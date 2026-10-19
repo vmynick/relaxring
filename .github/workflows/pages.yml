@@ -44,7 +44,7 @@ jobs:
         run: |
           mkdir _site
           # a setup.html csak az otthoni szerverhez kell (helyi tanúsítvány), ide nem
-          cp -r index.html manifest.json sw.js fonts.css fonts voice *.png _site/
+          cp -r index.html manifest.json sw.js fonts.css fonts voice info amb *.png _site/
           sed -i "s/__VERSION__/$(date -u +%Y%m%d%H%M%S)/" _site/sw.js
           # a github.io-n több projekt osztozik egy domainen: az app azonosítója a saját útvonala legyen
           sed -i 's#"id": "/"#"id": "/${{ github.event.repository.name }}/"#' _site/manifest.json

@@ -1,0 +1,92 @@
+{
+ "calm": {
+  "what": "Rallenta a circa 6 respiri al minuto, con un’espirazione più lunga dell’inspirazione. Espirare a lungo orienta il sistema nervoso verso il riposo: utile nei momenti di tensione, la sera o ogni volta che vuoi calmarti.",
+  "how": "Inspira dolcemente dal naso per 4 s, riempiendo prima la pancia, poi espira lentamente per 6 s dal naso o a labbra socchiuse. Morbido e silenzioso. Bastano 3–5 minuti.",
+  "care": "Deve essere facile. Se ti manca l’aria, accorcia l’espirazione o fai una pausa.",
+  "src": "Respirazione lenta con espirazione più lunga: Zaccaro et al., Frontiers in Human Neuroscience, 2018 (revisione sistematica)."
+ },
+ "sigh": {
+  "what": "Due inspirazioni di seguito e poi una lunga espirazione. La seconda, breve, riapre gli alveoli collassati e l’espirazione lunga libera anidride carbonica. Uno dei modi più rapidi per ridurre lo stress.",
+  "how": "Inspira dal naso per 2 s, aggiungi sopra un piccolo sorso d’aria di 1 s, poi espira lentamente dalla bocca per 6 s. 1–5 minuti, in un momento di tensione o come abitudine quotidiana.",
+  "care": "Il sorso in più resta piccolo, senza forzare. Fermati se ti gira la testa.",
+  "src": "Balban et al., Cell Reports Medicine, 2023: cinque minuti al giorno di sospiro ciclico hanno migliorato l’umore e rallentato il respiro più della meditazione mindfulness."
+ },
+ "coh": {
+  "what": "Respiro lento e regolare, circa 6 al minuto. Intorno a questo ritmo la variabilità della frequenza cardiaca è massima (risonanza), il che favorisce calma e resistenza allo stress.",
+  "how": "Respira in modo uniforme dal naso, inspirazione ed espirazione della stessa durata, senza pause. Imposta il ritmo sotto l’elenco dei ritmi, da 4,3 a 10 respiri al minuto; per la maggior parte delle persone 5,5–6 è l’ideale. 10–20 minuti al giorno.",
+  "care": "Deve essere comodo. Se senti fame d’aria, scegli un ritmo più veloce.",
+  "src": "Lehrer e Gevirtz, Frontiers in Psychology, 2014 (biofeedback della variabilità cardiaca)."
+ },
+ "relax": {
+  "what": "Una breve pausa dopo l’inspirazione e una lunga espirazione. Rallenta e scioglie la tensione, soprattutto in spalle e petto.",
+  "how": "Inspira dal naso per 4 s, trattieni dolcemente 2 s, poi espira lentamente per 6 s. A ogni espirazione lascia scendere le spalle.",
+  "care": "Trattieni senza sforzo, a gola aperta. Se la pausa è fastidiosa, usa piuttosto il ritmo Calma.",
+  "src": "Una variante della respirazione lenta con espirazione più lunga (vedi Zaccaro et al., 2018)."
+ },
+ "equal": {
+  "what": "Inspirazione ed espirazione della stessa durata. Riequilibra ed è un buon punto di partenza se gli esercizi di respiro sono nuovi per te.",
+  "how": "Inspira dal naso per 4 s ed espira per 4 s, in modo uniforme, senza pause. Quando è facile, allunga entrambe con un ritmo personale.",
+  "care": "Nessun rischio particolare; resta rilassato.",
+  "src": "Sama vritti (respiro uguale), dalla tradizione dello yoga."
+ },
+ "478": {
+  "what": "Una lunga apnea e un’espirazione ancora più lunga. Molto usata per calmarsi e addormentarsi.",
+  "how": "Inspira in silenzio dal naso per 4 s, trattieni per 7 s, poi espira dalla bocca per 8 s con un leggero soffio. Inizia con 4 cicli, a letto o seduto.",
+  "care": "All’inizio la lunga apnea può essere difficile: crea un ritmo personale con una pausa più breve. In caso di malattie cardiache o polmonari, chiedi prima al tuo medico.",
+  "src": "Resa popolare dal medico Andrew Weil, sulla base del pranayama. Le prove scientifiche sono ancora limitate."
+ },
+ "slow": {
+  "what": "L’espirazione passa da 4 a 8 s entro la fine della sessione: rallenti passo dopo passo quasi senza accorgertene.",
+  "how": "Inspira dal naso per 4 s e segui il cerchio nell’espirazione, che si allunga. Ideale prima di dormire o dopo una giornata intensa, 10–15 minuti.",
+  "care": "Se le espirazioni lunghe diventano scomode, scegli una sessione più breve.",
+  "src": "Si basa sulla respirazione lenta con espirazione crescente (vedi Zaccaro et al., 2018)."
+ },
+ "long": {
+  "what": "L’espirazione dura il doppio dell’inspirazione (rapporto 1:2): rilassamento profondo prima di dormire.",
+  "how": "Inspira dal naso per 4 s, poi espira lentamente per 8 s dal naso o a labbra socchiuse. Sdraiato, 5–10 minuti.",
+  "care": "Se 8 s sono troppi, inizia con il ritmo Calma (4·6).",
+  "src": "Il rapporto 1:2 viene dalla pratica dello yoga; vedi anche Zaccaro et al., 2018."
+ },
+ "bee": {
+  "what": "Ronzare espirando, come un’ape. La vibrazione delicata e l’espirazione lunga calmano e aiutano ad addormentarsi.",
+  "how": "Inspira dal naso per 4 s, poi ronza dal naso a bocca chiusa per 8 s («mmm»). Puoi chiudere le orecchie con i pollici. 5–10 cicli.",
+  "care": "Ronza piano, senza sforzare la gola. Evitalo in caso di otite.",
+  "src": "Bhramari pranayama; Kuppusamy et al., Journal of Traditional and Complementary Medicine, 2018 (revisione)."
+ },
+ "box": {
+  "what": "Quattro parti uguali: inspira, trattieni, espira, trattieni. Aiuta a restare lucido e concentrato sotto pressione; lo usano militari, atleti e soccorritori.",
+  "how": "Inspira dal naso per 4 s, trattieni 4 s, espira per 4 s, trattieni 4 s. Seduto con la schiena dritta, 3–5 minuti.",
+  "care": "Le pause restano rilassate. Se sono difficili, crea un ritmo personale con fasi di 3 s e aumenta gradualmente.",
+  "src": "Noto come respiro tattico; reso popolare dall’ex Navy SEAL Mark Divine."
+ },
+ "tri": {
+  "what": "Inspira, trattieni, espira, 4 s ciascuno: un semplice esercizio di concentrazione, più facile del respiro quadrato.",
+  "how": "Inspira dal naso per 4 s, trattieni 4 s, espira per 4 s, poi ricomincia senza pausa.",
+  "care": "Trattieni in modo rilassato, a gola aperta.",
+  "src": "Una variante del respiro quadrato."
+ },
+ "nadi": {
+  "what": "Respirare da una narice alla volta, alternando. Calma, riequilibra e aiuta a concentrarsi.",
+  "how": "Chiudi la narice destra col pollice e inspira dalla sinistra per 4 s; chiudi la sinistra con l’anulare ed espira dalla destra per 4 s; inspira dalla destra, espira dalla sinistra. La riga sotto il cerchio e la voce indicano il lato.",
+  "care": "Non con il naso chiuso. Respira dolcemente, non forzare mai l’aria.",
+  "src": "Nadi shodhana pranayama; Ghiya, International Journal of Research in Medical Sciences, 2017 (revisione di studi clinici)."
+ },
+ "wake": {
+  "what": "Un’inspirazione lunga e un’espirazione breve e decisa. Sveglia e dà energia, per esempio al mattino o dopo pranzo.",
+  "how": "Inspira profondamente dal naso per 4 s, poi espira con decisione dalla bocca per 2 s. 1–3 minuti, seduto o in piedi.",
+  "care": "Se ti gira la testa, rallenta o fermati.",
+  "src": "I ritmi energizzanti mettono l’accento sull’inspirazione; vedi Zaccaro et al., 2018."
+ },
+ "kapal": {
+  "what": "Espirazioni rapide e vigorose dal naso; l’inspirazione arriva da sola. Energizzante e riscaldante.",
+  "how": "Siediti dritto. Richiama di scatto la pancia per espellere l’aria dal naso, circa una volta al secondo; lascia che l’inspirazione arrivi passivamente. Dopo 30 espirazioni inspira a fondo, trattieni 15 s, poi riposa.",
+  "care": "Solo da seduti. Evitalo in gravidanza e in caso di ipertensione, malattie cardiache, epilessia, ernia o recente chirurgia addominale. Fermati se ti gira la testa.",
+  "src": "Kapalabhati, una tecnica di purificazione dell’hatha yoga (Hatha Yoga Pradipika)."
+ },
+ "whm": {
+  "what": "30 respiri profondi, poi una lunga apnea a polmoni vuoti e una breve a polmoni pieni. Energizzante, ti fa sentire i tuoi limiti. Uno studio ha mostrato che questo allenamento può influire sulle risposte allo stress e immunitarie del corpo.",
+  "how": "Inspira a fondo dal naso o dalla bocca e lascia andare senza sforzo, 30 volte. Dopo l’ultima espirazione trattieni finché è comodo e tocca il cerchio quando ti serve aria. Poi inspira a fondo e trattieni 15 s. 1–4 round.",
+  "care": "Solo seduti o sdraiati. Mai in acqua, alla guida o in piedi: potresti svenire. Evitalo in gravidanza e in caso di epilessia, malattie cardiache o ipertensione.",
+  "src": "Kox et al., PNAS, 2014: attivazione volontaria del sistema nervoso simpatico e attenuazione della risposta immunitaria innata."
+ }
+}

@@ -1,0 +1,92 @@
+{
+ "calm": {
+  "what": "Vertraagt tot ongeveer 6 ademhalingen per minuut, met een uitademing die langer is dan de inademing. Lang uitademen zet het zenuwstelsel op rust: goed bij spanning, ’s avonds of wanneer je wilt kalmeren.",
+  "how": "Adem zacht 4 s in door de neus, eerst naar de buik, en adem dan langzaam 6 s uit door de neus of getuite lippen. Zacht en stil. 3–5 minuten is genoeg.",
+  "care": "Het moet makkelijk gaan. Kom je lucht tekort, maak de uitademing korter of neem pauze.",
+  "src": "Langzaam ademen met een langere uitademing: Zaccaro et al., Frontiers in Human Neuroscience, 2018 (systematische review)."
+ },
+ "sigh": {
+  "what": "Twee inademingen achter elkaar en dan een lange uitademing. De korte tweede inademing opent dichtgevallen longblaasjes, de lange uitademing laat koolzuur los. Een van de snelste manieren om stress te verlagen.",
+  "how": "Adem 2 s in door de neus, neem er een kort extra slokje lucht van 1 s bovenop en adem dan langzaam 6 s uit door de mond. 1–5 minuten, op een gespannen moment of als dagelijkse gewoonte.",
+  "care": "Het extra slokje blijft klein, niet forceren. Stop als je duizelig wordt.",
+  "src": "Balban et al., Cell Reports Medicine, 2023: vijf minuten cyclisch zuchten per dag verbeterde de stemming en verlaagde het ademtempo meer dan mindfulnessmeditatie."
+ },
+ "coh": {
+  "what": "Rustig, gelijkmatig ademen, ongeveer 6 keer per minuut. Rond dit tempo is de hartslagvariabiliteit het grootst (resonantie), wat rust en stressbestendigheid bevordert.",
+  "how": "Adem gelijkmatig door de neus, in en uit even lang, zonder pauzes. Stel het tempo in onder de ritmelijst, van 4,3 tot 10 ademhalingen per minuut; voor de meesten werkt 5,5–6 het best. 10–20 minuten per dag.",
+  "care": "Het moet prettig voelen. Heb je luchthonger, kies dan een sneller tempo.",
+  "src": "Lehrer & Gevirtz, Frontiers in Psychology, 2014 (biofeedback van hartslagvariabiliteit)."
+ },
+ "relax": {
+  "what": "Een korte pauze na de inademing en een lange uitademing. Vertraagt en laat spanning los, vooral in schouders en borst.",
+  "how": "Adem 4 s in door de neus, houd zacht 2 s vast en adem langzaam 6 s uit. Laat bij elke uitademing je schouders zakken.",
+  "care": "Houd vast zonder moeite, met open keel. Is vasthouden onprettig, kies dan het ritme Rustig.",
+  "src": "Een variant van langzaam ademen met een langere uitademing (zie Zaccaro et al., 2018)."
+ },
+ "equal": {
+  "what": "In- en uitademing even lang. Brengt in balans en is een goed begin als ademoefeningen nieuw voor je zijn.",
+  "how": "Adem 4 s in door de neus en 4 s uit, gelijkmatig, zonder pauzes. Gaat het makkelijk, maak beide langer met een eigen ritme.",
+  "care": "Geen bijzondere risico’s; blijf ontspannen.",
+  "src": "Sama vritti (gelijke ademhaling) uit de yogatraditie."
+ },
+ "478": {
+  "what": "Lang vasthouden en een nog langere uitademing. Veel gebruikt om te kalmeren en in slaap te vallen.",
+  "how": "Adem stil 4 s in door de neus, houd 7 s vast en adem 8 s uit door de mond met een zacht ruisend geluid. Begin met 4 rondes, in bed of zittend.",
+  "care": "Het lange vasthouden kan eerst lastig zijn: maak een eigen ritme met korter vasthouden. Heb je een hart- of longziekte, vraag het dan eerst aan je arts.",
+  "src": "Bekend gemaakt door arts Andrew Weil, gebaseerd op pranayama. Het wetenschappelijk bewijs is nog beperkt."
+ },
+ "slow": {
+  "what": "De uitademing groeit tegen het einde van de sessie van 4 naar 8 s, zodat je stap voor stap, bijna ongemerkt, vertraagt.",
+  "how": "Adem 4 s in door de neus en volg bij het uitademen de cirkel, die steeds langer wordt. Ideaal voor het slapengaan of na een drukke dag, 10–15 minuten.",
+  "care": "Worden de lange uitademingen onprettig, kies dan een kortere sessie.",
+  "src": "Bouwt voort op langzaam ademen met een langer wordende uitademing (zie Zaccaro et al., 2018)."
+ },
+ "long": {
+  "what": "De uitademing is twee keer zo lang als de inademing (verhouding 1:2): diepe ontspanning voor het slapengaan.",
+  "how": "Adem 4 s in door de neus en adem langzaam 8 s uit door de neus of getuite lippen. Liggend, 5–10 minuten.",
+  "care": "Is 8 s te lang, begin dan met het ritme Rustig (4·6).",
+  "src": "De ademverhouding 1:2 komt uit de yogapraktijk; zie ook Zaccaro et al., 2018."
+ },
+ "bee": {
+  "what": "Neuriën bij het uitademen, als een bij. De zachte trilling en de lange uitademing kalmeren en helpen in slaap te vallen.",
+  "how": "Adem 4 s in door de neus en neurie dan 8 s door de neus met gesloten mond (‘mmm’). Je kunt je oren sluiten met je duimen. 5–10 rondes.",
+  "care": "Neurie zacht, zonder je keel te forceren. Niet doen bij een oorontsteking.",
+  "src": "Bhramari pranayama; Kuppusamy et al., Journal of Traditional and Complementary Medicine, 2018 (review)."
+ },
+ "box": {
+  "what": "Vier gelijke delen: in, vasthouden, uit, vasthouden. Helpt kalm en gefocust te blijven onder druk; militairen, sporters en hulpverleners gebruiken het.",
+  "how": "Adem 4 s in door de neus, houd 4 s vast, adem 4 s uit, houd 4 s vast. Rechtop zittend, 3–5 minuten.",
+  "care": "Het vasthouden blijft ontspannen. Is het moeilijk, maak een eigen ritme met delen van 3 s en bouw rustig op.",
+  "src": "Bekend als tactisch ademen; populair gemaakt door oud-Navy SEAL Mark Divine."
+ },
+ "tri": {
+  "what": "In, vasthouden, uit, elk 4 s: een eenvoudige focusoefening, makkelijker dan box-ademhaling.",
+  "how": "Adem 4 s in door de neus, houd 4 s vast, adem 4 s uit en begin zonder pauze opnieuw.",
+  "care": "Houd ontspannen vast, met open keel.",
+  "src": "Een variant van box-ademhaling."
+ },
+ "nadi": {
+  "what": "Afwisselend door één neusgat ademen. Kalmerend en in balans brengend; helpt je focussen.",
+  "how": "Sluit het rechterneusgat met je duim en adem 4 s in door links; sluit links met je ringvinger en adem 4 s uit door rechts; adem in door rechts, uit door links. De regel onder de cirkel en de stem vertellen welke kant.",
+  "care": "Niet met een verstopte neus. Adem zacht, forceer de lucht nooit.",
+  "src": "Nadi shodhana pranayama; Ghiya, International Journal of Research in Medical Sciences, 2017 (review van klinische studies)."
+ },
+ "wake": {
+  "what": "Een lange inademing en een korte, krachtige uitademing. Maakt wakker en geeft energie, bijvoorbeeld ’s ochtends of na de lunch.",
+  "how": "Adem 4 s diep in door de neus en adem 2 s krachtig uit door de mond. 1–3 minuten, zittend of staand.",
+  "care": "Word je duizelig, ga langzamer of stop.",
+  "src": "Activerende ritmes leggen de nadruk op de inademing; zie Zaccaro et al., 2018."
+ },
+ "kapal": {
+  "what": "Snelle, krachtige uitademingen door de neus; de inademing gaat vanzelf. Activerend en verwarmend.",
+  "how": "Zit rechtop. Trek je buik met een ruk in om de lucht ongeveer eens per seconde door de neus uit te stoten; laat de inademing vanzelf komen. Adem na 30 uitademingen diep in, houd 15 s vast en rust uit.",
+  "care": "Alleen zittend. Vermijd het bij zwangerschap, hoge bloeddruk, hartziekte, epilepsie, een breuk of een recente buikoperatie. Stop als je duizelig wordt.",
+  "src": "Kapalabhati, een reinigingstechniek uit de hatha yoga (Hatha Yoga Pradipika)."
+ },
+ "whm": {
+  "what": "30 diepe ademhalingen, dan lang vasthouden met lege longen en kort met volle. Geeft energie en laat je je grenzen voelen. Een studie liet zien dat zulke training de stress- en immuunreactie van het lichaam kan beïnvloeden.",
+  "how": "Adem 30 keer volledig in door neus of mond en laat zonder kracht los. Houd na de laatste uitademing vast zolang het prettig is en tik op de cirkel als je lucht nodig hebt. Adem dan volledig in en houd 15 s vast. 1–4 rondes.",
+  "care": "Alleen zittend of liggend. Nooit in het water, tijdens het rijden of staand: je kunt flauwvallen. Vermijd het bij zwangerschap, epilepsie, hartziekte of hoge bloeddruk.",
+  "src": "Kox et al., PNAS, 2014: vrijwillige activering van het sympathische zenuwstelsel en demping van de aangeboren immuunreactie."
+ }
+}

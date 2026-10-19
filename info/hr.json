@@ -1,0 +1,92 @@
+{
+ "calm": {
+  "what": "Usporava na oko 6 udaha u minuti, s izdahom duljim od udaha. Dug izdah usmjerava živčani sustav prema odmoru: dobar u napetim trenucima, navečer ili kad god se želiš smiriti.",
+  "how": "Udahni nježno kroz nos 4 s, najprije u trbuh, zatim polako izdahni 6 s kroz nos ili napućene usne. Mekano i tiho. Dovoljno je 3–5 minuta.",
+  "care": "Mora biti lako. Ako ti nedostaje zraka, skrati izdah ili napravi stanku.",
+  "src": "Sporo disanje s duljim izdahom: Zaccaro i sur., Frontiers in Human Neuroscience, 2018 (sustavni pregled)."
+ },
+ "sigh": {
+  "what": "Dva udaha zaredom, a zatim dug izdah. Kratki drugi udah ponovno otvara splasnute plućne mjehuriće, a dug izdah oslobađa ugljični dioksid. Jedan od najbržih načina da se smanji stres.",
+  "how": "Udahni kroz nos 2 s, dodaj na vrh kratak gutljaj zraka od 1 s, a zatim polako izdahni kroz usta 6 s. 1–5 minuta, u napetom trenutku ili kao dnevna navika.",
+  "care": "Dodatni gutljaj neka bude malen, ne forsiraj. Prestani ako ti se zavrti u glavi.",
+  "src": "Balban i sur., Cell Reports Medicine, 2023: pet minuta cikličkog uzdisanja dnevno poboljšalo je raspoloženje i usporilo disanje više od meditacije usredotočene svjesnosti."
+ },
+ "coh": {
+  "what": "Ravnomjerno, sporo disanje, oko 6 udaha u minuti. Oko tog tempa varijabilnost srčanog ritma je najveća (rezonancija), što potiče smirenost i otpornost na stres.",
+  "how": "Diši ravnomjerno kroz nos, udah i izdah jednako dugi, bez stanki. Tempo podesi ispod popisa ritmova, od 4,3 do 10 udaha u minuti; većini najbolje odgovara 5,5–6. 10–20 minuta dnevno.",
+  "care": "Mora biti ugodno. Ako osjećaš glad za zrakom, odaberi brži tempo.",
+  "src": "Lehrer i Gevirtz, Frontiers in Psychology, 2014 (biofeedback varijabilnosti srčanog ritma)."
+ },
+ "relax": {
+  "what": "Kratka stanka nakon udaha i dug izdah. Usporava i otpušta napetost, osobito u ramenima i prsima.",
+  "how": "Udahni kroz nos 4 s, lagano zadrži 2 s, zatim polako izdahni 6 s. Sa svakim izdahom spusti ramena.",
+  "care": "Zadržavaj bez napora, otvorenog grla. Ako je zadržavanje neugodno, radije odaberi ritam Smirenje.",
+  "src": "Inačica sporog disanja s duljim izdahom (vidi Zaccaro i sur., 2018)."
+ },
+ "equal": {
+  "what": "Jednako dug udah i izdah. Uravnotežuje i dobar je početak ako su ti vježbe disanja nove.",
+  "how": "Udahni kroz nos 4 s i izdahni 4 s, ravnomjerno, bez stanki. Kad postane lako, produlji oboje vlastitim ritmom.",
+  "care": "Nema posebnih rizika; ostani opušten.",
+  "src": "Sama vritti (jednako disanje) iz tradicije joge."
+ },
+ "478": {
+  "what": "Dugo zadržavanje i još dulji izdah. Često se koristi za smirivanje i uspavljivanje.",
+  "how": "Tiho udahni kroz nos 4 s, zadrži 7 s, zatim izdahni kroz usta 8 s uz blagi šum. Počni s 4 ciklusa, u krevetu ili sjedeći.",
+  "care": "Dugo zadržavanje u početku može biti teško: napravi vlastiti ritam s kraćim zadržavanjem. Ako imaš bolest srca ili pluća, najprije pitaj liječnika.",
+  "src": "Popularizirao ga je liječnik Andrew Weil, na temelju pranajame. Znanstvenih dokaza zasad je malo."
+ },
+ "slow": {
+  "what": "Izdah do kraja vježbe raste s 4 na 8 s, pa usporavaš korak po korak, gotovo neprimjetno.",
+  "how": "Udahni kroz nos 4 s i prati krug pri izdahu dok se produljuje. Idealno prije spavanja ili nakon napornog dana, 10–15 minuta.",
+  "care": "Ako dugi izdasi postanu neugodni, odaberi kraću vježbu.",
+  "src": "Temelji se na sporom disanju s produljenim izdahom (vidi Zaccaro i sur., 2018)."
+ },
+ "long": {
+  "what": "Izdah je dvostruko dulji od udaha (omjer 1:2): duboko opuštanje prije spavanja.",
+  "how": "Udahni kroz nos 4 s, zatim polako izdahni 8 s kroz nos ili napućene usne. Ležeći, 5–10 minuta.",
+  "care": "Ako je 8 s predugo, počni s ritmom Smirenje (4·6).",
+  "src": "Omjer disanja 1:2 potječe iz prakse joge; vidi i Zaccaro i sur., 2018."
+ },
+ "bee": {
+  "what": "Pjevušenje pri izdahu, poput pčele. Nježna vibracija i dug izdah smiruju i pomažu zaspati.",
+  "how": "Udahni kroz nos 4 s, zatim zatvorenih usta pjevuši kroz nos 8 s („mmm”). Uši možeš zatvoriti palčevima. 5–10 ciklusa.",
+  "care": "Pjevuši nježno, bez naprezanja grla. Izbjegavaj kod upale uha.",
+  "src": "Bhramari pranajama; Kuppusamy i sur., Journal of Traditional and Complementary Medicine, 2018 (pregled)."
+ },
+ "box": {
+  "what": "Četiri jednaka dijela: udah, zadržavanje, izdah, zadržavanje. Pomaže ostati sabran i usredotočen pod pritiskom; koriste ga vojnici, sportaši i spasioci.",
+  "how": "Udahni kroz nos 4 s, zadrži 4 s, izdahni 4 s, zadrži 4 s. Sjedeći uspravno, 3–5 minuta.",
+  "care": "Zadržavanja neka budu opuštena. Ako su teška, napravi vlastiti ritam s dijelovima od 3 s i postupno povećavaj.",
+  "src": "Poznat kao taktičko disanje; popularizirao ga je bivši pripadnik Navy SEAL-a Mark Divine."
+ },
+ "tri": {
+  "what": "Udah, zadržavanje, izdah, svaki po 4 s: jednostavna vježba usredotočenosti, lakša od kvadratnog disanja.",
+  "how": "Udahni kroz nos 4 s, zadrži 4 s, izdahni 4 s i počni ispočetka bez stanke.",
+  "care": "Zadržavaj opušteno, otvorenog grla.",
+  "src": "Inačica kvadratnog disanja."
+ },
+ "nadi": {
+  "what": "Disanje naizmjence kroz jednu nosnicu. Smiruje, uravnotežuje i pomaže se usredotočiti.",
+  "how": "Palcem zatvori desnu nosnicu i udahni kroz lijevu 4 s; prstenjakom zatvori lijevu i izdahni kroz desnu 4 s; udahni kroz desnu, izdahni kroz lijevu. Redak ispod kruga i glas govore koju stranu.",
+  "care": "Ne sa začepljenim nosom. Diši nježno, nikad ne forsiraj zrak.",
+  "src": "Nadi shodhana pranajama; Ghiya, International Journal of Research in Medical Sciences, 2017 (pregled kliničkih ispitivanja)."
+ },
+ "wake": {
+  "what": "Dug udah i kratak, snažan izdah. Budi i daje energiju, npr. ujutro ili nakon ručka.",
+  "how": "Duboko udahni kroz nos 4 s, zatim snažno izdahni kroz usta 2 s. 1–3 minute, sjedeći ili stojeći.",
+  "care": "Ako ti se zavrti u glavi, uspori ili prestani.",
+  "src": "Ritmovi za energiju naglašavaju udah; vidi Zaccaro i sur., 2018."
+ },
+ "kapal": {
+  "what": "Brzi, snažni izdasi kroz nos; udah dolazi sam od sebe. Daje energiju i zagrijava.",
+  "how": "Sjedni uspravno. Naglo uvuci trbuh i izbaci zrak kroz nos, otprilike jednom u sekundi; pusti da udah dođe sam. Nakon 30 izdaha duboko udahni, zadrži 15 s, pa se odmori.",
+  "care": "Samo sjedeći. Izbjegavaj u trudnoći i kod visokog tlaka, bolesti srca, epilepsije, kile ili nedavne operacije trbuha. Prestani ako ti se zavrti u glavi.",
+  "src": "Kapalabhati, tehnika čišćenja u hatha jogi (Hatha Yoga Pradipika)."
+ },
+ "whm": {
+  "what": "30 dubokih udaha, zatim dugo zadržavanje s praznim plućima i kratko s punima. Daje energiju i pokazuje ti vlastite granice. Istraživanje je pokazalo da takav trening može utjecati na odgovor tijela na stres i na imunosni odgovor.",
+  "how": "Udahni do kraja kroz nos ili usta i otpusti bez napora, 30 puta. Nakon zadnjeg izdaha zadrži dok je ugodno i dodirni krug kad ti treba zraka. Zatim udahni do kraja i zadrži 15 s. 1–4 runde.",
+  "care": "Samo sjedeći ili ležeći. Nikad u vodi, tijekom vožnje ili stojeći: možeš se onesvijestiti. Izbjegavaj u trudnoći i kod epilepsije, bolesti srca ili visokog tlaka.",
+  "src": "Kox i sur., PNAS, 2014: voljna aktivacija simpatičkog živčanog sustava i ublažavanje urođenog imunosnog odgovora."
+ }
+}

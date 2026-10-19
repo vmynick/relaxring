@@ -548,23 +548,100 @@ await check('sorozat: 1 perc sóhajtás, utána koherens légzés', async () => 
   await ev(() => stop());
   return { ok: /in2/.test(a.cur) && b.cur === 'in5 out5', info: `eleje: ${a.cur} („${a.ph}”); ${b.el}. mp: ${b.cur} („${b.ph}”)` };
 });
-await check('háttérhangok: mind a 8 szól a telefonon', async () => {
-  await fresh({ mode: 'calm', dur: 3, tone: false, bell: false });
+await check('háttérhangok: mind a 8 szól; a 6 természethang felvételről, letöltés után', async () => {
+  await fresh({ mode: 'calm', dur: 5, tone: false, bell: false });
   await page.click('#ringBtn'); await wait(1000);
   const r = await ev(async () => {
-    const out = [], an = ac.createAnalyser(), buf = new Float32Array(2048); an.fftSize = 2048;
+    const out = [], an = ac.createAnalyser(), buf = new Float32Array(2048), sleep = ms => new Promise(x => setTimeout(x, ms));
+    an.fftSize = 2048;
     for (const k of Object.keys(AMB).filter(k => k !== 'off')) {
-      st.amb = k; ambStart(.05); ambOut().connect(an);
-      await new Promise(x => setTimeout(x, 900));
+      st.amb = k; const t = performance.now(); ambStart(.05); ambOut().connect(an);
+      if (AMBREC[k]) for (let n = 0; n < 60 && !abuf[k]; n++) await sleep(250);   // a felvétel letöltése és dekódolása
+      const ms = Math.round(performance.now() - t);
+      await sleep(AMBREC[k] ? 2600 : 900);                                      // átúsztatás a felvételre
       an.getFloatTimeDomainData(buf); let e = 0; for (const x of buf) e += x * x;
-      out.push([k, Math.sqrt(e / buf.length)]);
-      ambStop(.05); await new Promise(x => setTimeout(x, 300));
+      out.push([k, Math.sqrt(e / buf.length), AMBREC[k] ? (abuf[k] ? `felvétel ${(abuf[k].duration).toFixed(0)} mp, ${ms} ms alatt` : 'NINCS felvétel') : 'szintetizált']);
+      ambStop(.05); await sleep(300);
     }
     ambOut().disconnect(an); st.amb = 'off'; return out;
   });
   await ev(() => stop());
-  const bad = r.filter(x => !(x[1] > 1e-4));
-  return { ok: r.length >= 8 && !bad.length, info: r.map(x => `${x[0]} ${(20 * Math.log10(x[1] || 1e-9)).toFixed(0)} dB`).join(', ') };
+  const bad = r.filter(x => !(x[1] > 1e-4) || /NINCS/.test(x[2]));
+  return { ok: r.length >= 8 && !bad.length, info: r.map(x => `${x[0]} ${(20 * Math.log10(x[1] || 1e-9)).toFixed(0)} dB (${x[2]})`).join(', ') };
+});
+
+// ---------------------------------------------------------------- az 1.4 újdonságai a telefonon
+group = 'Újdonságok';
+await check('saját ritmus fél másodpercekkel: a váltás 4,5 mp-nél, valós időben', async () => {
+  await fresh({ mode: 'own', shown: ['own', 'box', 'calm'], customs: [{ id: 'own', n: '', p: [4.5, 0, 5.5, 0] }] });
+  await ev(() => { window.chg = []; new MutationObserver(() => window.chg.push([ph.textContent, Math.round(performance.now() - t0)])).observe(ph, { childList: true, characterData: true, subtree: true }); });
+  await page.click('#ringBtn'); await wait(10600);
+  const c = await ev(() => window.chg.filter(x => run && x[1] > 100).slice(0, 2));
+  await ev(() => stop());
+  return { ok: c.length === 2 && Math.abs(c[0][1] - 4500) < 120 && Math.abs(c[1][1] - 10000) < 120, info: c.map(x => `„${x[0]}” ${(x[1] / 1000).toFixed(2)} mp`).join(', ') };
+});
+await check('visszatartás-teszt: indítás, megállítás, eredmény és grafikon a naplóban', async () => {
+  await fresh({ lang: 'hu', tests: [{ t: Date.now() - 864e5, k: 'bolt', s: 12 }] });
+  await ev(() => { openSheet(); openPage('journal'); }); await wait(500);
+  await page.click('#testBox .tgo[data-k="bolt"]'); await wait(700);
+  await shot('teszt_kezdes', 'Visszatartás-teszt: utasítás a kör alatt');
+  await page.click('#ringBtn'); await wait(6200);
+  await shot('teszt_tartas', 'Visszatartás-teszt: az idő fut');
+  await page.click('#ringBtn'); await wait(500);
+  const r = await ev(() => ({ ph: ph.textContent, ct: ct.textContent, sub: sub.textContent, n: st.tests.length, s: st.tests[st.tests.length - 1].s }));
+  await shot('teszt_eredmeny', `Eredmény: ${r.ct} mp, „${r.sub}”`);
+  await page.click('#ringBtn'); await wait(400);
+  await ev(() => { openSheet(); openPage('journal'); }); await wait(500);
+  await page.locator('#testBox').scrollIntoViewIfNeeded(); await wait(300);
+  const chart = await ev(() => !!document.querySelector('#testBox svg.tchart'));
+  await shot('teszt_grafikon', 'Napló: visszatartás-teszt grafikonnal');
+  await ev(() => closeSheet());
+  return { ok: r.n === 2 && r.s >= 6 && r.s < 7.5 && chart, info: `„${r.ph}” ${r.ct} mp (${r.s}), „${r.sub}”; grafikon: ${chart}` };
+});
+await check('hangulat előtte és utána: a kérdés a kör fölött, az eredmény a naplóban', async () => {
+  await fresh({ lang: 'hu', mode: 'calm', dur: 3, mood: true });
+  await page.click('#ringBtn'); await wait(600);
+  await shot('hangulat_elotte', 'Hangulat a gyakorlás előtt');
+  await page.click('#moodFaces button[data-v="2"]'); await wait(6500);
+  await page.click('#ringBtn'); await wait(700);              // leállítás 6 mp után
+  const q1 = await ev(() => !document.getElementById('mood').hidden && document.getElementById('moodQ').textContent);
+  await page.click('#moodFaces button[data-v="4"]'); await wait(300);
+  const m = await ev(() => st.hist[st.hist.length - 1].m);
+  return { ok: q1 === 'És most?' && m && m.join() === '2,4', info: `utána kérdez: „${q1}”; mentve: ${JSON.stringify(m)}` };
+});
+await check('programok: a mai nap indítása, a beállítások nem változnak', async () => {
+  await fresh({ lang: 'hu', mode: 'box', dur: 10 });
+  await ev(() => { openSheet(); openPage('programs'); }); await wait(400);
+  await page.click('#progList .prog:nth-child(2) button[data-a="start"]'); await wait(300);
+  await shot('programok', 'Programok: a 14 napos jobb alvás elindítva');
+  await page.click('#progList button[data-a="go"]'); await wait(1500);
+  const r = await ev(() => ({ run, rm: runMode, min: po && po.min, meta: meta.textContent, mode: st.mode, dur: st.dur }));
+  await shot('program_nap', `Programnap: ${r.meta}`);
+  await ev(() => stop());
+  return { ok: r.run && r.rm === 'calm' && r.min === 4 && r.mode === 'box' && r.dur === 10, info: `fut: ${r.rm}, ${r.min} perc; „${r.meta}”; a beállítás marad: ${r.mode}, ${r.dur} perc` };
+});
+await check('részletes leírás: betöltődik a telefonon, a Kipróbálom elindítja', async () => {
+  await fresh({ lang: 'hu' });
+  await ev(() => { openSheet(); openPage('rhythms'); }); await wait(400);
+  await page.click('[data-info="nadi"]');
+  await page.waitForFunction(() => document.querySelectorAll('#infoTxt h4').length === 4, null, { timeout: 10000 });
+  await shot('leiras', 'Részletes leírás: váltott orrlyukú légzés');
+  const t = await ev(() => document.getElementById('infoTxt').innerText.length);
+  await page.click('#infoTry'); await wait(1200);
+  const r = await ev(() => [run, st.mode]);
+  await ev(() => stop());
+  return { ok: t > 300 && r[0] && r[1] === 'nadi', info: `${t} karakter; Kipróbálom → fut: ${r[0]}, ${r[1]}` };
+});
+await check('Tabata: félidő és „még 5 mp” a felvett hanggal, gyakorlatonkénti idő', async () => {
+  await fresh({ lang: 'hu', mode: 'tabata', speak: true, vk: 'f', tabs: [{ id: 't1', n: 'Teszt', work: 20, rest: 10, rounds: 2, sets: 1, prep: 0, brk: 60, wu: 0, cd: 0, col: {}, snd: {},
+    ex: 'Guggolás 12/4\nFekvőtámasz', half: true, warn: 5, bpm: 0 }], tabSel: 't1' });
+  await page.waitForFunction(() => !!vbuf, null, { timeout: 20000 });
+  await ev(() => { window.rec = []; const o = playRec; playRec = k => { window.rec.push([k.join('+'), Math.round(performance.now() - t0)]); return o(k); }; });
+  await page.click('#ringBtn'); await wait(16500);
+  const r = await ev(() => ({ rec: window.rec, plan: tabataPlan().map(p => p[0] + p[1]).join(' ') }));
+  await ev(() => stop());
+  const has = (k, t) => r.rec.some(x => x[0] === k && Math.abs(x[1] - t) < 400);
+  return { ok: r.plan === 'work12 rest4 work20' && has('half', 6000) && has('w5', 7000) && has('half', 26000) === false, info: `terv: ${r.plan}; bemondások: ${r.rec.map(x => `${x[0]} @${(x[1] / 1000).toFixed(1)}`).join(', ')}` };
 });
 
 // ---------------------------------------------------------------- 7. Tabata

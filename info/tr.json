@@ -1,0 +1,92 @@
+{
+ "calm": {
+  "what": "Dakikada yaklaşık 6 nefese yavaşlatır; nefes verme, nefes almadan daha uzundur. Uzun nefes verme sinir sistemini dinlenmeye yöneltir: gergin anlarda, akşamları ya da sakinleşmek istediğin her an iyi gelir.",
+  "how": "Burnundan 4 sn yumuşakça nefes al, önce karnın şişsin; sonra burnundan ya da büzülmüş dudaklardan 6 sn yavaşça ver. Yumuşak ve sessiz. 3–5 dakika yeterli.",
+  "care": "Kolay gelmeli. Nefesin yetmezse nefes vermeyi kısalt ya da ara ver.",
+  "src": "Uzun nefes vermeli yavaş nefes: Zaccaro ve ark., Frontiers in Human Neuroscience, 2018 (sistematik derleme)."
+ },
+ "sigh": {
+  "what": "Art arda iki nefes alma, ardından uzun bir nefes verme. Kısa ikinci nefes çökmüş hava keseciklerini yeniden açar, uzun nefes verme karbondioksiti dışarı atar. Stresi azaltmanın en hızlı yollarından biri.",
+  "how": "Burnundan 2 sn nefes al, üstüne 1 sn kısa bir yudum hava daha ekle, sonra ağzından 6 sn yavaşça ver. 1–5 dakika, gergin bir anda ya da günlük alışkanlık olarak.",
+  "care": "Ek yudum küçük olsun, zorlama. Başın dönerse bırak.",
+  "src": "Balban ve ark., Cell Reports Medicine, 2023: günde beş dakika döngüsel iç çekme, ruh halini farkındalık meditasyonundan daha çok iyileştirdi ve solunumu daha çok yavaşlattı."
+ },
+ "coh": {
+  "what": "Dakikada yaklaşık 6 kez düzenli, yavaş nefes. Bu tempo civarında kalp atış hızı değişkenliği en yüksektir (rezonans); bu da sakinliği ve strese dayanıklılığı destekler.",
+  "how": "Burnundan düzenli nefes al ve ver; alma ve verme eşit uzunlukta, aralıksız. Tempoyu ritim listesinin altından ayarla, dakikada 4,3 ile 10 nefes arasında; çoğu kişiye en iyi 5,5–6 gelir. Günde 10–20 dakika.",
+  "care": "Rahat olmalı. Hava açlığı hissedersen daha hızlı bir tempo seç.",
+  "src": "Lehrer ve Gevirtz, Frontiers in Psychology, 2014 (kalp atış hızı değişkenliği biofeedback’i)."
+ },
+ "relax": {
+  "what": "Nefes aldıktan sonra kısa bir duraklama ve uzun bir nefes verme. Yavaşlatır ve gerginliği, özellikle omuz ve göğüsteki gerginliği çözer.",
+  "how": "Burnundan 4 sn nefes al, 2 sn hafifçe tut, sonra 6 sn yavaşça ver. Her nefes verişte omuzlarını bırak.",
+  "care": "Zorlamadan, boğazın açık tut. Tutmak rahatsız ediyorsa Sakin ritmini seç.",
+  "src": "Uzun nefes vermeli yavaş nefesin bir çeşidi (bkz. Zaccaro ve ark., 2018)."
+ },
+ "equal": {
+  "what": "Eşit uzunlukta nefes alma ve verme. Dengeler; nefes egzersizleri senin için yeniyse iyi bir başlangıçtır.",
+  "how": "Burnundan 4 sn al, 4 sn ver; düzenli ve aralıksız. Kolaylaşınca ikisini de kendi ritminle uzat.",
+  "care": "Özel bir riski yok; rahat kal.",
+  "src": "Yoga geleneğinden sama vritti (eşit nefes)."
+ },
+ "478": {
+  "what": "Uzun bir tutma ve daha da uzun bir nefes verme. Sakinleşmek ve uykuya dalmak için sık kullanılır.",
+  "how": "Burnundan sessizce 4 sn nefes al, 7 sn tut, sonra ağzından hafif bir hışırtıyla 8 sn ver. 4 turla başla; yatakta ya da oturarak.",
+  "care": "Uzun tutma başta zor gelebilir: daha kısa tutmalı kendi ritmini oluştur. Kalp ya da akciğer hastalığın varsa önce doktoruna danış.",
+  "src": "Pranayamaya dayanarak doktor Andrew Weil tarafından yaygınlaştırıldı. Bilimsel kanıt henüz sınırlı."
+ },
+ "slow": {
+  "what": "Nefes verme, seansın sonuna doğru 4 sn’den 8 sn’ye uzar; böylece neredeyse fark etmeden adım adım yavaşlarsın.",
+  "how": "Burnundan 4 sn nefes al ve nefes verirken uzayan çemberi izle. Uykudan önce ya da yoğun bir günün ardından, 10–15 dakika ideal.",
+  "care": "Uzun nefes vermeler rahatsız ederse daha kısa bir seans seç.",
+  "src": "Uzayan nefes vermeli yavaş nefese dayanır (bkz. Zaccaro ve ark., 2018)."
+ },
+ "long": {
+  "what": "Nefes verme, nefes almanın iki katı uzunluktadır (1:2 oranı): yatmadan önce derin gevşeme.",
+  "how": "Burnundan 4 sn nefes al, sonra burnundan ya da büzülmüş dudaklardan 8 sn yavaşça ver. Uzanarak, 5–10 dakika.",
+  "care": "8 sn fazla geliyorsa Sakin ritmiyle (4·6) başla.",
+  "src": "1:2 nefes oranı yoga pratiğinden gelir; ayrıca bkz. Zaccaro ve ark., 2018."
+ },
+ "bee": {
+  "what": "Nefes verirken arı gibi mırıldanmak. Hafif titreşim ve uzun nefes verme sakinleştirir, uykuya dalmaya yardım eder.",
+  "how": "Burnundan 4 sn nefes al, sonra ağzın kapalı burnundan 8 sn mırıldan („mmm”). Kulaklarını başparmaklarınla kapatabilirsin. 5–10 tur.",
+  "care": "Boğazını zorlamadan hafifçe mırıldan. Kulak iltihabında yapma.",
+  "src": "Bhramari pranayama; Kuppusamy ve ark., Journal of Traditional and Complementary Medicine, 2018 (derleme)."
+ },
+ "box": {
+  "what": "Dört eşit bölüm: al, tut, ver, tut. Baskı altında sakin ve odaklı kalmana yardım eder; askerler, sporcular ve ilk müdahale ekipleri kullanır.",
+  "how": "Burnundan 4 sn al, 4 sn tut, 4 sn ver, 4 sn tut. Dik oturarak, 3–5 dakika.",
+  "care": "Tutmalar rahat olmalı. Zor geliyorsa 3 sn’lik bölümlerle kendi ritmini oluştur ve yavaşça artır.",
+  "src": "Taktik nefes olarak bilinir; eski Navy SEAL Mark Divine tarafından yaygınlaştırıldı."
+ },
+ "tri": {
+  "what": "Al, tut, ver, her biri 4 sn: kare nefesten daha kolay, basit bir odak egzersizi.",
+  "how": "Burnundan 4 sn al, 4 sn tut, 4 sn ver, sonra ara vermeden yeniden başla.",
+  "care": "Tutarken rahat ol, boğazın açık olsun.",
+  "src": "Kare nefesin bir çeşidi."
+ },
+ "nadi": {
+  "what": "Sırayla tek burun deliğinden nefes almak. Sakinleştirir, dengeler ve odaklanmana yardım eder.",
+  "how": "Sağ burun deliğini başparmağınla kapat ve soldan 4 sn al; solu yüzük parmağınla kapat ve sağdan 4 sn ver; sağdan al, soldan ver. Çemberin altındaki satır ve ses hangi taraf olduğunu söyler.",
+  "care": "Burnun tıkalıyken yapma. Yumuşak nefes al, havayı asla zorlama.",
+  "src": "Nadi shodhana pranayama; Ghiya, International Journal of Research in Medical Sciences, 2017 (klinik çalışmaların derlemesi)."
+ },
+ "wake": {
+  "what": "Uzun bir nefes alma ve kısa, güçlü bir nefes verme. Uyandırır ve enerji verir; örneğin sabah ya da öğle yemeğinden sonra.",
+  "how": "Burnundan 4 sn derin nefes al, sonra ağzından 2 sn güçlüce ver. 1–3 dakika, oturarak ya da ayakta.",
+  "care": "Başın dönerse yavaşla ya da bırak.",
+  "src": "Canlandırıcı ritimler nefes almayı vurgular; bkz. Zaccaro ve ark., 2018."
+ },
+ "kapal": {
+  "what": "Burundan hızlı, güçlü nefes vermeler; nefes alma kendiliğinden gelir. Canlandırır ve ısıtır.",
+  "how": "Dik otur. Karnını aniden içeri çekerek havayı burnundan, saniyede yaklaşık bir kez dışarı it; nefes almanın kendiliğinden gelmesine izin ver. 30 nefes vermeden sonra derin nefes al, 15 sn tut, sonra dinlen.",
+  "care": "Sadece oturarak. Hamilelikte ve yüksek tansiyon, kalp hastalığı, epilepsi, fıtık ya da yakın zamanda karın ameliyatı varsa yapma. Başın dönerse bırak.",
+  "src": "Kapalabhati, hatha yoganın arındırıcı bir tekniği (Hatha Yoga Pradipika)."
+ },
+ "whm": {
+  "what": "30 derin nefes, ardından boş akciğerle uzun bir tutma ve dolu akciğerle kısa bir tutma. Canlandırır ve sınırlarını hissettirir. Bir çalışma, bu tür bir antrenmanın vücudun stres ve bağışıklık yanıtını etkileyebileceğini gösterdi.",
+  "how": "Burnundan ya da ağzından tam nefes al ve zorlamadan bırak, 30 kez. Son nefes verişten sonra rahat olduğu sürece tut ve havaya ihtiyacın olunca çembere dokun. Sonra tam nefes al ve 15 sn tut. 1–4 tur.",
+  "care": "Sadece oturarak ya da uzanarak. Asla suda, araç kullanırken ya da ayaktayken değil: bayılabilirsin. Hamilelikte ve epilepsi, kalp hastalığı ya da yüksek tansiyon varsa yapma.",
+  "src": "Kox ve ark., PNAS, 2014: sempatik sinir sisteminin istemli aktivasyonu ve doğuştan bağışıklık yanıtının zayıflaması."
+ }
+}

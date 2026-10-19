@@ -1,0 +1,92 @@
+{
+ "calm": {
+  "what": "Spowalnia do około 6 oddechów na minutę, z wydechem dłuższym od wdechu. Długi wydech nastawia układ nerwowy na odpoczynek: przydaje się w napięciu, wieczorem i zawsze, gdy chcesz się uspokoić.",
+  "how": "Wdychaj łagodnie nosem przez 4 s, najpierw do brzucha, potem wydychaj powoli przez 6 s nosem lub przez złożone usta. Miękko i cicho. Wystarczą 3–5 minuty.",
+  "care": "Ma być łatwo. Jeśli brakuje ci powietrza, skróć wydech albo zrób przerwę.",
+  "src": "Wolny oddech z dłuższym wydechem: Zaccaro i in., Frontiers in Human Neuroscience, 2018 (przegląd systematyczny)."
+ },
+ "sigh": {
+  "what": "Dwa wdechy jeden po drugim, potem długi wydech. Krótki drugi wdech otwiera zapadnięte pęcherzyki płucne, a długi wydech usuwa dwutlenek węgla. Jeden z najszybszych sposobów na obniżenie stresu.",
+  "how": "Wdychaj nosem przez 2 s, dodaj na wierzch krótki, 1-sekundowy łyk powietrza, potem wydychaj powoli ustami przez 6 s. 1–5 minut, w chwili napięcia lub codziennie.",
+  "care": "Dodatkowy łyk ma być mały, bez forsowania. Przerwij, jeśli kręci ci się w głowie.",
+  "src": "Balban i in., Cell Reports Medicine, 2023: pięć minut cyklicznego wzdychania dziennie poprawiało nastrój i zwalniało oddech bardziej niż medytacja uważności."
+ },
+ "coh": {
+  "what": "Równy, wolny oddech, około 6 na minutę. Przy tym tempie zmienność rytmu serca jest największa (rezonans), co sprzyja spokojowi i odporności na stres.",
+  "how": "Oddychaj równo nosem, wdech i wydech tej samej długości, bez przerw. Tempo ustawisz pod listą rytmów, od 4,3 do 10 oddechów na minutę; większości najlepiej służy 5,5–6. 10–20 minut dziennie.",
+  "care": "Ma być wygodnie. Jeśli brakuje ci powietrza, wybierz szybsze tempo.",
+  "src": "Lehrer i Gevirtz, Frontiers in Psychology, 2014 (biofeedback zmienności rytmu serca)."
+ },
+ "relax": {
+  "what": "Krótka pauza po wdechu i długi wydech. Spowalnia i rozluźnia napięcie, zwłaszcza w barkach i klatce piersiowej.",
+  "how": "Wdychaj nosem przez 4 s, zatrzymaj łagodnie na 2 s, potem wydychaj powoli przez 6 s. Przy każdym wydechu opuszczaj barki.",
+  "care": "Zatrzymuj bez wysiłku, z otwartym gardłem. Jeśli pauza jest nieprzyjemna, wybierz raczej rytm Spokój.",
+  "src": "Odmiana wolnego oddechu z dłuższym wydechem (zob. Zaccaro i in., 2018)."
+ },
+ "equal": {
+  "what": "Wdech i wydech tej samej długości. Równoważy i jest dobrym początkiem, jeśli ćwiczenia oddechowe są dla ciebie nowe.",
+  "how": "Wdychaj nosem przez 4 s i wydychaj przez 4 s, równo, bez przerw. Gdy stanie się łatwe, wydłuż oba własnym rytmem.",
+  "care": "Brak szczególnych zagrożeń; pozostań rozluźniony.",
+  "src": "Sama vritti (oddech równy) z tradycji jogi."
+ },
+ "478": {
+  "what": "Długie zatrzymanie i jeszcze dłuższy wydech. Wielu używa go, by się uspokoić i zasnąć.",
+  "how": "Wdychaj cicho nosem przez 4 s, zatrzymaj na 7 s, potem wydychaj ustami przez 8 s z cichym szumem. Zacznij od 4 cykli, w łóżku lub na siedząco.",
+  "care": "Długie zatrzymanie bywa na początku trudne: stwórz własny rytm z krótszą pauzą. Przy chorobach serca lub płuc najpierw zapytaj lekarza.",
+  "src": "Spopularyzowany przez lekarza Andrew Weila na podstawie pranajamy. Dowody naukowe są wciąż ograniczone."
+ },
+ "slow": {
+  "what": "Wydech wydłuża się z 4 do 8 s do końca sesji, więc zwalniasz krok po kroku, prawie niezauważalnie.",
+  "how": "Wdychaj nosem przez 4 s, a przy wydechu podążaj za kołem, które się wydłuża. Idealne przed snem lub po intensywnym dniu, 10–15 minut.",
+  "care": "Jeśli długie wydechy stają się niewygodne, wybierz krótszą sesję.",
+  "src": "Opiera się na wolnym oddechu z wydłużającym się wydechem (zob. Zaccaro i in., 2018)."
+ },
+ "long": {
+  "what": "Wydech jest dwa razy dłuższy od wdechu (proporcja 1:2): głębokie odprężenie przed snem.",
+  "how": "Wdychaj nosem przez 4 s, potem wydychaj powoli przez 8 s nosem lub przez złożone usta. Na leżąco, 5–10 minut.",
+  "care": "Jeśli 8 s to za długo, zacznij od rytmu Spokój (4·6).",
+  "src": "Proporcja oddechu 1:2 pochodzi z praktyki jogi; zob. też Zaccaro i in., 2018."
+ },
+ "bee": {
+  "what": "Brzęczenie przy wydechu, jak pszczoła. Delikatna wibracja i długi wydech uspokajają i pomagają zasnąć.",
+  "how": "Wdychaj nosem przez 4 s, potem brzęcz nosem z zamkniętymi ustami przez 8 s („mmm”). Możesz zatkać uszy kciukami. 5–10 cykli.",
+  "care": "Brzęcz łagodnie, bez nadwyrężania gardła. Unikaj przy zapaleniu ucha.",
+  "src": "Bhramari pranajama; Kuppusamy i in., Journal of Traditional and Complementary Medicine, 2018 (przegląd)."
+ },
+ "box": {
+  "what": "Cztery równe części: wdech, pauza, wydech, pauza. Pomaga zachować spokój i skupienie pod presją; korzystają z niego żołnierze, sportowcy i ratownicy.",
+  "how": "Wdychaj nosem przez 4 s, zatrzymaj na 4 s, wydychaj przez 4 s, zatrzymaj na 4 s. Siedząc prosto, 3–5 minut.",
+  "care": "Pauzy mają być luźne. Jeśli są trudne, stwórz własny rytm z częściami po 3 s i zwiększaj stopniowo.",
+  "src": "Znany jako oddech taktyczny; spopularyzował go były komandos Navy SEAL Mark Divine."
+ },
+ "tri": {
+  "what": "Wdech, pauza, wydech, po 4 s: proste ćwiczenie skupienia, łatwiejsze od oddechu kwadratowego.",
+  "how": "Wdychaj nosem przez 4 s, zatrzymaj na 4 s, wydychaj przez 4 s, potem zacznij od nowa bez przerwy.",
+  "care": "Pauza ma być luźna, z otwartym gardłem.",
+  "src": "Odmiana oddechu kwadratowego."
+ },
+ "nadi": {
+  "what": "Oddychanie na zmianę jedną dziurką nosa. Uspokaja, równoważy i pomaga się skupić.",
+  "how": "Zatkaj kciukiem prawą dziurkę i wdychaj lewą przez 4 s; zatkaj lewą palcem serdecznym i wydychaj prawą przez 4 s; wdychaj prawą, wydychaj lewą. Linia pod kołem i głos podają stronę.",
+  "care": "Nie przy zatkanym nosie. Oddychaj łagodnie, nigdy nie forsuj powietrza.",
+  "src": "Nadi shodhana pranajama; Ghiya, International Journal of Research in Medical Sciences, 2017 (przegląd badań klinicznych)."
+ },
+ "wake": {
+  "what": "Długi wdech i krótki, energiczny wydech. Budzi i dodaje energii, np. rano lub po obiedzie.",
+  "how": "Wdychaj głęboko nosem przez 4 s, potem wydychaj mocno ustami przez 2 s. 1–3 minuty, na siedząco lub na stojąco.",
+  "care": "Jeśli kręci ci się w głowie, zwolnij albo przerwij.",
+  "src": "Rytmy pobudzające akcentują wdech; zob. Zaccaro i in., 2018."
+ },
+ "kapal": {
+  "what": "Szybkie, mocne wydechy przez nos, a wdech przychodzi sam. Pobudza i rozgrzewa.",
+  "how": "Usiądź prosto. Gwałtownie wciągaj brzuch, wypychając powietrze nosem mniej więcej raz na sekundę; wdech niech przychodzi biernie. Po 30 wydechach weź głęboki wdech, zatrzymaj na 15 s, potem odpocznij.",
+  "care": "Tylko na siedząco. Unikaj w ciąży oraz przy nadciśnieniu, chorobach serca, padaczce, przepuklinie lub po niedawnej operacji brzucha. Przerwij, jeśli kręci ci się w głowie.",
+  "src": "Kapalabhati, technika oczyszczająca hatha jogi (Hatha Joga Pradipika)."
+ },
+ "whm": {
+  "what": "30 głębokich oddechów, potem długie zatrzymanie na pustych płucach i krótkie na pełnych. Pobudza i pozwala poczuć własne granice. Badanie wykazało, że taki trening może wpływać na reakcję stresową i odpornościową organizmu.",
+  "how": "Wdychaj pełno nosem lub ustami i wypuszczaj bez wysiłku, 30 razy. Po ostatnim wydechu zatrzymaj oddech, dopóki jest wygodnie, i dotknij koła, gdy potrzebujesz powietrza. Potem weź pełny wdech i zatrzymaj na 15 s. 1–4 rundy.",
+  "care": "Tylko na siedząco lub leżąco. Nigdy w wodzie, podczas jazdy ani na stojąco: możesz zemdleć. Unikaj w ciąży oraz przy padaczce, chorobach serca lub nadciśnieniu.",
+  "src": "Kox i in., PNAS, 2014: dobrowolna aktywacja współczulnego układu nerwowego i osłabienie wrodzonej odpowiedzi immunologicznej."
+ }
+}

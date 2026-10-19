@@ -1,0 +1,92 @@
+{
+ "calm": {
+  "what": "Te lleva a unas 6 respiraciones por minuto, con una exhalación más larga que la inhalación. Exhalar largo inclina el sistema nervioso hacia el descanso: va bien en momentos de tensión, por la noche o siempre que quieras calmarte.",
+  "how": "Inhala suavemente por la nariz 4 s, llenando primero el abdomen, y exhala despacio 6 s por la nariz o con los labios fruncidos. Suave y silencioso. Bastan 3–5 minutos.",
+  "care": "Debe resultar fácil. Si te falta el aire, acorta la exhalación o haz una pausa.",
+  "src": "Respiración lenta con exhalación más larga: Zaccaro et al., Frontiers in Human Neuroscience, 2018 (revisión sistemática)."
+ },
+ "sigh": {
+  "what": "Dos inhalaciones seguidas y una exhalación larga. La segunda inhalación corta vuelve a abrir los alvéolos colapsados y la exhalación larga libera dióxido de carbono. Una de las formas más rápidas de bajar el estrés.",
+  "how": "Inhala por la nariz 2 s, añade encima un sorbo extra de aire de 1 s y exhala despacio por la boca 6 s. De 1 a 5 minutos, en un momento tenso o como hábito diario.",
+  "care": "El sorbo extra debe ser pequeño, sin forzar. Para si te mareas.",
+  "src": "Balban et al., Cell Reports Medicine, 2023: cinco minutos diarios de suspiro cíclico mejoraron el ánimo y bajaron la frecuencia respiratoria más que la meditación mindfulness."
+ },
+ "coh": {
+  "what": "Respiración lenta y regular, unas 6 por minuto. Cerca de este ritmo la variabilidad de la frecuencia cardiaca es máxima (resonancia), lo que favorece la calma y la resistencia al estrés.",
+  "how": "Respira de forma uniforme por la nariz, inhalación y exhalación de igual duración, sin pausas. Ajusta el ritmo bajo la lista de ritmos, entre 4,3 y 10 respiraciones por minuto; a la mayoría le va mejor 5,5–6. 10–20 minutos al día.",
+  "care": "Debe ser cómodo. Si sientes falta de aire, elige un ritmo más rápido.",
+  "src": "Lehrer y Gevirtz, Frontiers in Psychology, 2014 (biofeedback de la variabilidad de la frecuencia cardiaca)."
+ },
+ "relax": {
+  "what": "Una pausa breve tras la inhalación y una exhalación larga. Te serena y suelta la tensión, sobre todo en hombros y pecho.",
+  "how": "Inhala por la nariz 4 s, retén suavemente 2 s y exhala despacio 6 s. Deja caer los hombros en cada exhalación.",
+  "care": "Retén sin esfuerzo, con la garganta abierta. Si la retención te incomoda, usa mejor el ritmo Calma.",
+  "src": "Una variante de la respiración lenta con exhalación más larga (ver Zaccaro et al., 2018)."
+ },
+ "equal": {
+  "what": "Inhalación y exhalación de la misma duración. Equilibra y es un buen punto de partida si los ejercicios de respiración son nuevos para ti.",
+  "how": "Inhala por la nariz 4 s y exhala 4 s, de forma uniforme, sin pausas. Cuando te resulte fácil, alarga ambas con un ritmo propio.",
+  "care": "No tiene riesgos especiales; mantente relajado.",
+  "src": "Sama vritti (respiración igual), de la tradición del yoga."
+ },
+ "478": {
+  "what": "Una retención larga y una exhalación aún más larga. Muy usada para calmarse y conciliar el sueño.",
+  "how": "Inhala en silencio por la nariz 4 s, retén 7 s y exhala por la boca 8 s con un suave soplido. Empieza con 4 ciclos, en la cama o sentado.",
+  "care": "Al principio la retención larga puede costar: crea un ritmo propio con una retención más corta. Si tienes una enfermedad cardiaca o pulmonar, consulta antes a tu médico.",
+  "src": "Popularizada por el médico Andrew Weil, basada en el pranayama. La evidencia científica aún es limitada."
+ },
+ "slow": {
+  "what": "La exhalación pasa de 4 a 8 s a lo largo de la sesión, así te vas calmando paso a paso casi sin notarlo.",
+  "how": "Inhala por la nariz 4 s y sigue el círculo en la exhalación, que se va alargando. Ideal antes de dormir o tras un día intenso, 10–15 minutos.",
+  "care": "Si las exhalaciones largas se vuelven incómodas, elige una sesión más corta.",
+  "src": "Se basa en la respiración lenta con exhalación creciente (ver Zaccaro et al., 2018)."
+ },
+ "long": {
+  "what": "La exhalación dura el doble que la inhalación (proporción 1:2): relajación profunda antes de acostarse.",
+  "how": "Inhala por la nariz 4 s y exhala despacio 8 s por la nariz o con los labios fruncidos. Tumbado, 5–10 minutos.",
+  "care": "Si 8 s es demasiado, empieza con el ritmo Calma (4·6).",
+  "src": "La proporción 1:2 procede de la práctica del yoga; ver también Zaccaro et al., 2018."
+ },
+ "bee": {
+  "what": "Zumbar al exhalar, como una abeja. La vibración suave y la exhalación larga calman y ayudan a dormir.",
+  "how": "Inhala por la nariz 4 s y luego zumba por la nariz con la boca cerrada 8 s («mmm»). Puedes taparte los oídos con los pulgares. 5–10 ciclos.",
+  "care": "Zumba con suavidad, sin forzar la garganta. Evítalo si tienes una infección de oído.",
+  "src": "Bhramari pranayama; Kuppusamy et al., Journal of Traditional and Complementary Medicine, 2018 (revisión)."
+ },
+ "box": {
+  "what": "Cuatro partes iguales: inhalar, retener, exhalar, retener. Ayuda a mantener la calma y la concentración bajo presión; la usan soldados, deportistas y equipos de emergencia.",
+  "how": "Inhala por la nariz 4 s, retén 4 s, exhala 4 s, retén 4 s. Sentado con la espalda recta, 3–5 minutos.",
+  "care": "Las retenciones deben ser relajadas. Si cuestan, crea un ritmo propio con partes de 3 s y progresa poco a poco.",
+  "src": "Conocida como respiración táctica; la popularizó el ex Navy SEAL Mark Divine."
+ },
+ "tri": {
+  "what": "Inhalar, retener, exhalar, 4 s cada uno: un ejercicio sencillo de concentración, más fácil que la respiración cuadrada.",
+  "how": "Inhala por la nariz 4 s, retén 4 s, exhala 4 s y vuelve a empezar sin pausa.",
+  "care": "Mantén la retención relajada, con la garganta abierta.",
+  "src": "Una variante de la respiración cuadrada."
+ },
+ "nadi": {
+  "what": "Respirar por una fosa nasal cada vez, alternando. Calma, equilibra y ayuda a concentrarse.",
+  "how": "Tapa la fosa derecha con el pulgar e inhala por la izquierda 4 s; tapa la izquierda con el anular y exhala por la derecha 4 s; inhala por la derecha y exhala por la izquierda. La línea bajo el círculo y la voz te indican el lado.",
+  "care": "No lo hagas con la nariz tapada. Respira con suavidad, nunca fuerces el aire.",
+  "src": "Nadi shodhana pranayama; Ghiya, International Journal of Research in Medical Sciences, 2017 (revisión de ensayos clínicos)."
+ },
+ "wake": {
+  "what": "Una inhalación larga y una exhalación corta y enérgica. Despierta y da energía, por ejemplo por la mañana o tras comer.",
+  "how": "Inhala hondo por la nariz 4 s y exhala con fuerza por la boca 2 s. 1–3 minutos, sentado o de pie.",
+  "care": "Si te mareas, ve más despacio o para.",
+  "src": "Los ritmos activadores acentúan la inhalación; ver Zaccaro et al., 2018."
+ },
+ "kapal": {
+  "what": "Exhalaciones rápidas y enérgicas por la nariz; la inhalación llega sola. Activa y calienta.",
+  "how": "Siéntate erguido. Mete el abdomen de golpe para expulsar el aire por la nariz, más o menos una vez por segundo; deja que la inhalación sea pasiva. Tras 30 exhalaciones inhala hondo, retén 15 s y descansa.",
+  "care": "Solo sentado. Evítalo durante el embarazo y si tienes hipertensión, enfermedad cardiaca, epilepsia, hernia o una cirugía abdominal reciente. Para si te mareas.",
+  "src": "Kapalabhati, técnica de limpieza del hatha yoga (Hatha Yoga Pradipika)."
+ },
+ "whm": {
+  "what": "30 respiraciones profundas, luego una retención larga con los pulmones vacíos y una corta con ellos llenos. Da energía y te deja sentir tus límites. Un estudio mostró que este entrenamiento puede influir en la respuesta del cuerpo al estrés y en la inmunitaria.",
+  "how": "Inhala a fondo por la nariz o la boca y suelta sin esfuerzo, 30 veces. Tras la última exhalación, retén mientras te resulte cómodo y toca el círculo cuando necesites aire. Luego inhala a fondo y retén 15 s. 1–4 rondas.",
+  "care": "Solo sentado o tumbado. Nunca en el agua, conduciendo o de pie: podrías desmayarte. Evítalo durante el embarazo y si tienes epilepsia, enfermedad cardiaca o hipertensión.",
+  "src": "Kox et al., PNAS, 2014: activación voluntaria del sistema nervioso simpático y atenuación de la respuesta inmunitaria innata."
+ }
+}

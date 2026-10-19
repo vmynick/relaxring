@@ -1,0 +1,92 @@
+{
+ "calm": {
+  "what": "Zpomalí na zhruba 6 dechů za minutu, s výdechem delším než nádech. Dlouhý výdech ladí nervovou soustavu na odpočinek: hodí se v napjatých chvílích, večer nebo kdykoli se chcete zklidnit.",
+  "how": "Nadechujte se jemně nosem 4 s, nejdřív do břicha, pak pomalu vydechujte 6 s nosem nebo sešpulenými rty. Jemně a potichu. Stačí 3–5 minut.",
+  "care": "Má to jít snadno. Když vám chybí vzduch, zkraťte výdech nebo si dejte pauzu.",
+  "src": "Pomalé dýchání s delším výdechem: Zaccaro a kol., Frontiers in Human Neuroscience, 2018 (systematický přehled)."
+ },
+ "sigh": {
+  "what": "Dva nádechy za sebou a pak dlouhý výdech. Krátký druhý nádech znovu otevře splasklé plicní sklípky a dlouhý výdech uvolní oxid uhličitý. Jeden z nejrychlejších způsobů, jak snížit stres.",
+  "how": "Nadechněte se nosem 2 s, přidejte navrch krátký 1sekundový doušek vzduchu a pak pomalu vydechujte ústy 6 s. 1–5 minut, v napjaté chvíli nebo jako denní zvyk.",
+  "care": "Doušek navíc má být malý, nenuťte se. Přestaňte, pokud se vám zatočí hlava.",
+  "src": "Balban a kol., Cell Reports Medicine, 2023: pět minut cyklického vzdychání denně zlepšilo náladu a zpomalilo dech více než meditace všímavosti."
+ },
+ "coh": {
+  "what": "Rovnoměrné, pomalé dýchání, asi 6 dechů za minutu. Kolem tohoto tempa je variabilita srdeční frekvence nejvyšší (rezonance), což podporuje klid a odolnost vůči stresu.",
+  "how": "Dýchejte rovnoměrně nosem, nádech i výdech stejně dlouhý, bez pauz. Tempo nastavíte pod seznamem rytmů, od 4,3 do 10 dechů za minutu; většině lidí vyhovuje 5,5–6. 10–20 minut denně.",
+  "care": "Má to být příjemné. Pokud cítíte hlad po vzduchu, zvolte rychlejší tempo.",
+  "src": "Lehrer a Gevirtz, Frontiers in Psychology, 2014 (biofeedback variability srdeční frekvence)."
+ },
+ "relax": {
+  "what": "Krátká pauza po nádechu a dlouhý výdech. Zpomalí a uvolní napětí, hlavně v ramenou a hrudi.",
+  "how": "Nadechněte se nosem 4 s, lehce zadržte 2 s a pak pomalu vydechujte 6 s. S každým výdechem nechte klesnout ramena.",
+  "care": "Zadržujte bez námahy, s otevřeným hrdlem. Je-li zadržení nepříjemné, zvolte raději rytmus Klid.",
+  "src": "Varianta pomalého dýchání s delším výdechem (viz Zaccaro a kol., 2018)."
+ },
+ "equal": {
+  "what": "Stejně dlouhý nádech a výdech. Vyrovnává a je dobrým začátkem, pokud jsou pro vás dechová cvičení novinkou.",
+  "how": "Nadechujte se nosem 4 s a vydechujte 4 s, plynule, bez pauz. Až to půjde snadno, prodlužte obojí vlastním rytmem.",
+  "care": "Žádná zvláštní rizika; zůstaňte uvolnění.",
+  "src": "Sama vritti (rovnoměrné dýchání) z jógové tradice."
+ },
+ "478": {
+  "what": "Dlouhé zadržení a ještě delší výdech. Často se používá ke zklidnění a usnutí.",
+  "how": "Nadechněte se potichu nosem 4 s, zadržte 7 s a pak vydechujte ústy 8 s s jemným šuměním. Začněte 4 cykly, v posteli nebo vsedě.",
+  "care": "Dlouhé zadržení může být zpočátku obtížné: vytvořte si vlastní rytmus s kratším zadržením. Máte-li nemoc srdce nebo plic, poraďte se nejdřív s lékařem.",
+  "src": "Proslavil ho lékař Andrew Weil na základě pránájámy. Vědeckých důkazů je zatím málo."
+ },
+ "slow": {
+  "what": "Výdech se do konce cvičení prodlužuje ze 4 na 8 s, takže se krok za krokem zklidníte téměř bez povšimnutí.",
+  "how": "Nadechujte se nosem 4 s a při výdechu sledujte kruh, jak se prodlužuje. Ideální před spaním nebo po náročném dni, 10–15 minut.",
+  "care": "Pokud jsou dlouhé výdechy nepříjemné, zvolte kratší cvičení.",
+  "src": "Vychází z pomalého dýchání s prodlužujícím se výdechem (viz Zaccaro a kol., 2018)."
+ },
+ "long": {
+  "what": "Výdech je dvakrát delší než nádech (poměr 1:2): hluboké uvolnění před spaním.",
+  "how": "Nadechujte se nosem 4 s, pak pomalu vydechujte 8 s nosem nebo sešpulenými rty. Vleže, 5–10 minut.",
+  "care": "Je-li 8 s příliš, začněte rytmem Klid (4·6).",
+  "src": "Dechový poměr 1:2 pochází z jógové praxe; viz také Zaccaro a kol., 2018."
+ },
+ "bee": {
+  "what": "Bzučení při výdechu, jako včela. Jemná vibrace a dlouhý výdech zklidňují a pomáhají usnout.",
+  "how": "Nadechněte se nosem 4 s, pak se zavřenými ústy bzučte nosem 8 s („mmm“). Uši si můžete zacpat palci. 5–10 cyklů.",
+  "care": "Bzučte jemně, nenamáhejte hrdlo. Při zánětu ucha vynechte.",
+  "src": "Bhrámarí pránájáma; Kuppusamy a kol., Journal of Traditional and Complementary Medicine, 2018 (přehled)."
+ },
+ "box": {
+  "what": "Čtyři stejné části: nádech, zadržení, výdech, zadržení. Pomáhá zůstat klidný a soustředěný pod tlakem; používají ho vojáci, sportovci i záchranáři.",
+  "how": "Nadechujte se nosem 4 s, zadržte 4 s, vydechujte 4 s, zadržte 4 s. Vsedě s rovnými zády, 3–5 minut.",
+  "care": "Zadržení má být uvolněné. Je-li obtížné, vytvořte si vlastní rytmus s částmi po 3 s a postupně přidávejte.",
+  "src": "Známý jako taktické dýchání; zpopularizoval ho bývalý příslušník Navy SEAL Mark Divine."
+ },
+ "tri": {
+  "what": "Nádech, zadržení, výdech, každé 4 s: jednoduché cvičení soustředění, snazší než čtvercové dýchání.",
+  "how": "Nadechujte se nosem 4 s, zadržte 4 s, vydechujte 4 s a začněte znovu bez pauzy.",
+  "care": "Zadržujte uvolněně, s otevřeným hrdlem.",
+  "src": "Varianta čtvercového dýchání."
+ },
+ "nadi": {
+  "what": "Dýchání střídavě jednou nosní dírkou. Zklidňuje, vyrovnává a pomáhá se soustředit.",
+  "how": "Palcem ucpěte pravou nosní dírku a nadechujte se levou 4 s; prsteníčkem ucpěte levou a vydechujte pravou 4 s; nádech pravou, výdech levou. Řádek pod kruhem a hlas vám řeknou stranu.",
+  "care": "Ne s ucpaným nosem. Dýchejte jemně, nikdy vzduch netlačte.",
+  "src": "Nádí šódhana pránájáma; Ghiya, International Journal of Research in Medical Sciences, 2017 (přehled klinických studií)."
+ },
+ "wake": {
+  "what": "Dlouhý nádech a krátký, rázný výdech. Probudí a dodá energii, třeba ráno nebo po obědě.",
+  "how": "Zhluboka se nadechujte nosem 4 s, pak rázně vydechněte ústy za 2 s. 1–3 minuty, vsedě nebo vestoje.",
+  "care": "Pokud se vám zatočí hlava, zpomalte nebo přestaňte.",
+  "src": "Povzbuzující rytmy zdůrazňují nádech; viz Zaccaro a kol., 2018."
+ },
+ "kapal": {
+  "what": "Rychlé, silné výdechy nosem; nádech přichází sám. Povzbuzuje a zahřívá.",
+  "how": "Seďte rovně. Prudce vtáhněte břicho a vytlačte vzduch nosem, zhruba jednou za sekundu; nádech nechte přijít samovolně. Po 30 výdeších se zhluboka nadechněte, zadržte 15 s a odpočiňte si.",
+  "care": "Jen vsedě. Vyhněte se mu v těhotenství a při vysokém tlaku, nemoci srdce, epilepsii, kýle či nedávné operaci břicha. Přestaňte, pokud se vám zatočí hlava.",
+  "src": "Kapálabhátí, očistná technika hathajógy (Hatha jóga pradípika)."
+ },
+ "whm": {
+  "what": "30 hlubokých nádechů, pak dlouhé zadržení s prázdnými plícemi a krátké s plnými. Povzbuzuje a dá vám poznat vlastní hranice. Studie ukázala, že takový trénink může ovlivnit stresovou a imunitní odpověď těla.",
+  "how": "Nadechněte se naplno nosem nebo ústy a bez námahy vydechněte, 30krát. Po posledním výdechu zadržte, dokud je to příjemné, a ťukněte na kruh, až budete potřebovat vzduch. Pak se naplno nadechněte a zadržte 15 s. 1–4 kola.",
+  "care": "Jen vsedě nebo vleže. Nikdy ve vodě, za jízdy nebo vestoje: můžete omdlít. Vyhněte se mu v těhotenství a při epilepsii, nemoci srdce či vysokém tlaku.",
+  "src": "Kox a kol., PNAS, 2014: vědomá aktivace sympatického nervového systému a utlumení vrozené imunitní odpovědi."
+ }
+}

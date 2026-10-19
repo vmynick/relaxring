@@ -1,0 +1,92 @@
+{
+ "calm": {
+  "what": "Percenként kb. 6 légzésre lassít, a kilégzés hosszabb a belégzésnél. A hosszú kilégzés a pihenés felé hangolja az idegrendszert, ezért feszült helyzetben, este vagy bármikor jó, amikor meg akarsz nyugodni.",
+  "how": "Lélegezz be lassan az orrodon 4 mp-ig, előbb a hasad emelkedjen, aztán fújd ki lassan 6 mp alatt az orrodon vagy csücsörített szájon. Legyen puha és halk. 3–5 perc elég.",
+  "care": "Könnyűnek kell lennie. Ha kevés a levegő, rövidíts a kilégzésen, vagy tarts szünetet.",
+  "src": "Lassú légzés hosszabb kilégzéssel: Zaccaro és mtsai, Frontiers in Human Neuroscience, 2018 (szisztematikus áttekintés)."
+ },
+ "sigh": {
+  "what": "Két belégzés egymás után, aztán hosszú kilégzés. A rövid második belégzés újra kinyitja az összeesett léghólyagokat, a hosszú kilégzés pedig kiengedi a szén-dioxidot. Az egyik leggyorsabb módja a stressz csökkentésének.",
+  "how": "Lélegezz be az orrodon 2 mp-ig, tetézd meg egy rövid, 1 mp-es plusz kortyintással, majd fújd ki lassan a szádon 6 mp alatt. 1–5 perc, feszült pillanatban vagy napi szokásként.",
+  "care": "A ráadás belégzés legyen kicsi, ne erőltesd. Ha szédülsz, hagyd abba.",
+  "src": "Balban és mtsai, Cell Reports Medicine, 2023: napi öt perc ciklikus sóhajtás jobban javította a hangulatot és lassította a légzést, mint a mindfulness-meditáció."
+ },
+ "coh": {
+  "what": "Egyenletes, lassú légzés, percenként kb. 6-tal. E körül a tempó körül a legnagyobb a szívritmus-variabilitás (rezonancia), ami segíti a nyugalmat és a stressztűrést.",
+  "how": "Lélegezz egyenletesen az orrodon, a be- és kilégzés legyen egyforma hosszú, szünet nélkül. A tempót a ritmuslista alatt állíthatod, percenként 4,3 és 10 légzés között; a legtöbbeknek az 5,5–6 a legjobb. Napi 10–20 perc.",
+  "care": "Kényelmesnek kell lennie. Ha légszomjad van, válassz gyorsabb tempót.",
+  "src": "Lehrer és Gevirtz, Frontiers in Psychology, 2014 (szívritmus-variabilitás biofeedback)."
+ },
+ "relax": {
+  "what": "Rövid szünet a belégzés után, majd hosszú kilégzés. Lelassít, és oldja a feszültséget, főleg a vállban és a mellkasban.",
+  "how": "Lélegezz be az orrodon 4 mp-ig, tartsd lazán 2 mp-ig, majd fújd ki lassan 6 mp alatt. Minden kilégzéssel engedd le a válladat.",
+  "care": "A tartás erőlködés nélkül, nyitott torokkal történjen. Ha kellemetlen, válaszd inkább a Nyugtató ritmust.",
+  "src": "A hosszabb kilégzésű lassú légzés egyik változata (lásd Zaccaro és mtsai, 2018)."
+ },
+ "equal": {
+  "what": "Egyforma hosszú be- és kilégzés. Kiegyensúlyoz, és jó kiindulópont, ha új vagy a légzőgyakorlatokban.",
+  "how": "Lélegezz be az orrodon 4 mp-ig és ki 4 mp-ig, egyenletesen, szünet nélkül. Ha már könnyű, saját ritmussal mindkettőt hosszabbíthatod.",
+  "care": "Nincs különösebb kockázata; maradj laza.",
+  "src": "Sama vritti (egyenlő légzés) a jóga hagyományából."
+ },
+ "478": {
+  "what": "Hosszú benntartás és még hosszabb kilégzés. Sokan használják megnyugvásra és elalváshoz.",
+  "how": "Lélegezz be csendesen az orrodon 4 mp-ig, tartsd bent 7 mp-ig, majd fújd ki a szádon 8 mp alatt, halk süvítéssel. Kezdd 4 körrel, ágyban vagy ülve.",
+  "care": "A hosszú benntartás eleinte nehéz lehet: készíts saját ritmust rövidebb tartással. Szív- vagy tüdőbetegség esetén előbb kérdezd meg az orvosodat.",
+  "src": "Andrew Weil orvos tette ismertté, a pránájáma alapján. Tudományos bizonyíték egyelőre kevés van rá."
+ },
+ "slow": {
+  "what": "A kilégzés a gyakorlás végére 4-ről 8 mp-re nyúlik, így szinte észrevétlenül, lépésről lépésre lassulsz le.",
+  "how": "Lélegezz be az orrodon 4 mp-ig, a kilégzésnél pedig kövesd a kört, ahogy egyre hosszabb lesz. Elalvás előtt vagy mozgalmas nap után ideális, 10–15 percig.",
+  "care": "Ha a hosszú kilégzések kényelmetlenné válnak, válassz rövidebb gyakorlást.",
+  "src": "A fokozatosan nyúló kilégzésű lassú légzésre épül (lásd Zaccaro és mtsai, 2018)."
+ },
+ "long": {
+  "what": "A kilégzés kétszer olyan hosszú, mint a belégzés (1:2 arány): mély ellazulás lefekvés előtt.",
+  "how": "Lélegezz be az orrodon 4 mp-ig, majd fújd ki lassan 8 mp alatt az orrodon vagy csücsörített szájon. Fekve, 5–10 percig.",
+  "care": "Ha a 8 mp túl hosszú, kezdd a Nyugtató ritmussal (4·6).",
+  "src": "Az 1:2 légzésarány a jógagyakorlatból ered; lásd még Zaccaro és mtsai, 2018."
+ },
+ "bee": {
+  "what": "Zümmögés kilégzés közben, mint egy méhecske. A finom rezgés és a hosszú kilégzés megnyugtat, és segít elaludni.",
+  "how": "Lélegezz be az orrodon 4 mp-ig, majd csukott szájjal zümmögj az orrodon át 8 mp-ig („mmm”). A füledet befoghatod a hüvelykujjaddal. 5–10 kör.",
+  "care": "Finoman zümmögj, a torkod megerőltetése nélkül. Fülgyulladásnál hagyd ki.",
+  "src": "Bhrámári pránájáma; Kuppusamy és mtsai, Journal of Traditional and Complementary Medicine, 2018 (áttekintés)."
+ },
+ "box": {
+  "what": "Négy egyforma rész: be, tartás, ki, tartás. Segít higgadtnak és összeszedettnek maradni nyomás alatt; katonák, sportolók és mentők is használják.",
+  "how": "Lélegezz be az orrodon 4 mp-ig, tartsd bent 4 mp-ig, fújd ki 4 mp alatt, tartsd kint 4 mp-ig. Egyenes háttal ülve, 3–5 percig.",
+  "care": "A tartások maradjanak lazák. Ha nehezek, készíts saját ritmust 3 mp-es részekkel, és fokozatosan haladj.",
+  "src": "Taktikai légzésként ismert; Mark Divine, a haditengerészet egykori különleges egységének (Navy SEAL) tagja tette népszerűvé."
+ },
+ "tri": {
+  "what": "Be, tartás, ki, mindegyik 4 mp: egyszerű összpontosító gyakorlat, könnyebb a doboz légzésnél.",
+  "how": "Lélegezz be az orrodon 4 mp-ig, tartsd bent 4 mp-ig, fújd ki 4 mp alatt, majd kezdd újra szünet nélkül.",
+  "care": "A tartás maradjon laza, nyitott torokkal.",
+  "src": "A doboz légzés egyik változata."
+ },
+ "nadi": {
+  "what": "Felváltva egyik, majd másik orrlyukon át lélegzel. Megnyugtat és kiegyensúlyoz; segít összpontosítani.",
+  "how": "Hüvelykujjaddal fogd be a jobb orrlyukat, és lélegezz be a balon 4 mp-ig; gyűrűsujjaddal fogd be a balt, és fújd ki a jobbon 4 mp alatt; lélegezz be a jobbon, ki a balon. A kör alatti felirat és a hang mondja, melyik oldal jön.",
+  "care": "Eldugult orral ne csináld. Finoman lélegezz, soha ne erőltesd a levegőt.",
+  "src": "Nádi sódhana pránájáma; Ghiya, International Journal of Research in Medical Sciences, 2017 (klinikai vizsgálatok áttekintése)."
+ },
+ "wake": {
+  "what": "Hosszú belégzés és rövid, határozott kilégzés. Felébreszt és energiát ad, például reggel vagy ebéd után.",
+  "how": "Lélegezz be mélyen az orrodon 4 mp-ig, majd fújd ki határozottan a szádon 2 mp alatt. 1–3 percig, ülve vagy állva.",
+  "care": "Ha szédülsz, lassíts vagy hagyd abba.",
+  "src": "Az élénkítő ritmusok a belégzést hangsúlyozzák; lásd Zaccaro és mtsai, 2018."
+ },
+ "kapal": {
+  "what": "Gyors, erőteljes kifújások az orron át, a belégzés magától történik. Élénkít és átmelegít.",
+  "how": "Ülj egyenesen. A hasadat hirtelen behúzva fújd ki a levegőt az orrodon, nagyjából másodpercenként egyszer; a belégzés jöjjön magától. 30 kifújás után lélegezz be mélyen, tartsd bent 15 mp-ig, aztán pihenj.",
+  "care": "Csak ülve. Kerüld várandósan, magas vérnyomás, szívbetegség, epilepszia, sérv vagy friss hasi műtét esetén. Ha szédülsz, hagyd abba.",
+  "src": "Kapálabháti, a hatha-jóga egyik tisztító gyakorlata (Hatha-jóga pradípiká)."
+ },
+ "whm": {
+  "what": "30 mély légzés, majd hosszú visszatartás kifújt tüdővel és rövid tartás teli tüdővel. Élénkít, és megmutatja a határaidat. Egy vizsgálat szerint az ilyen edzés hatással lehet a szervezet stressz- és immunválaszára.",
+  "how": "Lélegezz be teljesen az orrodon vagy a szádon, és engedd ki erőlködés nélkül, 30-szor. Az utolsó kilégzés után tartsd kint a levegőt, amíg kényelmes, és koppints a körre, amikor levegő kell. Utána lélegezz be teljesen, és tartsd bent 15 mp-ig. 1–4 kör.",
+  "care": "Csak ülve vagy fekve. Soha ne vízben, vezetés közben vagy állva: elájulhatsz. Kerüld várandósan, epilepszia, szívbetegség vagy magas vérnyomás esetén.",
+  "src": "Kox és mtsai, PNAS, 2014: a szimpatikus idegrendszer akaratlagos aktiválása és a veleszületett immunválasz mérséklése."
+ }
+}

@@ -1,7 +1,8 @@
 <!doctype html>
-<html lang="hu">
+<html lang="hu" translate="no">
 <head>
 <meta charset="utf-8">
+<meta name="google" content="notranslate">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Légző körök</title>
 <meta name="description" content="RelaxRing+: 15 légzéstechnika (doboz, 4-7-8, koherens, ciklusos, váltott orrlyuk, saját) és Tabata-időzítő.">
@@ -214,7 +215,30 @@ a.navi{text-decoration:none;box-sizing:border-box}
 .tlook{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;padding:12px 0;border-top:1px solid var(--line)}
 .tlook:first-child{border-top:0}
 .tlook b{font-size:18px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.tlook select{border:0;border-radius:10px;background:var(--bg);color:var(--fg);font:700 16px var(--body);padding:8px;max-width:11em}
+/* hangulat a gyakorlás előtt és után: a kör fölött */
+.mood{position:absolute;inset:0;z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:16px;text-align:center;background:color-mix(in srgb,var(--bg) 97%,transparent)}
+.mood[hidden]{display:none}
+.mood p{margin:0;font:700 24px/1.2 var(--display);text-wrap:balance}
+.faces{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+.faces button{width:52px;height:52px;border:0;border-radius:50%;background:var(--surface);font-size:29px;line-height:1;cursor:pointer}
+#moodSkip{border:0;background:none;color:var(--muted);font:600 17px var(--body);padding:8px 14px;cursor:pointer}
+.mrow{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:18px;padding:2px 0 10px}
+/* visszatartás-teszt és programok */
+.tgo{flex:none;border:0;border-radius:12px;background:var(--bg);color:var(--c1);font:700 16px var(--body);padding:10px 14px;cursor:pointer}
+.tchart{display:block;width:100%;height:auto;margin:2px 0 10px}
+.tchart polyline{fill:none;stroke:var(--c1);stroke-width:2.5;stroke-linejoin:round}
+.tchart circle{fill:var(--c1)}
+.tchart text{font:600 12px var(--body);fill:var(--muted)}
+#infoTxt h4{margin:14px 0 4px;font:700 17px/1.3 var(--body);color:var(--c1)}
+#infoTxt h4:first-child{margin-top:8px}
+#infoTxt p{margin:0 0 8px;font-size:17px;line-height:1.45}
+.ipat{flex:none;font-style:normal;font-weight:700;color:var(--muted);white-space:nowrap}
+.prog{padding:6px 0 12px;border-top:1px solid var(--line)}
+.prog:first-child{border-top:0}
+.prog .item{border-top:0}
+.pbar{height:8px;margin:4px 0 8px;border-radius:4px;background:var(--bg);overflow:hidden}
+.pbar i{display:block;height:100%;background:var(--c1)}
+.tlook select,.item select{border:0;border-radius:10px;background:var(--bg);color:var(--fg);font:700 16px var(--body);padding:8px;max-width:11em}
 #tbLook.stack .tlook{grid-template-columns:minmax(0,1fr)}   /* keskeny kijelzőn, ha egy név nem fér ki: a név felül, alatta a hang */
 #tbLook.stack .tlook b{white-space:normal}
 #tbLook.stack .tlook select{justify-self:start}
@@ -367,6 +391,7 @@ html.tb-run #ph{max-width:94vw;margin:0 auto;white-space:nowrap}
     <button id="ringBtn"></button>
     <div class="label"><div id="ph"></div><div id="ct"></div><div id="sub"></div></div>
     <div class="hint" id="hint" data-i="hint"></div>
+    <div class="mood" id="mood" hidden><p id="moodQ"></p><div class="faces" id="moodFaces"></div><button id="moodSkip" data-i="moodSkip"></button></div>
   </div>
 
   <div class="tbpanel" id="tbPanel" hidden>
@@ -416,6 +441,7 @@ html.tb-run #ph{max-width:94vw;margin:0 auto;white-space:nowrap}
         <button class="navi" data-go="rhythms"><i style="--ic:#30A46C"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.5"/></svg></i><span data-i="rhythms"></span><em id="sv_rhythms"></em><b aria-hidden="true">›</b></button>
         <button class="navi" data-go="tabata"><i style="--ic:#E5352B"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="13.5" r="7"/><path d="M12 13.5V10M10 3h4M18.5 6.5L17 8"/></svg></i><span data-i="r_tabata"></span><em id="sv_tabata"></em><b aria-hidden="true">›</b></button>
         <button class="navi" data-go="session"><i style="--ic:#5E5CE6"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3h10M7 21h10M8 3c0 5 8 5 8 9s-8 4-8 9M16 3c0 5-8 5-8 9s8 4 8 9"/></svg></i><span data-i="session"></span><em id="sv_session"></em><b aria-hidden="true">›</b></button>
+        <button class="navi" data-go="programs"><i style="--ic:#BF5AF2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 10h16M9 15l2 2 4-4"/></svg></i><span data-i="programs"></span><em id="sv_programs"></em><b aria-hidden="true">›</b></button>
       </div>
       <div class="group nav">
         <button class="navi" data-go="sound"><i style="--ic:#FF375F"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9z" fill="currentColor"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg></i><span data-i="sound"></span><em id="sv_sound"></em><b aria-hidden="true">›</b></button>
@@ -443,6 +469,10 @@ html.tb-run #ph{max-width:94vw;margin:0 auto;white-space:nowrap}
         <div class="cal" id="cal"></div>
         <div class="note" id="calSum"></div>
       </div>
+      <h3 data-i="holdTest"></h3>
+      <div class="group" id="testBox"></div>
+      <h3 data-i="moodTitle" id="moodH" hidden></h3>
+      <div class="group" id="moodBox" hidden></div>
       <div class="group"><div class="note" id="tabNote"></div></div>
       <div class="group">
         <div class="item"><span><span data-i="statsSw"></span><small class="desc" data-i="statsInfo"></small></span><button class="switch" id="statsSw" role="switch" aria-checked="false" data-ia="statsSw"></button></div>
@@ -462,6 +492,7 @@ html.tb-run #ph{max-width:94vw;margin:0 auto;white-space:nowrap}
         <a class="navi" href="https://github.com/vmynick/relaxring" target="_blank" rel="noopener"><span data-i="source"></span><em>GitHub</em><b aria-hidden="true">›</b></a>
         <a class="navi" href="https://github.com/vmynick/relaxring/blob/main/LICENSE" target="_blank" rel="noopener"><span data-i="license"></span><em>MIT</em><b aria-hidden="true">›</b></a>
         <a class="navi" href="voice/CREDITS.txt" target="_blank" rel="noopener"><span data-i="voiceCredits"></span><em>Piper</em><b aria-hidden="true">›</b></a>
+        <a class="navi" href="amb/CREDITS.txt" target="_blank" rel="noopener"><span data-i="ambCredits"></span><em>Freesound</em><b aria-hidden="true">›</b></a>
       </div>
     </div>
 
@@ -490,10 +521,20 @@ html.tb-run #ph{max-width:94vw;margin:0 auto;white-space:nowrap}
         <div class="item"><span><span data-i="music"></span><small class="desc" data-i="musicInfo"></small></span><button class="switch" id="musicSw" role="switch" aria-checked="false" data-ia="music"></button></div>
         <div class="note" data-i="tabInfo"></div>
       </div>
+      <h3 data-i="tCues"></h3>
+      <div class="group">
+        <div class="item"><span><span data-i="halfSw"></span><small class="desc" data-i="halfInfo"></small></span><button class="switch" id="halfSw" role="switch" aria-checked="false" data-ia="halfSw"></button></div>
+        <div class="item"><label for="warnSel" data-i="warnLbl"></label><select id="warnSel"></select></div>
+        <div class="item"><span><label for="bpmSel" data-i="bpmLbl"></label><small class="desc" data-i="bpmInfo"></small></span><select id="bpmSel"></select></div>
+        <div class="item"><span><span data-i="ownSnd"></span><small class="desc" id="ownSndName"></small></span></div>
+        <div class="opts"><button id="ownSndBtn" data-i="ownSndPick"></button><button id="ownSndDel" data-i="del"></button></div>
+        <input type="file" id="ownSndFile" accept="audio/*" hidden>
+      </div>
       <h3 data-i="exTitle"></h3>
       <div class="group">
         <textarea id="tex" rows="4" data-ph="exPh" data-ia="exTitle"></textarea>
         <div class="note" data-i="exInfo"></div>
+        <div class="note" data-i="exTime"></div>
       </div>
       <div class="group"><button class="addrow" id="tbShare" data-i="tShare"></button><div class="note" id="tbShareNote"></div></div>
     </div>
@@ -513,7 +554,15 @@ html.tb-run #ph{max-width:94vw;margin:0 auto;white-space:nowrap}
       <div class="group">
         <div class="item"><span><span data-i="sleepMode"></span><small class="desc" data-i="sleepInfo"></small></span><button class="switch" id="sleepSw" role="switch" aria-checked="false" data-ia="sleepMode"></button></div>
         <div class="item" id="fullItem"><span><span data-i="full"></span><small class="desc" data-i="fullInfo"></small></span><button class="switch" id="fullSw" role="switch" aria-checked="true" data-ia="full"></button></div>
+        <div class="item"><span><span data-i="moodSw"></span><small class="desc" data-i="moodInfo"></small></span><button class="switch" id="moodSw" role="switch" aria-checked="false" data-ia="moodSw"></button></div>
       </div>
+    </div>
+
+    <div class="page" data-page="info" hidden><div id="infoBody"></div></div>
+
+    <div class="page" data-page="programs" hidden>
+      <div class="group" id="progList"></div>
+      <div class="note" data-i="progInfo"></div>
     </div>
 
     <div class="page" data-page="sound" hidden>
@@ -657,7 +706,30 @@ const T={
     a_hullam:'Hullámok',a_madar:'Madarak',a_feher:'Fehér zaj',a_barna:'Barna zaj',
     voiceVol:'A hangos vezetés hangereje',voiceKind:'A vezetés hangja',vk_tts:'Telefon hangja',vk_f:'Női',vk_m:'Férfi',
     vkInfo:'Előre felvett hang (Piper): minden telefonon ugyanígy szól, pontosan a váltáskor. A gyakorlatok nevét a telefon hangja mondja.',
-    vkNone:'Ehhez a nyelvhez nincs ilyen felvett hang, a telefon hangja szól.',voiceCredits:'Felvett hangok'},
+    vkNone:'Ehhez a nyelvhez nincs ilyen felvett hang, a telefon hangja szól.',voiceCredits:'Felvett hangok',
+    tCues:'Jelzések munka közben',halfSw:'Félidő jelzés',halfInfo:'A munka felénél, ha legalább 10 mp.',warnLbl:'Figyelmeztetés a munka vége előtt',
+    bpmLbl:'Metronóm munka közben',bpmInfo:'Ütem a gyakorlatokhoz. Saját zene mellett nem szól.',metroN:n=>`${n}/perc`,
+    ownSnd:'Saját jelzőhang',ownSndPick:'Hangfájl választása',ownNone:'Nincs kiválasztva. Legfeljebb 400 KB; az első 3 mp szól.',
+    ownBig:'Ez a fájl túl nagy (legfeljebb 400 KB).',ownBad:'Ezt a hangfájlt a telefon nem tudja lejátszani.',
+    half:'Félidő',warnS:'Figyelmeztetés',cueHalf:'Félidő',cueLeft:n=>`Még ${n} másodperc`,
+    exTime:'Saját idő: írj számot a sor végére, pl. „Guggolás 40” (40 mp munka) vagy „Guggolás 40/15” (utána 15 mp pihenő).',
+    s_triple:'Hármas sípolás',s_chirp:'Felfutó sípolás',s_boxing:'Bokszcsengő',s_horn:'Duda',s_clap:'Taps',s_drum:'Dob',s_own:'Saját hang',
+    holdTest:'Visszatartás-teszt',holdInfo:'A BOLT-teszt (Buteyko) azt méri, meddig bírod kényelmesen egy normál kilégzés után: fogd be az orrod, és az első légszomjnál állítsd meg. Nem erőlködés! A maximális visszatartás a határodat méri. Mindig ugyanúgy mérj, például reggel ébredés után; ülve vagy fekve, soha ne vízben vagy vezetés közben.',
+    t_bolt:'BOLT-teszt',t_max:'Maximális visszatartás',tIn_bolt:'Lélegezz nyugodtan, fújd ki normálisan, fogd be az orrod, és koppints.',tIn_max:'Vegyél pár nyugodt lélegzetet, fújd ki normálisan, fogd be az orrod, és koppints.',
+    tOut_bolt:'koppints az első légszomjnál',tOut_max:'koppints, amikor levegőt kell venned',tResult:'Eredmény',tPrev:d=>`${d} mp az előzőhöz képest`,
+    tLast:'Utolsó',tBest:'Legjobb',tNone:'Még nincs mérés.',tGo:'Mérés',boltLv:['nagyon alacsony (10 mp alatt)','alacsony (10–20 mp)','közepes (20–30 mp)','jó (30–40 mp)','kiváló (40 mp felett)'],
+    moodSw:'Hangulat előtte és utána',moodInfo:'Gyakorlás előtt és után egy koppintással jelzed, hogy érzed magad; a napló megmutatja, mennyit segít.',
+    moodQ0:'Hogy érzed magad most?',moodQ1:'És most?',moodSkip:'Kihagyom',mood:['Nagyon rosszul','Rosszul','Közepesen','Jól','Nagyon jól'],
+    moodTitle:'Hangulat',moodStat:(a,b,n)=>`Átlagosan ${a} → ${b} (1–5), az utolsó ${n} gyakorlás alapján`,
+    programs:'Programok',progInfo:'Egy program naponta egy gyakorlásból áll. A nap akkor számít teljesítettnek, ha a gyakorlást végigcsinálod; a beállításaid közben nem változnak.',
+    p_start7:'7 napos alapozó',pd_start7:'nyugtató és kiegyensúlyozó légzés kezdőknek',p_sleep14:'14 napos jobb alvás',pd_sleep14:'esti levezetés egyre hosszabb kilégzéssel',
+    p_energy10:'10 napos energia és fókusz',pd_energy10:'fókuszáló, majd élénkítő légzés, a végén ciklusos légzéssel',
+    progDays:n=>`${n} nap`,progDayN:n=>`${n}. nap`,progNext:(d,r,t)=>`Következik: ${d}. nap – ${r}, ${t}`,progDoneToday:'Mára kész ✓',
+    progGoBtn:'Mai gyakorlás',progStop:'Leállítás',progStopAsk:'Leállítod a programot? A haladása elvész.',progSwitchAsk:'Már fut egy program. Lecseréled erre?',
+    progRestart:'Újrakezdés',progStartBtn:'Indítás',progFin:n=>`Teljesítetted: ${n}. Gratulálok!`,progTodayNote:(d,r,t)=>`Mai programnap (${d}.): ${r}, ${t}`,
+    i_what:'Mire jó',i_how:'Hogyan',i_care:'Mire figyelj',i_src:'Eredet és forrás',tryIt:'Kipróbálom',infoNone:'A leírás most nem tölthető be. Ellenőrizd az internetkapcsolatot.',
+    noMed:'A leírások tájékoztató jellegűek, nem orvosi tanácsok. Betegség vagy panasz esetén kérdezd meg az orvosodat.',
+    ambCredits:'Természethangok',helpNew:'Újdonságok: a Ritmusoknál az ⓘ elmagyarázza a technikát; a Beállítások → Programok többnapos tervet ad; a naplóban visszatartás-tesztet végezhetsz.'},
   en:{name:'English',locale:'en-US',title:'Breathing Circles',modes:'Breathing rhythm',
     r_box:'Box',r_478:'Sleep',r_calm:'Calm',r_sigh:'Sigh',r_coh:'Coherent',r_relax:'Relax',r_slow:'Unwind',r_own:'Custom',r_tabata:'Tabata',
     in:'Inhale',in2:'Top up',hold:'Hold',out:'Exhale',work:'Work',rest:'Rest',prep:'Get ready',next:'Next',
@@ -742,7 +814,30 @@ const T={
     a_hullam:'Waves',a_madar:'Birds',a_feher:'White noise',a_barna:'Brown noise',
     voiceVol:'Voice guidance volume',voiceKind:'Guidance voice',vk_tts:'Phone voice',vk_f:'Female',vk_m:'Male',
     vkInfo:'A pre-recorded voice (Piper): it sounds the same on every phone and speaks right at the change. Exercise names are read by the phone voice.',
-    vkNone:'There is no such recorded voice for this language, so the phone voice speaks.',voiceCredits:'Recorded voices'},
+    vkNone:'There is no such recorded voice for this language, so the phone voice speaks.',voiceCredits:'Recorded voices',
+    tCues:'Cues during work',halfSw:'Halfway signal',halfInfo:'At the middle of each work interval of 10 s or more.',warnLbl:'Warning before work ends',
+    bpmLbl:'Metronome during work',bpmInfo:'A beat to pace your reps. Not available with your own music.',metroN:n=>`${n}/min`,
+    ownSnd:'Custom signal sound',ownSndPick:'Choose a sound file',ownNone:'None chosen. Up to 400 KB; the first 3 s play.',
+    ownBig:'This file is too large (400 KB at most).',ownBad:'This phone cannot play this sound file.',
+    half:'Halfway',warnS:'Warning',cueHalf:'Halfway',cueLeft:n=>`${n} seconds left`,
+    exTime:'Own time: put a number at the end of a line, e.g. “Squats 40” (40 s work) or “Squats 40/15” (then 15 s rest).',
+    s_triple:'Triple beep',s_chirp:'Rising chirp',s_boxing:'Boxing bell',s_horn:'Horn',s_clap:'Clap',s_drum:'Drum',s_own:'Custom sound',
+    holdTest:'Breath-hold test',holdInfo:'The BOLT test (Buteyko) measures how long you can comfortably hold after a normal exhale: pinch your nose and stop at the first urge to breathe. No straining! The maximum hold measures your limit. Always test the same way, for example in the morning after waking; sitting or lying down, never in water or while driving.',
+    t_bolt:'BOLT test',t_max:'Maximum hold',tIn_bolt:'Breathe calmly, exhale normally, pinch your nose and tap.',tIn_max:'Take a few calm breaths, exhale normally, pinch your nose and tap.',
+    tOut_bolt:'tap at the first urge to breathe',tOut_max:'tap when you have to breathe',tResult:'Result',tPrev:d=>`${d} s compared with last time`,
+    tLast:'Last',tBest:'Best',tNone:'No results yet.',tGo:'Test',boltLv:['very low (under 10 s)','low (10–20 s)','medium (20–30 s)','good (30–40 s)','excellent (over 40 s)'],
+    moodSw:'Mood before and after',moodInfo:'Before and after a session, tap how you feel; the journal shows how much it helps.',
+    moodQ0:'How do you feel right now?',moodQ1:'And now?',moodSkip:'Skip',mood:['Very bad','Bad','Okay','Good','Very good'],
+    moodTitle:'Mood',moodStat:(a,b,n)=>`On average ${a} → ${b} (1–5), over the last ${n} sessions`,
+    programs:'Programs',progInfo:'A program has one session a day. A day counts as done when you finish the session; your settings stay as they are.',
+    p_start7:'7-day foundation',pd_start7:'calming and balancing breathing for beginners',p_sleep14:'14 days to better sleep',pd_sleep14:'evening wind-down with ever longer exhales',
+    p_energy10:'10 days of energy and focus',pd_energy10:'focusing, then energizing breathing, ending with power breathing',
+    progDays:n=>`${n} days`,progDayN:n=>`Day ${n}`,progNext:(d,r,t)=>`Next: day ${d} – ${r}, ${t}`,progDoneToday:'Done for today ✓',
+    progGoBtn:'Today’s session',progStop:'Stop',progStopAsk:'Stop the program? Its progress will be lost.',progSwitchAsk:'Another program is running. Replace it?',
+    progRestart:'Start over',progStartBtn:'Start',progFin:n=>`You completed ${n}. Well done!`,progTodayNote:(d,r,t)=>`Today’s program day (${d}): ${r}, ${t}`,
+    i_what:'What it does',i_how:'How to do it',i_care:'Take care',i_src:'Origin and source',tryIt:'Try it',infoNone:'The description cannot be loaded now. Check your internet connection.',
+    noMed:'These notes are for information, not medical advice. If you have a condition or symptoms, ask your doctor.',
+    ambCredits:'Nature sounds',helpNew:'New: the ⓘ in Rhythms explains each technique; Settings → Programs gives multi-day plans; the journal has a breath-hold test.'},
   de:{name:'Deutsch',locale:'de-DE',title:'Atemkreise',modes:'Atemrhythmus',
     r_box:'Box',r_478:'Schlaf',r_calm:'Ruhe',r_sigh:'Seufzer',r_coh:'Kohärent',r_relax:'Relax',r_slow:'Langsam',r_own:'Eigen',r_tabata:'Tabata',
     in:'Einatmen',in2:'Nachatmen',hold:'Halten',out:'Ausatmen',work:'Arbeit',rest:'Pause',prep:'Bereit',next:'Als Nächstes',
@@ -827,7 +922,30 @@ const T={
     a_hullam:'Wellen',a_madar:'Vögel',a_feher:'Weißes Rauschen',a_barna:'Braunes Rauschen',
     voiceVol:'Lautstärke der Sprachansage',voiceKind:'Stimme',vk_tts:'Telefonstimme',vk_f:'Weiblich',vk_m:'Männlich',
     vkInfo:'Eine vorab aufgenommene Stimme (Piper): klingt auf jedem Telefon gleich und spricht genau beim Wechsel. Übungsnamen liest die Telefonstimme.',
-    vkNone:'Für diese Sprache gibt es keine solche Aufnahme, daher spricht die Telefonstimme.',voiceCredits:'Aufgenommene Stimmen'},
+    vkNone:'Für diese Sprache gibt es keine solche Aufnahme, daher spricht die Telefonstimme.',voiceCredits:'Aufgenommene Stimmen',
+    tCues:'Signale während der Arbeit',halfSw:'Halbzeit-Signal',halfInfo:'In der Mitte jeder Arbeitsphase ab 10 s.',warnLbl:'Warnung vor Ende der Arbeit',
+    bpmLbl:'Metronom während der Arbeit',bpmInfo:'Ein Takt für die Wiederholungen. Nicht mit eigener Musik.',metroN:n=>`${n}/Min.`,
+    ownSnd:'Eigener Signalton',ownSndPick:'Tondatei wählen',ownNone:'Keine gewählt. Bis 400 KB; die ersten 3 s erklingen.',
+    ownBig:'Diese Datei ist zu groß (höchstens 400 KB).',ownBad:'Dieses Telefon kann die Tondatei nicht abspielen.',
+    half:'Halbzeit',warnS:'Warnung',cueHalf:'Halbzeit',cueLeft:n=>`Noch ${n} Sekunden`,
+    exTime:'Eigene Zeit: eine Zahl ans Zeilenende, z. B. „Kniebeugen 40“ (40 s Arbeit) oder „Kniebeugen 40/15“ (danach 15 s Pause).',
+    s_triple:'Dreifach-Piep',s_chirp:'Aufsteigender Piep',s_boxing:'Boxglocke',s_horn:'Hupe',s_clap:'Klatschen',s_drum:'Trommel',s_own:'Eigener Ton',
+    holdTest:'Atemanhalte-Test',holdInfo:'Der BOLT-Test (Buteyko) misst, wie lange du nach einer normalen Ausatmung bequem anhalten kannst: Nase zuhalten und beim ersten Atemdrang stoppen. Nicht pressen! Das maximale Anhalten misst deine Grenze. Miss immer gleich, etwa morgens nach dem Aufwachen; im Sitzen oder Liegen, nie im Wasser oder beim Fahren.',
+    t_bolt:'BOLT-Test',t_max:'Maximales Anhalten',tIn_bolt:'Atme ruhig, atme normal aus, halte die Nase zu und tippe.',tIn_max:'Atme ein paar Mal ruhig, atme normal aus, halte die Nase zu und tippe.',
+    tOut_bolt:'tippe beim ersten Atemdrang',tOut_max:'tippe, wenn du atmen musst',tResult:'Ergebnis',tPrev:d=>`${d} s gegenüber dem letzten Mal`,
+    tLast:'Zuletzt',tBest:'Bestwert',tNone:'Noch keine Messung.',tGo:'Messen',boltLv:['sehr niedrig (unter 10 s)','niedrig (10–20 s)','mittel (20–30 s)','gut (30–40 s)','ausgezeichnet (über 40 s)'],
+    moodSw:'Stimmung vorher und nachher',moodInfo:'Vor und nach der Übung tippst du an, wie du dich fühlst; das Tagebuch zeigt, wie sehr es hilft.',
+    moodQ0:'Wie fühlst du dich gerade?',moodQ1:'Und jetzt?',moodSkip:'Überspringen',mood:['Sehr schlecht','Schlecht','Mittel','Gut','Sehr gut'],
+    moodTitle:'Stimmung',moodStat:(a,b,n)=>`Im Schnitt ${a} → ${b} (1–5), aus den letzten ${n} Übungen`,
+    programs:'Programme',progInfo:'Ein Programm hat eine Übung pro Tag. Ein Tag gilt als geschafft, wenn du die Übung zu Ende machst; deine Einstellungen bleiben unverändert.',
+    p_start7:'7-Tage-Grundlage',pd_start7:'beruhigendes und ausgleichendes Atmen für Einsteiger',p_sleep14:'14 Tage besser schlafen',pd_sleep14:'abendliches Herunterfahren mit immer längerem Ausatmen',
+    p_energy10:'10 Tage Energie und Fokus',pd_energy10:'fokussierendes, dann belebendes Atmen, zum Schluss Power-Atmung',
+    progDays:n=>`${n} Tage`,progDayN:n=>`Tag ${n}`,progNext:(d,r,t)=>`Als Nächstes: Tag ${d} – ${r}, ${t}`,progDoneToday:'Für heute geschafft ✓',
+    progGoBtn:'Heutige Übung',progStop:'Beenden',progStopAsk:'Programm beenden? Der Fortschritt geht verloren.',progSwitchAsk:'Ein anderes Programm läuft. Ersetzen?',
+    progRestart:'Neu beginnen',progStartBtn:'Starten',progFin:n=>`${n} geschafft. Glückwunsch!`,progTodayNote:(d,r,t)=>`Heutiger Programmtag (${d}): ${r}, ${t}`,
+    i_what:'Wofür',i_how:'So geht’s',i_care:'Achtung',i_src:'Herkunft und Quelle',tryIt:'Ausprobieren',infoNone:'Die Beschreibung lässt sich gerade nicht laden. Prüfe die Internetverbindung.',
+    noMed:'Die Beschreibungen dienen der Information und sind kein ärztlicher Rat. Bei Erkrankungen oder Beschwerden frag deine Ärztin oder deinen Arzt.',
+    ambCredits:'Naturklänge',helpNew:'Neu: Das ⓘ bei den Rhythmen erklärt jede Technik; Einstellungen → Programme bietet mehrtägige Pläne; im Tagebuch gibt es einen Atemanhalte-Test.'},
   es:{name:'Español',locale:'es-ES',title:'Círculos de respiración',modes:'Ritmo de respiración',
     r_box:'Cuadrada',r_478:'Dormir',r_calm:'Calma',r_sigh:'Suspiro',r_coh:'Coherente',r_relax:'Relax',r_slow:'Pausado',r_own:'Propio',r_tabata:'Tabata',
     in:'Inhala',in2:'Un poco más',hold:'Mantén',out:'Exhala',work:'Trabajo',rest:'Descanso',prep:'Prepárate',next:'Siguiente',
@@ -912,7 +1030,30 @@ const T={
     a_hullam:'Olas',a_madar:'Pájaros',a_feher:'Ruido blanco',a_barna:'Ruido marrón',
     voiceVol:'Volumen de la guía por voz',voiceKind:'Voz de la guía',vk_tts:'Voz del teléfono',vk_f:'Femenina',vk_m:'Masculina',
     vkInfo:'Una voz pregrabada (Piper): suena igual en todos los teléfonos y habla justo en el cambio. Los nombres de los ejercicios los lee la voz del teléfono.',
-    vkNone:'No hay una voz grabada así para este idioma, así que habla la voz del teléfono.',voiceCredits:'Voces grabadas'},
+    vkNone:'No hay una voz grabada así para este idioma, así que habla la voz del teléfono.',voiceCredits:'Voces grabadas',
+    tCues:'Avisos durante el trabajo',halfSw:'Aviso a mitad',halfInfo:'A la mitad de cada trabajo de 10 s o más.',warnLbl:'Aviso antes del final del trabajo',
+    bpmLbl:'Metrónomo durante el trabajo',bpmInfo:'Un ritmo para las repeticiones. No suena con tu propia música.',metroN:n=>`${n}/min`,
+    ownSnd:'Sonido de aviso propio',ownSndPick:'Elegir archivo de sonido',ownNone:'Ninguno. Hasta 400 KB; suenan los primeros 3 s.',
+    ownBig:'Este archivo es demasiado grande (400 KB como máximo).',ownBad:'Este teléfono no puede reproducir este archivo.',
+    half:'Mitad',warnS:'Aviso',cueHalf:'Mitad',cueLeft:n=>`Quedan ${n} segundos`,
+    exTime:'Tiempo propio: pon un número al final de la línea, p. ej. «Sentadillas 40» (40 s de trabajo) o «Sentadillas 40/15» (luego 15 s de descanso).',
+    s_triple:'Pitido triple',s_chirp:'Pitido ascendente',s_boxing:'Campana de boxeo',s_horn:'Bocina',s_clap:'Palmada',s_drum:'Tambor',s_own:'Sonido propio',
+    holdTest:'Prueba de apnea',holdInfo:'La prueba BOLT (Buteyko) mide cuánto aguantas cómodamente tras una exhalación normal: tápate la nariz y para con las primeras ganas de respirar. ¡Sin forzar! La apnea máxima mide tu límite. Mide siempre igual, por ejemplo por la mañana al despertar; sentado o tumbado, nunca en el agua ni conduciendo.',
+    t_bolt:'Prueba BOLT',t_max:'Apnea máxima',tIn_bolt:'Respira tranquilo, exhala normalmente, tápate la nariz y toca.',tIn_max:'Haz unas respiraciones tranquilas, exhala normalmente, tápate la nariz y toca.',
+    tOut_bolt:'toca con las primeras ganas de respirar',tOut_max:'toca cuando tengas que respirar',tResult:'Resultado',tPrev:d=>`${d} s respecto a la vez anterior`,
+    tLast:'Última',tBest:'Mejor',tNone:'Aún no hay mediciones.',tGo:'Medir',boltLv:['muy bajo (menos de 10 s)','bajo (10–20 s)','medio (20–30 s)','bueno (30–40 s)','excelente (más de 40 s)'],
+    moodSw:'Ánimo antes y después',moodInfo:'Antes y después de la sesión indicas con un toque cómo te sientes; el diario muestra cuánto ayuda.',
+    moodQ0:'¿Cómo te sientes ahora?',moodQ1:'¿Y ahora?',moodSkip:'Omitir',mood:['Muy mal','Mal','Regular','Bien','Muy bien'],
+    moodTitle:'Ánimo',moodStat:(a,b,n)=>`De media ${a} → ${b} (1–5), en las últimas ${n} sesiones`,
+    programs:'Programas',progInfo:'Un programa tiene una sesión al día. El día cuenta como hecho cuando terminas la sesión; tus ajustes no cambian.',
+    p_start7:'Base de 7 días',pd_start7:'respiración calmante y equilibrante para principiantes',p_sleep14:'14 días para dormir mejor',pd_sleep14:'relajación nocturna con exhalaciones cada vez más largas',
+    p_energy10:'10 días de energía y foco',pd_energy10:'respiración para concentrarse y luego energizante, al final respiración potente',
+    progDays:n=>`${n} días`,progDayN:n=>`Día ${n}`,progNext:(d,r,t)=>`Siguiente: día ${d} – ${r}, ${t}`,progDoneToday:'Hecho por hoy ✓',
+    progGoBtn:'Sesión de hoy',progStop:'Detener',progStopAsk:'¿Detener el programa? Se perderá el progreso.',progSwitchAsk:'Ya hay otro programa en curso. ¿Reemplazarlo?',
+    progRestart:'Empezar de nuevo',progStartBtn:'Empezar',progFin:n=>`Has completado ${n}. ¡Enhorabuena!`,progTodayNote:(d,r,t)=>`Día del programa de hoy (${d}): ${r}, ${t}`,
+    i_what:'Para qué sirve',i_how:'Cómo se hace',i_care:'Precauciones',i_src:'Origen y fuente',tryIt:'Probar',infoNone:'Ahora no se puede cargar la descripción. Comprueba la conexión a internet.',
+    noMed:'Estas notas son informativas, no consejo médico. Si tienes una enfermedad o síntomas, consulta a tu médico.',
+    ambCredits:'Sonidos de la naturaleza',helpNew:'Novedades: la ⓘ en Ritmos explica cada técnica; Ajustes → Programas ofrece planes de varios días; en el diario hay una prueba de apnea.'},
   fr:{name:'Français',locale:'fr-FR',title:'Cercles de respiration',modes:'Rythme respiratoire',
     r_box:'Carré',r_478:'Sommeil',r_calm:'Calme',r_sigh:'Soupir',r_coh:'Cohérence',r_relax:'Détente',r_slow:'Ralenti',r_own:'Perso',r_tabata:'Tabata',
     in:'Inspirez',in2:'Encore un peu',hold:'Retenez',out:'Expirez',work:'Effort',rest:'Repos',prep:'Préparez-vous',next:'Ensuite',
@@ -997,7 +1138,30 @@ const T={
     a_hullam:'Vagues',a_madar:'Oiseaux',a_feher:'Bruit blanc',a_barna:'Bruit brun',
     voiceVol:'Volume du guidage vocal',voiceKind:'Voix du guidage',vk_tts:'Voix du téléphone',vk_f:'Féminine',vk_m:'Masculine',
     vkInfo:'Une voix préenregistrée (Piper) : identique sur tous les téléphones, elle parle pile au changement. Les noms des exercices sont lus par la voix du téléphone.',
-    vkNone:'Pas de voix enregistrée de ce type pour cette langue : c’est la voix du téléphone qui parle.',voiceCredits:'Voix enregistrées'},
+    vkNone:'Pas de voix enregistrée de ce type pour cette langue : c’est la voix du téléphone qui parle.',voiceCredits:'Voix enregistrées',
+    tCues:'Signaux pendant l’effort',halfSw:'Signal à mi-parcours',halfInfo:'Au milieu de chaque effort de 10 s ou plus.',warnLbl:'Alerte avant la fin de l’effort',
+    bpmLbl:'Métronome pendant l’effort',bpmInfo:'Un tempo pour les répétitions. Pas avec votre propre musique.',metroN:n=>`${n}/min`,
+    ownSnd:'Son de signal personnel',ownSndPick:'Choisir un fichier son',ownNone:'Aucun. 400 Ko au plus ; les 3 premières s sont jouées.',
+    ownBig:'Ce fichier est trop volumineux (400 Ko au plus).',ownBad:'Ce téléphone ne peut pas lire ce fichier son.',
+    half:'Mi-parcours',warnS:'Alerte',cueHalf:'Mi-parcours',cueLeft:n=>`Encore ${n} secondes`,
+    exTime:'Durée propre : ajoutez un nombre en fin de ligne, p. ex. « Squats 40 » (40 s d’effort) ou « Squats 40/15 » (puis 15 s de repos).',
+    s_triple:'Triple bip',s_chirp:'Bip montant',s_boxing:'Cloche de boxe',s_horn:'Klaxon',s_clap:'Clap',s_drum:'Tambour',s_own:'Son personnel',
+    holdTest:'Test d’apnée',holdInfo:'Le test BOLT (Buteyko) mesure combien de temps vous tenez confortablement après une expiration normale : pincez le nez et arrêtez au premier besoin de respirer. Sans forcer ! L’apnée maximale mesure votre limite. Mesurez toujours de la même façon, par exemple le matin au réveil ; assis ou allongé, jamais dans l’eau ni en conduisant.',
+    t_bolt:'Test BOLT',t_max:'Apnée maximale',tIn_bolt:'Respirez calmement, expirez normalement, pincez le nez et touchez.',tIn_max:'Prenez quelques respirations calmes, expirez normalement, pincez le nez et touchez.',
+    tOut_bolt:'touchez au premier besoin de respirer',tOut_max:'touchez quand vous devez respirer',tResult:'Résultat',tPrev:d=>`${d} s par rapport à la dernière fois`,
+    tLast:'Dernier',tBest:'Meilleur',tNone:'Aucune mesure pour l’instant.',tGo:'Mesurer',boltLv:['très bas (moins de 10 s)','bas (10–20 s)','moyen (20–30 s)','bon (30–40 s)','excellent (plus de 40 s)'],
+    moodSw:'Humeur avant et après',moodInfo:'Avant et après la séance, indiquez d’une touche comment vous vous sentez ; le journal montre à quel point cela aide.',
+    moodQ0:'Comment vous sentez-vous maintenant ?',moodQ1:'Et maintenant ?',moodSkip:'Passer',mood:['Très mal','Mal','Moyen','Bien','Très bien'],
+    moodTitle:'Humeur',moodStat:(a,b,n)=>`En moyenne ${a} → ${b} (1–5), sur les ${n} dernières séances`,
+    programs:'Programmes',progInfo:'Un programme compte une séance par jour. Un jour est validé quand vous terminez la séance ; vos réglages ne changent pas.',
+    p_start7:'Bases en 7 jours',pd_start7:'respiration apaisante et équilibrante pour débuter',p_sleep14:'14 jours pour mieux dormir',pd_sleep14:'détente du soir avec des expirations de plus en plus longues',
+    p_energy10:'10 jours d’énergie et de concentration',pd_energy10:'respiration de concentration, puis tonique, pour finir respiration puissante',
+    progDays:n=>`${n} jours`,progDayN:n=>`Jour ${n}`,progNext:(d,r,t)=>`Ensuite : jour ${d} – ${r}, ${t}`,progDoneToday:'Fait pour aujourd’hui ✓',
+    progGoBtn:'Séance du jour',progStop:'Arrêter',progStopAsk:'Arrêter le programme ? La progression sera perdue.',progSwitchAsk:'Un autre programme est en cours. Le remplacer ?',
+    progRestart:'Recommencer',progStartBtn:'Commencer',progFin:n=>`Vous avez terminé ${n}. Bravo !`,progTodayNote:(d,r,t)=>`Jour de programme (${d}) : ${r}, ${t}`,
+    i_what:'À quoi ça sert',i_how:'Comment faire',i_care:'Précautions',i_src:'Origine et source',tryIt:'Essayer',infoNone:'La description ne peut pas être chargée pour l’instant. Vérifiez la connexion internet.',
+    noMed:'Ces notes sont informatives et ne remplacent pas un avis médical. En cas de maladie ou de symptômes, consultez votre médecin.',
+    ambCredits:'Sons de la nature',helpNew:'Nouveau : le ⓘ dans Rythmes explique chaque technique ; Réglages → Programmes propose des plans sur plusieurs jours ; le journal contient un test d’apnée.'},
   it:{name:'Italiano',locale:'it-IT',title:'Cerchi del respiro',modes:'Ritmo del respiro',
     r_box:'Quadrato',r_478:'Sonno',r_calm:'Calma',r_sigh:'Sospiro',r_coh:'Coerente',r_relax:'Relax',r_slow:'Lento',r_own:'Personale',r_tabata:'Tabata',
     in:'Inspira',in2:'Ancora un po’',hold:'Trattieni',out:'Espira',work:'Lavoro',rest:'Riposo',prep:'Preparati',next:'Prossimo',
@@ -1082,7 +1246,30 @@ const T={
     a_hullam:'Onde',a_madar:'Uccelli',a_feher:'Rumore bianco',a_barna:'Rumore marrone',
     voiceVol:'Volume della guida vocale',voiceKind:'Voce della guida',vk_tts:'Voce del telefono',vk_f:'Femminile',vk_m:'Maschile',
     vkInfo:'Una voce preregistrata (Piper): suona uguale su ogni telefono e parla proprio al cambio. I nomi degli esercizi li legge la voce del telefono.',
-    vkNone:'Per questa lingua non c’è una voce registrata di questo tipo, quindi parla la voce del telefono.',voiceCredits:'Voci registrate'},
+    vkNone:'Per questa lingua non c’è una voce registrata di questo tipo, quindi parla la voce del telefono.',voiceCredits:'Voci registrate',
+    tCues:'Segnali durante il lavoro',halfSw:'Segnale a metà',halfInfo:'A metà di ogni lavoro di almeno 10 s.',warnLbl:'Avviso prima della fine del lavoro',
+    bpmLbl:'Metronomo durante il lavoro',bpmInfo:'Un ritmo per le ripetizioni. Non con la tua musica.',metroN:n=>`${n}/min`,
+    ownSnd:'Suono di segnale personale',ownSndPick:'Scegli un file audio',ownNone:'Nessuno. Fino a 400 KB; suonano i primi 3 s.',
+    ownBig:'Il file è troppo grande (massimo 400 KB).',ownBad:'Questo telefono non riesce a riprodurre il file.',
+    half:'Metà',warnS:'Avviso',cueHalf:'Metà',cueLeft:n=>`Ancora ${n} secondi`,
+    exTime:'Tempo proprio: metti un numero a fine riga, es. «Squat 40» (40 s di lavoro) o «Squat 40/15» (poi 15 s di riposo).',
+    s_triple:'Triplo bip',s_chirp:'Bip ascendente',s_boxing:'Campana da boxe',s_horn:'Clacson',s_clap:'Battito di mani',s_drum:'Tamburo',s_own:'Suono personale',
+    holdTest:'Test di apnea',holdInfo:'Il test BOLT (Buteyko) misura quanto resisti comodamente dopo un’espirazione normale: chiudi il naso e fermati al primo stimolo a respirare. Senza sforzo! L’apnea massima misura il tuo limite. Misura sempre allo stesso modo, ad esempio al mattino appena sveglio; seduto o sdraiato, mai in acqua o alla guida.',
+    t_bolt:'Test BOLT',t_max:'Apnea massima',tIn_bolt:'Respira con calma, espira normalmente, chiudi il naso e tocca.',tIn_max:'Fai qualche respiro calmo, espira normalmente, chiudi il naso e tocca.',
+    tOut_bolt:'tocca al primo stimolo a respirare',tOut_max:'tocca quando devi respirare',tResult:'Risultato',tPrev:d=>`${d} s rispetto all’ultima volta`,
+    tLast:'Ultimo',tBest:'Migliore',tNone:'Ancora nessuna misura.',tGo:'Misura',boltLv:['molto basso (sotto 10 s)','basso (10–20 s)','medio (20–30 s)','buono (30–40 s)','eccellente (oltre 40 s)'],
+    moodSw:'Umore prima e dopo',moodInfo:'Prima e dopo la sessione indichi con un tocco come ti senti; il diario mostra quanto aiuta.',
+    moodQ0:'Come ti senti adesso?',moodQ1:'E adesso?',moodSkip:'Salta',mood:['Molto male','Male','Così così','Bene','Molto bene'],
+    moodTitle:'Umore',moodStat:(a,b,n)=>`In media ${a} → ${b} (1–5), nelle ultime ${n} sessioni`,
+    programs:'Programmi',progInfo:'Un programma prevede una sessione al giorno. Il giorno conta come fatto quando completi la sessione; le tue impostazioni non cambiano.',
+    p_start7:'Base in 7 giorni',pd_start7:'respiro calmante ed equilibrante per principianti',p_sleep14:'14 giorni per dormire meglio',pd_sleep14:'rilassamento serale con espirazioni sempre più lunghe',
+    p_energy10:'10 giorni di energia e concentrazione',pd_energy10:'respiro per la concentrazione, poi energizzante, alla fine respiro potente',
+    progDays:n=>`${n} giorni`,progDayN:n=>`Giorno ${n}`,progNext:(d,r,t)=>`Prossimo: giorno ${d} – ${r}, ${t}`,progDoneToday:'Fatto per oggi ✓',
+    progGoBtn:'Sessione di oggi',progStop:'Interrompi',progStopAsk:'Interrompere il programma? I progressi andranno persi.',progSwitchAsk:'C’è già un altro programma in corso. Sostituirlo?',
+    progRestart:'Ricomincia',progStartBtn:'Inizia',progFin:n=>`Hai completato ${n}. Complimenti!`,progTodayNote:(d,r,t)=>`Giorno di programma di oggi (${d}): ${r}, ${t}`,
+    i_what:'A cosa serve',i_how:'Come si fa',i_care:'Attenzione',i_src:'Origine e fonte',tryIt:'Prova',infoNone:'Ora non è possibile caricare la descrizione. Controlla la connessione a internet.',
+    noMed:'Queste note sono informative, non consigli medici. In caso di malattie o sintomi, chiedi al tuo medico.',
+    ambCredits:'Suoni della natura',helpNew:'Novità: la ⓘ in Ritmi spiega ogni tecnica; Impostazioni → Programmi offre piani di più giorni; nel diario c’è un test di apnea.'},
   pl:{name:'Polski',locale:'pl-PL',title:'Kręgi oddechu',modes:'Rytm oddechu',
     r_box:'Kwadrat',r_478:'Sen',r_calm:'Spokój',r_sigh:'Westchnij',r_coh:'Rezonans',r_relax:'Relaks',r_slow:'Wolniej',r_own:'Własny',r_tabata:'Tabata',
     in:'Wdech',in2:'Jeszcze trochę',hold:'Trzymaj',out:'Wydech',work:'Praca',rest:'Przerwa',prep:'Przygotuj się',next:'Następnie',
@@ -1167,7 +1354,30 @@ const T={
     a_hullam:'Fale',a_madar:'Ptaki',a_feher:'Biały szum',a_barna:'Brązowy szum',
     voiceVol:'Głośność przewodnika głosowego',voiceKind:'Głos przewodnika',vk_tts:'Głos telefonu',vk_f:'Kobiecy',vk_m:'Męski',
     vkInfo:'Nagrany wcześniej głos (Piper): brzmi tak samo na każdym telefonie i mówi dokładnie przy zmianie. Nazwy ćwiczeń czyta głos telefonu.',
-    vkNone:'Dla tego języka nie ma takiego nagranego głosu, więc mówi głos telefonu.',voiceCredits:'Nagrane głosy'},
+    vkNone:'Dla tego języka nie ma takiego nagranego głosu, więc mówi głos telefonu.',voiceCredits:'Nagrane głosy',
+    tCues:'Sygnały podczas pracy',halfSw:'Sygnał w połowie',halfInfo:'W połowie każdej pracy trwającej co najmniej 10 s.',warnLbl:'Ostrzeżenie przed końcem pracy',
+    bpmLbl:'Metronom podczas pracy',bpmInfo:'Rytm do powtórzeń. Nie działa z własną muzyką.',metroN:n=>`${n}/min`,
+    ownSnd:'Własny dźwięk sygnału',ownSndPick:'Wybierz plik dźwiękowy',ownNone:'Nie wybrano. Do 400 KB; grają pierwsze 3 s.',
+    ownBig:'Ten plik jest za duży (najwyżej 400 KB).',ownBad:'Ten telefon nie może odtworzyć tego pliku.',
+    half:'Połowa',warnS:'Ostrzeżenie',cueHalf:'Połowa',cueLeft:n=>`Jeszcze ${n} sekund`,
+    exTime:'Własny czas: dopisz liczbę na końcu wiersza, np. „Przysiady 40” (40 s pracy) lub „Przysiady 40/15” (potem 15 s przerwy).',
+    s_triple:'Potrójny sygnał',s_chirp:'Rosnący sygnał',s_boxing:'Gong bokserski',s_horn:'Klakson',s_clap:'Klaśnięcie',s_drum:'Bęben',s_own:'Własny dźwięk',
+    holdTest:'Test zatrzymania oddechu',holdInfo:'Test BOLT (Buteyko) mierzy, jak długo wygodnie wytrzymujesz po normalnym wydechu: zatkaj nos i zatrzymaj pomiar przy pierwszej potrzebie oddechu. Bez forsowania! Maksymalne zatrzymanie mierzy twoją granicę. Mierz zawsze tak samo, np. rano po przebudzeniu; na siedząco lub leżąco, nigdy w wodzie ani podczas jazdy.',
+    t_bolt:'Test BOLT',t_max:'Maksymalne zatrzymanie',tIn_bolt:'Oddychaj spokojnie, zrób normalny wydech, zatkaj nos i dotknij.',tIn_max:'Weź kilka spokojnych oddechów, zrób normalny wydech, zatkaj nos i dotknij.',
+    tOut_bolt:'dotknij przy pierwszej potrzebie oddechu',tOut_max:'dotknij, gdy musisz zaczerpnąć powietrza',tResult:'Wynik',tPrev:d=>`${d} s względem poprzedniego razu`,
+    tLast:'Ostatni',tBest:'Najlepszy',tNone:'Brak pomiarów.',tGo:'Zmierz',boltLv:['bardzo niski (poniżej 10 s)','niski (10–20 s)','średni (20–30 s)','dobry (30–40 s)','doskonały (powyżej 40 s)'],
+    moodSw:'Nastrój przed i po',moodInfo:'Przed sesją i po niej jednym dotknięciem zaznaczasz samopoczucie; dziennik pokazuje, ile to pomaga.',
+    moodQ0:'Jak się teraz czujesz?',moodQ1:'A teraz?',moodSkip:'Pomiń',mood:['Bardzo źle','Źle','Średnio','Dobrze','Bardzo dobrze'],
+    moodTitle:'Nastrój',moodStat:(a,b,n)=>`Średnio ${a} → ${b} (1–5), z ostatnich ${n} sesji`,
+    programs:'Programy',progInfo:'Program to jedna sesja dziennie. Dzień liczy się jako zaliczony, gdy dokończysz sesję; twoje ustawienia się nie zmieniają.',
+    p_start7:'7-dniowe podstawy',pd_start7:'uspokajający i równoważący oddech dla początkujących',p_sleep14:'14 dni lepszego snu',pd_sleep14:'wieczorne wyciszenie z coraz dłuższym wydechem',
+    p_energy10:'10 dni energii i skupienia',pd_energy10:'oddech skupiający, potem pobudzający, na końcu oddech mocy',
+    progDays:n=>`${n} dni`,progDayN:n=>`Dzień ${n}`,progNext:(d,r,t)=>`Dalej: dzień ${d} – ${r}, ${t}`,progDoneToday:'Na dziś gotowe ✓',
+    progGoBtn:'Dzisiejsza sesja',progStop:'Zakończ',progStopAsk:'Zakończyć program? Postęp przepadnie.',progSwitchAsk:'Trwa inny program. Zastąpić go?',
+    progRestart:'Zacznij od nowa',progStartBtn:'Rozpocznij',progFin:n=>`Ukończono: ${n}. Gratulacje!`,progTodayNote:(d,r,t)=>`Dzisiejszy dzień programu (${d}): ${r}, ${t}`,
+    i_what:'Do czego służy',i_how:'Jak to robić',i_care:'Uwaga',i_src:'Pochodzenie i źródło',tryIt:'Wypróbuj',infoNone:'Nie można teraz wczytać opisu. Sprawdź połączenie z internetem.',
+    noMed:'Opisy mają charakter informacyjny i nie są poradą lekarską. Jeśli chorujesz lub masz dolegliwości, zapytaj lekarza.',
+    ambCredits:'Dźwięki natury',helpNew:'Nowość: ⓘ przy rytmach wyjaśnia każdą technikę; Ustawienia → Programy dają plany na kilka dni; w dzienniku jest test zatrzymania oddechu.'},
   pt:{name:'Português',locale:'pt-BR',title:'Círculos de respiração',modes:'Ritmo de respiração',
     r_box:'Quadrada',r_478:'Dormir',r_calm:'Calma',r_sigh:'Suspiro',r_coh:'Coerente',r_relax:'Relaxar',r_slow:'Lento',r_own:'Próprio',r_tabata:'Tabata',
     in:'Inspire',in2:'Mais um pouco',hold:'Segure',out:'Expire',work:'Treino',rest:'Descanso',prep:'Prepare-se',next:'Próximo',
@@ -1249,7 +1459,30 @@ const T={
     a_hullam:'Ondas',a_madar:'Pássaros',a_feher:'Ruído branco',a_barna:'Ruído marrom',
     voiceVol:'Volume da guia por voz',voiceKind:'Voz da guia',vk_tts:'Voz do telefone',vk_f:'Feminina',vk_m:'Masculina',
     vkInfo:'Uma voz pré-gravada (Piper): soa igual em todos os telefones e fala bem na troca. Os nomes dos exercícios são lidos pela voz do telefone.',
-    vkNone:'Não há uma voz gravada assim para este idioma, então fala a voz do telefone.',voiceCredits:'Vozes gravadas'},
+    vkNone:'Não há uma voz gravada assim para este idioma, então fala a voz do telefone.',voiceCredits:'Vozes gravadas',
+    tCues:'Sinais durante o trabalho',halfSw:'Sinal na metade',halfInfo:'Na metade de cada trabalho de 10 s ou mais.',warnLbl:'Aviso antes do fim do trabalho',
+    bpmLbl:'Metrônomo durante o trabalho',bpmInfo:'Um ritmo para as repetições. Não toca com sua própria música.',metroN:n=>`${n}/min`,
+    ownSnd:'Som de sinal próprio',ownSndPick:'Escolher arquivo de som',ownNone:'Nenhum. Até 400 KB; tocam os primeiros 3 s.',
+    ownBig:'Este arquivo é grande demais (no máximo 400 KB).',ownBad:'Este telefone não consegue tocar este arquivo.',
+    half:'Metade',warnS:'Aviso',cueHalf:'Metade',cueLeft:n=>`Faltam ${n} segundos`,
+    exTime:'Tempo próprio: coloque um número no fim da linha, ex. “Agachamentos 40” (40 s de trabalho) ou “Agachamentos 40/15” (depois 15 s de descanso).',
+    s_triple:'Bipe triplo',s_chirp:'Bipe crescente',s_boxing:'Sino de boxe',s_horn:'Buzina',s_clap:'Palma',s_drum:'Tambor',s_own:'Som próprio',
+    holdTest:'Teste de apneia',holdInfo:'O teste BOLT (Buteyko) mede quanto você aguenta confortavelmente após uma expiração normal: tape o nariz e pare na primeira vontade de respirar. Sem forçar! A apneia máxima mede seu limite. Meça sempre do mesmo jeito, por exemplo de manhã ao acordar; sentado ou deitado, nunca na água ou dirigindo.',
+    t_bolt:'Teste BOLT',t_max:'Apneia máxima',tIn_bolt:'Respire com calma, expire normalmente, tape o nariz e toque.',tIn_max:'Faça algumas respirações calmas, expire normalmente, tape o nariz e toque.',
+    tOut_bolt:'toque na primeira vontade de respirar',tOut_max:'toque quando precisar respirar',tResult:'Resultado',tPrev:d=>`${d} s em relação à última vez`,
+    tLast:'Último',tBest:'Melhor',tNone:'Ainda sem medições.',tGo:'Medir',boltLv:['muito baixo (menos de 10 s)','baixo (10–20 s)','médio (20–30 s)','bom (30–40 s)','excelente (mais de 40 s)'],
+    moodSw:'Humor antes e depois',moodInfo:'Antes e depois da sessão, toque em como você se sente; o diário mostra o quanto ajuda.',
+    moodQ0:'Como você se sente agora?',moodQ1:'E agora?',moodSkip:'Pular',mood:['Muito mal','Mal','Mais ou menos','Bem','Muito bem'],
+    moodTitle:'Humor',moodStat:(a,b,n)=>`Em média ${a} → ${b} (1–5), nas últimas ${n} sessões`,
+    programs:'Programas',progInfo:'Um programa tem uma sessão por dia. O dia conta como feito quando você termina a sessão; suas configurações não mudam.',
+    p_start7:'Base de 7 dias',pd_start7:'respiração calmante e equilibrante para iniciantes',p_sleep14:'14 dias para dormir melhor',pd_sleep14:'relaxamento noturno com expirações cada vez mais longas',
+    p_energy10:'10 dias de energia e foco',pd_energy10:'respiração de foco, depois energizante, no fim respiração potente',
+    progDays:n=>`${n} dias`,progDayN:n=>`Dia ${n}`,progNext:(d,r,t)=>`Próximo: dia ${d} – ${r}, ${t}`,progDoneToday:'Feito por hoje ✓',
+    progGoBtn:'Sessão de hoje',progStop:'Parar',progStopAsk:'Parar o programa? O progresso será perdido.',progSwitchAsk:'Outro programa está em andamento. Substituir?',
+    progRestart:'Recomeçar',progStartBtn:'Começar',progFin:n=>`Você concluiu ${n}. Parabéns!`,progTodayNote:(d,r,t)=>`Dia do programa de hoje (${d}): ${r}, ${t}`,
+    i_what:'Para que serve',i_how:'Como fazer',i_care:'Cuidados',i_src:'Origem e fonte',tryIt:'Experimentar',infoNone:'Não é possível carregar a descrição agora. Verifique a conexão com a internet.',
+    noMed:'Estas notas são informativas, não um conselho médico. Se você tem alguma doença ou sintomas, pergunte ao seu médico.',
+    ambCredits:'Sons da natureza',helpNew:'Novidade: o ⓘ em Ritmos explica cada técnica; Configurações → Programas traz planos de vários dias; no diário há um teste de apneia.'},
   nl:{name:'Nederlands',locale:'nl-NL',title:'Ademcirkels',modes:'Ademritme',
     r_box:'Vierkant',r_478:'Slapen',r_calm:'Rustig',r_sigh:'Zucht',r_coh:'Coherent',r_relax:'Ontspan',r_slow:'Vertragen',r_own:'Eigen',r_tabata:'Tabata',
     in:'Inademen',in2:'Nog wat',hold:'Houd vast',out:'Uitademen',work:'Werk',rest:'Rust',prep:'Maak je klaar',next:'Volgende',
@@ -1331,7 +1564,30 @@ const T={
     a_hullam:'Golven',a_madar:'Vogels',a_feher:'Witte ruis',a_barna:'Bruine ruis',
     voiceVol:'Volume spraakbegeleiding',voiceKind:'Stem',vk_tts:'Telefoonstem',vk_f:'Vrouw',vk_m:'Man',
     vkInfo:'Een vooraf opgenomen stem (Piper): klinkt op elke telefoon hetzelfde en spreekt precies bij de wissel. Namen van oefeningen leest de telefoonstem.',
-    vkNone:'Voor deze taal is er geen zo’n opgenomen stem, dus spreekt de telefoonstem.',voiceCredits:'Opgenomen stemmen'},
+    vkNone:'Voor deze taal is er geen zo’n opgenomen stem, dus spreekt de telefoonstem.',voiceCredits:'Opgenomen stemmen',
+    tCues:'Signalen tijdens het werk',halfSw:'Signaal halverwege',halfInfo:'Halverwege elke werkfase van 10 s of langer.',warnLbl:'Waarschuwing voor het einde',
+    bpmLbl:'Metronoom tijdens het werk',bpmInfo:'Een tel voor je herhalingen. Niet met je eigen muziek.',metroN:n=>`${n}/min`,
+    ownSnd:'Eigen signaalgeluid',ownSndPick:'Geluidsbestand kiezen',ownNone:'Niets gekozen. Tot 400 KB; de eerste 3 s klinken.',
+    ownBig:'Dit bestand is te groot (hoogstens 400 KB).',ownBad:'Deze telefoon kan dit geluidsbestand niet afspelen.',
+    half:'Halverwege',warnS:'Waarschuwing',cueHalf:'Halverwege',cueLeft:n=>`Nog ${n} seconden`,
+    exTime:'Eigen tijd: zet een getal aan het eind van de regel, bijv. „Squats 40” (40 s werk) of „Squats 40/15” (daarna 15 s rust).',
+    s_triple:'Driedubbele piep',s_chirp:'Stijgende piep',s_boxing:'Boksbel',s_horn:'Toeter',s_clap:'Klap',s_drum:'Trom',s_own:'Eigen geluid',
+    holdTest:'Ademinhoudtest',holdInfo:'De BOLT-test (Buteyko) meet hoe lang je na een normale uitademing comfortabel kunt inhouden: knijp je neus dicht en stop bij de eerste ademdrang. Niet forceren! Maximaal inhouden meet je grens. Meet altijd op dezelfde manier, bijvoorbeeld ’s ochtends na het wakker worden; zittend of liggend, nooit in het water of tijdens het rijden.',
+    t_bolt:'BOLT-test',t_max:'Maximaal inhouden',tIn_bolt:'Adem rustig, adem normaal uit, knijp je neus dicht en tik.',tIn_max:'Adem een paar keer rustig, adem normaal uit, knijp je neus dicht en tik.',
+    tOut_bolt:'tik bij de eerste ademdrang',tOut_max:'tik als je moet ademen',tResult:'Resultaat',tPrev:d=>`${d} s ten opzichte van vorige keer`,
+    tLast:'Laatste',tBest:'Beste',tNone:'Nog geen metingen.',tGo:'Meten',boltLv:['zeer laag (onder 10 s)','laag (10–20 s)','gemiddeld (20–30 s)','goed (30–40 s)','uitstekend (boven 40 s)'],
+    moodSw:'Stemming voor en na',moodInfo:'Voor en na een sessie tik je aan hoe je je voelt; het dagboek laat zien hoeveel het helpt.',
+    moodQ0:'Hoe voel je je nu?',moodQ1:'En nu?',moodSkip:'Overslaan',mood:['Heel slecht','Slecht','Gaat wel','Goed','Heel goed'],
+    moodTitle:'Stemming',moodStat:(a,b,n)=>`Gemiddeld ${a} → ${b} (1–5), over de laatste ${n} sessies`,
+    programs:'Programma’s',progInfo:'Een programma heeft één sessie per dag. Een dag telt als klaar wanneer je de sessie afmaakt; je instellingen blijven hetzelfde.',
+    p_start7:'7-daagse basis',pd_start7:'kalmerend en balancerend ademen voor beginners',p_sleep14:'14 dagen beter slapen',pd_sleep14:'avondontspanning met steeds langere uitademingen',
+    p_energy10:'10 dagen energie en focus',pd_energy10:'focusademen, dan oppeppend ademen, tot slot krachtademen',
+    progDays:n=>`${n} dagen`,progDayN:n=>`Dag ${n}`,progNext:(d,r,t)=>`Volgende: dag ${d} – ${r}, ${t}`,progDoneToday:'Klaar voor vandaag ✓',
+    progGoBtn:'Sessie van vandaag',progStop:'Stoppen',progStopAsk:'Programma stoppen? De voortgang gaat verloren.',progSwitchAsk:'Er loopt al een ander programma. Vervangen?',
+    progRestart:'Opnieuw beginnen',progStartBtn:'Starten',progFin:n=>`Je hebt ${n} voltooid. Goed gedaan!`,progTodayNote:(d,r,t)=>`Programmadag van vandaag (${d}): ${r}, ${t}`,
+    i_what:'Waarvoor',i_how:'Zo doe je het',i_care:'Let op',i_src:'Herkomst en bron',tryIt:'Probeer het',infoNone:'De beschrijving kan nu niet worden geladen. Controleer je internetverbinding.',
+    noMed:'Deze beschrijvingen zijn informatief en geen medisch advies. Heb je een aandoening of klachten, vraag het dan aan je arts.',
+    ambCredits:'Natuurgeluiden',helpNew:'Nieuw: de ⓘ bij Ritmes legt elke techniek uit; Instellingen → Programma’s biedt meerdaagse plannen; in het dagboek staat een ademinhoudtest.'},
   sv:{name:'Svenska',locale:'sv-SE',title:'Andningscirklar',modes:'Andningsrytm',
     r_box:'Fyrkant',r_478:'Sömn',r_calm:'Lugn',r_sigh:'Suck',r_coh:'Koherent',r_relax:'Avslappna',r_slow:'Saktare',r_own:'Egen',r_tabata:'Tabata',
     in:'Andas in',in2:'Lite till',hold:'Håll',out:'Andas ut',work:'Arbete',rest:'Vila',prep:'Gör dig redo',next:'Nästa',
@@ -1413,7 +1669,30 @@ const T={
     a_hullam:'Vågor',a_madar:'Fåglar',a_feher:'Vitt brus',a_barna:'Brunt brus',
     voiceVol:'Röstguidens volym',voiceKind:'Röst',vk_tts:'Telefonens röst',vk_f:'Kvinna',vk_m:'Man',
     vkInfo:'En förinspelad röst (Piper): låter likadant på alla telefoner och talar precis vid bytet. Övningsnamn läses av telefonens röst.',
-    vkNone:'Det finns ingen sådan inspelad röst för det här språket, så telefonens röst talar.',voiceCredits:'Inspelade röster'},
+    vkNone:'Det finns ingen sådan inspelad röst för det här språket, så telefonens röst talar.',voiceCredits:'Inspelade röster',
+    tCues:'Signaler under arbetet',halfSw:'Signal vid halvtid',halfInfo:'Mitt i varje arbetspass på minst 10 s.',warnLbl:'Varning före arbetets slut',
+    bpmLbl:'Metronom under arbetet',bpmInfo:'En takt för repetitionerna. Inte med egen musik.',metroN:n=>`${n}/min`,
+    ownSnd:'Eget signalljud',ownSndPick:'Välj ljudfil',ownNone:'Inget valt. Högst 400 kB; de första 3 s spelas.',
+    ownBig:'Filen är för stor (högst 400 kB).',ownBad:'Telefonen kan inte spela upp ljudfilen.',
+    half:'Halvtid',warnS:'Varning',cueHalf:'Halvtid',cueLeft:n=>`${n} sekunder kvar`,
+    exTime:'Egen tid: skriv en siffra i slutet av raden, t.ex. ”Knäböj 40” (40 s arbete) eller ”Knäböj 40/15” (sedan 15 s vila).',
+    s_triple:'Trippelpip',s_chirp:'Stigande pip',s_boxing:'Boxningsklocka',s_horn:'Tuta',s_clap:'Klapp',s_drum:'Trumma',s_own:'Eget ljud',
+    holdTest:'Andhållningstest',holdInfo:'BOLT-testet (Buteyko) mäter hur länge du bekvämt kan hålla andan efter en vanlig utandning: håll för näsan och stoppa vid första andningsbehovet. Ingen ansträngning! Maximal andhållning mäter din gräns. Mät alltid på samma sätt, till exempel på morgonen när du vaknat; sittande eller liggande, aldrig i vatten eller när du kör.',
+    t_bolt:'BOLT-test',t_max:'Maximal andhållning',tIn_bolt:'Andas lugnt, andas ut som vanligt, håll för näsan och tryck.',tIn_max:'Ta några lugna andetag, andas ut som vanligt, håll för näsan och tryck.',
+    tOut_bolt:'tryck vid första andningsbehovet',tOut_max:'tryck när du måste andas',tResult:'Resultat',tPrev:d=>`${d} s jämfört med förra gången`,
+    tLast:'Senaste',tBest:'Bästa',tNone:'Inga mätningar än.',tGo:'Mät',boltLv:['mycket låg (under 10 s)','låg (10–20 s)','medel (20–30 s)','bra (30–40 s)','utmärkt (över 40 s)'],
+    moodSw:'Humör före och efter',moodInfo:'Före och efter passet trycker du på hur du mår; dagboken visar hur mycket det hjälper.',
+    moodQ0:'Hur mår du just nu?',moodQ1:'Och nu?',moodSkip:'Hoppa över',mood:['Mycket dåligt','Dåligt','Okej','Bra','Mycket bra'],
+    moodTitle:'Humör',moodStat:(a,b,n)=>`I snitt ${a} → ${b} (1–5), de senaste ${n} passen`,
+    programs:'Program',progInfo:'Ett program har ett pass om dagen. Dagen räknas som klar när du gör färdigt passet; dina inställningar ändras inte.',
+    p_start7:'7 dagars grund',pd_start7:'lugnande och balanserande andning för nybörjare',p_sleep14:'14 dagar till bättre sömn',pd_sleep14:'kvällsnedvarvning med allt längre utandningar',
+    p_energy10:'10 dagar med energi och fokus',pd_energy10:'fokuserande, sedan uppiggande andning, sist kraftandning',
+    progDays:n=>`${n} dagar`,progDayN:n=>`Dag ${n}`,progNext:(d,r,t)=>`Nästa: dag ${d} – ${r}, ${t}`,progDoneToday:'Klart för idag ✓',
+    progGoBtn:'Dagens pass',progStop:'Avbryt',progStopAsk:'Avbryta programmet? Framstegen försvinner.',progSwitchAsk:'Ett annat program pågår. Byta ut det?',
+    progRestart:'Börja om',progStartBtn:'Starta',progFin:n=>`Du har klarat ${n}. Bra jobbat!`,progTodayNote:(d,r,t)=>`Dagens programdag (${d}): ${r}, ${t}`,
+    i_what:'Vad den gör',i_how:'Så gör du',i_care:'Tänk på',i_src:'Ursprung och källa',tryIt:'Prova',infoNone:'Beskrivningen kan inte laddas just nu. Kontrollera internetanslutningen.',
+    noMed:'Beskrivningarna är information, inte medicinska råd. Har du en sjukdom eller besvär, fråga din läkare.',
+    ambCredits:'Naturljud',helpNew:'Nytt: ⓘ vid Rytmer förklarar varje teknik; Inställningar → Program ger flerdagarsplaner; i dagboken finns ett andhållningstest.'},
   da:{name:'Dansk',locale:'da-DK',title:'Åndedrætscirkler',modes:'Vejrtrækningsrytme',
     r_box:'Firkant',r_478:'Søvn',r_calm:'Ro',r_sigh:'Suk',r_coh:'Kohærent',r_relax:'Afslap',r_slow:'Langsom',r_own:'Egen',r_tabata:'Tabata',
     in:'Ånd ind',in2:'Lidt mere',hold:'Hold',out:'Ånd ud',work:'Arbejde',rest:'Pause',prep:'Gør dig klar',next:'Næste',
@@ -1495,7 +1774,30 @@ const T={
     a_hullam:'Bølger',a_madar:'Fugle',a_feher:'Hvid støj',a_barna:'Brun støj',
     voiceVol:'Stemmeguidens lydstyrke',voiceKind:'Stemme',vk_tts:'Telefonens stemme',vk_f:'Kvinde',vk_m:'Mand',
     vkInfo:'En forudindspillet stemme (Piper): lyder ens på alle telefoner og taler præcis ved skiftet. Øvelsernes navne læses af telefonens stemme.',
-    vkNone:'Der findes ingen sådan indspillet stemme til dette sprog, så telefonens stemme taler.',voiceCredits:'Indspillede stemmer'},
+    vkNone:'Der findes ingen sådan indspillet stemme til dette sprog, så telefonens stemme taler.',voiceCredits:'Indspillede stemmer',
+    tCues:'Signaler under arbejdet',halfSw:'Signal ved halvvejs',halfInfo:'Midt i hvert arbejdsinterval på mindst 10 s.',warnLbl:'Advarsel før arbejdet slutter',
+    bpmLbl:'Metronom under arbejdet',bpmInfo:'En takt til gentagelserne. Ikke med din egen musik.',metroN:n=>`${n}/min`,
+    ownSnd:'Egen signallyd',ownSndPick:'Vælg lydfil',ownNone:'Ingen valgt. Højst 400 KB; de første 3 s afspilles.',
+    ownBig:'Filen er for stor (højst 400 KB).',ownBad:'Telefonen kan ikke afspille lydfilen.',
+    half:'Halvvejs',warnS:'Advarsel',cueHalf:'Halvvejs',cueLeft:n=>`${n} sekunder tilbage`,
+    exTime:'Egen tid: skriv et tal sidst på linjen, fx “Squats 40” (40 s arbejde) eller “Squats 40/15” (derefter 15 s pause).',
+    s_triple:'Tredobbelt bip',s_chirp:'Stigende bip',s_boxing:'Bokseklokke',s_horn:'Horn',s_clap:'Klap',s_drum:'Tromme',s_own:'Egen lyd',
+    holdTest:'Vejrtrækningstest',holdInfo:'BOLT-testen (Buteyko) måler, hvor længe du komfortabelt kan holde vejret efter en normal udånding: hold dig for næsen, og stop ved den første trang til at trække vejret. Ingen anstrengelse! Maksimal vejrtrækningspause måler din grænse. Mål altid på samme måde, fx om morgenen, når du vågner; siddende eller liggende, aldrig i vand eller under kørsel.',
+    t_bolt:'BOLT-test',t_max:'Maksimal pause',tIn_bolt:'Træk vejret roligt, pust normalt ud, hold dig for næsen og tryk.',tIn_max:'Tag et par rolige åndedrag, pust normalt ud, hold dig for næsen og tryk.',
+    tOut_bolt:'tryk ved den første trang til at trække vejret',tOut_max:'tryk, når du skal trække vejret',tResult:'Resultat',tPrev:d=>`${d} s i forhold til sidste gang`,
+    tLast:'Seneste',tBest:'Bedste',tNone:'Ingen målinger endnu.',tGo:'Mål',boltLv:['meget lav (under 10 s)','lav (10–20 s)','middel (20–30 s)','god (30–40 s)','fremragende (over 40 s)'],
+    moodSw:'Humør før og efter',moodInfo:'Før og efter sessionen trykker du på, hvordan du har det; dagbogen viser, hvor meget det hjælper.',
+    moodQ0:'Hvordan har du det lige nu?',moodQ1:'Og nu?',moodSkip:'Spring over',mood:['Meget dårligt','Dårligt','Okay','Godt','Meget godt'],
+    moodTitle:'Humør',moodStat:(a,b,n)=>`I gennemsnit ${a} → ${b} (1–5), over de seneste ${n} sessioner`,
+    programs:'Programmer',progInfo:'Et program har én session om dagen. Dagen tæller som klaret, når du gør sessionen færdig; dine indstillinger ændres ikke.',
+    p_start7:'7 dages grundforløb',pd_start7:'beroligende og balancerende vejrtrækning for begyndere',p_sleep14:'14 dage til bedre søvn',pd_sleep14:'aftenafslapning med stadig længere udåndinger',
+    p_energy10:'10 dage med energi og fokus',pd_energy10:'fokuserende, så opkvikkende vejrtrækning, til sidst kraftvejrtrækning',
+    progDays:n=>`${n} dage`,progDayN:n=>`Dag ${n}`,progNext:(d,r,t)=>`Næste: dag ${d} – ${r}, ${t}`,progDoneToday:'Klaret for i dag ✓',
+    progGoBtn:'Dagens session',progStop:'Stop',progStopAsk:'Stoppe programmet? Fremskridtet går tabt.',progSwitchAsk:'Et andet program kører. Erstatte det?',
+    progRestart:'Start forfra',progStartBtn:'Start',progFin:n=>`Du har gennemført ${n}. Flot!`,progTodayNote:(d,r,t)=>`Dagens programdag (${d}): ${r}, ${t}`,
+    i_what:'Hvad den gør',i_how:'Sådan gør du',i_care:'Pas på',i_src:'Oprindelse og kilde',tryIt:'Prøv den',infoNone:'Beskrivelsen kan ikke indlæses lige nu. Tjek internetforbindelsen.',
+    noMed:'Beskrivelserne er til information og ikke lægefaglig rådgivning. Har du en sygdom eller gener, så spørg din læge.',
+    ambCredits:'Naturlyde',helpNew:'Nyt: ⓘ ved Rytmer forklarer hver teknik; Indstillinger → Programmer giver planer over flere dage; i dagbogen er der en vejrtrækningstest.'},
   nb:{name:'Norsk',locale:'nb-NO',title:'Pustesirkler',modes:'Pusterytme',
     r_box:'Firkant',r_478:'Søvn',r_calm:'Ro',r_sigh:'Sukk',r_coh:'Koherent',r_relax:'Avslapp',r_slow:'Langsom',r_own:'Egen',r_tabata:'Tabata',
     in:'Pust inn',in2:'Litt til',hold:'Hold',out:'Pust ut',work:'Arbeid',rest:'Hvile',prep:'Gjør deg klar',next:'Neste',
@@ -1577,7 +1879,30 @@ const T={
     a_hullam:'Bølger',a_madar:'Fugler',a_feher:'Hvit støy',a_barna:'Brun støy',
     voiceVol:'Volum for stemmeguiden',voiceKind:'Stemme',vk_tts:'Telefonens stemme',vk_f:'Kvinne',vk_m:'Mann',
     vkInfo:'En forhåndsinnspilt stemme (Piper): høres lik ut på alle telefoner og snakker akkurat ved skiftet. Øvelsesnavn leses av telefonens stemme.',
-    vkNone:'Det finnes ingen slik innspilt stemme for dette språket, så telefonens stemme snakker.',voiceCredits:'Innspilte stemmer'},
+    vkNone:'Det finnes ingen slik innspilt stemme for dette språket, så telefonens stemme snakker.',voiceCredits:'Innspilte stemmer',
+    tCues:'Signaler under arbeidet',halfSw:'Signal halvveis',halfInfo:'Midt i hvert arbeidsintervall på minst 10 s.',warnLbl:'Varsel før arbeidet slutter',
+    bpmLbl:'Metronom under arbeidet',bpmInfo:'En takt for repetisjonene. Ikke med egen musikk.',metroN:n=>`${n}/min`,
+    ownSnd:'Egen signallyd',ownSndPick:'Velg lydfil',ownNone:'Ingen valgt. Opptil 400 kB; de første 3 s spilles.',
+    ownBig:'Filen er for stor (høyst 400 kB).',ownBad:'Telefonen kan ikke spille av lydfilen.',
+    half:'Halvveis',warnS:'Varsel',cueHalf:'Halvveis',cueLeft:n=>`${n} sekunder igjen`,
+    exTime:'Egen tid: skriv et tall på slutten av linjen, f.eks. «Knebøy 40» (40 s arbeid) eller «Knebøy 40/15» (deretter 15 s pause).',
+    s_triple:'Trippelpip',s_chirp:'Stigende pip',s_boxing:'Boksebjelle',s_horn:'Horn',s_clap:'Klapp',s_drum:'Tromme',s_own:'Egen lyd',
+    holdTest:'Pustetest',holdInfo:'BOLT-testen (Buteyko) måler hvor lenge du komfortabelt kan holde pusten etter en vanlig utpust: klyp deg for nesen og stopp ved første pustetrang. Ikke press! Maksimal pustestopp måler grensen din. Mål alltid på samme måte, for eksempel om morgenen når du våkner; sittende eller liggende, aldri i vann eller mens du kjører.',
+    t_bolt:'BOLT-test',t_max:'Maksimal pustestopp',tIn_bolt:'Pust rolig, pust ut som vanlig, klyp deg for nesen og trykk.',tIn_max:'Ta noen rolige pust, pust ut som vanlig, klyp deg for nesen og trykk.',
+    tOut_bolt:'trykk ved første pustetrang',tOut_max:'trykk når du må puste',tResult:'Resultat',tPrev:d=>`${d} s sammenlignet med forrige gang`,
+    tLast:'Siste',tBest:'Beste',tNone:'Ingen målinger ennå.',tGo:'Mål',boltLv:['svært lav (under 10 s)','lav (10–20 s)','middels (20–30 s)','god (30–40 s)','utmerket (over 40 s)'],
+    moodSw:'Humør før og etter',moodInfo:'Før og etter økten trykker du på hvordan du har det; dagboken viser hvor mye det hjelper.',
+    moodQ0:'Hvordan har du det nå?',moodQ1:'Og nå?',moodSkip:'Hopp over',mood:['Svært dårlig','Dårlig','Greit','Bra','Svært bra'],
+    moodTitle:'Humør',moodStat:(a,b,n)=>`I snitt ${a} → ${b} (1–5), de siste ${n} øktene`,
+    programs:'Programmer',progInfo:'Et program har én økt om dagen. Dagen regnes som fullført når du fullfører økten; innstillingene dine endres ikke.',
+    p_start7:'7 dagers grunnkurs',pd_start7:'beroligende og balanserende pust for nybegynnere',p_sleep14:'14 dager til bedre søvn',pd_sleep14:'kveldsnedtrapping med stadig lengre utpust',
+    p_energy10:'10 dager med energi og fokus',pd_energy10:'fokuserende, så oppkvikkende pust, til slutt kraftpust',
+    progDays:n=>`${n} dager`,progDayN:n=>`Dag ${n}`,progNext:(d,r,t)=>`Neste: dag ${d} – ${r}, ${t}`,progDoneToday:'Ferdig for i dag ✓',
+    progGoBtn:'Dagens økt',progStop:'Stopp',progStopAsk:'Stoppe programmet? Fremdriften går tapt.',progSwitchAsk:'Et annet program pågår. Bytte det ut?',
+    progRestart:'Start på nytt',progStartBtn:'Start',progFin:n=>`Du har fullført ${n}. Godt jobbet!`,progTodayNote:(d,r,t)=>`Dagens programdag (${d}): ${r}, ${t}`,
+    i_what:'Hva den gjør',i_how:'Slik gjør du',i_care:'Pass på',i_src:'Opprinnelse og kilde',tryIt:'Prøv',infoNone:'Beskrivelsen kan ikke lastes nå. Sjekk internettforbindelsen.',
+    noMed:'Beskrivelsene er til informasjon og ikke medisinske råd. Har du en sykdom eller plager, spør legen din.',
+    ambCredits:'Naturlyder',helpNew:'Nytt: ⓘ ved Rytmer forklarer hver teknikk; Innstillinger → Programmer gir planer over flere dager; i dagboken finnes en pustetest.'},
   fi:{name:'Suomi',locale:'fi-FI',title:'Hengitysympyrät',modes:'Hengitysrytmi',
     r_box:'Neliö',r_478:'Uni',r_calm:'Rauha',r_sigh:'Huokaus',r_coh:'Koherentti',r_relax:'Rentoutus',r_slow:'Hidastus',r_own:'Oma',r_tabata:'Tabata',
     in:'Sisään',in2:'Vielä vähän',hold:'Pidätä',out:'Ulos',work:'Työ',rest:'Lepo',prep:'Valmistaudu',next:'Seuraavaksi',
@@ -1659,7 +1984,30 @@ const T={
     a_hullam:'Aallot',a_madar:'Linnut',a_feher:'Valkoinen kohina',a_barna:'Ruskea kohina',
     voiceVol:'Ääniohjauksen voimakkuus',voiceKind:'Ääni',vk_tts:'Puhelimen ääni',vk_f:'Nainen',vk_m:'Mies',
     vkInfo:'Valmiiksi tallennettu ääni (Piper): kuulostaa samalta kaikissa puhelimissa ja puhuu juuri vaihdon kohdalla. Liikkeiden nimet lukee puhelimen ääni.',
-    vkNone:'Tälle kielelle ei ole tällaista tallennettua ääntä, joten puhelimen ääni puhuu.',voiceCredits:'Tallennetut äänet'},
+    vkNone:'Tälle kielelle ei ole tällaista tallennettua ääntä, joten puhelimen ääni puhuu.',voiceCredits:'Tallennetut äänet',
+    tCues:'Merkit työn aikana',halfSw:'Puolivälin merkki',halfInfo:'Jokaisen vähintään 10 s työjakson puolivälissä.',warnLbl:'Varoitus ennen työn loppua',
+    bpmLbl:'Metronomi työn aikana',bpmInfo:'Tahti toistoille. Ei omaa musiikkia käytettäessä.',metroN:n=>`${n}/min`,
+    ownSnd:'Oma merkkiääni',ownSndPick:'Valitse äänitiedosto',ownNone:'Ei valittu. Enintään 400 kt; ensimmäiset 3 s soivat.',
+    ownBig:'Tiedosto on liian suuri (enintään 400 kt).',ownBad:'Puhelin ei pysty toistamaan tätä tiedostoa.',
+    half:'Puoliväli',warnS:'Varoitus',cueHalf:'Puoliväli',cueLeft:n=>`${n} sekuntia jäljellä`,
+    exTime:'Oma aika: kirjoita rivin loppuun luku, esim. ”Kyykyt 40” (40 s työtä) tai ”Kyykyt 40/15” (sitten 15 s lepoa).',
+    s_triple:'Kolmoispiippaus',s_chirp:'Nouseva piippaus',s_boxing:'Nyrkkeilykello',s_horn:'Torvi',s_clap:'Taputus',s_drum:'Rumpu',s_own:'Oma ääni',
+    holdTest:'Hengityksenpidätystesti',holdInfo:'BOLT-testi (Buteyko) mittaa, kuinka kauan pidätät mukavasti tavallisen uloshengityksen jälkeen: purista nenä kiinni ja pysäytä ensimmäisestä hengityksen tarpeesta. Ei ponnistelua! Enimmäispidätys mittaa rajasi. Mittaa aina samalla tavalla, esimerkiksi aamulla herättyäsi; istuen tai maaten, ei koskaan vedessä tai ajaessa.',
+    t_bolt:'BOLT-testi',t_max:'Enimmäispidätys',tIn_bolt:'Hengitä rauhallisesti, hengitä normaalisti ulos, purista nenä kiinni ja napauta.',tIn_max:'Hengitä muutaman kerran rauhallisesti, hengitä normaalisti ulos, purista nenä kiinni ja napauta.',
+    tOut_bolt:'napauta ensimmäisestä hengityksen tarpeesta',tOut_max:'napauta, kun on pakko hengittää',tResult:'Tulos',tPrev:d=>`${d} s edelliseen kertaan verrattuna`,
+    tLast:'Viimeisin',tBest:'Paras',tNone:'Ei vielä mittauksia.',tGo:'Mittaa',boltLv:['erittäin matala (alle 10 s)','matala (10–20 s)','keskitaso (20–30 s)','hyvä (30–40 s)','erinomainen (yli 40 s)'],
+    moodSw:'Mieliala ennen ja jälkeen',moodInfo:'Ennen harjoitusta ja sen jälkeen napautat, miltä tuntuu; päiväkirja näyttää, kuinka paljon se auttaa.',
+    moodQ0:'Miltä sinusta tuntuu nyt?',moodQ1:'Entä nyt?',moodSkip:'Ohita',mood:['Hyvin huonolta','Huonolta','Kohtalaiselta','Hyvältä','Hyvin hyvältä'],
+    moodTitle:'Mieliala',moodStat:(a,b,n)=>`Keskimäärin ${a} → ${b} (1–5), viimeiset ${n} harjoitusta`,
+    programs:'Ohjelmat',progInfo:'Ohjelmassa on yksi harjoitus päivässä. Päivä on tehty, kun teet harjoituksen loppuun; asetuksesi eivät muutu.',
+    p_start7:'7 päivän perusteet',pd_start7:'rauhoittavaa ja tasapainottavaa hengitystä aloittelijoille',p_sleep14:'14 päivää parempaa unta',pd_sleep14:'iltarauhoittumista yhä pidemmillä uloshengityksillä',
+    p_energy10:'10 päivää energiaa ja keskittymistä',pd_energy10:'keskittävää, sitten virkistävää hengitystä, lopuksi voimahengitystä',
+    progDays:n=>`${n} päivää`,progDayN:n=>`${n}. päivä`,progNext:(d,r,t)=>`Seuraavaksi: ${d}. päivä – ${r}, ${t}`,progDoneToday:'Tältä päivältä valmis ✓',
+    progGoBtn:'Päivän harjoitus',progStop:'Lopeta',progStopAsk:'Lopetetaanko ohjelma? Edistyminen katoaa.',progSwitchAsk:'Toinen ohjelma on käynnissä. Vaihdetaanko?',
+    progRestart:'Aloita alusta',progStartBtn:'Aloita',progFin:n=>`Suoritit ohjelman ${n}. Hienoa!`,progTodayNote:(d,r,t)=>`Päivän ohjelmapäivä (${d}.): ${r}, ${t}`,
+    i_what:'Mihin se auttaa',i_how:'Näin teet',i_care:'Huomioi',i_src:'Alkuperä ja lähde',tryIt:'Kokeile',infoNone:'Kuvausta ei voi ladata nyt. Tarkista internetyhteys.',
+    noMed:'Kuvaukset ovat tietoa, eivät lääketieteellistä neuvontaa. Jos sinulla on sairaus tai oireita, kysy lääkäriltä.',
+    ambCredits:'Luonnonäänet',helpNew:'Uutta: Rytmien ⓘ selittää jokaisen tekniikan; Asetukset → Ohjelmat tarjoaa monipäiväisiä suunnitelmia; päiväkirjassa on hengityksenpidätystesti.'},
   cs:{name:'Čeština',locale:'cs-CZ',title:'Dechové kruhy',modes:'Dechový rytmus',
     r_box:'Čtverec',r_478:'Spánek',r_calm:'Klid',r_sigh:'Povzdech',r_coh:'Koherentní',r_relax:'Uvolnění',r_slow:'Zpomalení',r_own:'Vlastní',r_tabata:'Tabata',
     in:'Nádech',in2:'Ještě trochu',hold:'Zadržet',out:'Výdech',work:'Práce',rest:'Odpočinek',prep:'Připrav se',next:'Dále',
@@ -1741,7 +2089,30 @@ const T={
     a_hullam:'Vlny',a_madar:'Ptáci',a_feher:'Bílý šum',a_barna:'Hnědý šum',
     voiceVol:'Hlasitost hlasového průvodce',voiceKind:'Hlas průvodce',vk_tts:'Hlas telefonu',vk_f:'Ženský',vk_m:'Mužský',
     vkInfo:'Předem nahraný hlas (Piper): zní stejně v každém telefonu a mluví přesně při změně. Názvy cviků čte hlas telefonu.',
-    vkNone:'Pro tento jazyk takový nahraný hlas není, proto mluví hlas telefonu.',voiceCredits:'Nahrané hlasy'},
+    vkNone:'Pro tento jazyk takový nahraný hlas není, proto mluví hlas telefonu.',voiceCredits:'Nahrané hlasy',
+    tCues:'Signály během práce',halfSw:'Signál v polovině',halfInfo:'V polovině každé práce dlouhé aspoň 10 s.',warnLbl:'Varování před koncem práce',
+    bpmLbl:'Metronom během práce',bpmInfo:'Rytmus pro opakování. Nehraje s vlastní hudbou.',metroN:n=>`${n}/min`,
+    ownSnd:'Vlastní zvuk signálu',ownSndPick:'Vybrat zvukový soubor',ownNone:'Nevybráno. Nejvýš 400 kB; hrají první 3 s.',
+    ownBig:'Soubor je příliš velký (nejvýš 400 kB).',ownBad:'Telefon tento zvukový soubor neumí přehrát.',
+    half:'Polovina',warnS:'Varování',cueHalf:'Polovina',cueLeft:n=>`Ještě ${n} sekund`,
+    exTime:'Vlastní čas: napište na konec řádku číslo, např. „Dřepy 40“ (40 s práce) nebo „Dřepy 40/15“ (pak 15 s odpočinku).',
+    s_triple:'Trojité pípnutí',s_chirp:'Stoupající pípnutí',s_boxing:'Boxerský zvon',s_horn:'Klakson',s_clap:'Tlesknutí',s_drum:'Buben',s_own:'Vlastní zvuk',
+    holdTest:'Test zadržení dechu',holdInfo:'Test BOLT (Buteyko) měří, jak dlouho pohodlně vydržíte po normálním výdechu: ucpěte si nos a zastavte při první potřebě nadechnout se. Bez přemáhání! Maximální zadržení měří vaši hranici. Měřte vždy stejně, třeba ráno po probuzení; vsedě nebo vleže, nikdy ve vodě ani za jízdy.',
+    t_bolt:'Test BOLT',t_max:'Maximální zadržení',tIn_bolt:'Dýchejte klidně, normálně vydechněte, ucpěte si nos a ťukněte.',tIn_max:'Několikrát se klidně nadechněte, normálně vydechněte, ucpěte si nos a ťukněte.',
+    tOut_bolt:'ťukněte při první potřebě nadechnout se',tOut_max:'ťukněte, až se musíte nadechnout',tResult:'Výsledek',tPrev:d=>`${d} s oproti minule`,
+    tLast:'Poslední',tBest:'Nejlepší',tNone:'Zatím žádná měření.',tGo:'Změřit',boltLv:['velmi nízký (pod 10 s)','nízký (10–20 s)','střední (20–30 s)','dobrý (30–40 s)','výborný (nad 40 s)'],
+    moodSw:'Nálada před a po',moodInfo:'Před cvičením a po něm ťuknutím označíte, jak se cítíte; deník ukáže, jak moc to pomáhá.',
+    moodQ0:'Jak se teď cítíte?',moodQ1:'A teď?',moodSkip:'Přeskočit',mood:['Velmi špatně','Špatně','Ujde to','Dobře','Velmi dobře'],
+    moodTitle:'Nálada',moodStat:(a,b,n)=>`V průměru ${a} → ${b} (1–5), za posledních ${n} cvičení`,
+    programs:'Programy',progInfo:'Program má jedno cvičení denně. Den se počítá jako splněný, když cvičení dokončíte; vaše nastavení se nemění.',
+    p_start7:'7denní základ',pd_start7:'uklidňující a vyrovnávající dýchání pro začátečníky',p_sleep14:'14 dní lepšího spánku',pd_sleep14:'večerní zklidnění se stále delším výdechem',
+    p_energy10:'10 dní energie a soustředění',pd_energy10:'soustředící, pak povzbuzující dýchání, nakonec silové dýchání',
+    progDays:n=>`${n} dní`,progDayN:n=>`${n}. den`,progNext:(d,r,t)=>`Dále: ${d}. den – ${r}, ${t}`,progDoneToday:'Pro dnešek hotovo ✓',
+    progGoBtn:'Dnešní cvičení',progStop:'Ukončit',progStopAsk:'Ukončit program? Postup se ztratí.',progSwitchAsk:'Už běží jiný program. Nahradit ho?',
+    progRestart:'Začít znovu',progStartBtn:'Začít',progFin:n=>`Dokončili jste: ${n}. Gratulujeme!`,progTodayNote:(d,r,t)=>`Dnešní den programu (${d}.): ${r}, ${t}`,
+    i_what:'K čemu je',i_how:'Jak na to',i_care:'Pozor',i_src:'Původ a zdroj',tryIt:'Vyzkoušet',infoNone:'Popis teď nelze načíst. Zkontrolujte připojení k internetu.',
+    noMed:'Popisy jsou informativní, nejde o lékařskou radu. Máte-li nemoc nebo potíže, zeptejte se lékaře.',
+    ambCredits:'Zvuky přírody',helpNew:'Novinky: ⓘ u rytmů vysvětluje každou techniku; Nastavení → Programy nabízí vícedenní plány; v deníku je test zadržení dechu.'},
   sk:{name:'Slovenčina',locale:'sk-SK',title:'Dychové kruhy',modes:'Dychový rytmus',
     r_box:'Štvorec',r_478:'Spánok',r_calm:'Pokoj',r_sigh:'Vzdych',r_coh:'Koherentný',r_relax:'Uvoľnenie',r_slow:'Spomalenie',r_own:'Vlastný',r_tabata:'Tabata',
     in:'Nádych',in2:'Ešte trochu',hold:'Zadržať',out:'Výdych',work:'Práca',rest:'Oddych',prep:'Priprav sa',next:'Ďalej',
@@ -1823,7 +2194,30 @@ const T={
     a_hullam:'Vlny',a_madar:'Vtáky',a_feher:'Biely šum',a_barna:'Hnedý šum',
     voiceVol:'Hlasitosť hlasového sprievodcu',voiceKind:'Hlas sprievodcu',vk_tts:'Hlas telefónu',vk_f:'Ženský',vk_m:'Mužský',
     vkInfo:'Vopred nahraný hlas (Piper): znie rovnako v každom telefóne a hovorí presne pri zmene. Názvy cvikov číta hlas telefónu.',
-    vkNone:'Pre tento jazyk taký nahraný hlas nie je, preto hovorí hlas telefónu.',voiceCredits:'Nahrané hlasy'},
+    vkNone:'Pre tento jazyk taký nahraný hlas nie je, preto hovorí hlas telefónu.',voiceCredits:'Nahrané hlasy',
+    tCues:'Signály počas práce',halfSw:'Signál v polovici',halfInfo:'V polovici každej práce dlhej aspoň 10 s.',warnLbl:'Upozornenie pred koncom práce',
+    bpmLbl:'Metronóm počas práce',bpmInfo:'Rytmus pre opakovania. Nehrá s vlastnou hudbou.',metroN:n=>`${n}/min`,
+    ownSnd:'Vlastný zvuk signálu',ownSndPick:'Vybrať zvukový súbor',ownNone:'Nevybrané. Najviac 400 kB; hrajú prvé 3 s.',
+    ownBig:'Súbor je príliš veľký (najviac 400 kB).',ownBad:'Telefón tento zvukový súbor nevie prehrať.',
+    half:'Polovica',warnS:'Upozornenie',cueHalf:'Polovica',cueLeft:n=>`Ešte ${n} sekúnd`,
+    exTime:'Vlastný čas: na koniec riadka napíšte číslo, napr. „Drepy 40“ (40 s práce) alebo „Drepy 40/15“ (potom 15 s oddychu).',
+    s_triple:'Trojité pípnutie',s_chirp:'Stúpajúce pípnutie',s_boxing:'Boxerský zvon',s_horn:'Klaksón',s_clap:'Tlesknutie',s_drum:'Bubon',s_own:'Vlastný zvuk',
+    holdTest:'Test zadržania dychu',holdInfo:'Test BOLT (Buteyko) meria, ako dlho pohodlne vydržíte po normálnom výdychu: zapchajte si nos a zastavte pri prvej potrebe nadýchnuť sa. Bez namáhania! Maximálne zadržanie meria vašu hranicu. Merajte vždy rovnako, napríklad ráno po prebudení; v sede alebo v ľahu, nikdy vo vode ani za jazdy.',
+    t_bolt:'Test BOLT',t_max:'Maximálne zadržanie',tIn_bolt:'Dýchajte pokojne, normálne vydýchnite, zapchajte si nos a ťuknite.',tIn_max:'Niekoľkokrát sa pokojne nadýchnite, normálne vydýchnite, zapchajte si nos a ťuknite.',
+    tOut_bolt:'ťuknite pri prvej potrebe nadýchnuť sa',tOut_max:'ťuknite, keď sa musíte nadýchnuť',tResult:'Výsledok',tPrev:d=>`${d} s oproti minule`,
+    tLast:'Posledný',tBest:'Najlepší',tNone:'Zatiaľ žiadne merania.',tGo:'Zmerať',boltLv:['veľmi nízky (pod 10 s)','nízky (10–20 s)','stredný (20–30 s)','dobrý (30–40 s)','výborný (nad 40 s)'],
+    moodSw:'Nálada pred a po',moodInfo:'Pred cvičením a po ňom ťuknutím označíte, ako sa cítite; denník ukáže, ako veľmi to pomáha.',
+    moodQ0:'Ako sa teraz cítite?',moodQ1:'A teraz?',moodSkip:'Preskočiť',mood:['Veľmi zle','Zle','Ujde to','Dobre','Veľmi dobre'],
+    moodTitle:'Nálada',moodStat:(a,b,n)=>`V priemere ${a} → ${b} (1–5), za posledných ${n} cvičení`,
+    programs:'Programy',progInfo:'Program má jedno cvičenie denne. Deň sa počíta ako splnený, keď cvičenie dokončíte; vaše nastavenia sa nemenia.',
+    p_start7:'7-dňový základ',pd_start7:'upokojujúce a vyrovnávajúce dýchanie pre začiatočníkov',p_sleep14:'14 dní lepšieho spánku',pd_sleep14:'večerné upokojenie so stále dlhším výdychom',
+    p_energy10:'10 dní energie a sústredenia',pd_energy10:'sústreďujúce, potom povzbudzujúce dýchanie, nakoniec silové dýchanie',
+    progDays:n=>`${n} dní`,progDayN:n=>`${n}. deň`,progNext:(d,r,t)=>`Ďalej: ${d}. deň – ${r}, ${t}`,progDoneToday:'Na dnes hotovo ✓',
+    progGoBtn:'Dnešné cvičenie',progStop:'Ukončiť',progStopAsk:'Ukončiť program? Postup sa stratí.',progSwitchAsk:'Už beží iný program. Nahradiť ho?',
+    progRestart:'Začať odznova',progStartBtn:'Začať',progFin:n=>`Dokončili ste: ${n}. Gratulujeme!`,progTodayNote:(d,r,t)=>`Dnešný deň programu (${d}.): ${r}, ${t}`,
+    i_what:'Na čo je',i_how:'Ako na to',i_care:'Pozor',i_src:'Pôvod a zdroj',tryIt:'Vyskúšať',infoNone:'Popis sa teraz nedá načítať. Skontrolujte pripojenie na internet.',
+    noMed:'Popisy sú informatívne, nejde o lekársku radu. Ak máte ochorenie alebo ťažkosti, opýtajte sa lekára.',
+    ambCredits:'Zvuky prírody',helpNew:'Novinky: ⓘ pri rytmoch vysvetľuje každú techniku; Nastavenia → Programy ponúkajú viacdňové plány; v denníku je test zadržania dychu.'},
   ro:{name:'Română',locale:'ro-RO',title:'Cercuri de respirație',modes:'Ritmul respirației',
     r_box:'Pătrat',r_478:'Somn',r_calm:'Calm',r_sigh:'Oftat',r_coh:'Coerent',r_relax:'Relaxare',r_slow:'Încetinire',r_own:'Propriu',r_tabata:'Tabata',
     in:'Inspiră',in2:'Încă puțin',hold:'Ține',out:'Expiră',work:'Efort',rest:'Pauză',prep:'Pregătește-te',next:'Urmează',
@@ -1905,7 +2299,30 @@ const T={
     a_hullam:'Valuri',a_madar:'Păsări',a_feher:'Zgomot alb',a_barna:'Zgomot maro',
     voiceVol:'Volumul ghidului vocal',voiceKind:'Vocea ghidului',vk_tts:'Vocea telefonului',vk_f:'Feminină',vk_m:'Masculină',
     vkInfo:'O voce înregistrată dinainte (Piper): sună la fel pe orice telefon și vorbește exact la schimbare. Numele exercițiilor le citește vocea telefonului.',
-    vkNone:'Pentru această limbă nu există o asemenea voce înregistrată, așa că vorbește vocea telefonului.',voiceCredits:'Voci înregistrate'},
+    vkNone:'Pentru această limbă nu există o asemenea voce înregistrată, așa că vorbește vocea telefonului.',voiceCredits:'Voci înregistrate',
+    tCues:'Semnale în timpul efortului',halfSw:'Semnal la jumătate',halfInfo:'La jumătatea fiecărui efort de cel puțin 10 s.',warnLbl:'Avertizare înainte de finalul efortului',
+    bpmLbl:'Metronom în timpul efortului',bpmInfo:'Un ritm pentru repetări. Nu se aude cu muzica ta.',metroN:n=>`${n}/min`,
+    ownSnd:'Sunet de semnal propriu',ownSndPick:'Alege un fișier audio',ownNone:'Niciunul. Cel mult 400 KB; se aud primele 3 s.',
+    ownBig:'Fișierul este prea mare (cel mult 400 KB).',ownBad:'Telefonul nu poate reda acest fișier.',
+    half:'Jumătate',warnS:'Avertizare',cueHalf:'Jumătate',cueLeft:n=>`Mai sunt ${n}${n>=20?' de':''} secunde`,
+    exTime:'Timp propriu: scrie un număr la finalul rândului, de ex. „Genuflexiuni 40” (40 s efort) sau „Genuflexiuni 40/15” (apoi 15 s pauză).',
+    s_triple:'Bip triplu',s_chirp:'Bip ascendent',s_boxing:'Clopot de box',s_horn:'Claxon',s_clap:'Bătaie din palme',s_drum:'Tobă',s_own:'Sunet propriu',
+    holdTest:'Test de apnee',holdInfo:'Testul BOLT (Buteyko) măsoară cât reziști confortabil după o expirație normală: ține-te de nas și oprește la prima nevoie de a respira. Fără efort! Apneea maximă îți măsoară limita. Măsoară mereu la fel, de exemplu dimineața la trezire; așezat sau culcat, niciodată în apă sau la volan.',
+    t_bolt:'Test BOLT',t_max:'Apnee maximă',tIn_bolt:'Respiră liniștit, expiră normal, ține-te de nas și atinge.',tIn_max:'Respiră liniștit de câteva ori, expiră normal, ține-te de nas și atinge.',
+    tOut_bolt:'atinge la prima nevoie de a respira',tOut_max:'atinge când trebuie să respiri',tResult:'Rezultat',tPrev:d=>`${d} s față de data trecută`,
+    tLast:'Ultimul',tBest:'Cel mai bun',tNone:'Încă nicio măsurătoare.',tGo:'Măsoară',boltLv:['foarte scăzut (sub 10 s)','scăzut (10–20 s)','mediu (20–30 s)','bun (30–40 s)','excelent (peste 40 s)'],
+    moodSw:'Starea înainte și după',moodInfo:'Înainte și după sesiune atingi cum te simți; jurnalul arată cât te ajută.',
+    moodQ0:'Cum te simți acum?',moodQ1:'Și acum?',moodSkip:'Omite',mood:['Foarte rău','Rău','Așa și așa','Bine','Foarte bine'],
+    moodTitle:'Stare',moodStat:(a,b,n)=>`În medie ${a} → ${b} (1–5), din ultimele ${n} sesiuni`,
+    programs:'Programe',progInfo:'Un program are o sesiune pe zi. Ziua contează ca făcută când termini sesiunea; setările tale nu se schimbă.',
+    p_start7:'Bazele în 7 zile',pd_start7:'respirație calmantă și echilibrantă pentru începători',p_sleep14:'14 zile pentru un somn mai bun',pd_sleep14:'relaxare de seară cu expirații tot mai lungi',
+    p_energy10:'10 zile de energie și concentrare',pd_energy10:'respirație de concentrare, apoi energizantă, la final respirație puternică',
+    progDays:n=>`${n} zile`,progDayN:n=>`Ziua ${n}`,progNext:(d,r,t)=>`Urmează: ziua ${d} – ${r}, ${t}`,progDoneToday:'Gata pentru azi ✓',
+    progGoBtn:'Sesiunea de azi',progStop:'Oprește',progStopAsk:'Oprești programul? Progresul se pierde.',progSwitchAsk:'Rulează deja alt program. Îl înlocuiești?',
+    progRestart:'Ia de la capăt',progStartBtn:'Începe',progFin:n=>`Ai terminat ${n}. Felicitări!`,progTodayNote:(d,r,t)=>`Ziua de program de azi (${d}): ${r}, ${t}`,
+    i_what:'La ce ajută',i_how:'Cum se face',i_care:'Atenție',i_src:'Origine și sursă',tryIt:'Încearcă',infoNone:'Descrierea nu se poate încărca acum. Verifică conexiunea la internet.',
+    noMed:'Descrierile sunt informative, nu sfaturi medicale. Dacă ai o boală sau simptome, întreabă-ți medicul.',
+    ambCredits:'Sunete din natură',helpNew:'Nou: ⓘ de la Ritmuri explică fiecare tehnică; Setări → Programe oferă planuri pe mai multe zile; în jurnal există un test de apnee.'},
   hr:{name:'Hrvatski',locale:'hr-HR',title:'Krugovi disanja',modes:'Ritam disanja',
     r_box:'Kvadrat',r_478:'San',r_calm:'Smirenje',r_sigh:'Uzdah',r_coh:'Koherentno',r_relax:'Opuštanje',r_slow:'Usporavanje',r_own:'Vlastiti',r_tabata:'Tabata',
     in:'Udah',in2:'Još malo',hold:'Zadrži',out:'Izdah',work:'Rad',rest:'Odmor',prep:'Pripremi se',next:'Sljedeće',
@@ -1987,7 +2404,30 @@ const T={
     a_hullam:'Valovi',a_madar:'Ptice',a_feher:'Bijeli šum',a_barna:'Smeđi šum',
     voiceVol:'Glasnoća glasovnog vodiča',voiceKind:'Glas vodiča',vk_tts:'Glas telefona',vk_f:'Ženski',vk_m:'Muški',
     vkInfo:'Unaprijed snimljen glas (Piper): zvuči jednako na svakom telefonu i govori točno pri promjeni. Nazive vježbi čita glas telefona.',
-    vkNone:'Za ovaj jezik nema takvog snimljenog glasa, pa govori glas telefona.',voiceCredits:'Snimljeni glasovi'},
+    vkNone:'Za ovaj jezik nema takvog snimljenog glasa, pa govori glas telefona.',voiceCredits:'Snimljeni glasovi',
+    tCues:'Signali tijekom rada',halfSw:'Signal na pola',halfInfo:'Na pola svakog rada od najmanje 10 s.',warnLbl:'Upozorenje prije kraja rada',
+    bpmLbl:'Metronom tijekom rada',bpmInfo:'Ritam za ponavljanja. Ne svira uz vlastitu glazbu.',metroN:n=>`${n}/min`,
+    ownSnd:'Vlastiti zvuk signala',ownSndPick:'Odaberi zvučnu datoteku',ownNone:'Nije odabrano. Najviše 400 KB; sviraju prve 3 s.',
+    ownBig:'Datoteka je prevelika (najviše 400 KB).',ownBad:'Telefon ne može reproducirati ovu datoteku.',
+    half:'Pola',warnS:'Upozorenje',cueHalf:'Pola',cueLeft:n=>`Još ${n} sekundi`,
+    exTime:'Vlastito vrijeme: na kraj retka upiši broj, npr. „Čučnjevi 40” (40 s rada) ili „Čučnjevi 40/15” (zatim 15 s odmora).',
+    s_triple:'Trostruki zvuk',s_chirp:'Rastući zvuk',s_boxing:'Boksačko zvono',s_horn:'Truba',s_clap:'Pljesak',s_drum:'Bubanj',s_own:'Vlastiti zvuk',
+    holdTest:'Test zadržavanja daha',holdInfo:'BOLT test (Buteyko) mjeri koliko ugodno izdržiš nakon normalnog izdaha: začepi nos i zaustavi mjerenje pri prvoj potrebi za udahom. Bez naprezanja! Maksimalno zadržavanje mjeri tvoju granicu. Mjeri uvijek isto, npr. ujutro nakon buđenja; sjedeći ili ležeći, nikad u vodi ni tijekom vožnje.',
+    t_bolt:'BOLT test',t_max:'Maksimalno zadržavanje',tIn_bolt:'Diši mirno, normalno izdahni, začepi nos i dodirni.',tIn_max:'Nekoliko puta mirno udahni, normalno izdahni, začepi nos i dodirni.',
+    tOut_bolt:'dodirni pri prvoj potrebi za udahom',tOut_max:'dodirni kad moraš udahnuti',tResult:'Rezultat',tPrev:d=>`${d} s u odnosu na prošli put`,
+    tLast:'Zadnje',tBest:'Najbolje',tNone:'Još nema mjerenja.',tGo:'Izmjeri',boltLv:['vrlo nisko (ispod 10 s)','nisko (10–20 s)','srednje (20–30 s)','dobro (30–40 s)','izvrsno (iznad 40 s)'],
+    moodSw:'Raspoloženje prije i poslije',moodInfo:'Prije i poslije vježbe jednim dodirom označiš kako se osjećaš; dnevnik pokazuje koliko pomaže.',
+    moodQ0:'Kako se sada osjećaš?',moodQ1:'A sada?',moodSkip:'Preskoči',mood:['Vrlo loše','Loše','Osrednje','Dobro','Vrlo dobro'],
+    moodTitle:'Raspoloženje',moodStat:(a,b,n)=>`U prosjeku ${a} → ${b} (1–5), iz zadnjih ${n} vježbi`,
+    programs:'Programi',progInfo:'Program ima jednu vježbu dnevno. Dan se računa kao obavljen kad dovršiš vježbu; tvoje postavke se ne mijenjaju.',
+    p_start7:'Osnove u 7 dana',pd_start7:'umirujuće i uravnotežujuće disanje za početnike',p_sleep14:'14 dana boljeg sna',pd_sleep14:'večernje smirivanje sa sve duljim izdasima',
+    p_energy10:'10 dana energije i fokusa',pd_energy10:'disanje za fokus, zatim za energiju, na kraju snažno disanje',
+    progDays:n=>`${n} dana`,progDayN:n=>`${n}. dan`,progNext:(d,r,t)=>`Sljedeće: ${d}. dan – ${r}, ${t}`,progDoneToday:'Za danas gotovo ✓',
+    progGoBtn:'Današnja vježba',progStop:'Zaustavi',progStopAsk:'Zaustaviti program? Napredak će se izgubiti.',progSwitchAsk:'Već traje drugi program. Zamijeniti ga?',
+    progRestart:'Počni ispočetka',progStartBtn:'Pokreni',progFin:n=>`Završio si: ${n}. Čestitamo!`,progTodayNote:(d,r,t)=>`Današnji dan programa (${d}.): ${r}, ${t}`,
+    i_what:'Čemu služi',i_how:'Kako se radi',i_care:'Pazi',i_src:'Podrijetlo i izvor',tryIt:'Isprobaj',infoNone:'Opis se trenutno ne može učitati. Provjeri internetsku vezu.',
+    noMed:'Opisi su informativni, a ne liječnički savjet. Ako imaš bolest ili tegobe, pitaj liječnika.',
+    ambCredits:'Zvukovi prirode',helpNew:'Novo: ⓘ kod ritmova objašnjava svaku tehniku; Postavke → Programi nude višednevne planove; u dnevniku je test zadržavanja daha.'},
   uk:{name:'Українська',locale:'uk-UA',title:'Дихальні кола',modes:'Ритм дихання',
     r_box:'Квадрат',r_478:'Сон',r_calm:'Спокій',r_sigh:'Зітхання',r_coh:'Когерентне',r_relax:'Релакс',r_slow:'Повільно',r_own:'Власний',r_tabata:'Табата',
     in:'Вдих',in2:'Ще трохи',hold:'Затримка',out:'Видих',work:'Робота',rest:'Відпочинок',prep:'Приготуйся',next:'Далі',
@@ -2069,7 +2509,30 @@ const T={
     a_hullam:'Хвилі',a_madar:'Птахи',a_feher:'Білий шум',a_barna:'Коричневий шум',
     voiceVol:'Гучність голосового супроводу',voiceKind:'Голос супроводу',vk_tts:'Голос телефона',vk_f:'Жіночий',vk_m:'Чоловічий',
     vkInfo:'Заздалегідь записаний голос (Piper): звучить однаково на будь-якому телефоні й говорить точно під час зміни. Назви вправ читає голос телефона.',
-    vkNone:'Для цієї мови такого записаного голосу немає, тому говорить голос телефона.',voiceCredits:'Записані голоси'},
+    vkNone:'Для цієї мови такого записаного голосу немає, тому говорить голос телефона.',voiceCredits:'Записані голоси',
+    tCues:'Сигнали під час роботи',halfSw:'Сигнал на половині',halfInfo:'Посередині кожної роботи від 10 с.',warnLbl:'Попередження перед кінцем роботи',
+    bpmLbl:'Метроном під час роботи',bpmInfo:'Ритм для повторень. Не звучить із власною музикою.',metroN:n=>`${n}/хв`,
+    ownSnd:'Власний звук сигналу',ownSndPick:'Вибрати звуковий файл',ownNone:'Не вибрано. До 400 КБ; звучать перші 3 с.',
+    ownBig:'Файл завеликий (щонайбільше 400 КБ).',ownBad:'Телефон не може відтворити цей файл.',
+    half:'Половина',warnS:'Попередження',cueHalf:'Половина',cueLeft:n=>`Ще ${n} секунд`,
+    exTime:'Власний час: допишіть число в кінці рядка, напр. «Присідання 40» (40 с роботи) або «Присідання 40/15» (потім 15 с відпочинку).',
+    s_triple:'Потрійний сигнал',s_chirp:'Висхідний сигнал',s_boxing:'Боксерський дзвін',s_horn:'Гудок',s_clap:'Оплеск',s_drum:'Барабан',s_own:'Власний звук',
+    holdTest:'Тест затримки дихання',holdInfo:'Тест BOLT (Бутейко) вимірює, як довго ви комфортно витримуєте після звичайного видиху: затисніть ніс і зупиніть на першому бажанні вдихнути. Без зусиль! Максимальна затримка вимірює вашу межу. Вимірюйте завжди однаково, наприклад уранці після пробудження; сидячи або лежачи, ніколи у воді чи за кермом.',
+    t_bolt:'Тест BOLT',t_max:'Максимальна затримка',tIn_bolt:'Дихайте спокійно, звичайно видихніть, затисніть ніс і торкніться.',tIn_max:'Зробіть кілька спокійних вдихів, звичайно видихніть, затисніть ніс і торкніться.',
+    tOut_bolt:'торкніться на першому бажанні вдихнути',tOut_max:'торкніться, коли треба вдихнути',tResult:'Результат',tPrev:d=>`${d} с порівняно з минулим разом`,
+    tLast:'Останній',tBest:'Найкращий',tNone:'Ще немає вимірювань.',tGo:'Виміряти',boltLv:['дуже низький (менше 10 с)','низький (10–20 с)','середній (20–30 с)','добрий (30–40 с)','відмінний (понад 40 с)'],
+    moodSw:'Настрій до і після',moodInfo:'До і після заняття одним дотиком позначте, як почуваєтеся; щоденник покаже, наскільки це допомагає.',
+    moodQ0:'Як ви почуваєтеся зараз?',moodQ1:'А тепер?',moodSkip:'Пропустити',mood:['Дуже погано','Погано','Так собі','Добре','Дуже добре'],
+    moodTitle:'Настрій',moodStat:(a,b,n)=>`У середньому ${a} → ${b} (1–5), за останні ${n} занять`,
+    programs:'Програми',progInfo:'Програма має одне заняття на день. День зараховано, коли ви завершили заняття; ваші налаштування не змінюються.',
+    p_start7:'7-денна основа',pd_start7:'заспокійливе та врівноважувальне дихання для початківців',p_sleep14:'14 днів кращого сну',pd_sleep14:'вечірнє заспокоєння з дедалі довшим видихом',
+    p_energy10:'10 днів енергії та зосередження',pd_energy10:'дихання для зосередження, потім бадьоре, наприкінці потужне дихання',
+    progDays:n=>`${n} днів`,progDayN:n=>`День ${n}`,progNext:(d,r,t)=>`Далі: день ${d} – ${r}, ${t}`,progDoneToday:'На сьогодні готово ✓',
+    progGoBtn:'Сьогоднішнє заняття',progStop:'Зупинити',progStopAsk:'Зупинити програму? Прогрес буде втрачено.',progSwitchAsk:'Уже триває інша програма. Замінити її?',
+    progRestart:'Почати знову',progStartBtn:'Почати',progFin:n=>`Ви завершили: ${n}. Вітаємо!`,progTodayNote:(d,r,t)=>`Сьогоднішній день програми (${d}): ${r}, ${t}`,
+    i_what:'Для чого',i_how:'Як виконувати',i_care:'Зверніть увагу',i_src:'Походження і джерело',tryIt:'Спробувати',infoNone:'Зараз не вдається завантажити опис. Перевірте підключення до інтернету.',
+    noMed:'Описи мають інформаційний характер і не є медичною порадою. Якщо маєте захворювання чи скарги, зверніться до лікаря.',
+    ambCredits:'Звуки природи',helpNew:'Нове: ⓘ біля ритмів пояснює кожну техніку; Налаштування → Програми пропонують багатоденні плани; у щоденнику є тест затримки дихання.'},
   ru:{name:'Русский',locale:'ru-RU',title:'Дыхательные круги',modes:'Ритм дыхания',
     r_box:'Квадрат',r_478:'Сон',r_calm:'Покой',r_sigh:'Вздох',r_coh:'Когерентное',r_relax:'Релакс',r_slow:'Медленно',r_own:'Свой',r_tabata:'Табата',
     in:'Вдох',in2:'Ещё немного',hold:'Задержка',out:'Выдох',work:'Работа',rest:'Отдых',prep:'Приготовься',next:'Далее',
@@ -2151,7 +2614,30 @@ const T={
     a_hullam:'Волны',a_madar:'Птицы',a_feher:'Белый шум',a_barna:'Коричневый шум',
     voiceVol:'Громкость голосового гида',voiceKind:'Голос гида',vk_tts:'Голос телефона',vk_f:'Женский',vk_m:'Мужской',
     vkInfo:'Заранее записанный голос (Piper): звучит одинаково на любом телефоне и говорит точно в момент смены. Названия упражнений читает голос телефона.',
-    vkNone:'Для этого языка такого записанного голоса нет, поэтому говорит голос телефона.',voiceCredits:'Записанные голоса'},
+    vkNone:'Для этого языка такого записанного голоса нет, поэтому говорит голос телефона.',voiceCredits:'Записанные голоса',
+    tCues:'Сигналы во время работы',halfSw:'Сигнал на середине',halfInfo:'В середине каждой работы от 10 с.',warnLbl:'Предупреждение перед концом работы',
+    bpmLbl:'Метроном во время работы',bpmInfo:'Ритм для повторений. Не звучит с вашей музыкой.',metroN:n=>`${n}/мин`,
+    ownSnd:'Свой звук сигнала',ownSndPick:'Выбрать звуковой файл',ownNone:'Не выбран. До 400 КБ; звучат первые 3 с.',
+    ownBig:'Файл слишком большой (не больше 400 КБ).',ownBad:'Телефон не может воспроизвести этот файл.',
+    half:'Половина',warnS:'Предупреждение',cueHalf:'Половина',cueLeft:n=>`Ещё ${n} секунд`,
+    exTime:'Своё время: допишите число в конце строки, напр. «Приседания 40» (40 с работы) или «Приседания 40/15» (затем 15 с отдыха).',
+    s_triple:'Тройной сигнал',s_chirp:'Восходящий сигнал',s_boxing:'Боксёрский гонг',s_horn:'Гудок',s_clap:'Хлопок',s_drum:'Барабан',s_own:'Свой звук',
+    holdTest:'Тест задержки дыхания',holdInfo:'Тест BOLT (Бутейко) измеряет, как долго вы комфортно выдерживаете после обычного выдоха: зажмите нос и остановите при первом желании вдохнуть. Без усилий! Максимальная задержка измеряет ваш предел. Измеряйте всегда одинаково, например утром после пробуждения; сидя или лёжа, никогда в воде или за рулём.',
+    t_bolt:'Тест BOLT',t_max:'Максимальная задержка',tIn_bolt:'Дышите спокойно, обычно выдохните, зажмите нос и коснитесь.',tIn_max:'Сделайте несколько спокойных вдохов, обычно выдохните, зажмите нос и коснитесь.',
+    tOut_bolt:'коснитесь при первом желании вдохнуть',tOut_max:'коснитесь, когда нужно вдохнуть',tResult:'Результат',tPrev:d=>`${d} с по сравнению с прошлым разом`,
+    tLast:'Последний',tBest:'Лучший',tNone:'Пока нет измерений.',tGo:'Измерить',boltLv:['очень низкий (меньше 10 с)','низкий (10–20 с)','средний (20–30 с)','хороший (30–40 с)','отличный (больше 40 с)'],
+    moodSw:'Настроение до и после',moodInfo:'До и после занятия одним касанием отметьте, как себя чувствуете; дневник покажет, насколько это помогает.',
+    moodQ0:'Как вы себя чувствуете сейчас?',moodQ1:'А теперь?',moodSkip:'Пропустить',mood:['Очень плохо','Плохо','Так себе','Хорошо','Очень хорошо'],
+    moodTitle:'Настроение',moodStat:(a,b,n)=>`В среднем ${a} → ${b} (1–5), за последние ${n} занятий`,
+    programs:'Программы',progInfo:'В программе одно занятие в день. День засчитывается, когда вы завершили занятие; ваши настройки не меняются.',
+    p_start7:'7-дневная основа',pd_start7:'успокаивающее и уравновешивающее дыхание для начинающих',p_sleep14:'14 дней лучшего сна',pd_sleep14:'вечернее успокоение со всё более длинным выдохом',
+    p_energy10:'10 дней энергии и концентрации',pd_energy10:'дыхание для концентрации, затем бодрящее, в конце мощное дыхание',
+    progDays:n=>`${n} дней`,progDayN:n=>`День ${n}`,progNext:(d,r,t)=>`Далее: день ${d} – ${r}, ${t}`,progDoneToday:'На сегодня готово ✓',
+    progGoBtn:'Занятие на сегодня',progStop:'Остановить',progStopAsk:'Остановить программу? Прогресс будет потерян.',progSwitchAsk:'Уже идёт другая программа. Заменить её?',
+    progRestart:'Начать заново',progStartBtn:'Начать',progFin:n=>`Вы завершили: ${n}. Поздравляем!`,progTodayNote:(d,r,t)=>`Сегодняшний день программы (${d}): ${r}, ${t}`,
+    i_what:'Для чего',i_how:'Как выполнять',i_care:'Обратите внимание',i_src:'Происхождение и источник',tryIt:'Попробовать',infoNone:'Сейчас не удаётся загрузить описание. Проверьте подключение к интернету.',
+    noMed:'Описания носят информационный характер и не являются медицинской рекомендацией. При заболеваниях или жалобах обратитесь к врачу.',
+    ambCredits:'Звуки природы',helpNew:'Новое: ⓘ у ритмов объясняет каждую технику; Настройки → Программы предлагают многодневные планы; в дневнике есть тест задержки дыхания.'},
   tr:{name:'Türkçe',locale:'tr-TR',title:'Nefes Halkaları',modes:'Nefes ritmi',
     r_box:'Kutu',r_478:'Uyku',r_calm:'Sakin',r_sigh:'İç çekiş',r_coh:'Uyumlu',r_relax:'Gevşe',r_slow:'Yavaşla',r_own:'Kendi',r_tabata:'Tabata',
     in:'Nefes al',in2:'Biraz daha',hold:'Tut',out:'Nefes ver',work:'Çalış',rest:'Dinlen',prep:'Hazırlan',next:'Sıradaki',
@@ -2233,13 +2719,46 @@ const T={
     a_hullam:'Dalgalar',a_madar:'Kuşlar',a_feher:'Beyaz gürültü',a_barna:'Kahverengi gürültü',
     voiceVol:'Sesli rehber düzeyi',voiceKind:'Rehber sesi',vk_tts:'Telefon sesi',vk_f:'Kadın',vk_m:'Erkek',
     vkInfo:'Önceden kaydedilmiş ses (Piper): her telefonda aynı duyulur ve tam geçişte konuşur. Egzersiz adlarını telefonun sesi okur.',
-    vkNone:'Bu dil için böyle bir kayıtlı ses yok, bu yüzden telefonun sesi konuşur.',voiceCredits:'Kayıtlı sesler'}
+    vkNone:'Bu dil için böyle bir kayıtlı ses yok, bu yüzden telefonun sesi konuşur.',voiceCredits:'Kayıtlı sesler',
+    tCues:'Çalışma sırasında sinyaller',halfSw:'Yarı yol sinyali',halfInfo:'En az 10 sn süren her çalışmanın ortasında.',warnLbl:'Çalışma bitmeden uyarı',
+    bpmLbl:'Çalışma sırasında metronom',bpmInfo:'Tekrarlar için ritim. Kendi müziğinle çalmaz.',metroN:n=>`${n}/dk`,
+    ownSnd:'Kendi sinyal sesin',ownSndPick:'Ses dosyası seç',ownNone:'Seçilmedi. En fazla 400 KB; ilk 3 sn çalar.',
+    ownBig:'Bu dosya çok büyük (en fazla 400 KB).',ownBad:'Bu telefon bu ses dosyasını çalamıyor.',
+    half:'Yarı yol',warnS:'Uyarı',cueHalf:'Yarı yol',cueLeft:n=>`${n} saniye kaldı`,
+    exTime:'Kendi süresi: satırın sonuna bir sayı yaz, ör. “Squat 40” (40 sn çalışma) veya “Squat 40/15” (ardından 15 sn dinlenme).',
+    s_triple:'Üçlü bip',s_chirp:'Yükselen bip',s_boxing:'Boks zili',s_horn:'Korna',s_clap:'Alkış',s_drum:'Davul',s_own:'Kendi sesin',
+    holdTest:'Nefes tutma testi',holdInfo:'BOLT testi (Buteyko), normal bir nefes verişten sonra rahatça ne kadar dayanabildiğini ölçer: burnunu kapat ve ilk nefes alma isteğinde durdur. Zorlama yok! Azami nefes tutma sınırını ölçer. Her zaman aynı şekilde ölç, örneğin sabah uyanınca; oturarak veya uzanarak, asla suda ya da araç kullanırken değil.',
+    t_bolt:'BOLT testi',t_max:'Azami nefes tutma',tIn_bolt:'Sakince nefes al, normal şekilde ver, burnunu kapat ve dokun.',tIn_max:'Birkaç sakin nefes al, normal şekilde ver, burnunu kapat ve dokun.',
+    tOut_bolt:'ilk nefes alma isteğinde dokun',tOut_max:'nefes alman gerektiğinde dokun',tResult:'Sonuç',tPrev:d=>`geçen seferle karşılaştırıldığında ${d} sn`,
+    tLast:'Son',tBest:'En iyi',tNone:'Henüz ölçüm yok.',tGo:'Ölç',boltLv:['çok düşük (10 sn altı)','düşük (10–20 sn)','orta (20–30 sn)','iyi (30–40 sn)','mükemmel (40 sn üstü)'],
+    moodSw:'Öncesi ve sonrası ruh hali',moodInfo:'Seanstan önce ve sonra nasıl hissettiğine dokun; günlük ne kadar yardımcı olduğunu gösterir.',
+    moodQ0:'Şu an nasıl hissediyorsun?',moodQ1:'Ya şimdi?',moodSkip:'Atla',mood:['Çok kötü','Kötü','İdare eder','İyi','Çok iyi'],
+    moodTitle:'Ruh hali',moodStat:(a,b,n)=>`Ortalama ${a} → ${b} (1–5), son ${n} seansa göre`,
+    programs:'Programlar',progInfo:'Bir programda günde bir seans vardır. Seansı bitirdiğinde gün tamamlanmış sayılır; ayarların değişmez.',
+    p_start7:'7 günlük temel',pd_start7:'yeni başlayanlar için sakinleştirici ve dengeleyici nefes',p_sleep14:'14 günde daha iyi uyku',pd_sleep14:'gittikçe uzayan nefes verişlerle akşam gevşemesi',
+    p_energy10:'10 günde enerji ve odak',pd_energy10:'önce odaklayan, sonra canlandıran nefes, sonunda güçlü nefes',
+    progDays:n=>`${n} gün`,progDayN:n=>`${n}. gün`,progNext:(d,r,t)=>`Sıradaki: ${d}. gün – ${r}, ${t}`,progDoneToday:'Bugünlük tamam ✓',
+    progGoBtn:'Bugünkü seans',progStop:'Durdur',progStopAsk:'Program durdurulsun mu? İlerleme kaybolur.',progSwitchAsk:'Başka bir program sürüyor. Değiştirilsin mi?',
+    progRestart:'Baştan başla',progStartBtn:'Başla',progFin:n=>`${n} tamamlandı. Tebrikler!`,progTodayNote:(d,r,t)=>`Bugünün program günü (${d}.): ${r}, ${t}`,
+    i_what:'Ne işe yarar',i_how:'Nasıl yapılır',i_care:'Dikkat',i_src:'Köken ve kaynak',tryIt:'Dene',infoNone:'Açıklama şu an yüklenemiyor. İnternet bağlantını kontrol et.',
+    noMed:'Bu açıklamalar bilgi amaçlıdır, tıbbi tavsiye değildir. Bir hastalığın veya şikâyetin varsa doktoruna danış.',
+    ambCredits:'Doğa sesleri',helpNew:'Yeni: Ritimlerdeki ⓘ her tekniği açıklar; Ayarlar → Programlar çok günlük planlar sunar; günlükte nefes tutma testi var.'}
 };
 let L=T.hu,shownNote=null;
 
 // Újdonságok, a legfrissebb elöl. Az első elem verziója az app verziója; ha nagyobb, mint amit a felhasználó
 // utoljára látott, indításkor egyszer szólunk („Mi újság”). Új kiadásnál ide kerül egy új elem.
 const NEWS=[
+  {v:'1.4',d:'2026-10-19',
+    hu:['Visszatartás-teszt (BOLT és maximális), grafikonnal a naplóban','Többnapos programok: alapozó, jobb alvás, energia és fókusz','Részletes leírás minden technikához (ⓘ a Ritmusoknál)',
+      'Hangulat a gyakorlás előtt és után (a Gyakorlásnál kapcsolható be)','Tabata: gyakorlatonként saját idő, félidő- és figyelmeztető jelzés, metronóm, 6 új hang, saját hangfájl',
+      'Felvett természethangok','Saját ritmusok fél másodperces pontossággal'],
+    en:['Breath-hold test (BOLT and maximum) with a chart in the journal','Multi-day programs: foundation, better sleep, energy and focus','A detailed description for every technique (ⓘ in Rhythms)',
+      'Mood before and after a session (turn it on under Session)','Tabata: own time per exercise, halfway and warning cues, metronome, 6 new sounds, your own sound file',
+      'Recorded nature sounds','Custom rhythms in half-second steps'],
+    de:['Atemanhalte-Test (BOLT und maximal) mit Diagramm im Tagebuch','Mehrtägige Programme: Grundlage, besser schlafen, Energie und Fokus','Ausführliche Beschreibung zu jeder Technik (ⓘ bei den Rhythmen)',
+      'Stimmung vor und nach der Übung (unter Übung einschalten)','Tabata: eigene Zeit pro Übung, Halbzeit- und Warnsignal, Metronom, 6 neue Töne, eigene Tondatei',
+      'Aufgenommene Naturklänge','Eigene Rhythmen in halben Sekunden']},
   {v:'1.3.4',d:'2026-10-19',
     hu:['Kis kijelzőn is olvashatók a Tabata színei és hangjai'],en:['Tabata colours and sounds are readable on small screens too'],
     de:['Tabata-Farben und -Töne sind auch auf kleinen Bildschirmen lesbar']},
@@ -2344,8 +2863,13 @@ function seqStep(q,e){   // a sorozat éppen futó lépése: [ritmus, sorszám];
 }
 function progress(){       // a gyakorlás haladása 0…1 (a Lassulóhoz)
   if(!run)return 0;
-  const e=eff();return Math.min(1,st.durType==='br'?(cyc-1)/st.breaths:st.durType==='inf'?e/600:e/(st.dur*60));
+  const e=eff();return Math.min(1,dType()==='br'?(cyc-1)/st.breaths:dType()==='inf'?e/600:e/(dMin()*60));
 }
+// Programnap közben (po) a ritmus és a hossz a programból jön, a beállítások nem változnak
+let po=null;
+function dType(){return po?'min':st.durType}
+function dMin(){return po&&po.min||st.dur}
+function whRounds(){return po&&po.rounds||st.whr}
 function pattern(id,e){
   if(id==='tabata')return tabataPlan();
   const c=custom(id);if(c){const [a,b,d,f]=c.p;return [['in',a],['hold',b],['out',d],['hold',f]].filter(x=>x[1]>0)}
@@ -2356,9 +2880,9 @@ function pattern(id,e){
   return R[id].p;
 }
 // Tabata: mentett edzések (st.tabs), a kiválasztott: st.tabSel. Szakaszonként saját szín (col) és jelzőhang (snd).
-const TBDEF={work:20,rest:10,rounds:8,sets:1,prep:10,brk:60,ex:'',wu:0,cd:0};
+const TBDEF={work:20,rest:10,rounds:8,sets:1,prep:10,brk:60,ex:'',wu:0,cd:0,half:false,warn:0,bpm:0};
 const TBCOL={warm:'#F07B16',prep:'#F5B700',work:'#E5352B',rest:'#12914A',cool:'#2D7FD3'};
-const TBSND={warm:'bell',prep:'none',work:'hi',rest:'lo2',cool:'bell'};
+const TBSND={warm:'bell',prep:'none',work:'hi',rest:'lo2',cool:'bell',half:'chirp',warn:'triple'};
 const PALETTE=['#E5352B','#F07B16','#F5B700','#12914A','#0E9AA7','#2D7FD3','#7B4FD0','#D6337A','#3A4148'];
 function tw(){return st.tabs.find(w=>w.id===st.tabSel)||st.tabs[0]}
 function wname(w){return w.n||L.r_tabata}
@@ -2366,22 +2890,27 @@ function wLabel(w){return `${w.work}/${w.rest} ×${w.rounds}`+(w.sets>1?` ×${w.
 // A teljes edzés egyben (nem ismétlődő kör): [fajta, mp, kör, blokk, gyakorlat]
 function tabataPlan(t=tw()){
   // gyakorlat: munkánál az aktuális, pihenőnél a következő neve; pihenő 0 mp-cel = EMOM
-  const ex=exList(t),en=k=>ex.length?ex[(k-1)%ex.length]:'',p=[];
+  const ex=exList(t),ek=k=>ex.length?ex[(k-1)%ex.length]:null,en=k=>{const e=ek(k);return e?e.n:''},p=[];
   if(t.wu)p.push(['warm',t.wu,0,1,'']);
   if(t.prep)p.push(['prep',t.prep,0,1,en(1)]);
   for(let s=1;s<=t.sets;s++){
     if(s>1)p.push(['rest',t.brk,0,s,en(1)]);         // blokkok közti pihenő
-    for(let k=1;k<=t.rounds;k++){p.push(['work',t.work,k,s,en(k)]);if(k<t.rounds&&t.rest)p.push(['rest',t.rest,k,s,en(k+1)])}
+    for(let k=1;k<=t.rounds;k++){const e=ek(k),r=e&&e.r!=null?e.r:t.rest;
+      p.push(['work',e&&e.w||t.work,k,s,en(k)]);if(k<t.rounds&&r)p.push(['rest',r,k,s,en(k+1)])}
   }
   if(t.cd)p.push(['cool',t.cd,0,t.sets,'']);
   return p;
 }
-function exList(t=tw()){return (t.ex||'').split('\n').map(x=>x.trim()).filter(Boolean).slice(0,40)}
+function exList(t=tw()){return (t.ex||'').split('\n').map(x=>x.trim()).filter(Boolean).slice(0,40).map(exParse)}
+// Egy gyakorlatsor: név, és ha a végén szám áll, a saját munkaideje, perjel után a pihenője (mp)
+function exParse(x){const m=x.match(/^(.*\S)\s+(\d{1,3})(?:\s*\/\s*(\d{1,3}))?$/);
+  return m?{n:m[1],w:Math.max(1,Math.min(600,+m[2])),r:m[3]!=null?Math.min(600,+m[3]):null}:{n:x,w:null,r:null}}
+function num(v){return new Intl.NumberFormat(L.locale,{maximumFractionDigits:1}).format(v)}
 function patternLabel(id){
   if(id==='tabata')return wLabel(tw());
   const q=seq(id);if(q)return seqMins(q)+'′';
   if(R[id]&&R[id].lab)return R[id].lab;
-  return pattern(id).map(x=>x[1]).join('·');
+  return pattern(id).map(x=>num(x[1])).join('·');
 }
 
 let st={mode:'box',shown:['box','478','calm'],customs:[{id:'own',n:'',p:[4,4,6,0]}],seqs:[],pace:4,whr:3,durType:'min',breaths:20,cd:0,
@@ -2508,8 +3037,14 @@ function tbOut(){
   if(!tbGain){tbGain=ac.createGain();const lp=ac.createBiquadFilter();lp.type='lowpass';lp.frequency.value=5000;tbGain.connect(lp);lp.connect(ac.destination)}
   tbGain.gain.value=(st.tvol/100)**2;return tbGain;
 }
-const SIGS=['hi','lo2','bell','gong','whistle','buzzer','none'];
-const SIGLEN={hi:.6,lo2:.7,tick:.15,end:.95,bell:1.6,gong:2.5,whistle:.65,buzzer:.7};
+const SIGS=['hi','lo2','triple','chirp','bell','gong','boxing','whistle','buzzer','horn','clap','drum'];
+const SIGLEN={hi:.6,lo2:.7,tick:.15,end:.95,bell:1.6,gong:2.5,whistle:.65,buzzer:.7,boxing:.9,horn:.9,clap:.32,drum:.5,chirp:.36,triple:.45,own:.1};
+function sigList(){return [...SIGS,...(ownBuf?['own']:[]),'none']}
+// Saját jelzőhang: a telefonról választott rövid hangfájl (legfeljebb 3 mp szól belőle). Külön tárolódik, a mentésbe nem kerül.
+let ownBuf=null,ownName='';
+function ownUse(b,n){ownBuf=b;ownName=n;SIGLEN.own=b?Math.min(3,b.duration):.1;for(const k in clipUrl)if(k.startsWith('own|'))delete clipUrl[k]}
+function ownDecode(d){return new (window.OfflineAudioContext||window.webkitOfflineAudioContext)(1,1,22050).decodeAudioData(Uint8Array.from(atob(d),c=>c.charCodeAt(0)).buffer)}
+try{const o=JSON.parse(localStorage.getItem('legzo-snd')||'null');if(o&&o.d)ownDecode(o.d).then(b=>{ownUse(b,o.n);if(!sheet.hidden&&page==='tabata')renderTabSettings()}).catch(()=>{})}catch(e){}
 function sigGraph(c,dest,id,t){
   const tone=(type,f,a,len,at)=>{const o=c.createOscillator(),g=c.createGain();o.type=type;o.frequency.value=f;
       g.gain.setValueAtTime(0,at);g.gain.linearRampToValueAtTime(a,at+.005);g.gain.setValueAtTime(a,at+len-.02);g.gain.linearRampToValueAtTime(0,at+len);
@@ -2523,6 +3058,17 @@ function sigGraph(c,dest,id,t){
   else if(id==='bell')ring(1046,[[1,.6],[2.76,.25],[5.4,.12]],1.6,t);
   else if(id==='gong')ring(180,[[1,.7],[1.48,.35],[2.3,.25],[3.1,.12]],2.5,t);
   else if(id==='buzzer')tone('sawtooth',160,.5,.7,t);
+  else if(id==='boxing')for(let k=0;k<3;k++)ring(1250,[[1,.5],[2.4,.25],[3.9,.12]],.5,t+k*.17);   // ökölvívó-csengő
+  else if(id==='horn')[440,554,659].forEach(f=>tone('sawtooth',f,.2,.9,t));
+  else if(id==='triple')for(let k=0;k<3;k++)tone('square',1800,.45,.09,t+k*.14);
+  else if(id==='chirp'){const o=c.createOscillator(),g=c.createGain();o.frequency.setValueAtTime(800,t);o.frequency.exponentialRampToValueAtTime(2200,t+.3);
+    g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.45,t+.01);g.gain.setValueAtTime(.45,t+.28);g.gain.linearRampToValueAtTime(0,t+.34);o.connect(g);g.connect(dest);o.start(t);o.stop(t+.36)}
+  else if(id==='drum'){const o=c.createOscillator(),g=c.createGain();o.frequency.setValueAtTime(150,t);o.frequency.exponentialRampToValueAtTime(45,t+.35);
+    g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.9,t+.005);g.gain.exponentialRampToValueAtTime(.001,t+.45);o.connect(g);g.connect(dest);o.start(t);o.stop(t+.5)}
+  else if(id==='clap')for(let k=0;k<2;k++){const n=c.createBufferSource(),b=c.createBuffer(1,Math.ceil(c.sampleRate*.12),c.sampleRate),d=b.getChannelData(0),
+      f=c.createBiquadFilter(),g=c.createGain();for(let j=0;j<d.length;j++)d[j]=(Math.random()*2-1)*Math.exp(-j/(c.sampleRate*.02));
+    f.type='bandpass';f.frequency.value=1400;f.Q.value=.8;g.gain.value=1.4;n.buffer=b;n.connect(f);f.connect(g);g.connect(dest);n.start(t+k*.16)}
+  else if(id==='own'){if(ownBuf){const b=c.createBufferSource();b.buffer=ownBuf;b.connect(dest);b.start(t,0,SIGLEN.own)}}
   else if(id==='whistle'){const o=c.createOscillator(),g=c.createGain(),l=c.createOscillator(),lg=c.createGain();   // sípszó: gyors trillával
     o.frequency.value=2900;l.frequency.value=28;lg.gain.value=180;l.connect(lg);lg.connect(o.frequency);
     g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.4,t+.02);g.gain.setValueAtTime(.4,t+.55);g.gain.linearRampToValueAtTime(0,t+.62);
@@ -2552,7 +3098,7 @@ function wavBlob(d,sr){
   return new Blob([b],{type:'audio/wav'});
 }
 function ink(h){const n=parseInt(h.slice(1),16),l=(.299*(n>>16)+.587*(n>>8&255)+.114*(n&255))/255;return l>.62?'#1A1A1A':'#fff'}   // olvasható szöveg a színen
-function tbCt(){const v=left>=100?fmt(left):String(left);ct.textContent=v;ct.classList.toggle('long',v.length>2)}
+function tbCt(){const l=Math.ceil(left),v=l>=100?fmt(l):String(l);ct.textContent=v;ct.classList.toggle('long',v.length>2)}
 function tbBuzz(p){if(st.vib)try{navigator.vibrate&&navigator.vibrate(p)}catch(e){}}
 
 // Természethang a légzés alá: a telefon generálja (nincs hangfájl). 8 mp-es hurok, a vége az elejébe úsztatva, így nincs kattanás.
@@ -2586,16 +3132,35 @@ const AMB={
 };
 let amb=null,ambGain=null;
 function ambOut(){if(!ambGain){ambGain=ac.createGain();ambGain.connect(master)}ambGain.gain.value=(st.ambVol/100)**1.5*1.2;return ambGain}
+// Felvett természethangok (CC0, amb/<név>.mp3, lásd amb/CREDITS.txt): első használatkor töltődnek le, utána a gyorsítótárból
+// jönnek. Amíg nincs meg (vagy offline, ha még sosem töltődött le), a szintetizált változat szól, és ha közben megérkezik,
+// 2 mp alatt átúsztatunk rá. Egyszerre csak a választott hang marad dekódolva a memóriában.
+const AMBREC={eso:1.6,patak:2.3,tuz:1.6,szel:2.6,hullam:1.8,madar:1},abuf={},aload={};let ambGen=0;   // erősítés: kb. a szintetizált hang szintje
+function ambLoad(k){
+  if(!AMBREC[k]||abuf[k])return null;
+  for(const x in abuf)if(x!==k)delete abuf[x];
+  return aload[k]||(aload[k]=fetch('amb/'+k+'.mp3').then(r=>{if(!r.ok)throw 0;return r.arrayBuffer()})
+    .then(b=>new (window.OfflineAudioContext||window.webkitOfflineAudioContext)(2,1,44100).decodeAudioData(b))
+    .then(b=>{abuf[k]=b;delete aload[k];return b}).catch(()=>{delete aload[k];return null}));
+}
+function ambRec(k,fade,gen){
+  const b=abuf[k],src=ac.createBufferSource(),g=ac.createGain();src.buffer=b;src.loop=true;g.gain.value=0;src.connect(g);g.connect(ambOut());
+  src.start(0,Math.random()*b.duration);ramp(g.gain,AMBREC[k],fade);
+  return {gen,stop(d){ramp(g.gain,0,d);setTimeout(()=>{try{src.stop()}catch(e){}g.disconnect()},d*1000+150)}};
+}
 function ambStart(fade){
   ambStop(.3);
-  const def=AMB[st.amb];if(!def||!ensureAudio())return;
+  const k=st.amb,def=AMB[k];if(!def||!ensureAudio())return;
+  const gen=++ambGen;
+  if(abuf[k]){amb=ambRec(k,fade,gen);return}
+  const p=ambLoad(k);if(p)p.then(b=>{if(b&&amb&&amb.gen===gen){amb.stop(2);amb=ambRec(k,2,gen)}});
   if(!def.buf)def.buf=loopBuf(8,def.gen(ac.sampleRate));
   const src=ac.createBufferSource(),g=ac.createGain(),osc=[];src.buffer=def.buf;src.loop=true;
   let node=src;
   def.chain.forEach(([type,f,q])=>{const b=ac.createBiquadFilter();b.type=type;b.frequency.value=f;if(q)b.Q.value=q;node.connect(b);node=b;
     if(def.sweep){const l=ac.createOscillator(),lg=ac.createGain();l.frequency.value=.07;lg.gain.value=300;l.connect(lg);lg.connect(b.frequency);l.start();osc.push(l)}});
   g.gain.value=0;node.connect(g);g.connect(ambOut());src.start();osc.push(src);ramp(g.gain,def.lvl,fade);
-  amb={stop(d){ramp(g.gain,0,d);setTimeout(()=>{osc.forEach(o=>{try{o.stop()}catch(e){}});g.disconnect()},d*1000+150)}};
+  amb={gen,stop(d){ramp(g.gain,0,d);setTimeout(()=>{osc.forEach(o=>{try{o.stop()}catch(e){}});g.disconnect()},d*1000+150)}};
 }
 function ambStop(d=2){if(amb){amb.stop(d);amb=null}}
 
@@ -2660,7 +3225,7 @@ function phaseText(p){const [kind,,side,,exn]=p;return !tb?L[kind]+(side?', '+L[
 function upcoming(){                                 // a következő szakasz: [kulcs, szakasz], vagy null, ha itt vége
   if(i+1<cur.length)return [cyc+':'+(i+1),cur[i+1]];
   if(tb||sessionDone(cyc+1,elapsed+left))return null;
-  const nm=simple(st.mode)&&simple(runMode)?st.mode:runMode;
+  const nm=!po&&simple(st.mode)&&simple(runMode)?st.mode:runMode;
   return [(cyc+1)+':0',pattern(nm,elapsed+left-pre)[0]];
 }
 function sayAhead(){
@@ -2679,14 +3244,14 @@ if('speechSynthesis' in window)speechSynthesis.addEventListener('voiceschanged',
 // Naponta a gyakorolt másodpercek (kb. 13 hónapra visszamenőleg, a havi naptárhoz), és az alkalmak száma (legalább 1 perc)
 function dayKey(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
 function addDays(d,n){const x=new Date(d);x.setDate(x.getDate()+n);return x}
-function logSession(sec,r,rets){
-  if(sec<5)return;
+function logSession(sec,r,rets){   // igaz, ha bekerült a naplóba
+  sec=Math.round(sec);if(sec<5)return false;
   const k=dayKey(new Date());st.log[k]=(st.log[k]||0)+sec;if(sec>=60)st.sessions++;
   const old=dayKey(addDays(new Date(),-400));for(const d in st.log)if(d<old)delete st.log[d];
   addHist(Object.assign({t:Date.now(),r,n:rname(r),s:sec},rets&&rets.length?{ret:rets}:{}));
   st.totalSec=(st.totalSec||0)+sec;st.bestStreak=Math.max(st.bestStreak||0,streak());
   if(rets&&rets.length)st.bestRet=Math.max(st.bestRet||0,...rets);
-  save();
+  save();return true;
 }
 // Gyakorlások egyenként (a statisztikához): időpont, ritmus és a neve akkor, hossz; kb. 13 hónapig
 function addHist(h){st.hist.push(h);const lim=Date.now()-400*864e5;st.hist=st.hist.filter(x=>x.t>=lim).slice(-3000)}
@@ -2730,9 +3295,98 @@ function renderJournal(){
   $('calSum').textContent=L.monthSum(act,Math.round(tot/60));
   $('calNext').disabled=calOff>=0;$('calPrev').disabled=calOff<=-12;
   $('tabNote').textContent=L.tabN(st.tabN||0);       // a Tabata külön számít, nem légzésperc
-  renderStatsBox();
+  renderTests();renderMood();renderStatsBox();
 }
 $('calPrev').onclick=()=>{calOff--;renderJournal()};
+$('moodSw').onclick=()=>{st.mood=!st.mood;setSwitch($('moodSw'),st.mood);save()};
+
+// ---------------------------------------------------------------- visszatartás-teszt
+// BOLT (Buteyko): normál kilégzés után az első légszomjig; maximális: amíg bírod. A főképernyőn fut: koppintás indít,
+// koppintás megállít, koppintás vissza. Az eredmények (st.tests) a naplóba kerülnek, grafikonnal.
+let test=null;
+function boltLv(s){return L.boltLv[Math.min(4,Math.floor(s/10))]}
+function testStart(k){
+  if(run)stop();closeSheet();ensureAudio();
+  test={k,st:'ready'};app.classList.remove('idle');app.classList.add('subon');
+  ph.textContent=L.prep;fitRing('prep');ct.textContent='';sub.textContent=L['tIn_'+k];meta.textContent=L['t_'+k];size(.5,1);lock();
+}
+function testTap(){
+  if(test.st==='ready'){
+    test.st='hold';test.t0=performance.now();test.bell=0;ph.textContent=L.hold;fitRing('hold');ct.textContent='0';sub.textContent=L['tOut_'+test.k];buzz();size(0,90);
+    test.iv=setInterval(()=>{const s=Math.floor((performance.now()-test.t0)/1000);ct.textContent=s;if(s>=10&&s%10===0&&s!==test.bell){test.bell=s;ding(660)}},200);
+    return;
+  }
+  if(test.st==='hold'){
+    clearInterval(test.iv);
+    const s=Math.round((performance.now()-test.t0)/100)/10,prev=(st.tests||[]).filter(x=>x.k===test.k).pop();
+    st.tests=[...(st.tests||[]),{t:Date.now(),k:test.k,s}].slice(-500);save();
+    test.st='done';buzz();ph.textContent=L.tResult;fitRing('done');ct.textContent=Math.round(s);size(.5,1);unlock();
+    sub.textContent=[test.k==='bolt'?boltLv(s):'',prev?L.tPrev((s>prev.s?'+':'')+num(Math.round((s-prev.s)*10)/10)):''].filter(Boolean).join(' · ');
+    return;
+  }
+  testEnd();
+}
+function testEnd(){if(!test)return;clearInterval(test.iv);test=null;app.classList.remove('subon');app.classList.add('idle');idleLabel();showMeta();unlock();size(0,1)}
+function chart(r){         // az utolsó 20 eredmény vonaldiagramon, az első és az utolsó dátummal
+  r=r.slice(-20);const W=300,H=70,mx=Math.max(...r.map(x=>x.s))*1.15||1,df=new Intl.DateTimeFormat(L.locale,{month:'short',day:'numeric'});
+  const pts=r.map((x,k)=>[(k/(r.length-1))*(W-20)+10,H-6-x.s/mx*(H-16)].map(v=>v.toFixed(1)));
+  return `<svg class="tchart" viewBox="0 0 ${W} ${H+18}" role="img" aria-label="${esc(r.map(x=>L.sec(num(x.s))).join(', '))}"><polyline points="${pts.map(p=>p.join(',')).join(' ')}"/>`+
+    pts.map(p=>`<circle cx="${p[0]}" cy="${p[1]}" r="3.5"/>`).join('')+`<text x="10" y="${H+14}">${df.format(r[0].t)}</text><text x="${W-10}" y="${H+14}" text-anchor="end">${df.format(r[r.length-1].t)}</text></svg>`;
+}
+function renderTests(){
+  const box=$('testBox'),res=k=>(st.tests||[]).filter(x=>x.k===k);
+  box.innerHTML=['bolt','max'].map(k=>{const r=res(k),last=r[r.length-1],best=r.length?Math.max(...r.map(x=>x.s)):0;
+    return `<div class="item"><span><b>${L['t_'+k]}</b><small class="desc">${last?L.tLast+': '+L.sec(num(last.s))+(k==='bolt'?' · '+boltLv(last.s):'')+' · '+L.tBest+': '+L.sec(num(best)):L.tNone}</small></span>`+
+      `<button class="tgo" data-k="${k}">${L.tGo}</button></div>${r.length>1?chart(r):''}`}).join('')+`<div class="note">${esc(L.holdInfo)}</div>`;
+  box.querySelectorAll('.tgo').forEach(b=>b.onclick=()=>testStart(b.dataset.k));
+}
+
+// ---------------------------------------------------------------- hangulat előtte és utána
+// Bekapcsolva a gyakorlás előtt és után egy koppintással 1–5; az utolsó 30 gyakorlás átlaga a naplóban.
+const MOODS=['😫','😟','😐','🙂','😌'];let m0=null;
+function askMood(q,cb){
+  const box=$('mood'),f=$('moodFaces');$('moodQ').textContent=L[q];
+  f.innerHTML=MOODS.map((e,k)=>`<button data-v="${k+1}" aria-label="${esc(L.mood[k])}">${e}</button>`).join('');
+  box.hidden=false;
+  const done=v=>{box.hidden=true;cb(v)};
+  f.querySelectorAll('button').forEach(b=>b.onclick=e=>{e.stopPropagation();done(+b.dataset.v)});
+  $('moodSkip').onclick=e=>{e.stopPropagation();done(null)};
+}
+function renderMood(){
+  const hs=st.hist.filter(x=>x.m).slice(-30),box=$('moodBox');$('moodH').hidden=box.hidden=!hs.length;if(!hs.length)return;
+  const a=hs.reduce((t,x)=>t+x.m[0],0)/hs.length,b=hs.reduce((t,x)=>t+x.m[1],0)/hs.length,f=v=>num(Math.round(v*10)/10);
+  box.innerHTML=`<div class="item"><span><b>${MOODS[Math.round(a)-1]} → ${MOODS[Math.round(b)-1]}</b><small class="desc">${esc(L.moodStat(f(a),f(b),hs.length))}</small></span></div>`+
+    `<div class="mrow">${hs.slice(-10).reverse().map(x=>`<span>${MOODS[x.m[0]-1]}→${MOODS[x.m[1]-1]}</span>`).join('')}</div>`;
+}
+
+// ---------------------------------------------------------------- programok
+// Többnapos programok: naponta egy gyakorlás [ritmus, perc]; a ciklusos légzésnél [ritmus, kör]. Egy program fut egyszerre
+// (st.prog: {id, day: a következő nap sorszáma 0-tól, last: az utolsó teljesített nap dátuma}). A nap akkor teljesül,
+// ha a gyakorlás végigment; a beállítások közben nem változnak.
+const PROGS={
+  start7:[['calm',3],['equal',4],['sigh',3],['box',4],['coh',5],['478',4],['coh',8]],
+  sleep14:[['calm',4],['478',3],['long',5],['slow',6],['bee',4],['478',5],['slow',8],['long',8],['bee',6],['478',6],['slow',10],['long',10],['bee',8],['slow',12]],
+  energy10:[['box',3],['tri',4],['wake',3],['box',5],['nadi',5],['kapal',3],['wake',5],['nadi',6],['whm',2],['whm',3]]};
+function progDay(){const p=st.prog;return p&&PROGS[p.id]&&p.day<PROGS[p.id].length?PROGS[p.id][p.day]:null}
+function progLen(d){return d[0]==='whm'?L.rounds(d[1]):L.min(d[1])}
+function progGo(){const d=progDay();if(!d)return;closeSheet();notice.classList.remove('show');if(run)stop();po=d[0]==='whm'?{mode:'whm',rounds:d[1]}:{mode:d[0],min:d[1]};start()}
+function progDone(){
+  const p=st.prog;if(!p||!PROGS[p.id])return;p.day++;p.last=dayKey(new Date());save();
+  if(p.day>=PROGS[p.id].length)note(()=>L.progFin(L['p_'+p.id]),'ok',()=>notice.classList.remove('show'));
+}
+function renderPrograms(){
+  const p=st.prog,today=dayKey(new Date()),box=$('progList');
+  box.innerHTML=Object.keys(PROGS).map(id=>{const days=PROGS[id],act=!!p&&p.id===id,d=act?p.day:0,fin=act&&d>=days.length,nx=act&&!fin?days[d]:null;
+    return `<div class="prog"><div class="item"><span><b>${L['p_'+id]}</b><small class="desc">${esc(L['pd_'+id])} · ${L.progDays(days.length)}</small></span></div>`+
+      (act?`<div class="pbar" role="img" aria-label="${d}/${days.length}"><i style="width:${Math.min(100,d/days.length*100)}%"></i></div>`+
+        `<div class="note">${fin?esc(L.progFin(L['p_'+id])):(p.last===today?esc(L.progDoneToday)+' ':'')+esc(L.progNext(d+1,rname(nx[0]),progLen(nx)))}</div>`:'')+
+      `<div class="opts">${act&&!fin?`<button data-a="go">${L.progGoBtn}</button><button data-a="stop">${L.progStop}</button>`:`<button data-a="start" data-id="${id}">${act?L.progRestart:L.progStartBtn}</button>`}</div></div>`}).join('');
+  box.querySelectorAll('button').forEach(b=>b.onclick=()=>{
+    if(b.dataset.a==='go')progGo();
+    else if(b.dataset.a==='stop'){if(!confirm(L.progStopAsk))return;st.prog=null;save();renderPrograms()}
+    else{if(st.prog&&st.prog.id!==b.dataset.id&&progDay()&&!confirm(L.progSwitchAsk))return;st.prog={id:b.dataset.id,day:0,last:''};save();renderPrograms()}
+  });
+}
 // Kitüntetések és statisztika (kikapcsolható): szint az összes perc alapján, kitüntetések, a gyakorlások listája és bontások.
 // A legtöbb kitüntetés a meglévő naplóból is kiszámolható, így a korábbi gyakorlások is beszámítanak.
 const LEVELS=[0,15,60,150,300,600,1000,1500,2500,4000,6000,10000];   // perc
@@ -2782,7 +3436,7 @@ function badgeCheck(){
 
 // Súgó és névjegy: használat, újdonságok, adatvédelem; a verzió mellett a közzététel ideje (a gyorsítótár nevéből)
 function renderAbout(){
-  $('helpList').innerHTML=L.help.map(x=>`<li>${x}</li>`).join('');
+  $('helpList').innerHTML=[...L.help,L.helpNew].map(x=>`<li>${x}</li>`).join('');
   const df=new Intl.DateTimeFormat(L.locale,{year:'numeric',month:'long',day:'numeric'});
   $('newsList').innerHTML=NEWS.map(n=>`<div class="news"><b>${n.v} · ${df.format(new Date(n.d+'T12:00'))}</b><ul>${(n[st.lang]||n.en).map(x=>`<li>${x}</li>`).join('')}</ul></div>`).join('');
   $('verTxt').textContent=`${L.version} ${APP_VER}`;
@@ -2803,11 +3457,12 @@ function size(big,d){
 }
 function phase(){
   if(i===0){                                         // minden kör elején (a Lassuló így nyúlik, a sorozat így lép tovább)
-    if(!tb&&simple(st.mode)&&simple(runMode))runMode=st.mode;   // légzés közben a Beállításokban váltott ritmus a következő körtől él
+    if(!tb&&!po&&simple(st.mode)&&simple(runMode))runMode=st.mode;   // légzés közben a Beállításokban váltott ritmus a következő körtől él
     cur=cyc===0?[['prep',pre]]:pattern(runMode);      // 0. kör: visszaszámlálás indulás előtt
   }
   const [kind,secs]=cur[i],early=said===cyc+':'+i;  // early: a nevét már előre bemondtuk
-  ph.textContent=L[kind];left=secs;ct.textContent=left;said='';
+  metroStop();
+  ph.textContent=L[kind];left=secs;ct.textContent=Math.ceil(left);said='';
   if(tb){                                            // a képernyő színe jelzi a szakaszt (CSS: html[data-tb])
     const exn=cur[i][4],w=tw(),co=w.col[kind]||TBCOL[kind],h=document.documentElement;ph.style.fontSize=ph.style.whiteSpace='';
     h.dataset.tb=kind;h.style.setProperty('--tbc',co);h.style.setProperty('--tbt',ink(co));
@@ -2816,6 +3471,7 @@ function phase(){
     if(!mute){
       sig(w.snd[kind]||TBSND[kind]);tbBuzz(kind==='work'?400:kind==='rest'?[150,100,150]:kind==='prep'?0:200);
       if(!early)speakPhase(cur[i]);
+      if(kind==='work')metroStart(secs,+w.bpm||0);
     }
     sayAhead();mediaMeta();return;
   }
@@ -2827,7 +3483,7 @@ function phase(){
   sayAhead();mediaMeta();
 }
 // A szám a körben: mély légzésnél a hátralévő légzések, visszatartásnál az eltelt idő, máskor a hátralévő másodpercek
-function disp(){const [k,secs]=cur[i];return k==='pwr'?Math.ceil(left/3):k==='retain'?secs-left:left}
+function disp(){const [k,secs]=cur[i];return k==='pwr'?Math.ceil(left/3):k==='retain'?Math.floor(secs-left):Math.ceil(left)}
 function tipFor(p){const [k,,side]=p;return side?L['via'+side]:k==='retain'?L.retainTip:k==='pump'?L.pumpTip:''}
 function pwrIn(){size(1,2);if(!mute&&voice)voice.inhale(2)}
 function pwrOut(){size(0,1);if(!mute&&voice)voice.exhale(1)}
@@ -2854,7 +3510,7 @@ function fitPh(){   // hosszú gyakorlatnév: kisebb betű, hogy egy sorba férj
   const fs=parseFloat(getComputedStyle(ph).fontSize)*max/w;
   if(fs>=22)ph.style.fontSize=fs+'px';else{ph.style.fontSize='22px';ph.style.whiteSpace='normal'}
 }
-function fmt(s){return Math.floor(s/60)+":"+String(s%60).padStart(2,'0')}
+function fmt(s){s=Math.max(0,Math.ceil(s));return Math.floor(s/60)+":"+String(s%60).padStart(2,'0')}
 function planSecs(p){return p.reduce((a,x)=>a+x[1],0)}
 function showMeta(){
   if(exitArmed){meta.textContent=L.exitAgain;return}   // amíg a Kilépés élesítve van, ez a felirat marad
@@ -2867,13 +3523,13 @@ function showMeta(){
   meta.textContent=durLabel()+' · '+(st.tone&&st.bell?`${v} + ${c}`:st.tone?L.only(v):st.bell?L.only(c):L.silent);
 }
 function runMeta(){
-  const e=eff(),q=seq(runMode);
+  const e=eff(),q=seq(runMode),pd=po?L.progDayN(st.prog.day+1)+' · ':'';
   if(cyc===0)return L.prep;
-  if(runMode==='whm')return L.tround(`${cyc}/${st.whr}`)+' · '+fmt(e);
+  if(runMode==='whm')return pd+L.tround(`${cyc}/${whRounds()}`)+' · '+fmt(e);
   if(q){const [r,k]=seqStep(q,e);return `${rname(r)} · ${k+1}/${q.s.length} · ${fmt(Math.max(0,seqMins(q)*60-e))}`}
-  if(st.durType==='br')return L.brN(Math.min(cyc,st.breaths),st.breaths);
-  if(st.durType==='inf')return L.round(cyc,fmt(e));
-  return L.round(cyc,fmt(Math.max(0,st.dur*60-e)));
+  if(dType()==='br')return L.brN(Math.min(cyc,st.breaths),st.breaths);
+  if(dType()==='inf')return L.round(cyc,fmt(e));
+  return pd+L.round(cyc,fmt(Math.max(0,dMin()*60-e)));
 }
 // A gyakorlás hossza szövegesen: perc, légzésszám, ∞; a sorozatnak és a ciklusos légzésnek saját hossza van
 function durLabel(id=st.mode){
@@ -2881,38 +3537,44 @@ function durLabel(id=st.mode){
   return st.durType==='br'?L.brCount(st.breaths):st.durType==='inf'?'∞':L.min(st.dur);
 }
 function estSecs(){       // várható hossz (mp): az alvás mód elsötétüléséhez és a lezárási képernyőhöz
-  const q=seq(runMode);if(q)return seqMins(q)*60;if(runMode==='whm')return st.whr*150;
-  return st.durType==='br'?st.breaths*planSecs(pattern(runMode)):st.durType==='inf'?900:st.dur*60;
+  const q=seq(runMode);if(q)return seqMins(q)*60;if(runMode==='whm')return whRounds()*150;
+  return dType()==='br'?st.breaths*planSecs(pattern(runMode)):dType()==='inf'?900:dMin()*60;
 }
 // Időzítés a valós órához igazítva: ha a böngésző a háttérben (lezárt képernyőnél) ritkábban hív, a lemaradt
 // másodperceket bepótoljuk; nagy lemaradásnál hangok nélkül, hogy ne szóljon egyszerre sok jelzés.
-// A 250 ms-os ütem mellett a következő egész másodpercre külön időzítő is szól, így a váltás (szám, hang, bemondás) pontosan akkor van.
+// A 250 ms-os ütem mellett a következő fél másodpercre külön időzítő is szól, így a váltás (szám, hang, bemondás) pontosan akkor van.
+// Az óra fél másodpercenként lép, mert a saját ritmusok fél másodpercre állíthatók; a másodpercenkénti dolgok
+// (3-2-1 csipogás, Kapalbhati-ütem, visszaszámlálás) a szakasz egész másodperceire esnek.
 let t0=0,paused=false,pauseAt=0,mute=false,tickT=0,pre=0,ret=[];   // pre: visszaszámlálás (mp); ret: visszatartási idők
 function eff(){return Math.max(0,elapsed-pre)}       // a gyakorlásból eltelt idő, a visszaszámlálás nélkül
 function sessionDone(c,el){                          // véget ér-e a gyakorlás a kör végén; c: a következő kör, el: az eltelt idő akkor
   const e=Math.max(0,el-pre),q=seq(runMode);
-  if(runMode==='whm')return c>st.whr;
+  if(runMode==='whm')return c>whRounds();
   if(q)return e>=seqMins(q)*60;
-  if(st.durType==='br')return c>st.breaths;
-  return st.durType!=='inf'&&e>=st.dur*60;
+  if(dType()==='br')return c>st.breaths;
+  return dType()!=='inf'&&e>=dMin()*60;
 }
 function tick(){
   clearTimeout(tickT);
   if(!run||paused)return;
-  const due=Math.floor((performance.now()-t0)/1000);
+  const due=Math.floor((performance.now()-t0)/500)/2;
   mute=due-elapsed>3;
-  while(run&&!paused&&elapsed<due){if(due-elapsed===1)mute=false;step()}
+  while(run&&!paused&&elapsed<due){if(due-elapsed<=.5)mute=false;step()}
   mute=false;
-  if(run&&!paused)tickT=setTimeout(tick,t0+(elapsed+1)*1000-performance.now()+2);
+  if(run&&!paused)tickT=setTimeout(tick,t0+(elapsed+.5)*1000-performance.now()+2);
 }
 function step(){
-  elapsed++;left--;
+  elapsed+=.5;left-=.5;
   if(left<=0){
-    if(!tb&&cur[i][0]==='retain')ret.push(cur[i][1]);   // a felső határig kitartott
+    if(!tb&&cur[i][0]==='retain')ret.push(Math.round(cur[i][1]));   // a felső határig kitartott
     i++;
     if(i>=cur.length){if(tb||sessionDone(cyc+1,elapsed)){finish();return}i=0;cyc++}
     phase();
-  }else if(tb){tbCt();if(left<=3&&!mute){sig('tick');tbBuzz(60)}}   // Tabata: 3-2-1 csipogás a váltás előtt
+  }else if(tb){
+    if(!(left%1)){tbCt();if(left<=3&&!mute){sig('tick');tbBuzz(60)}}   // Tabata: 3-2-1 csipogás a váltás előtt
+    if(cur[i][0]==='work'&&!mute&&left>3)tbCue(cur[i][1]);
+  }
+  else if(left%1){}                                 // fél másodperc: a kijelzett (felfelé kerekített) szám nem változik
   else{
     ct.textContent=disp();
     const [k,secs]=cur[i],t=secs-left;
@@ -2922,16 +3584,35 @@ function step(){
   }
   showMeta();
 }
+// Tabata munka közben: félidő és figyelmeztetés a vége előtt (edzésenként állítható), jelzőhanggal, rezgéssel és bemondással.
+// Ha a kettő egybeesik, a figyelmeztetés szól.
+function tbCue(secs){
+  const w=tw(),warn=+w.warn||0;
+  if(warn&&left===warn&&secs>=warn+5){sig(w.snd.warn||TBSND.warn);tbBuzz([120,80,120]);speakCue('w'+warn,L.cueLeft(warn))}
+  else if(w.half&&secs>=10&&left===secs/2){sig(w.snd.half||TBSND.half);tbBuzz(150);speakCue('half',L.cueHalf)}
+}
+function speakCue(k,text){if(!st.speak)return;const v=voxFor();if(recVoice()&&v&&v.clips[k])playRec([k]);else speakText(text)}
+// Metronóm munka közben: a kattanások a szakasz végéig előre be vannak ütemezve; szünetnél és váltáskor leállnak.
+// Saját zene mellett nem szól (ott nincs Web Audio).
+let metro=[];
+function metroStart(secs,bpm){
+  metroStop();if(!bpm||st.music||!st.tvol||!ensureAudio())return;
+  const iv=60/bpm,t=ac.currentTime,out=tbOut();
+  for(let k=1;k*iv<secs-.1;k++){const o=ac.createOscillator(),g=ac.createGain(),at=t+k*iv;o.frequency.value=k%4?1300:1700;
+    g.gain.setValueAtTime(0,at);g.gain.linearRampToValueAtTime(.35,at+.003);g.gain.exponentialRampToValueAtTime(.001,at+.05);
+    o.connect(g);g.connect(out);o.start(at);o.stop(at+.06);metro.push(o)}
+}
+function metroStop(){metro.forEach(o=>{try{o.stop()}catch(e){}});metro=[]}
 // Ciklusos légzés: a visszatartás koppintásra ér véget; az ideje bekerül a naplóba
 function endRetain(){
   if(!run||tb||cur[i][0]!=='retain')return;
   if(paused)resume();
-  ret.push(cur[i][1]-left);t0=performance.now()-elapsed*1000;i++;phase();showMeta();tick();
+  ret.push(Math.round(cur[i][1]-left));t0=performance.now()-elapsed*1000;i++;phase();showMeta();tick();
 }
 // Szünet és folytatás: a lezárási képernyő, a fülhallgató gombja, vagy ha a telefon elveszi a hangot (pl. hívás)
 function pause(){
   if(!run||paused||holdFn)return;                    // az indulás előtti pillanatban (a hangra várva) nincs mit megállítani
-  paused=true;pauseAt=performance.now();
+  paused=true;pauseAt=performance.now();metroStop();
   if(voice)voice.quiet(.5);ambStop(1);if('speechSynthesis' in window)speechSynthesis.cancel();
   clearTimeout(sayT);clearTimeout(tickT);said='';    // az előre bemondott név a folytatás után a váltáskor újra elhangzik
   if(st.sleep&&!tb)setDim(getComputedStyle(dim).opacity,0);     // az elsötétülés is megáll
@@ -2944,7 +3625,8 @@ function resume(){
   if(!run||!paused)return;
   paused=false;t0+=performance.now()-pauseAt;if(!(tb&&st.music))ensureAudio();
   app.classList.remove('paused');ringBtn.setAttribute('aria-label',tb?L.paused:L.stop);
-  const [kind,,,,exn]=cur[i];ph.textContent=tb&&kind==='work'&&exn?exn:L[kind];ct.textContent=tb?left:disp();if(tb){fitPh();tbCt()}
+  const [kind,,,,exn]=cur[i];ph.textContent=tb&&kind==='work'&&exn?exn:L[kind];ct.textContent=tb?Math.ceil(left):disp();if(tb){fitPh();tbCt()}
+  if(tb&&kind==='work')metroStart(left,+tw().bpm||0);
   if(!tb){                                           // a félbemaradt szakasz a hátralévő időre folytatódik
     const tip=tipFor(cur[i]);sub.textContent=tip;app.classList.toggle('subon',!!tip);fitRing(kind);
     if(kind!=='hold'&&kind!=='pwr')size(curBig,left);
@@ -3024,10 +3706,13 @@ function orient(){
 }
 document.addEventListener('fullscreenchange',orient);
 function setDim(op,secs){dim.style.transition=`opacity ${secs}s linear`;dim.style.opacity=op}
-function start(){
-  if(HV.includes(st.mode)&&!st.hvOk){if(!confirm(L.hvWarn))return;st.hvOk=true;save()}   // hiperventiláció: egyszer figyelmeztetünk
+function start(asked){
+  if(test)testEnd();
+  const md=po?po.mode:st.mode;
+  if(st.mood&&!asked&&md!=='tabata'){askMood('moodQ0',v=>{m0=v;start(true)});return}   // hangulat előtte (bekapcsolható)
+  if(HV.includes(md)&&!st.hvOk){if(!confirm(L.hvWarn)){po=null;return}st.hvOk=true;save()}   // hiperventiláció: egyszer figyelmeztetünk
   fsTried=false;goFull();
-  closeSheet();tb=st.mode==='tabata';runMode=st.mode;pre=!tb&&st.cd?st.cd:0;ret=[];badgesBefore=st.stats?earned():null;
+  closeSheet();tb=md==='tabata';runMode=md;pre=!tb&&st.cd?st.cd:0;ret=[];badgesBefore=st.stats?earned():null;
   const mus=tb&&st.music;                            // saját zene mellett: se Web Audio, se hosszú hurok, a jelzések klipekből
   if(mus){if(ac&&ac.state==='running')ac.suspend();['tick','end',...Object.values(Object.assign({},TBSND,tw().snd))].forEach(x=>x!=='none'&&clip(x))}else ensureAudio();
   document.documentElement.classList.toggle('tb-run',tb);
@@ -3065,20 +3750,22 @@ function idleLabel(){ph.textContent=finished?L.done:L.start;fitRing();sub.textCo
 function stop(keepFull){
   if(!run)return;
   if(!keepFull)leaveFull();
-  run=false;paused=false;app.classList.remove('paused');clearInterval(tm);clearTimeout(tickT);clearTimeout(holdT);holdFn=null;clearTimeout(sayT);said='';mediaStop();mediaNext(false);skipBtn.hidden=true;
+  run=false;paused=false;app.classList.remove('paused');clearInterval(tm);clearTimeout(tickT);clearTimeout(holdT);holdFn=null;metroStop();clearTimeout(sayT);said='';mediaStop();mediaNext(false);skipBtn.hidden=true;
   size(0,1.2);if(voice)voice.quiet(.8);ambStop(keepFull?10:2);   // alvás mód végén lassan halkul
   if('speechSynthesis' in window)speechSynthesis.cancel();
   clearTimeout(focusT);app.classList.remove('focus');hint.classList.remove('show');
   document.documentElement.classList.remove('tb-run');delete document.documentElement.dataset.tb;ct.classList.remove('long');
   document.documentElement.style.removeProperty('--tbc');document.documentElement.style.removeProperty('--tbt');
-  app.classList.remove('subon');app.classList.add('idle');idleLabel();unlock();showMeta();if(!tb)logSession(eff(),runMode,ret);badgeCheck();
+  app.classList.remove('subon');app.classList.add('idle');idleLabel();unlock();showMeta();const logged=!tb&&logSession(eff(),runMode,ret);badgeCheck();
+  if(logged&&m0!=null&&st.mood&&!(st.sleep&&keepFull)){const h=st.hist[st.hist.length-1],a=m0;askMood('moodQ1',v=>{if(v!=null){h.m=[a,v];save()}})}
+  m0=null;po=null;
   setDim(0,.6);
 }
 function finish(){
   const sleeping=st.sleep&&!tb;
-  if(tb){st.tabN=(st.tabN||0)+1;addHist({t:Date.now(),r:'tabata',n:wname(tw()),s:elapsed});save();sig('end');tbBuzz([300,100,300,100,300])}
+  if(tb){st.tabN=(st.tabN||0)+1;addHist({t:Date.now(),r:'tabata',n:wname(tw()),s:Math.round(elapsed)});save();sig('end');tbBuzz([300,100,300,100,300])}
   else if(!sleeping){ding(523);setTimeout(()=>ding(784),400)}
-  stop(sleeping);finished=true;idleLabel();
+  const pd=!!po;stop(sleeping);finished=true;idleLabel();if(pd)progDone();
   if(sleeping)setDim(.97,2);                         // alvás módban sötét (és teljes képernyős) marad, a képernyő magától kikapcsolhat
 }
 let undim=false;                                     // alvás mód után az első koppintás csak felébreszti a képernyőt
@@ -3097,6 +3784,7 @@ ringBtn.onclick=()=>{
   if(lpDone){lpDone=false;return}
   if(undim){undim=false;return}
   if(run&&paused){resume();return}
+  if(test){testTap();return}                         // visszatartás-teszt: indítás, megállítás, vissza
   if(run&&!tb&&cur[i][0]==='retain'){endRetain();return}   // ciklusos légzés: koppintás = vége a visszatartásnak
   if(run&&tb){pause();return}
   run?stop():start();
@@ -3105,7 +3793,7 @@ skipBtn.onclick=skip;
 function renderModes(){
   const box=$('modes');
   box.innerHTML=allIds().filter(id=>st.shown.includes(id)).map(id=>`<button data-m="${id}" aria-pressed="${st.mode===id}"><span>${esc(rname(id))}</span><small>${esc(patternLabel(id))}</small></button>`).join('');
-  box.querySelectorAll('button').forEach(b=>b.onclick=()=>{st.mode=b.dataset.m;save();mark();if(run)stop();renderTabPanel();showMeta()});
+  box.querySelectorAll('button').forEach(b=>b.onclick=()=>{testEnd();st.mode=b.dataset.m;save();mark();if(run)stop();renderTabPanel();showMeta()});
   renderTabPanel();fitModes();
 }
 function mark(){document.querySelectorAll('[data-m]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.m===st.mode))}
@@ -3133,10 +3821,10 @@ const sheet=$('sheet'),backdrop=$('backdrop'),setBtn=$('setBtn'),voiceOpts=$('vo
 // Főoldal (napló + kategóriák) és almenük. A telefon vissza gombja/mozdulata (CloseWatcher) az almenüből a főoldalra,
 // onnan a főképernyőre lép, és nem zárja be az appot. Böngészőelőzményt szándékosan nem írunk: azzal a Kilépés gomb
 // (window.close) nem működne. CloseWatcher nélkül (Firefox, Safari) az Esc billentyű lép vissza.
-const PAGES={journal:'journal',rhythms:'rhythms',tabata:'r_tabata',session:'session',sound:'sound',look:'look',lang:'language',backup:'backup',about:'about'};
+const PAGES={journal:'journal',rhythms:'rhythms',tabata:'r_tabata',session:'session',programs:'programs',sound:'sound',look:'look',lang:'language',backup:'backup',about:'about'};
 let page='main',cwMain=null,cwPage=null;
 function watch(fn){if(!('CloseWatcher' in window))return null;try{const w=new CloseWatcher();w.onclose=fn;return w}catch(e){return null}}
-function setTitle(){const h=$('sheetTitle');h.textContent=L[PAGES[page]||'settings'];fitText(h,16)}
+function setTitle(){const h=$('sheetTitle');h.textContent=page==='info'?rname(infoId):L[PAGES[page]||'settings'];fitText(h,16)}
 function showPage(p){
   page=p;sheet.querySelectorAll('.page').forEach(x=>x.hidden=x.dataset.page!==p);
   $('backBtn').hidden=p==='main';setTitle();$('sheetBody').scrollTop=0;
@@ -3145,12 +3833,14 @@ function showPage(p){
   if(p==='about')renderAbout();
   if(p==='session')renderSession();
   if(p==='tabata')renderTabSettings();
+  if(p==='programs')renderPrograms();
   fitLabels(sheet.querySelector(`.page[data-page="${p}"]`));
 }
 function navSummary(){   // a kategóriák mellett a mostani érték
   const sv=(k,v)=>$('sv_'+k).textContent=v,v=L['v_'+st.voice],c=L['c_'+st.chime];
   sv('rhythms',allIds().filter(id=>st.shown.includes(id)).map(rname).join(', '));
   sv('tabata',patternLabel('tabata'));
+  const pg=st.prog&&PROGS[st.prog.id];sv('programs',pg?`${L['p_'+st.prog.id]} · ${Math.min(st.prog.day,pg.length)}/${pg.length}`:'');
   sv('session',(st.durType==='br'?L.brCount(st.breaths):st.durType==='inf'?'∞':L.min(st.dur))+(st.cd?' · '+L.sec(st.cd):'')+(st.sleep?' · '+L.sleepMode:''));
   sv('sound',st.tone&&st.bell?`${v} + ${c}`:st.tone?v:st.bell?c:L.silent);
   sv('look',L['t_'+st.color]);
@@ -3158,11 +3848,29 @@ function navSummary(){   // a kategóriák mellett a mostani érték
   sv('about',APP_VER);
 }
 function openSheet(){
+  testEnd();
   voiceNote();showPage('main');sheet.hidden=backdrop.hidden=false;setBtn.setAttribute('aria-expanded','true');clearTimeout(focusT);app.classList.remove('focus');
   cwMain=watch(()=>{cwMain=null;closeSheet()});$('doneBtn').focus();
 }
 function openPage(p){showPage(p);cwPage=watch(()=>{cwPage=null;showPage('main')});$('sheetTitle').focus({preventScroll:true})}
-function backToMain(){if(cwPage){cwPage.destroy();cwPage=null}showPage('main')}
+function backToMain(){if(cwPage){cwPage.destroy();cwPage=null}if(page==='info')openPage('rhythms');else showPage('main')}
+// Részletes leírás egy technikáról (mire jó, hogyan, mire figyelj, forrás): info/<nyelv>.json, az első megnyitáskor
+// töltődik le, utána a gyorsítótárból jön. A Ritmusok oldaláról nyílik, és oda is lép vissza.
+let infoId='';const INFO={};
+function infoData(){const l=st.lang;return INFO[l]||(INFO[l]=fetch(`info/${l}.json`).then(r=>r.ok?r.json():{}).catch(()=>{delete INFO[l];return {}}))}
+function openInfo(id){
+  infoId=id;if(cwPage){cwPage.destroy();cwPage=null}
+  showPage('info');cwPage=watch(()=>{cwPage=null;openPage('rhythms')});$('sheetTitle').focus({preventScroll:true});
+  renderInfo();
+}
+function renderInfo(){
+  const id=infoId;
+  $('infoBody').innerHTML=`<div class="group"><div class="item"><span><b>${esc(rname(id))}</b><small class="desc">${esc(L['d_'+id])}</small></span><em class="ipat">${esc(patternLabel(id))}</em></div></div>`+
+    `<div class="group" id="infoTxt"><div class="note">…</div></div><div class="opts"><button id="infoTry">${L.tryIt}</button></div><div class="note">${esc(L.noMed)}</div>`;
+  $('infoTry').onclick=()=>{st.mode=id;if(!st.shown.includes(id))st.shown=[...st.shown.slice(0,2),id];save();renderModes();mark();closeSheet();start()};
+  infoData().then(d=>{const x=d[id];if(infoId!==id||page!=='info')return;
+    $('infoTxt').innerHTML=x?['what','how','care','src'].filter(k=>x[k]).map(k=>`<h4>${L['i_'+k]}</h4><p>${esc(x[k])}</p>`).join(''):`<div class="note">${esc(L.infoNone)}</div>`});
+}
 function closeSheet(){
   if(sheet.hidden)return;
   [cwPage,cwMain].forEach(w=>w&&w.destroy());cwPage=cwMain=null;
@@ -3212,7 +3920,7 @@ function ambPick(id){                             // választáskor 4 mp-ig hall
   $('ambVolRow').classList.toggle('dim',id==='off');
   if(id==='off'){ambStop(.6);return}
   if(run){if(!tb)ambStart(1.5);return}
-  ambStart(1);const a=amb;setTimeout(()=>{if(!run&&amb===a)ambStop(1.5)},4000);
+  ambStart(1);const a=amb&&amb.gen;setTimeout(()=>{if(!run&&amb&&amb.gen===a)ambStop(1.5)},4000);
 }
 const ambVol=$('ambVol');
 ambVol.oninput=()=>{st.ambVol=+ambVol.value;fill(ambVol);save();if(ambGain)ramp(ambGain.gain,(st.ambVol/100)**1.5*1.2,.1)};
@@ -3227,15 +3935,17 @@ function rrow(id,desc){
   return `<button class="rrow" data-id="${id}" aria-pressed="${st.shown.includes(id)}"><i aria-hidden="true">✓</i><span><b>${esc(rname(id))}</b>${desc?`<small>${esc(desc)}</small>`:''}</span><em>${esc(patternLabel(id))}</em></button>`;
 }
 function editRow(id,desc){return `<div class="rw">${rrow(id,desc)}<button class="redit" data-edit="${id}" aria-label="${esc(L.edit)}">✎</button></div>`}
+function infoRow(id){return `<div class="rw">${rrow(id,L['d_'+id])}<button class="redit" data-info="${id}" aria-label="${esc(L.details+': '+rname(id))}">ⓘ</button></div>`}
 function renderRhythms(){
-  let h=GROUPS.map(g=>`<h3>${L['g_'+g]}</h3><div class="group">${BIDS.filter(id=>R[id].g===g).map(id=>rrow(id,L['d_'+id])).join('')}</div>`).join('');
+  let h=GROUPS.map(g=>`<h3>${L['g_'+g]}</h3><div class="group">${BIDS.filter(id=>R[id].g===g).map(infoRow).join('')}</div>`).join('');
   h+=`<h3>${L.g_own}</h3><div class="group">`+st.customs.map(c=>editRow(c.id)+(editing===c.id?ownEditor(c):'')).join('')+`<button class="addrow" id="addOwn">${L.newOwn}</button></div>`;
   h+=`<h3>${L.g_seq}</h3><div class="group">`+st.seqs.map(q=>editRow(q.id,q.s.map(x=>rname(x[0])+' '+x[1]+'′').join(' → '))+(editing===q.id?seqEditor(q):'')).join('')+
     `<button class="addrow" id="addSeq">${L.newSeq}</button><div class="note">${L.seqInfo}</div></div>`;
   h+=`<h3>${L.r_tabata}</h3><div class="group">${rrow('tabata',L.d_tabata)}</div>`;
   rhOpts.innerHTML=h;
   rhOpts.querySelectorAll('.rrow').forEach(b=>b.onclick=()=>toggleShown(b.dataset.id));
-  rhOpts.querySelectorAll('.redit').forEach(b=>b.onclick=()=>{editing=editing===b.dataset.edit?'':b.dataset.edit;renderRhythms()});
+  rhOpts.querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>{editing=editing===b.dataset.edit?'':b.dataset.edit;renderRhythms()});
+  rhOpts.querySelectorAll('[data-info]').forEach(b=>b.onclick=()=>openInfo(b.dataset.info));
   $('addOwn').onclick=()=>{const c={id:newId('c'),n:`${L.r_own} ${st.customs.length+1}`,p:[4,0,6,0]};st.customs.push(c);editing=c.id;save();renderRhythms()};
   $('addSeq').onclick=()=>{const q={id:newId('q'),n:`${L.g_seq1} ${st.seqs.length+1}`,s:[['sigh',3],['coh',5]]};st.seqs.push(q);editing=q.id;save();renderRhythms()};
   const ed=rhOpts.querySelector('.editor');if(ed)bindEditor(ed);
@@ -3257,7 +3967,7 @@ function bindEditor(ed){
   inp.oninput=()=>{(c||q).n=inp.value.trim();save();renderModes();showMeta();const b=rhOpts.querySelector(`.rrow[data-id="${id}"] b`);if(b)b.textContent=rname(id)};
   ed.querySelector('.ok').onclick=()=>{editing='';renderRhythms()};
   ed.querySelector('.del').onclick=()=>{if(confirm(L.delAsk))removeRhythm(id)};
-  if(c){const names=[L.in,L.hold,L.out,L.hold],mn=[2,0,2,0],mx=[20,30,20,30];steppers(ed.querySelector('.steps'),c.p.map((v,k)=>[names[k],v,mn[k],mx[k],1]),(k,v)=>c.p[k]=v)}
+  if(c){const names=[L.in,L.hold,L.out,L.hold],mn=[1,0,1,0],mx=[20,30,20,30];steppers(ed.querySelector('.steps'),c.p.map((v,k)=>[names[k],v,mn[k],mx[k],.5]),(k,v)=>c.p[k]=v)}
   if(q){
     ed.querySelectorAll('.sqstep').forEach(row=>{const k=+row.dataset.k;
       row.querySelector('select').onchange=e=>{q.s[k][0]=e.target.value;again()};
@@ -3287,6 +3997,7 @@ $('pace').oninput=()=>{st.pace=+$('pace').value;$('pacev').textContent=paceLabel
 $('pace').onchange=()=>renderRhythms();
 // Gyakorlás hossza: perc, légzésszám vagy végtelen; és visszaszámlálás indulás előtt
 function renderSession(){
+  setSwitch($('moodSw'),!!st.mood);
   const dt=$('durType');dt.innerHTML=['min','br','inf'].map(k=>`<button data-k="${k}" aria-pressed="${st.durType===k}">${L['dt_'+k]}</button>`).join('');
   dt.querySelectorAll('button').forEach(b=>b.onclick=()=>{st.durType=b.dataset.k;save();renderSession();showMeta()});
   $('durRow').hidden=$('durSl').hidden=st.durType!=='min';
@@ -3333,25 +4044,45 @@ function renderTabSettings(){
   }
   steppers($('tsteps'),tabItems(8),tabSet,renderTabSettings);
   const w=tw(),look=$('tbLook');
-  look.innerHTML=['warm','prep','work','rest','cool'].map(k=>{const c=w.col[k]||TBCOL[k],sn=w.snd[k]||TBSND[k];
-    return `<div class="tlook"><b>${L[k]}</b><select data-k="${k}" aria-label="${esc(L[k])}">${SIGS.map(x=>`<option value="${x}"${x===sn?' selected':''}>${L['s_'+x]}</option>`).join('')}</select>`+
-      `<div class="sw">${PALETTE.map(x=>`<button data-k="${k}" data-c="${x}" style="--c:${x}" aria-pressed="${x===c}" aria-label="${L[k]} ${x}"></button>`).join('')}</div></div>`}).join('');
+  look.innerHTML=['warm','prep','work','rest','cool','half','warn'].map(k=>{const c=w.col[k]||TBCOL[k],sn=sigList().includes(w.snd[k])?w.snd[k]:TBSND[k],nm=k==='warn'?L.warnS:L[k];
+    return `<div class="tlook"><b>${nm}</b><select data-k="${k}" aria-label="${esc(nm)}">${sigList().map(x=>`<option value="${x}"${x===sn?' selected':''}>${L['s_'+x]}</option>`).join('')}</select>`+
+      (TBCOL[k]?`<div class="sw">${PALETTE.map(x=>`<button data-k="${k}" data-c="${x}" style="--c:${x}" aria-pressed="${x===c}" aria-label="${L[k]} ${x}"></button>`).join('')}</div>`:'')+'</div>'}).join('');
   look.querySelectorAll('select').forEach(e=>e.onchange=()=>{w.snd[e.dataset.k]=e.value;save();sig(e.value)});
   look.querySelectorAll('.sw button').forEach(b=>b.onclick=()=>{w.col[b.dataset.k]=b.dataset.c;save();renderTabSettings()});
   setSwitch($('musicSw'),!!st.music);tex.value=w.ex||'';$('tbShareNote').textContent='';
+  setSwitch($('halfSw'),!!w.half);
+  $('warnSel').innerHTML=[0,5,10,15,30].map(n=>`<option value="${n}"${n===(+w.warn||0)?' selected':''}>${n?L.sec(n):L.a_off}</option>`).join('');
+  $('bpmSel').innerHTML=[0,40,50,60,70,80,90,100,110,120,140,160,180].map(n=>`<option value="${n}"${n===(+w.bpm||0)?' selected':''}>${n?L.metroN(n):L.a_off}</option>`).join('');
+  $('ownSndName').textContent=ownBuf?ownName:L.ownNone;$('ownSndDel').hidden=!ownBuf;
   look.classList.remove('stack');fitLabels(look);
   if([...look.querySelectorAll('.tlook b')].some(b=>b.scrollWidth>b.clientWidth+1)){look.classList.add('stack');fitLabels(look)}
 }
 $('musicSw').onclick=()=>{st.music=!st.music;setSwitch($('musicSw'),st.music);save()};
+$('halfSw').onclick=()=>{const w=tw();w.half=!w.half;setSwitch($('halfSw'),w.half);save()};
+$('warnSel').onchange=e=>{tw().warn=+e.target.value;save()};
+$('bpmSel').onchange=e=>{tw().bpm=+e.target.value;save()};
+$('ownSndBtn').onclick=()=>$('ownSndFile').click();
+$('ownSndFile').onchange=e=>{
+  const f=e.target.files[0];e.target.value='';if(!f)return;
+  if(f.size>400*1024){note('ownBig','ok',()=>notice.classList.remove('show'));return}
+  const r=new FileReader();
+  r.onload=()=>{const d=String(r.result).split(',')[1]||'';
+    ownDecode(d).then(b=>{try{localStorage.setItem('legzo-snd',JSON.stringify({n:f.name.slice(0,40),d}))}catch(err){note('ownBig','ok',()=>notice.classList.remove('show'));return}
+      ownUse(b,f.name.slice(0,40));renderTabSettings();sig('own')}).catch(()=>note('ownBad','ok',()=>notice.classList.remove('show')))};
+  r.readAsDataURL(f);
+};
+$('ownSndDel').onclick=()=>{try{localStorage.removeItem('legzo-snd')}catch(e){}ownUse(null,'');
+  st.tabs.forEach(w=>{for(const k in w.snd)if(w.snd[k]==='own')delete w.snd[k]});save();renderTabSettings()};
 // Edzés megosztása: a beállítások egy linkben (?w=…, base64url JSON); megnyitáskor az app felajánlja a mentését
 function b64u(x){return btoa(String.fromCharCode(...new TextEncoder().encode(x))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')}
 function unb64u(x){const b=atob(x.replace(/-/g,'+').replace(/_/g,'/'));return new TextDecoder().decode(Uint8Array.from(b,c=>c.charCodeAt(0)))}
 function wLink(w){const {id,...x}=w;return SHARE_URL+'?w='+b64u(JSON.stringify(x))}
 function wClean(x){                                  // kívülről jött edzés: csak ismert mezők, érvényes tartományban
   const num=(v,a,b,d)=>Number.isFinite(+v)?Math.max(a,Math.min(b,Math.round(+v))):d,col={},snd={};
-  for(const k in TBCOL){const c=x.col&&x.col[k];if(/^#[0-9a-f]{6}$/i.test(c))col[k]=c;const s=x.snd&&x.snd[k];if(SIGS.includes(s))snd[k]=s}
+  for(const k in TBSND){const c=x.col&&x.col[k];if(TBCOL[k]&&/^#[0-9a-f]{6}$/i.test(c))col[k]=c;const s=x.snd&&x.snd[k];if(SIGS.includes(s)||s==='none')snd[k]=s}
   return {id:newId('t'),n:String(x.n||'').slice(0,24),work:num(x.work,5,90,20),rest:num(x.rest,0,90,10),rounds:num(x.rounds,1,30,8),sets:num(x.sets,1,5,1),
-    prep:num(x.prep,0,30,10),brk:num(x.brk,10,180,60),wu:num(x.wu,0,900,0),cd:num(x.cd,0,900,0),ex:String(x.ex||'').slice(0,2000),col,snd};
+    prep:num(x.prep,0,30,10),brk:num(x.brk,10,180,60),wu:num(x.wu,0,900,0),cd:num(x.cd,0,900,0),ex:String(x.ex||'').slice(0,2000),col,snd,
+    half:!!x.half,warn:[0,5,10,15,30].includes(+x.warn)?+x.warn:0,bpm:num(x.bpm,0,200,0)};
 }
 $('tbShare').onclick=async()=>{
   const w=tw(),url=wLink(w);
@@ -3360,7 +4091,7 @@ $('tbShare').onclick=async()=>{
 };
 // léptetők: [név, érték, min, max, lépés]
 function steppers(box,items,set,after){
-  box.innerHTML=items.map(([n,v],k)=>`<div class="stepper"><span>${n}</span><div><button data-k="${k}" data-d="-1" aria-label="${n} −">−</button><output>${v}</output><button data-k="${k}" data-d="1" aria-label="${n} +">+</button></div></div>`).join('');
+  box.innerHTML=items.map(([n,v],k)=>`<div class="stepper"><span>${n}</span><div><button data-k="${k}" data-d="-1" aria-label="${n} −">−</button><output>${num(v)}</output><button data-k="${k}" data-d="1" aria-label="${n} +">+</button></div></div>`).join('');
   box.querySelectorAll('button').forEach(b=>b.onclick=()=>{
     const k=+b.dataset.k,[,v,min,max,step]=items[k];set(k,Math.max(min,Math.min(max,v+ +b.dataset.d*step)));
     save();(after||renderRhythms)();renderModes();showMeta();
@@ -3479,7 +4210,7 @@ applyTheme(st.color);size(0,0);showMeta();
 const notice=$('notice'),ntext=$('ntext'),nact=$('nact'),nx=$('nx');
 function note(textKey,labelKey,act,dismiss){
   shownNote=[textKey,labelKey,act,dismiss];
-  ntext.textContent=L[textKey];nact.textContent=L[labelKey];nact.onclick=()=>{shownNote=null;act()};
+  ntext.textContent=typeof textKey==='function'?textKey():L[textKey];nact.textContent=L[labelKey];nact.onclick=()=>{shownNote=null;act()};
   nx.onclick=()=>{shownNote=null;notice.classList.remove('show');dismiss&&dismiss()};notice.classList.add('show');
 }
 
@@ -3532,6 +4263,8 @@ $('shareBtn').onclick=async()=>{
 // Első indításkor a rövid súgót ajánljuk, frissítés után (egyszer) az újdonságokat
 function openAbout(news){notice.classList.remove('show');openSheet();openPage('about');if(news)$('newsList').scrollIntoView({block:'start'})}
 if(firstRun){st.newsSeen=APP_VER;save();note('welcome','helpBtn',()=>openAbout())}
+else if(progDay()&&st.prog.last!==dayKey(new Date())&&st.newsSeen===APP_VER){const d=progDay();
+  note(()=>L.progTodayNote(st.prog.day+1,rname(d[0]),progLen(d)),'progGoBtn',progGo)}
 else if(st.newsSeen!==APP_VER){st.newsSeen=APP_VER;save();note('newsTxt','newsBtn',()=>openAbout(true))}
 if(isSecureContext&&'serviceWorker' in navigator){
   // Új verzió: az új service worker átveszi az irányítást (controllerchange) → sáv a Frissítés gombbal.
