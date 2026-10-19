@@ -5,7 +5,8 @@
 // publikált változat is tesztelhető, a frissítés pedig egy régebbi git-változatról (OLD, alapból 1.2.1) indul.
 // Címmel (pl. https://vmynick.github.io/relaxring/) az élő oldalt teszteli.
 // A valódi telefonos Chrome-ot vezérli (Playwright _android), és az Android rendszerállapotait is nézi: médiamenet,
-// hangfókusz, rezgés, ébren tartás, forgatás, megosztó lap, letöltés, repülőgép üzemmód, bejövő hívás, telepítés.
+// hangfókusz, rezgés, ébren tartás, forgatás, megosztó lap, letöltés, repülőgép üzemmód, bejövő hívás, telepítés,
+// mély alvás (Doze) és energiatakarékos mód, processzorhasználat, kis kijelző és nagyított oldal, minden hang.
 // A végén jelentes.html készül a képernyőképekkel.
 import { _android } from 'playwright-core';
 import { execFileSync } from 'node:child_process';
@@ -62,7 +63,12 @@ async function check(name, fn) {
   const t = Date.now();
   let r;
   step = '';
-  try { r = await fn(); } catch (e) { r = { ok: false, info: 'HIBA' + (step ? ` (${step})` : '') + ': ' + String(e.message || e).split('\n')[0].slice(0, 300) }; }
+  try { r = await fn(); } catch (e) {
+    r = { ok: false, info: 'HIBA' + (step ? ` (${step})` : '') + ': ' + String(e.message || e).split('\n')[0].slice(0, 300) };
+    const log = String(e.message || '').split('\n').filter(l => /^\s+- /.test(l)).slice(-3).map(l => l.trim()).join(' | ');   // a Playwright utolsó lépései
+    if (log) r.info += ' [' + log.slice(0, 300) + ']';
+    try { await shot('hiba', `Hiba: ${group} / ${name}`); } catch {}
+  }
   if (typeof r !== 'object' || r === null) r = { ok: !!r };
   results.push({ group, name, ok: !!r.ok, warn: !!r.warn, info: r.info || '', ms: Date.now() - t });
   console.log(`${r.ok ? (r.warn ? 'FIGY' : ' OK ') : 'HIBA'} │ ${group} │ ${name}${r.info ? ' │ ' + r.info : ''}`);
@@ -73,10 +79,18 @@ const key = k => sh(`input keyevent ${k}`);
 await sh('echo "_ --disable-fre --no-default-browser-check --no-first-run" > /data/local/tmp/chrome-command-line');
 await sh('settings put system accelerometer_rotation 0; settings put system user_rotation 0; locksettings set-disable true; svc power stayon true; cmd uimode night no');
 await key('KEYCODE_WAKEUP'); await sh('wm dismiss-keyguard');
-const ctx = await dev.launchBrowser();
+let ctx = await dev.launchBrowser();
 let page = ctx.pages()[0] || await ctx.newPage();
 for (const p of ctx.pages()) if (p !== page) await p.close();          // előző futásból megmaradt lapok
 page.on('dialog', d => d.accept());
+async function relaunch() {                   // a Chrome újraindítása: a kijelzőméret-váltás bezárja a vezérelt lapot
+  try { await ctx.close(); } catch {}
+  ctx = await dev.launchBrowser();
+  page = ctx.pages()[0] || await ctx.newPage();
+  for (const p of ctx.pages()) if (p !== page) await p.close();
+  page.on('dialog', d => d.accept());
+  await page.goto(SITE); await page.waitForFunction(() => typeof start === 'function');
+}
 const info = { model: dev.model(), android: (await sh('getprop ro.build.version.release')).trim(),
   chrome: ((await sh('dumpsys package com.android.chrome')).match(/versionName=(\S+)/) || [])[1], url: SITE };
 console.log('Eszköz:', info);
@@ -90,6 +104,7 @@ async function fresh(state = {}) {           // tiszta állapot a megadott beál
   await page.waitForFunction(() => typeof start === 'function' && !!document.getElementById('ringBtn'));
 }
 const ev = (f, a) => page.evaluate(f, a);
+const tabState = { mode: 'tabata', shown: ['box', '478', 'tabata'], tabs: [{ id: 't1', n: 'Reggeli', work: 5, rest: 5, rounds: 3, sets: 1, prep: 0, brk: 60, ex: 'Squats\nPush-ups\nLunges', wu: 0, cd: 0, col: { work: '#7B4FD0' }, snd: {} }], tabSel: 't1' };
 async function touchHold(sel, ms) {         // valódi érintés: lenyomás, tartás, felengedés (CDP)
   const b = await page.locator(sel).boundingBox(), x = b.x + b.width / 2, y = b.y + b.height / 2, cdp = await ctx.newCDPSession(page);
   await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x, y }] });
@@ -179,9 +194,8 @@ await check('első indításkor a telefon nyelve', async () => {
   await shot('elso_inditas', `Első indítás: „${r.note}”`);
   return { ok: r.lang === r.nav.slice(0, 2), info: `telefon: ${r.nav} → app: ${r.lang}; nézet: ${r.w}×${r.h} px; „${r.note}”` };
 });
-await check('mind a 20 nyelv a telefon szélességén: semmi nem lóg ki, nem vágódik le', async () => {
-  await fresh();
-  const bad = await ev(async () => {
+async function audit() {                      // mind a 20 nyelv: a ritmusgombok, a körszavak és a Beállítások oldalai; a hibák listája
+  return ev(async () => {
     const out = [], wait = () => new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
     await document.fonts.ready;
     for (const l of Object.keys(T)) {
@@ -212,7 +226,12 @@ await check('mind a 20 nyelv a telefon szélességén: semmi nem lóg ki, nem v�
     applyLang('en'); idleLabel();
     return [...new Set(out)];
   });
-  return { ok: bad.length === 0, info: bad.length ? bad.slice(0, 12).join('; ') + (bad.length > 12 ? ` … (+${bad.length - 12})` : '') : `${await ev(() => innerWidth)} px széles nézetben is minden kifér` };
+}
+const auditInfo = bad => bad.slice(0, 12).join('; ') + (bad.length > 12 ? ` … (+${bad.length - 12})` : '');
+await check('mind a 20 nyelv a telefon szélességén: semmi nem lóg ki, nem vágódik le', async () => {
+  await fresh();
+  const bad = await audit();
+  return { ok: bad.length === 0, info: bad.length ? auditInfo(bad) : `${await ev(() => innerWidth)} px széles nézetben is minden kifér` };
 });
 await check('hosszú feliratok kicsinyítve: finn körszó, portugál Tabata, horvát cím, orosz megosztás', async () => {
   await fresh({ lang: 'fi', mode: 'whm', shown: ['whm', 'box', 'calm'] });
@@ -238,6 +257,30 @@ await check('nyelvválasztó: a nyelvek saját nevükön', async () => {
   await ev(() => closeSheet());
   return { ok: names.includes('Magyar') && names.includes('Українська') && names.length === 20, info: names.join(', ') };
 });
+
+// ---------------------------------------------------------------- kis kijelző, nagyított oldal
+// A rendszer betűméretét (font_scale) a Chrome 145 nem adja tovább; a Chrome saját szövegnagyítása az oldalt nagyítja,
+// ami olyan, mintha keskenyebb lenne a kijelző: ezt a képsűrűséggel (wm density) állítjuk elő.
+group = 'Kijelzők';
+for (const [name, cmd, strict, tag] of [
+  ['kis telefon (320 dp széles)', 'wm size 720x1520; wm density 360', true, 'kis_telefon'],
+  ['nagyított oldal (a Chrome 130%-os szövegnagyítása, kb. 258 px széles)', 'wm density 624', false, 'nagyitott']]) {
+  await check(`${name}: mind a 20 nyelv, főképernyő, Tabata`, async () => {
+    await sh(cmd); await wait(2500);
+    try {
+      await relaunch(); await fresh();
+      const bad = await audit(), w = await ev(() => `${innerWidth}×${innerHeight} px`);
+      await fresh({ lang: 'hu', mode: 'nadi', shown: ['nadi', 'box', 'tabata'] });
+      await page.click('#ringBtn'); await wait(1500);
+      await shot(`${tag}_legzes`, `${name}: váltott orrlyukú légzés`);
+      await fresh({ ...tabState, lang: 'de' });
+      await page.click('#ringBtn'); await wait(1500);
+      await shot(`${tag}_tabata`, `${name}: Tabata, németül`);
+      await ev(() => stop());
+      return { ok: strict ? !bad.length : true, warn: !strict && bad.length > 0, info: `${w}: ` + (bad.length ? `${bad.length} gond: ${auditInfo(bad)}` : 'minden kifér') };
+    } finally { await sh('wm size reset; wm density reset'); await wait(2500); await relaunch(); }
+  });
+}
 
 // ---------------------------------------------------------------- 3. légzés valós időben
 group = 'Légzés';
@@ -329,6 +372,46 @@ await check('bejövő hívás szünetelteti', async () => {
   return { ok: p0 && p1, info: `hívás előtt fut: ${p0}; csengetéskor szünet: ${p1}; a hívás után: ${p2 ? 'szünetel (érintésre folytatható)' : 'fut'}` };
 });
 
+// ---------------------------------------------------------------- akkumulátor: mély alvás, energiatakarékos mód, processzor
+group = 'Akkumulátor';
+async function cpuTimes() {                    // a Chrome folyamatainak és a hangszervernek eddigi processzorideje (mp)
+  const ps = (await sh('ps -A -o PID,NAME')).split('\n').map(l => l.trim().split(/\s+/)).filter(x => /^(com\.android\.chrome|audioserver)/.test(x[1] || '') && !/zygote/.test(x[1]));
+  const out = {};
+  for (const [pid, name] of ps) {
+    const st = await sh(`cat /proc/${pid}/stat 2>/dev/null`), f = st.slice(st.lastIndexOf(')') + 2).split(' ');
+    if (f.length < 13) continue;
+    const k = /audioserver/.test(name) ? 'hangszerver' : /sandboxed/.test(name) ? 'oldal' : /privileged/.test(name) ? 'GPU és hang' : 'böngésző';
+    out[k] = (out[k] || 0) + (+f[11] + +f[12]) / 100;           // utime + stime, 100 tikk/mp
+  }
+  return out;
+}
+const cpuPct = (a, b, secs) => Object.keys(b).reduce((x, k) => x + b[k] - (a[k] || 0), 0) / secs * 100;
+const cpuParts = (a, b, secs) => Object.keys(b).map(k => `${k} ${((b[k] - (a[k] || 0)) / secs * 100).toFixed(1)}%`).join(', ');
+await check('3 perc kikapcsolt képernyővel: pontos idő és processzorhasználat, ebből 90 mp mély alvásban (Doze) energiatakarékos módban', async () => {
+  await fresh({ mode: 'calm', dur: 5 });
+  await key('KEYCODE_SLEEP'); await wait(2000);
+  const b0 = await cpuTimes(); await wait(30000); const b1 = await cpuTimes();       // összevetésnek: tétlen Chrome
+  await key('KEYCODE_WAKEUP'); await sh('wm dismiss-keyguard'); await wait(1000);
+  await page.click('#ringBtn'); await wait(3000);
+  await key('KEYCODE_SLEEP'); await wait(2000);
+  const e0 = await ev(() => elapsed), r0 = Date.now(), c0 = await cpuTimes();
+  await wait(90000);
+  const e1 = await ev(() => elapsed), r1 = Date.now(), c1 = await cpuTimes();
+  let deep = '';
+  await sh('dumpsys battery unplug; cmd power set-mode 1; dumpsys deviceidle force-idle');
+  try { await wait(90000); deep = (await sh('dumpsys deviceidle get deep')).trim(); }
+  finally { await sh('dumpsys deviceidle unforce; dumpsys battery reset; cmd power set-mode 0'); }
+  const e2 = await ev(() => ({ elapsed, run, paused })), r2 = Date.now(), c2 = await cpuTimes();
+  const playing = /PlaybackState \{state=(3|PLAYING)/.test(await sh('dumpsys media_session'));
+  await key('KEYCODE_WAKEUP'); await sh('wm dismiss-keyguard'); await wait(1000);
+  await shot('harom_perc_utan', '3 perc kikapcsolt képernyő után (90 mp mély alvással)');
+  await ev(() => stop());
+  const s1 = Math.round((r1 - r0) / 1000), s2 = Math.round((r2 - r1) / 1000), d1 = e1 - e0 - s1, d2 = e2.elapsed - e1 - s2;
+  return { ok: e2.run && !e2.paused && Math.abs(d1) <= 2 && Math.abs(d2) <= 2 && deep === 'IDLE' && playing,
+    info: `normál: ${s1} mp alatt ${e1 - e0} mp telt el a gyakorlásban; mély alvás (${deep}) + energiatakarékos mód: ${s2} mp alatt ${e2.elapsed - e1} mp; fut: ${e2.run}; médiavezérlő: ${playing ? 'lejátszás' : 'NEM'}` +
+      `; processzor (egy mag %-ában) – tétlen Chrome: ${cpuPct(b0, b1, 30).toFixed(1)}%, gyakorlás: ${cpuPct(c0, c1, s1).toFixed(1)}% (${cpuParts(c0, c1, s1)}), mély alvásban: ${cpuPct(c1, c2, s2).toFixed(1)}%` };
+});
+
 // ---------------------------------------------------------------- 5. hangos vezetés
 group = 'Hangos vezetés';
 await check('telefon felolvasója (magyar): időzítés, mért késés', async () => {
@@ -352,6 +435,45 @@ await check('felvett női hang (magyar): letöltés, dekódolás, a váltáskor 
   await shot('valtott_orrlyuk', 'Váltott orrlyukú légzés (magyar, felvett hang)');
   await ev(() => stop());
   return { ok: r.rec.length >= 2 && r.rec[0][0] === 'in+viaL' && r.ac === 'running', info: `mp3 dekódolva (${r.dur} mp); lejátszott szavak: ${r.rec.map(x => `${x[0]} @${(x[1] / 1000).toFixed(2)}`).join(', ')}` };
+});
+
+await check('mind a 29 felvett hang: letöltés, dekódolás Androidon, egyik szó sem néma', async () => {
+  await fresh();
+  const r = await ev(async () => {
+    const out = [];
+    for (const [lang, gs] of Object.entries(VOX)) for (const [g, v] of Object.entries(gs)) {
+      try {
+        const b = await (await fetch('voice/' + v.src)).arrayBuffer();
+        const buf = await new OfflineAudioContext(1, 1, 22050).decodeAudioData(b.slice(0));
+        const d = buf.getChannelData(0), sr = buf.sampleRate, end = Math.max(...Object.values(v.clips).map(c => c[0] + c[1]));
+        const silent = Object.entries(v.clips).filter(([, [s0, len]]) => { let a = 0; const i0 = Math.floor(s0 * sr), n = Math.floor(len * sr);
+          for (let j = 0; j < n; j++) a += (d[i0 + j] || 0) ** 2; return !(Math.sqrt(a / n) > .01); }).map(([k]) => k);
+        out.push({ id: lang + '-' + g, ok: buf.duration >= end - .05 && !silent.length, dur: buf.duration, kb: b.byteLength / 1024, silent });
+      } catch (e) { out.push({ id: lang + '-' + g, ok: false, err: String(e) }); }
+    }
+    return out;
+  });
+  const bad = r.filter(x => !x.ok);
+  return { ok: r.length === 29 && !bad.length, info: `${r.length} hang, összesen ${Math.round(r.reduce((a, x) => a + (x.kb || 0), 0))} KB` +
+    (bad.length ? '; hibás: ' + bad.map(x => `${x.id} ${x.err || 'néma: ' + x.silent.join(',')}`).join('; ') : '; mind rendben: ' + r.map(x => x.id).join(' ')) };
+});
+await check('a telefon felolvasója mind a 20 nyelven: van-e hang, megszólal-e', async () => {
+  await fresh({ speak: true });
+  await page.click('#setBtn'); await ev(() => closeSheet());       // a felolvasóhoz felhasználói koppintás kell
+  const r = await ev(async () => {
+    const out = [];
+    for (const l of Object.keys(T)) {
+      applyLang(l); const v = ttsVoice();
+      if (!v) { out.push([l, '', 'nincs hang']); continue; }
+      const res = await new Promise(done => { const u = new SpeechSynthesisUtterance(L.in), t = performance.now(); u.voice = v; u.lang = v.lang; u.volume = .4;
+        u.onstart = () => done(Math.round(performance.now() - t)); u.onerror = e => done('hiba: ' + e.error); setTimeout(() => done('nem szólalt meg'), 8000); speechSynthesis.speak(u); });
+      speechSynthesis.cancel(); await new Promise(x => setTimeout(x, 300));
+      out.push([l, v.lang, res]);
+    }
+    applyLang('en'); return out;
+  });
+  const bad = r.filter(x => typeof x[2] !== 'number');
+  return { ok: true, warn: bad.length > 0, info: (bad.length ? `nem szól: ${bad.map(x => x[0] + ' (' + x[2] + ')').join(', ')}; ` : 'mind a 20 nyelv megszólal; ') + r.filter(x => typeof x[2] === 'number').map(x => `${x[0]} ${x[1]} ${x[2]} ms`).join(', ') };
 });
 
 // ---------------------------------------------------------------- 6. technikák, felület
@@ -399,9 +521,54 @@ await check('saját ritmus a felületen, az Android vissza gombja', async () => 
   return { ok: t1 === 'Settings' && r.hidden && r.modes.includes('Esti') && r.url.startsWith(SITE), info: `1. vissza: „${t1}” oldal; 2. vissza: bezárt (${r.hidden}); főképernyő: ${r.modes.join(', ')}; az app nem lépett ki` };
 });
 
+// ---------------------------------------------------------------- alvás mód, sorozat, háttérhangok
+group = 'Funkciók';
+await check('alvás mód: a képernyő lassan elsötétül, a végén nincs csengő, sötét és teljes képernyős marad', async () => {
+  await fresh({ mode: 'box', durType: 'br', breaths: 1, sleep: true, amb: 'eso', full: true });
+  await ev(() => { window.dings = 0; const o = ding; ding = (...a) => { if (elapsed >= 16) window.dings++; return o(...a); }; });   // csak a záró csengő számít
+  await page.click('#ringBtn'); await wait(8000);
+  const mid = await ev(() => +getComputedStyle(document.getElementById('dim')).opacity);
+  await wait(9500);
+  const end = await ev(() => ({ run, finished, dings: window.dings, fs: !!document.fullscreenElement }));
+  await wait(2500);
+  const op = await ev(() => +getComputedStyle(document.getElementById('dim')).opacity);
+  await shot('alvas_mod_vege', `Alvás mód vége: sötétítés ${op.toFixed(2)}`);
+  return { ok: mid > .2 && mid < .8 && !end.run && end.finished && end.dings === 0 && end.fs && op > .9,
+    info: `8 mp-nél a sötétítés: ${mid.toFixed(2)}; a végén: ${op.toFixed(2)}; csengő: ${end.dings}×; teljes képernyő marad: ${end.fs}` };
+});
+await check('sorozat: 1 perc sóhajtás, utána koherens légzés', async () => {
+  await fresh({ mode: 'q1', shown: ['q1', 'box', 'calm'], seqs: [{ id: 'q1', n: 'Esti sor', s: [['sigh', 1], ['coh', 1]] }] });
+  await page.click('#ringBtn'); await wait(1500);
+  const sig = () => ev(() => ({ cur: cur.map(x => x[0] + x[1]).join(' '), ph: ph.textContent, el: elapsed, label: document.getElementById('modes').textContent }));
+  const a = await sig();
+  await ev(() => { t0 -= 55000; tick(); });                // előreugrás az első lépés végéhez
+  await wait(12000);
+  const b = await sig();
+  await shot('sorozat', `Sorozat, ${b.el}. mp: ${b.cur}`);
+  await ev(() => stop());
+  return { ok: /in2/.test(a.cur) && b.cur === 'in5 out5', info: `eleje: ${a.cur} („${a.ph}”); ${b.el}. mp: ${b.cur} („${b.ph}”)` };
+});
+await check('háttérhangok: mind a 8 szól a telefonon', async () => {
+  await fresh({ mode: 'calm', dur: 3, tone: false, bell: false });
+  await page.click('#ringBtn'); await wait(1000);
+  const r = await ev(async () => {
+    const out = [], an = ac.createAnalyser(), buf = new Float32Array(2048); an.fftSize = 2048;
+    for (const k of Object.keys(AMB).filter(k => k !== 'off')) {
+      st.amb = k; ambStart(.05); ambOut().connect(an);
+      await new Promise(x => setTimeout(x, 900));
+      an.getFloatTimeDomainData(buf); let e = 0; for (const x of buf) e += x * x;
+      out.push([k, Math.sqrt(e / buf.length)]);
+      ambStop(.05); await new Promise(x => setTimeout(x, 300));
+    }
+    ambOut().disconnect(an); st.amb = 'off'; return out;
+  });
+  await ev(() => stop());
+  const bad = r.filter(x => !(x[1] > 1e-4));
+  return { ok: r.length >= 8 && !bad.length, info: r.map(x => `${x[0]} ${(20 * Math.log10(x[1] || 1e-9)).toFixed(0)} dB`).join(', ') };
+});
+
 // ---------------------------------------------------------------- 7. Tabata
 group = 'Tabata';
-const tabState = { mode: 'tabata', shown: ['box', '478', 'tabata'], tabs: [{ id: 't1', n: 'Reggeli', work: 5, rest: 5, rounds: 3, sets: 1, prep: 0, brk: 60, ex: 'Squats\nPush-ups\nLunges', wu: 0, cd: 0, col: { work: '#7B4FD0' }, snd: {} }], tabSel: 't1' };
 await check('saját szín, koppintás = szünet, ⏭, „következő” médiagomb, hosszú nyomás = leállítás', async () => {
   await fresh(tabState);
   await page.click('#ringBtn'); await wait(1200);

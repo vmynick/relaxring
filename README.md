@@ -167,7 +167,11 @@ The app is a single HTML file with HTML, CSS and JavaScript. It uses no framewor
 - a locked screen, headset buttons and an incoming call;
 - voice timing;
 - Tabata in landscape, and lowering another app's music;
-- the share sheet, the backup file, airplane mode and installing to the home screen.
+- the share sheet, the backup file, airplane mode and installing to the home screen;
+- small screens and Chrome's page zoom;
+- Doze and battery saver with the screen off, and CPU use;
+- every recorded voice, and the phone voice in all 20 languages;
+- sleep mode, sequences and background sounds.
 
 It writes a report with screenshots to `../emulator-teszt/jelentes.html`. To test the published site instead, pass its address: `node tests/android/emulator.mjs <folder> https://vmynick.github.io/relaxring/`.
 
