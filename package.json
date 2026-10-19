@@ -5,7 +5,8 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "test": "playwright test"
+    "test": "playwright test",
+    "test:android": "node tests/android/emulator.mjs"
   },
   "devDependencies": {
     "@playwright/test": "1.64.0"

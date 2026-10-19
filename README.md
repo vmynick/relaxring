@@ -146,7 +146,7 @@ The app is a single HTML file with HTML, CSS and JavaScript. It uses no framewor
 | `*.png` | icons |
 | [setup.html](setup.html) | only for the earlier self-hosted home-server version |
 | [docs/](docs) | README images, not published to the site |
-| [tests/](tests), [playwright.config.mjs](playwright.config.mjs), [package.json](package.json) | browser tests; only needed for development |
+| [tests/](tests), [playwright.config.mjs](playwright.config.mjs), [package.json](package.json) | browser tests and the Android test ([tests/android/](tests/android)); only needed for development |
 | [.github/workflows/pages.yml](.github/workflows/pages.yml) | tests and publishing |
 
 **Run locally:** start any static web server in this folder, for example `python -m http.server 8000`, and open http://localhost:8000. The service worker also works on localhost.
@@ -159,6 +159,17 @@ The app is a single HTML file with HTML, CSS and JavaScript. It uses no framewor
 - badges and statistics;
 - Tabata: presets, pause, skip, long-press stop, saved workouts, warm-up and cool-down, colors, shared links and the own-music mode;
 - the landscape layout, settings navigation, backup and restore, sharing, shortcuts, offline start and the "what's new" notice.
+
+**Android test:** `npm run test:android` runs the app in Chrome on an Android emulator or a USB-connected phone (`adb` must be on the PATH). The CI does not run it. It serves this folder to the phone and covers:
+- updating from an older version with its saved data;
+- labels in all 20 languages at the phone's width;
+- sound, vibration, wake lock and the lock-screen media controls;
+- a locked screen, headset buttons and an incoming call;
+- voice timing;
+- Tabata in landscape, and lowering another app's music;
+- the share sheet, the backup file, airplane mode and installing to the home screen.
+
+It writes a report with screenshots to `../emulator-teszt/jelentes.html`. To test the published site instead, pass its address: `node tests/android/emulator.mjs <folder> https://vmynick.github.io/relaxring/`.
 
 **Publishing:** every push to `main` runs the tests first. The site is published only if they all pass, about 2–3 minutes in total. The workflow also:
 - writes a new version into `sw.js`, which is how installed apps notice an update;
