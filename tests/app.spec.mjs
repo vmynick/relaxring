@@ -135,6 +135,7 @@ test('hangos vezetés: a következő szakasz neve a felolvasó késésével elő
   await seed(page, { mode: 'box', speak: true, ttsLag: 300 });
   await page.goto('/');
   await page.locator('#ringBtn').click();
+  await page.clock.runFor(300);                      // az első szóra vár: a kör akkor indul, amikor a hang megszólal
   const start = await page.evaluate(() => t0);
   await page.clock.runFor(3_800);
   await expect(page.locator('#ph')).toHaveText('Belégzés');
@@ -150,6 +151,30 @@ test('hangos vezetés: a következő szakasz neve a felolvasó késésével elő
   expect(await page.evaluate(() => st.ttsLag)).toBe(300);         // a mért késés
 });
 
+test('hangos vezetés: a kör az első szó megszólalásakor indul, legfeljebb 2 mp várakozással', async ({ page }) => {
+  await page.clock.install({ time: new Date('2026-10-15T12:00:00') });
+  await fakeVoice(page);
+  await seed(page, { mode: 'box', speak: true, ttsLag: 300 });
+  await page.goto('/');
+  await page.clock.pauseAt(new Date('2026-10-15T12:00:30'));   // az óra áll: csak runFor léptet (terhelés alatt se késsen)
+  await page.evaluate(() => ringBtn.addEventListener('click', () => { window.tc = performance.now(); }, true));   // a koppintás pillanata
+  await page.locator('#ringBtn').click();
+  await page.clock.runFor(200);
+  expect(await page.evaluate(() => ({ run, elapsed, ph: ph.textContent, hold: !!holdFn }))).toEqual({ run: true, elapsed: 0, ph: 'Belégzés', hold: true });
+  await page.clock.runFor(150);                      // a próbababa 300 ms-nál szólal meg
+  expect(await page.evaluate(() => holdFn)).toBe(null);
+  expect(await page.evaluate(() => t0 - tc)).toBeGreaterThanOrEqual(295);
+  expect(await page.evaluate(() => t0 - tc)).toBeLessThanOrEqual(310);
+  expect(await page.evaluate(() => st.ttsLag)).toBe(300);         // a hideg indulás nem számít bele
+  await page.evaluate(() => { stop(); speechSynthesis.speak = u => window.said.push([u.text]); });   // a hang nem szólal meg
+  await page.locator('#ringBtn').click();
+  await page.clock.runFor(2_100);
+  expect(await page.evaluate(() => t0 - tc)).toBeGreaterThanOrEqual(1_995);
+  expect(await page.evaluate(() => t0 - tc)).toBeLessThanOrEqual(2_010);
+  await page.clock.runFor(4_000);
+  await expect(page.locator('#ph')).toHaveText('Tartás');
+});
+
 test('szünet után is pontosan a másodpercre vált, és újra bemondja a szakaszt', async ({ page }) => {
   await page.clock.install();
   await fakeVoice(page);
@@ -161,7 +186,7 @@ test('szünet után is pontosan a másodpercre vált, és újra bemondja a szaka
       .observe(ph, { childList: true, characterData: true, subtree: true });
   });
   await page.locator('#ringBtn').click();
-  await page.clock.runFor(3_800);                    // a Tartás már elhangzott
+  await page.clock.runFor(4_100);                    // 300 ms az első szóig, utána 3,8 mp: a Tartás már elhangzott
   await page.evaluate(() => pause());
   await page.clock.runFor(5_130);                    // nem kerek szünet: a 250 ms-os ütem elcsúszik hozzá képest
   await page.locator('#ringBtn').click();
@@ -237,7 +262,7 @@ test('váltott orrlyuk: a kör alatt és a bemondásban is az oldal', async ({ p
   await page.locator('#ringBtn').click();
   await expect(page.locator('#sub')).toHaveText('bal orrlyukon');
   await expect(page.locator('#sub')).toBeVisible();
-  await page.clock.runFor(4_100);
+  await page.clock.runFor(4_400);                    // 300 ms: a kör az első szóval indul
   await expect(page.locator('#sub')).toHaveText('jobb orrlyukon');
   const said = await page.evaluate(() => window.said.map(s => s[0]));
   expect(said.slice(0, 2)).toEqual(['Belégzés, bal orrlyukon', 'Kilégzés, jobb orrlyukon']);

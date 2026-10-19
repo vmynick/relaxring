@@ -2236,6 +2236,9 @@ let L=T.hu,shownNote=null;
 // Újdonságok, a legfrissebb elöl. Az első elem verziója az app verziója; ha nagyobb, mint amit a felhasználó
 // utoljára látott, indításkor egyszer szólunk („Mi újság”). Új kiadásnál ide kerül egy új elem.
 const NEWS=[
+  {v:'1.3.3',d:'2026-10-19',
+    hu:['A telefon hangjával a kör az első szóval együtt indul'],en:['With the phone voice, the circle starts together with the first word'],
+    de:['Mit der Telefonstimme startet der Kreis zusammen mit dem ersten Wort']},
   {v:'1.3.2',d:'2026-10-19',
     hu:['Keskeny kijelzőn is kiférnek a hosszabb feliratok'],en:['Longer labels fit on narrow screens too'],
     de:['Längere Beschriftungen passen auch auf schmale Bildschirme']},
@@ -2631,13 +2634,19 @@ function speakPhase(p){
 }
 // A felolvasó motor késve szólal meg (Androidon pár tized másodperc). Minden bemondásnál mérjük a késést (a start eseményig),
 // és átlagoljuk; a következő szakasz nevét ennyivel a váltás előtt indítjuk (sayAhead), így a számláló váltásával együtt hallatszik.
-function speakText(text){
-  if(!st.speak||!('speechSynthesis' in window))return;
-  const v=ttsVoice();if(!v)return;
+// Hosszabb csend után a motor „hidegen” indul (akár 1–2 mp): az ilyen késés nem jellemző, nem számít bele.
+// onStart: a gyakorlás első szavánál ezzel indul a kör (start); hiba esetén is meghívódik. Visszaadja, hogy elküldte-e.
+let ttsLast=-1e9;
+function speakText(text,onStart){
+  if(!st.speak||!('speechSynthesis' in window))return false;
+  const v=ttsVoice();if(!v)return false;
   const u=new SpeechSynthesisUtterance(text);u.voice=v;u.lang=v.lang;u.rate=.9;u.volume=st.vvol/100;
-  let t=0;u.onstart=()=>{st.ttsLag=Math.round(st.ttsLag*.7+Math.min(800,performance.now()-t)*.3)};
+  let t=0;u.onstart=()=>{const now=performance.now();
+    if(onStart)onStart();else if(now-ttsLast<30e3)st.ttsLag=Math.round(st.ttsLag*.7+Math.min(800,now-t)*.3);ttsLast=now};
+  if(onStart)u.onerror=onStart;
   const busy=speechSynthesis.speaking||speechSynthesis.pending;if(busy)speechSynthesis.cancel();
   setTimeout(()=>{t=performance.now();speechSynthesis.speak(u)},busy?30:0);   // közvetlenül a cancel után a Chrome néha elnyeli
+  return true;
 }
 let sayT=0,said='';                                  // said: az előre bemondott szakasz kulcsa (kör:sorszám)
 function phaseText(p){const [kind,,side,,exn]=p;return !tb?L[kind]+(side?', '+L['via'+side]:''):kind==='work'&&exn?exn:exn?`${L[kind]}. ${L.next}: ${exn}`:L[kind]}
@@ -2914,7 +2923,7 @@ function endRetain(){
 }
 // Szünet és folytatás: a lezárási képernyő, a fülhallgató gombja, vagy ha a telefon elveszi a hangot (pl. hívás)
 function pause(){
-  if(!run||paused)return;
+  if(!run||paused||holdFn)return;                    // az indulás előtti pillanatban (a hangra várva) nincs mit megállítani
   paused=true;pauseAt=performance.now();
   if(voice)voice.quiet(.5);ambStop(1);if('speechSynthesis' in window)speechSynthesis.cancel();
   clearTimeout(sayT);clearTimeout(tickT);said='';    // az előre bemondott név a folytatás után a váltáskor újra elhangzik
@@ -3016,12 +3025,25 @@ function start(){
   if(mus){if(ac&&ac.state==='running')ac.suspend();['tick','end',...Object.values(Object.assign({},TBSND,tw().snd))].forEach(x=>x!=='none'&&clip(x))}else ensureAudio();
   document.documentElement.classList.toggle('tb-run',tb);
   run=true;paused=false;finished=false;i=0;cyc=pre?0:1;elapsed=0;curBig=0;t0=performance.now();app.classList.remove('idle','paused');
-  phase();if(!mus){mediaStart();mediaNext(tb)}tm=setInterval(tick,250);tick();ringBtn.setAttribute('aria-label',tb?L.paused:L.stop);lock();showMeta();focusLater(1200);keepStorage();
+  if(!mus){mediaStart();mediaNext(tb)}ringBtn.setAttribute('aria-label',tb?L.paused:L.stop);lock();focusLater(1200);keepStorage();
+  // A telefon felolvasója az első szónál hidegen indul (akár 1–2 mp). Ha az első szakaszt ő mondja be, a kör csak akkor indul,
+  // amikor a hang megszólal (legfeljebb 2 mp várakozás); addig a kör áll, rajta az első szakasz. A többi szakasz: sayAhead.
+  if(!tb&&!pre&&st.speak&&!recVoice()&&ttsVoice()){
+    cur=pattern(runMode);const p0=cur[0],tip=tipFor(p0);left=p0[1];
+    ph.textContent=L[p0[0]];fitRing(p0[0]);ct.textContent=disp();sub.textContent=tip;app.classList.toggle('subon',!!tip);
+    const go=()=>{if(holdFn===go)begin()};holdFn=go;holdT=setTimeout(go,2000);
+    said='1:0';if(!speakText(phaseText(p0),go))begin();
+  }else begin();
   skipBtn.hidden=!tb;
   if(!tb&&st.amb!=='off')ambStart(4);
   if(st.sleep&&!tb){setDim(0,0);requestAnimationFrame(()=>requestAnimationFrame(()=>setDim(.9,estSecs()+pre)))}
   const hk=tb?'hintTb':'hint2';hint.textContent=L[tb?'hintTb':'hint'];   // az első 3 alkalommal (légzésnél és Tabatánál külön) rövid tipp
   if((st[hk]||0)<3){st[hk]=(st[hk]||0)+1;save();hint.classList.add('show');setTimeout(()=>hint.classList.remove('show'),5000)}
+}
+let holdT=0,holdFn=null;                            // indulás: várakozás a felolvasó első szavára (start)
+function begin(){                                    // innen fut a gyakorlás órája
+  clearTimeout(holdT);holdFn=null;if(!run)return;
+  t0=performance.now();phase();tm=setInterval(tick,250);tick();showMeta();
 }
 // ⏭ a Tabata-terv következő szakaszára: a hátralévő másodpercek kimaradnak, és az óra úgy igazodik, hogy az új szakasz egész másodperccel induljon
 function skip(){
@@ -3036,7 +3058,7 @@ function idleLabel(){ph.textContent=finished?L.done:L.start;fitRing();sub.textCo
 function stop(keepFull){
   if(!run)return;
   if(!keepFull)leaveFull();
-  run=false;paused=false;app.classList.remove('paused');clearInterval(tm);clearTimeout(tickT);clearTimeout(sayT);said='';mediaStop();mediaNext(false);skipBtn.hidden=true;
+  run=false;paused=false;app.classList.remove('paused');clearInterval(tm);clearTimeout(tickT);clearTimeout(holdT);holdFn=null;clearTimeout(sayT);said='';mediaStop();mediaNext(false);skipBtn.hidden=true;
   size(0,1.2);if(voice)voice.quiet(.8);ambStop(keepFull?10:2);   // alvás mód végén lassan halkul
   if('speechSynthesis' in window)speechSynthesis.cancel();
   clearTimeout(focusT);app.classList.remove('focus');hint.classList.remove('show');

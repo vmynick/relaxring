@@ -48,7 +48,7 @@ The app warns once before Kapalbhati and Power breathing: they are hyperventilat
 
 - 4 breathing sounds (Soft, Ocean, Pad, Bowl), 5 chimes (Bell, Bowl, Wood, Drop, Piezo) and 8 background sounds (rain, stream, fire, wind, waves, birds, white and brown noise). The phone synthesizes all of these, so nothing has to be downloaded.
 - **Voice guidance** in three kinds:
-  - the phone's own text-to-speech voice. The app measures how late it starts and starts it that much early, so you hear it as the counter changes;
+  - the phone's own text-to-speech voice. The app measures how late it starts and starts it that much early, so you hear it as the counter changes. At the start of a session the circle waits, at most 2 seconds, until the voice actually starts;
   - a recorded female or male voice for 18 languages. It sounds the same on every phone and plays exactly at the change. It downloads on first use and then works offline. Exercise names are still read by the phone voice.
 - Separate volume for the voice guidance and for the background sound.
 - Vibration on every phase change.

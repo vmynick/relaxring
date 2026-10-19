@@ -334,12 +334,14 @@ group = 'Hangos vezetés';
 await check('telefon felolvasója (magyar): időzítés, mért késés', async () => {
   await fresh({ lang: 'hu', mode: 'box', speak: true, vk: 'tts', durType: 'br', breaths: 1 });
   await ev(() => { window.said = []; const o = speechSynthesis.speak.bind(speechSynthesis);
-    speechSynthesis.speak = u => { const t = performance.now(), s = u.onstart; u.onstart = e => { window.said.push([u.text, u.lang, Math.round(t - t0), Math.round(performance.now() - t)]); s && s(e); }; o(u); }; });
-  await page.click('#ringBtn'); await wait(13000);
-  const r = await ev(() => ({ said: window.said, lag: st.ttsLag, voice: ttsVoice() && ttsVoice().lang }));
+    speechSynthesis.speak = u => { const t = performance.now(), s = u.onstart; u.onstart = e => { window.said.push([u.text, t, performance.now()]); s && s(e); }; o(u); }; });
+  await page.click('#ringBtn'); await wait(14000);
+  // a gyakorlás órája (t0) az első szó megszólalásakor indul: minden időt ehhez mérünk
+  const r = await ev(() => ({ said: window.said.map(s => [s[0], Math.round(s[1] - t0), Math.round(s[2] - t0)]), lag: st.ttsLag, voice: ttsVoice() && ttsVoice().lang }));
   await ev(() => stop());
-  const off = r.said.map(s => { const x = (s[2] + s[3]) % 4000; return x > 2000 ? x - 4000 : x; });
-  return { ok: r.said.length >= 3 && r.said[1][0] === 'Tartás', info: `hang: ${r.voice}; bemondás @kérés+késés: ${r.said.map(s => `${s[0]} @${(s[2] / 1000).toFixed(2)}+${s[3]}ms`).join(', ')}; tanult késés: ${r.lag} ms; a váltáshoz képest: ${off.map(x => (x > 0 ? '+' : '') + x + ' ms').join(', ')}` };
+  const off = r.said.map(s => { const x = s[2] % 4000; return x > 2000 ? x - 4000 : x; });
+  return { ok: r.said.length >= 3 && r.said[1][0] === 'Tartás' && Math.abs(off[0]) <= 100 && off.slice(1).every(x => Math.abs(x) <= 400),
+    info: `hang: ${r.voice}; bemondások (kérés → megszólalás, a kör indulásától): ${r.said.map(s => `${s[0]} ${(s[1] / 1000).toFixed(2)} → ${(s[2] / 1000).toFixed(2)} mp`).join(', ')}; tanult késés: ${r.lag} ms; a váltáshoz képest: ${off.map(x => (x > 0 ? '+' : '') + x + ' ms').join(', ')}` };
 });
 await check('felvett női hang (magyar): letöltés, dekódolás, a váltáskor szól', async () => {
   await fresh({ lang: 'hu', mode: 'nadi', shown: ['nadi', 'box', 'calm'], speak: true, vk: 'f', durType: 'br', breaths: 1 });
